@@ -1,0 +1,51 @@
+.lookupContainer {
+  position: relative;
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input:focus {
+  border-color: #4dabf7;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background: #1b263b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  margin-top: 4px;
+  padding: 0;
+  list-style: none;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.listItem {
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #e9ecef;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.listItem:hover {
+  background: rgba(77, 171, 247, 0.2);
+  color: #fff;
+}
