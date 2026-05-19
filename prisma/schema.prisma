@@ -1,0 +1,921 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+// ============================================================
+// SYSTEM / AUTH
+// ============================================================
+
+model Company {
+  CmpCode         Int       @id @default(autoincrement())
+  CmpName         String
+  CmpAddress      String?
+  CmpCity         String?
+  CmpDistrict     String?
+  CmpState        String?
+  CmpReg1         String?
+  CmpReg2         String?
+  CmpReg3         String?
+  CmpContPer      String?
+  CmpOPhone       String?
+  CmpRPhone       String?
+  CmpFax          String?
+  CmpEmail        String?
+  CmpWebsite      String?
+  CmpJurisdiction String?
+  CmpBooksDate    DateTime?
+  CmpFYStartDt    DateTime?
+  CmpFYEndDt      DateTime?
+  CmpSecPwd       String?
+  CmpRecState     Int       @default(1)
+}
+
+model UserRoleMst {
+  UrlCode       Int             @id @default(autoincrement())
+  UrlName       String
+  UrlRecState   Int             @default(1)
+  UserMast      UserMast[]
+  UserRightMst  UserRightMst[]
+}
+
+model UserMast {
+  UsrCode       Int             @id @default(autoincrement())
+  UsrName       String
+  UsrUrlCode    Int?         
+  UsrPwd        String
+  UsrRecState   Int             @default(1)
+  Role          UserRoleMst?    @relation(fields: [UsrUrlCode], references: [UrlCode])
+  UserRightMst  UserRightMst[]
+}
+
+model UserRightMst {
+  UhtCode         Int          @id @default(autoincrement())
+  UhtUsrCode      Int?      
+  UhtUrlCode      Int?      
+  UhtSecuOptName  String
+  UhtCanAdd       Boolean      @default(false)
+  UhtCanEdit      Boolean      @default(false)
+  UhtCanDelete    Boolean      @default(false)
+  UhtCanView      Boolean      @default(false)
+  UhtRemark       String?
+  UhtRecState     Int          @default(1)
+  User            UserMast?    @relation(fields: [UhtUsrCode], references: [UsrCode])
+  Role            UserRoleMst? @relation(fields: [UhtUrlCode], references: [UrlCode])
+}
+
+// ============================================================
+// HMS MASTER TABLES
+// ============================================================
+
+model PatCatgMst {
+  PcgCode         Int       @id @default(autoincrement())
+  PcgName         String
+  PcgInfAllowed   Boolean   @default(false)
+  PcgDefAllowed   Boolean   @default(false)
+  PcgDiscAllowed  Boolean   @default(false)
+  PcgDiscPer      Float     @default(0)
+  PcgShowInList   Boolean   @default(true)
+  PcgRecState     Int       @default(1)
+  PatMast         PatMast[]
+}
+
+model DoctCatgMst {
+  DcgCode       Int        @id @default(autoincrement())
+  DcgName       String
+  DcgRecState   Int        @default(1)
+  DoctMast      DoctMast[]
+}
+
+model DoctRoleMst {
+  DrlCode       Int        @id @default(autoincrement())
+  DrlName       String
+  DrlRecState   Int        @default(1)
+  DoctMast      DoctMast[]
+}
+
+model RefCatgMst {
+  RfgCode       Int         @id @default(autoincrement())
+  RfgName       String
+  RfgRecState   Int         @default(1)
+  RefByMast     RefByMast[]
+  RefToMast     RefToMast[]
+}
+
+model DoctMast {
+  DctCode        Int          @id @default(autoincrement())
+  DctTitle       String?
+  DctName        String
+  DctSpeci       String?
+  DctDcgCode     Int?      
+  DctDrlCode     Int?      
+  DctAddr        String?
+  DctTelNo       String?
+  DctEmail       String?
+  DctAhCode      Int?
+  DctShare       Float?       @default(0)
+  DctRecState    Int          @default(1)
+  Category       DoctCatgMst? @relation(fields: [DctDcgCode], references: [DcgCode])
+  Role           DoctRoleMst? @relation(fields: [DctDrlCode], references: [DrlCode])
+  OutdReg        OutdReg[]
+  OutdHdr        OutdHdr[]
+  OutdBillDct    OutdBlDctDtl[]
+  OutdRcpt       OutdRcpt[]
+  OutdRcDct      OutdRcDctDtl[]
+  IndrHdr        IndrHdr[]
+  IndrBlDct      IndrBlDctDtl[]
+  LabHdr         LabHdr[]
+  LabRcDct       LabRcDctDtl[]
+}
+
+model RefByMast {
+  RByCode        Int           @id @default(autoincrement())
+  RByName        String
+  RBySpeci       String?
+  RByRfgCode     Int?       
+  RByAddr        String?
+  RByTelNo       String?
+  RByEmail       String?
+  RByAhCode      Int?
+  RByShare       Float?        @default(0)
+  RByRecState    Int           @default(1)
+  Category       RefCatgMst?   @relation(fields: [RByRfgCode], references: [RfgCode])
+  OutdReg        OutdReg[]
+  OutdHdr        OutdHdr[]
+  OutdRcpt       OutdRcpt[]
+  IndrHdr        IndrHdr[]
+  LabHdr         LabHdr[]
+}
+
+model RefToMast {
+  RToCode        Int           @id @default(autoincrement())
+  RToName        String
+  RToSpeci       String?
+  RToRfgCode     Int?       
+  RToAddr        String?
+  RToTelNo       String?
+  RToEmail       String?
+  RToAhCode      Int?
+  RToShare       Float?        @default(0)
+  RToRecState    Int           @default(1)
+  Category       RefCatgMst?   @relation(fields: [RToRfgCode], references: [RfgCode])
+  OutdReg        OutdReg[]
+}
+
+model AreaMast {
+  AraCode       Int         @id @default(autoincrement())
+  AraName       String
+  AraRecState   Int         @default(1)
+  PatMast       PatMast[]
+  PartyMast     PartyMast[]
+}
+
+model StsnMast {
+  StnCode       Int       @id @default(autoincrement())
+  StnName       String
+  StnRecState   Int       @default(1)
+  PatMast       PatMast[]
+}
+
+model DiagMast {
+  DigCode       Int       @id @default(autoincrement())
+  DigName       String
+  DigRecState   Int       @default(1)
+  OutdRegProv   OutdReg[] @relation("ProvDiag")
+  OutdRegFinal  OutdReg[] @relation("FinalDiag")
+  IndrHdrProv   IndrHdr[] @relation("ProvDiag")
+  IndrHdrFinal  IndrHdr[] @relation("FinalDiag")
+}
+
+model FloorMast {
+  FlrCode       Int        @id @default(autoincrement())
+  FlrName       String
+  FlrShowInList Boolean    @default(true)
+  FlrRecState   Int        @default(1)
+  BedMast       BedMast[]
+  IndrHdr       IndrHdr[]
+}
+
+model WardMast {
+  WrdCode       Int        @id @default(autoincrement())
+  WrdName       String
+  WrdRecState   Int        @default(1)
+  BedMast       BedMast[]
+  IndrHdr       IndrHdr[]
+}
+
+model ServGrpMst {
+  SgpCode           Int       @id @default(autoincrement())
+  SgpName           String
+  SgpIndex          Int?      @default(0)
+  SgpExpanded       Boolean?  @default(false)
+  SgpEditable       Boolean?  @default(false)
+  SgpInfAllowed     Boolean?  @default(false)
+  SgpDefAllowed     Boolean?  @default(false)
+  SgpDiscAllowed    Boolean?  @default(false)
+  SgpDiscPer        Float?    @default(0)
+  SgpExtRateSys     Boolean?  @default(false)
+  SgpDctwseRateSys  Boolean?  @default(false)
+  SgpPcgwseRateSys  Boolean?  @default(false)
+  SgpRBywseRateSys  Boolean?  @default(false)
+  SgpRTowseRateSys  Boolean?  @default(false)
+  SgpTimewseRateSys Boolean?  @default(false)
+  SgpExtDiscSys     Boolean?  @default(false)
+  SgpDctwseDiscSys  Boolean?  @default(false)
+  SgpPcgwseDiscSys  Boolean?  @default(false)
+  SgpExtBargSys     Boolean?  @default(false)
+  SgpExtShareSys    Boolean?  @default(false)
+  SgpDctwseShareSys Boolean?  @default(false)
+  SgpShowInList     Boolean?  @default(true)
+  SgpRecState       Int       @default(1)
+  ServMast          ServMast[]
+}
+
+model ServMast {
+  SrvCode             Int         @id @default(autoincrement())
+  SrvName             String
+  SrvSgpCode          Int?     
+  SrvAhCode           Int?
+  SrvCharges          Float?      @default(0)
+  SrvDiscPer          Float?      @default(0)
+  SrvIndex            Int?        @default(0)
+  SrvRateEditable     Boolean?    @default(false)
+  SrvAmtEditable      Boolean?    @default(false)
+  SrvUnitEditable     Boolean?    @default(false)
+  SrvMultiDct         Boolean?    @default(false)
+  SrvShowInList       Boolean?    @default(true)
+  SrvAutoInsIndr      Boolean?    @default(false)
+  SrvAutoInsOnceIndr  Boolean?    @default(false)
+  SrvAutoCalcIndr     Boolean?    @default(false)
+  SrvInfAllowed       Boolean?    @default(false)
+  SrvDefAllowed       Boolean?    @default(false)
+  SrvDiscAllowed      Boolean?    @default(false)
+  SrvExtRateSys       Boolean?    @default(false)
+  SrvExtDiscSys       Boolean?    @default(false)
+  SrvExtShareSys      Boolean?    @default(false)
+  SrvExtBargSys       Boolean?    @default(false)
+  SrvRecState         Int         @default(1)
+  Group               ServGrpMst? @relation(fields: [SrvSgpCode], references: [SgpCode])
+  ServRateMst         ServRateMst[]
+  BedMast             BedMast[]
+  OutdReg             OutdReg[]
+  OutdBill            OutdBill[]
+  IndrBill            IndrBill[]
+  LabRcpt             LabRcpt[]
+}
+
+model ServRateMst {
+  SrmCode       Int       @id @default(autoincrement())
+  SrmSrvCode    Int?   
+  SrmRateType   String
+  SrmRefCode    Int?
+  SrmEffDate    DateTime?
+  SrmStartTime  Int?
+  SrmEndTime    Int?
+  SrmRate       Float?    @default(0)
+  SrmShare      Float?    @default(0)
+  SrmDiscPer    Float?    @default(0)
+  SrmBargPer    Float?    @default(0)
+  SrmRecState   Int       @default(1)
+  Service       ServMast? @relation(fields: [SrmSrvCode], references: [SrvCode])
+}
+
+model PatMast {
+  PttCode        Int         @id @default(autoincrement())
+  PttName        String
+  PttRegNo       Int?
+  PttRegDate     DateTime?
+  PttAhCode      Int?
+  PttPcgCode     Int?     
+  PttSex         String?
+  PttAgeAsOnDt   DateTime?
+  PttDob         DateTime?
+  PttRefRela     String?
+  PttRefName     String?
+  PttAddr        String?
+  PttAraCode     Int?     
+  PttStnCode     Int?     
+  PttTelNo       String?
+  PttSMSNo       String?
+  PttEmail       String?
+  PttInfAllowed  Boolean?    @default(false)
+  PttDefAllowed  Boolean?    @default(false)
+  PttDiscAllowed Boolean?    @default(false)
+  PttDiscPer     Float?      @default(0)
+  PttShowInList  Boolean?    @default(true)
+  PttRemark      String?
+  PttRecState    Int         @default(1)
+  Category       PatCatgMst? @relation(fields: [PttPcgCode], references: [PcgCode])
+  Area           AreaMast?   @relation(fields: [PttAraCode], references: [AraCode])
+  Station        StsnMast?   @relation(fields: [PttStnCode], references: [StnCode])
+  OutdReg        OutdReg[]
+  OutdHdr        OutdHdr[]
+  OutdRcpt       OutdRcpt[]
+  IndrHdr        IndrHdr[]
+  IndrBlHdr      IndrBlHdr[]
+  LabHdr         LabHdr[]
+  SahMedSales    MedSaleHdr[]
+}
+
+model BedMast {
+  BdmCode           Int        @id @default(autoincrement())
+  BdmName           String
+  BdmWrdCode        Int?    
+  BdmFlrCode        Int?    
+  BdmCharges        Float?     @default(0)
+  BdmDiscPer        Float?     @default(0)
+  BdmDiscAllowed    Boolean?   @default(false)
+  BdmSrvCode        Int?    
+  BdmFreeAllot      Boolean?   @default(false)
+  BdmChkTime        Int?
+  BdmChkOutTimeBasis String?
+  BdmIndex          Int?       @default(0)
+  BdmShowInList     Boolean?   @default(true)
+  BdmRemark         String?
+  BdmRecState       Int        @default(1)
+  Ward              WardMast?  @relation(fields: [BdmWrdCode], references: [WrdCode])
+  Floor             FloorMast? @relation(fields: [BdmFlrCode], references: [FlrCode])
+  Service           ServMast?  @relation(fields: [BdmSrvCode], references: [SrvCode])
+  IBedState         IBedState[]
+  IndrHdr           IndrHdr[]
+}
+
+// ============================================================
+// OPD (OUTPATIENT) TRANSACTIONS
+// ============================================================
+
+model OutdReg {
+  OpgCode            Int       @id @default(autoincrement())
+  OpgVtmCode         Int?
+  OpgPrefix          String?
+  OpgVchNo           Int
+  OpgPostfix         String?
+  OpgDate            DateTime
+  OpgTime            Int?
+  OpgOldOpgCode      Int?
+  OpgCDctCode        Int?   
+  OpgRByCode         Int?   
+  OpgRToCode         Int?   
+  OpgPttCode         Int    
+  OpgPDigCode        Int?   
+  OpgFDigCode        Int?   
+  OpgSrvCode         Int?   
+  OpgUnit            Float?    @default(1)
+  OpgRate            Float?    @default(0)
+  OpgAmtBefDisc      Float?    @default(0)
+  OpgDiscPer         Float?    @default(0)
+  OpgDiscAmt         Float?    @default(0)
+  OpgAmtAftDisc      Float?    @default(0)
+  OpgRfugAmt         Float?    @default(0)
+  OpgRemark          String?
+  OpgRecState        Int       @default(1)
+  OpgCmpCode         Int       @default(1)
+  ConsultingDoctor   DoctMast? @relation(fields: [OpgCDctCode], references: [DctCode])
+  ReferredBy         RefByMast? @relation(fields: [OpgRByCode], references: [RByCode])
+  ReferredTo         RefToMast? @relation(fields: [OpgRToCode], references: [RToCode])
+  Patient            PatMast   @relation(fields: [OpgPttCode], references: [PttCode])
+  ProvisionalDiag    DiagMast? @relation("ProvDiag", fields: [OpgPDigCode], references: [DigCode])
+  FinalDiag          DiagMast? @relation("FinalDiag", fields: [OpgFDigCode], references: [DigCode])
+  Service            ServMast? @relation(fields: [OpgSrvCode], references: [SrvCode])
+  OutdRgRefd         OutdRgRefd[]
+}
+
+model OutdHdr {
+  OhdCode         Int          @id @default(autoincrement())
+  OhdVtmCode      Int?
+  OhdPrefix       String?
+  OhdVchNo        Int
+  OhdDate         DateTime
+  OhdTime         Int?
+  OhdPttCode      Int       
+  OhdCDctCode     Int?      
+  OhdRByCode      Int?      
+  OhdBillType     String?
+  OhdDiscPer      Float?       @default(0)
+  OhdDiscAmt      Float?       @default(0)
+  OhdTotalAmt     Float?       @default(0)
+  OhdDepAmt       Float?       @default(0)
+  OhdRfugAmt      Float?       @default(0)
+  OhdBalAmt       Float?       @default(0)
+  OhdRemark       String?
+  OhdVoidFlag     Boolean?     @default(false)
+  OhdRecState     Int          @default(1)
+  OhdCmpCode      Int          @default(1)
+  Patient         PatMast      @relation(fields: [OhdPttCode], references: [PttCode])
+  Doctor          DoctMast?    @relation(fields: [OhdCDctCode], references: [DctCode])
+  ReferredBy      RefByMast?   @relation(fields: [OhdRByCode], references: [RByCode])
+  OutdBill        OutdBill[]
+  OutdBlDctDtl    OutdBlDctDtl[]
+  OutdBlPymtHdr   OutdBlPymtHdr[]
+  OutdBlRefdHdr   OutdBlRefdHdr[]
+}
+
+model OutdBill {
+  ObdCode         Int       @id @default(autoincrement())
+  ObdOhdCode      Int    
+  ObdSrvCode      Int?   
+  ObdSno          Int?
+  ObdUnit         Float?    @default(1)
+  ObdRate         Float?    @default(0)
+  ObdAmtBefDisc   Float?    @default(0)
+  ObdDiscPer      Float?    @default(0)
+  ObdDiscAmt      Float?    @default(0)
+  ObdAmtAftDisc   Float?    @default(0)
+  ObdRecState     Int       @default(1)
+  Header          OutdHdr   @relation(fields: [ObdOhdCode], references: [OhdCode])
+  Service         ServMast? @relation(fields: [ObdSrvCode], references: [SrvCode])
+}
+
+model OutdBlDctDtl {
+  OddCode         Int       @id @default(autoincrement())
+  OddOhdCode      Int    
+  OddDctCode      Int?   
+  OddSharePer     Float?    @default(0)
+  OddShareAmt     Float?    @default(0)
+  OddRecState     Int       @default(1)
+  Header          OutdHdr   @relation(fields: [OddOhdCode], references: [OhdCode])
+  Doctor          DoctMast? @relation(fields: [OddDctCode], references: [DctCode])
+}
+
+model OutdBlPymtHdr {
+  ObpCode         Int      @id @default(autoincrement())
+  ObpOhdCode      Int?  
+  ObpDate         DateTime
+  ObpAmt          Float?   @default(0)
+  ObpRecState     Int      @default(1)
+  Header          OutdHdr? @relation(fields: [ObpOhdCode], references: [OhdCode])
+}
+
+model OutdBlRefdHdr {
+  ObrCode         Int      @id @default(autoincrement())
+  ObrOhdCode      Int?  
+  ObrDate         DateTime
+  ObrAmt          Float?   @default(0)
+  ObrRecState     Int      @default(1)
+  Header          OutdHdr? @relation(fields: [ObrOhdCode], references: [OhdCode])
+}
+
+model OutdRcpt {
+  OrcCode         Int          @id @default(autoincrement())
+  OrcVtmCode      Int?
+  OrcPrefix       String?
+  OrcVchNo        Int
+  OrcDate         DateTime
+  OrcTime         Int?
+  OrcPttCode      Int       
+  OrcCDctCode     Int?      
+  OrcRByCode      Int?      
+  OrcReceiptType  String?
+  OrcDiscPer      Float?       @default(0)
+  OrcTotalAmt     Float?       @default(0)
+  OrcRecvdAmt     Float?       @default(0)
+  OrcRfugAmt      Float?       @default(0)
+  OrcBalAmt       Float?       @default(0)
+  OrcAdvAmt       Float?       @default(0)
+  OrcRemark       String?
+  OrcVoidFlag     Boolean?     @default(false)
+  OrcRecState     Int          @default(1)
+  OrcCmpCode      Int          @default(1)
+  Patient         PatMast      @relation(fields: [OrcPttCode], references: [PttCode])
+  Doctor          DoctMast?    @relation(fields: [OrcCDctCode], references: [DctCode])
+  ReferredBy      RefByMast?   @relation(fields: [OrcRByCode], references: [RByCode])
+  OutdRcDctDtl    OutdRcDctDtl[]
+  OutdPymtHdr     OutdPymtHdr[]
+  OutdRefdHdr     OutdRefdHdr[]
+}
+
+model OutdRcDctDtl {
+  OrdCode         Int       @id @default(autoincrement())
+  OrdOrcCode      Int    
+  OrdDctCode      Int?   
+  OrdSharePer     Float?    @default(0)
+  OrdRecState     Int       @default(1)
+  Receipt         OutdRcpt  @relation(fields: [OrdOrcCode], references: [OrcCode])
+  Doctor          DoctMast? @relation(fields: [OrdDctCode], references: [DctCode])
+}
+
+model OutdPymtHdr {
+  OphCode         Int      @id @default(autoincrement())
+  OphOrcCode      Int?  
+  OphDate         DateTime
+  OphAmt          Float?   @default(0)
+  OphRecState     Int      @default(1)
+  Receipt         OutdRcpt? @relation(fields: [OphOrcCode], references: [OrcCode])
+}
+
+model OutdRefdHdr {
+  OrhCode         Int      @id @default(autoincrement())
+  OrhOrcCode      Int?  
+  OrhDate         DateTime
+  OrhAmt          Float?   @default(0)
+  OrhRecState     Int      @default(1)
+  Receipt         OutdRcpt? @relation(fields: [OrhOrcCode], references: [OrcCode])
+}
+
+model OutdRgRefd {
+  OrrCode         Int      @id @default(autoincrement())
+  OrrOpgCode      Int?  
+  OrrDate         DateTime
+  OrrAmt          Float?   @default(0)
+  OrrRecState     Int      @default(1)
+  Registration    OutdReg? @relation(fields: [OrrOpgCode], references: [OpgCode])
+}
+
+// ============================================================
+// IPD (INPATIENT) TRANSACTIONS
+// ============================================================
+
+model IndrHdr {
+  IhdCode         Int          @id @default(autoincrement())
+  IhdVtmCode      Int?
+  IhdPrefix       String?
+  IhdVchNo        Int
+  IhdDate         DateTime
+  IhdTime         Int?
+  IhdPttCode      Int       
+  IhdCDctCode     Int?      
+  IhdRByCode      Int?      
+  IhdWrdCode      Int?      
+  IhdBedCode      Int?      
+  IhdFlrCode      Int?      
+  IhdAdvAmt       Float?       @default(0)
+  IhdDischDate    DateTime?
+  IhdDischTime    Int?
+  IhdPDigCode     Int?      
+  IhdFDigCode     Int?      
+  IhdStatus       String?      @default("Admitted")
+  IhdRemark       String?
+  IhdVoidFlag     Boolean?     @default(false)
+  IhdRecState     Int          @default(1)
+  IhdCmpCode      Int          @default(1)
+  Patient         PatMast      @relation(fields: [IhdPttCode], references: [PttCode])
+  Doctor          DoctMast?    @relation(fields: [IhdCDctCode], references: [DctCode])
+  ReferredBy      RefByMast?   @relation(fields: [IhdRByCode], references: [RByCode])
+  Ward            WardMast?    @relation(fields: [IhdWrdCode], references: [WrdCode])
+  Bed             BedMast?     @relation(fields: [IhdBedCode], references: [BdmCode])
+  Floor           FloorMast?   @relation(fields: [IhdFlrCode], references: [FlrCode])
+  ProvisionalDiag DiagMast?    @relation("ProvDiag", fields: [IhdPDigCode], references: [DigCode])
+  FinalDiag       DiagMast?    @relation("FinalDiag", fields: [IhdFDigCode], references: [DigCode])
+  IBedState       IBedState[]
+  IndrBlHdr       IndrBlHdr[]
+  IndrReg         IndrReg[]
+}
+
+model IBedState {
+  IbbsCode        Int       @id @default(autoincrement())
+  IbbsICode       Int    
+  IbbsIbsCode     Int?   
+  IbbsFromDate    DateTime?
+  IbbsFromTime    Int?
+  IbbsToDate      DateTime?
+  IbbsToTime      Int?
+  IbbsUnit        Float?    @default(1)
+  IbbsIblICode    Int?
+  IbbsIpgCode     Int?
+  IbbsSno         Int?
+  IbbsTrnCode     Int?
+  IbbsRemark      String?
+  IbbsRecState    Int       @default(1)
+  Header          IndrHdr   @relation(fields: [IbbsICode], references: [IhdCode])
+  Bed             BedMast?  @relation(fields: [IbbsIbsCode], references: [BdmCode])
+}
+
+model IndrBlHdr {
+  IbhCode         Int          @id @default(autoincrement())
+  IbhVtmCode      Int?
+  IbhPrefix       String?
+  IbhVchNo        Int
+  IbhDate         DateTime
+  IbhIhdCode      Int       
+  IbhPttCode      Int       
+  IbhBillType     String?
+  IbhDiscPer      Float?       @default(0)
+  IbhTotalAmt     Float?       @default(0)
+  IbhDepAmt       Float?       @default(0)
+  IbhRfugAmt      Float?       @default(0)
+  IbhBalAmt       Float?       @default(0)
+  IbhStatus       String?
+  IbhDischDate    DateTime?
+  IbhRemark       String?
+  IbhVoidFlag     Boolean?     @default(false)
+  IbhRecState     Int          @default(1)
+  IbhCmpCode      Int          @default(1)
+  IPDHeader       IndrHdr      @relation(fields: [IbhIhdCode], references: [IhdCode])
+  Patient         PatMast      @relation(fields: [IbhPttCode], references: [PttCode])
+  IndrBill        IndrBill[]
+  IndrBlDctDtl    IndrBlDctDtl[]
+  IndrBlDpogDtl   IndrBlDpogDtl[]
+  IndrBlRfugDtl   IndrBlRfugDtl[]
+}
+
+model IndrBill {
+  IbdCode         Int       @id @default(autoincrement())
+  IbdIbhCode      Int    
+  IbdSrvCode      Int?   
+  IbdSno          Int?
+  IbdUnit         Float?    @default(1)
+  IbdRate         Float?    @default(0)
+  IbdAmtBefDisc   Float?    @default(0)
+  IbdDiscPer      Float?    @default(0)
+  IbdDiscAmt      Float?    @default(0)
+  IbdAmtAftDisc   Float?    @default(0)
+  IbdRecState     Int       @default(1)
+  Header          IndrBlHdr @relation(fields: [IbdIbhCode], references: [IbhCode])
+  Service         ServMast? @relation(fields: [IbdSrvCode], references: [SrvCode])
+}
+
+model IndrBlDctDtl {
+  IddCode         Int       @id @default(autoincrement())
+  IddIbhCode      Int    
+  IddDctCode      Int?   
+  IddSharePer     Float?    @default(0)
+  IddShareAmt     Float?    @default(0)
+  IddRecState     Int       @default(1)
+  Header          IndrBlHdr @relation(fields: [IddIbhCode], references: [IbhCode])
+  Doctor          DoctMast? @relation(fields: [IddDctCode], references: [DctCode])
+}
+
+model IndrBlDpogDtl {
+  IpdCode         Int       @id @default(autoincrement())
+  IpdIbhCode      Int?   
+  IpdAmt          Float?    @default(0)
+  IpdDate         DateTime?
+  IpdRecState     Int       @default(1)
+  Header          IndrBlHdr? @relation(fields: [IpdIbhCode], references: [IbhCode])
+}
+
+model IndrBlRfugDtl {
+  IrdCode         Int       @id @default(autoincrement())
+  IrdIbhCode      Int?   
+  IrdAmt          Float?    @default(0)
+  IrdDate         DateTime?
+  IrdRecState     Int       @default(1)
+  Header          IndrBlHdr? @relation(fields: [IrdIbhCode], references: [IbhCode])
+}
+
+model IndrReg {
+  IrgCode         Int       @id @default(autoincrement())
+  IrgIhdCode      Int    
+  IrgDate         DateTime
+  IrgAmt          Float?    @default(0)
+  IrgType         String?
+  IrgRecState     Int       @default(1)
+  Header          IndrHdr   @relation(fields: [IrgIhdCode], references: [IhdCode])
+  IndrRgPymt      IndrRgPymt[]
+  IndrRgRefd      IndrRgRefd[]
+}
+
+model IndrRgPymt {
+  IrpCode         Int      @id @default(autoincrement())
+  IrpIrgCode      Int?  
+  IrpDate         DateTime
+  IrpAmt          Float?   @default(0)
+  IrpRecState     Int      @default(1)
+  Registration    IndrReg? @relation(fields: [IrpIrgCode], references: [IrgCode])
+}
+
+model IndrRgRefd {
+  IrrCode         Int      @id @default(autoincrement())
+  IrrIrgCode      Int?  
+  IrrDate         DateTime
+  IrrAmt          Float?   @default(0)
+  IrrRecState     Int      @default(1)
+  Registration    IndrReg? @relation(fields: [IrrIrgCode], references: [IrgCode])
+}
+
+// ============================================================
+// LAB TRANSACTIONS
+// ============================================================
+
+model LabHdr {
+  LhdCode         Int          @id @default(autoincrement())
+  LhdVtmCode      Int?
+  LhdPrefix       String?
+  LhdVchNo        Int
+  LhdDate         DateTime
+  LhdTime         Int?
+  LhdPttCode      Int       
+  LhdCDctCode     Int?      
+  LhdRByCode      Int?      
+  LhdReceiptType  String?
+  LhdDiscPer      Float?       @default(0)
+  LhdTotalAmt     Float?       @default(0)
+  LhdRecvdAmt     Float?       @default(0)
+  LhdRfugAmt      Float?       @default(0)
+  LhdBalAmt       Float?       @default(0)
+  LhdAdvAmt       Float?       @default(0)
+  LhdRemark       String?
+  LhdVoidFlag     Boolean?     @default(false)
+  LhdRecState     Int          @default(1)
+  LhdCmpCode      Int          @default(1)
+  Patient         PatMast      @relation(fields: [LhdPttCode], references: [PttCode])
+  Doctor          DoctMast?    @relation(fields: [LhdCDctCode], references: [DctCode])
+  ReferredBy      RefByMast?   @relation(fields: [LhdRByCode], references: [RByCode])
+  LabRcpt         LabRcpt[]
+  LabRcDctDtl     LabRcDctDtl[]
+  LabPymtHdr      LabPymtHdr[]
+  LabRefdHdr      LabRefdHdr[]
+}
+
+model LabRcpt {
+  LrdCode         Int       @id @default(autoincrement())
+  LrdLhdCode      Int    
+  LrdSrvCode      Int?   
+  LrdSno          Int?
+  LrdUnit         Float?    @default(1)
+  LrdRate         Float?    @default(0)
+  LrdAmtBefDisc   Float?    @default(0)
+  LrdDiscPer      Float?    @default(0)
+  LrdDiscAmt      Float?    @default(0)
+  LrdAmtAftDisc   Float?    @default(0)
+  LrdRecState     Int       @default(1)
+  Header          LabHdr    @relation(fields: [LrdLhdCode], references: [LhdCode])
+  Service         ServMast? @relation(fields: [LrdSrvCode], references: [SrvCode])
+}
+
+model LabRcDctDtl {
+  LddCode         Int       @id @default(autoincrement())
+  LddLhdCode      Int    
+  LddDctCode      Int?   
+  LddSharePer     Float?    @default(0)
+  LddRecState     Int       @default(1)
+  Header          LabHdr    @relation(fields: [LddLhdCode], references: [LhdCode])
+  Doctor          DoctMast? @relation(fields: [LddDctCode], references: [DctCode])
+}
+
+model LabPymtHdr {
+  LphCode         Int      @id @default(autoincrement())
+  LphLhdCode      Int?  
+  LphDate         DateTime
+  LphAmt          Float?   @default(0)
+  LphRecState     Int      @default(1)
+  Header          LabHdr?  @relation(fields: [LphLhdCode], references: [LhdCode])
+}
+
+model LabRefdHdr {
+  LrhCode         Int      @id @default(autoincrement())
+  LrhLhdCode      Int?  
+  LrhDate         DateTime
+  LrhAmt          Float?   @default(0)
+  LrhRecState     Int      @default(1)
+  Header          LabHdr?  @relation(fields: [LrhLhdCode], references: [LhdCode])
+}
+
+// ============================================================
+// PHARMACY (MDS) TABLES
+// ============================================================
+
+model SubItmGrpMst {
+  SigCode       Int          @id @default(autoincrement())
+  SigName       String
+  SigRecState   Int          @default(1)
+  SubItmMast    SubItmMast[]
+}
+
+model SubItmMast {
+  SimCode       Int          @id @default(autoincrement())
+  SimName       String
+  SimSigCode    Int?      
+  SimRecState   Int          @default(1)
+  Group         SubItmGrpMst? @relation(fields: [SimSigCode], references: [SigCode])
+  IndrStkDtl    IndrStkDtl[]
+  OutdStkDtl    OutdStkDtl[]
+  MedPurchDtl   MedPurchDtl[]
+  MedSaleDtl    MedSaleDtl[]
+}
+
+model PartyGrpMst {
+  PgpCode       Int         @id @default(autoincrement())
+  PgpName       String
+  PgpRecState   Int         @default(1)
+  PartyMast     PartyMast[]
+}
+
+model PartyMast {
+  PryCode        Int         @id @default(autoincrement())
+  PryName        String
+  PryPgpCode     Int?     
+  PryAddr        String?
+  PryAraCode     Int?     
+  PryTelNo       String?
+  PryEmail       String?
+  PryRecState    Int         @default(1)
+  Group          PartyGrpMst? @relation(fields: [PryPgpCode], references: [PgpCode])
+  Area           AreaMast?    @relation(fields: [PryAraCode], references: [AraCode])
+  MedPurchHdr    MedPurchHdr[]
+}
+
+model PharStkMst {
+  PsmCode       Int          @id @default(autoincrement())
+  PsmName       String
+  PsmRecState   Int          @default(1)
+  IndrStkDtl    IndrStkDtl[]
+  OutdStkDtl    OutdStkDtl[]
+}
+
+model MedPurchHdr {
+  PuhCode         Int          @id @default(autoincrement())
+  PuhVtmCode      Int?
+  PuhPrefix       String?
+  PuhVchNo        Int
+  PuhDate         DateTime
+  PuhTime         Int?
+  PuhPrtCode      Int?      
+  PuhTotalAmt     Float?       @default(0)
+  PuhRecState     Int          @default(1)
+  PuhCmpCode      Int          @default(1)
+  Party           PartyMast?   @relation(fields: [PuhPrtCode], references: [PryCode])
+  Details         MedPurchDtl[]
+}
+
+model MedPurchDtl {
+  PurICode        Int         @id @default(autoincrement())
+  PurCode         Int
+  PurSno          Int?
+  PurSimCode      Int?
+  PurQty          Float?      @default(0)
+  PurRate         Float?      @default(0)
+  PurAmount       Float?      @default(0)
+  PurRecState     Int         @default(1)
+  Header          MedPurchHdr @relation(fields: [PurCode], references: [PuhCode])
+  Item            SubItmMast? @relation(fields: [PurSimCode], references: [SimCode])
+}
+
+model MedSaleHdr {
+  SahCode         Int          @id @default(autoincrement())
+  SahVtmCode      Int?
+  SahPrefix       String?
+  SahVchNo        Int
+  SahDate         DateTime
+  SahTime         Int?
+  SahPttCode      Int?      
+  SahTotalAmt     Float?       @default(0)
+  SahRecState     Int          @default(1)
+  SahCmpCode      Int          @default(1)
+  Patient         PatMast?     @relation(fields: [SahPttCode], references: [PttCode])
+  Details         MedSaleDtl[]
+}
+
+model MedSaleDtl {
+  SalICode        Int         @id @default(autoincrement())
+  SalCode         Int
+  SalSno          Int?
+  SalSimCode      Int?
+  SalQty          Float?      @default(0)
+  SalRate         Float?      @default(0)
+  SalAmount       Float?      @default(0)
+  SalRecState     Int         @default(1)
+  Header          MedSaleHdr  @relation(fields: [SalCode], references: [SahCode])
+  Item            SubItmMast? @relation(fields: [SalSimCode], references: [SimCode])
+}
+
+model IndrStkDtl {
+  IsdCode         Int         @id @default(autoincrement())
+  IsdSimCode      Int?     
+  IsdPsmCode      Int?     
+  IsdQty          Float?      @default(0)
+  IsdDate         DateTime?
+  IsdRecState     Int         @default(1)
+  Item            SubItmMast? @relation(fields: [IsdSimCode], references: [SimCode])
+  Stock           PharStkMst? @relation(fields: [IsdPsmCode], references: [PsmCode])
+}
+
+model OutdStkDtl {
+  OsdCode         Int         @id @default(autoincrement())
+  OsdSimCode      Int?     
+  OsdPsmCode      Int?     
+  OsdQty          Float?      @default(0)
+  OsdDate         DateTime?
+  OsdRecState     Int         @default(1)
+  Item            SubItmMast? @relation(fields: [OsdSimCode], references: [SimCode])
+  Stock           PharStkMst? @relation(fields: [OsdPsmCode], references: [PsmCode])
+}
+
+// ============================================================
+// SYNC & LOGGING
+// ============================================================
+
+model SyncLog {
+  SynCode         Int      @id @default(autoincrement())
+  SynTableName    String
+  SynRecordId     String
+  SynOperation    String
+  SynTimestamp    DateTime @default(now())
+  SynStatus       String   @default("Pending")
+  SynErrorMessage String?
+}
+
+
+model SyncConfig {
+  id           Int      @id @default(autoincrement())
+  lastSyncTime DateTime
+  status       String
+}

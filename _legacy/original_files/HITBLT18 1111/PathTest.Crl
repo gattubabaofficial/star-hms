@@ -1,0 +1,9 @@
+"Pathalogy Test Rep.(Gen)","STAR_PathTestRepo_Gen.Rpt",#TRUE#
+"Pathalogy Test Rep.(Gen_Large)","STAR_PathTestRepo_Gen_Large.Rpt",#FALSE#
+"Pathalogy Test Rep.(Gen_Extra Large)","STAR_PathTestRepo_Gen_ExtraLarge.Rpt",#FALSE#
+"Pathalogy Test Rep.(Nrm.Rng)","STAR_PathTestRepo_NrmRng.Rpt",#TRUE#
+"Pathalogy Test Rep.(Nrm.Rng_Large)","STAR_PathTestRepo_NrmRng_Large.Rpt",#FALSE#
+"Pathalogy Test Rep.(Nrm.Rng_Extra Large)","STAR_PathTestRepo_NrmRng_ExtraLarge.Rpt",#FALSE#
+"Pathalogy (Widal) Test Report","STAR_PathTestRepo_Widal_CrossTab.Rpt",#TRUE#
+"Pathalogy Test Report(C/S-Abnormal)","STAR_PathTestRepo_CultureSens_Abn.Rpt",#TRUE#
+"Pathalogy Test Report(C/S-Normal)","STAR_PathTestRepo_CultureSens_Nrm.Rpt",#FALSE#

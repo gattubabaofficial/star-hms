@@ -1,0 +1,13 @@
+[ODBC]
+DRIVER=Microsoft Access Driver (*.mdb)
+READONLY=0
+UserCommitSync=Yes
+Threads=3
+SafeTransactions=0
+PageTimeout=5
+MaxScanRows=8
+MaxBufferSize=2048
+FIL=MS Access
+DriverId=25
+DefaultDir=D:\Vb6Raj1\Hospital\HmsData\HITBLT18
+DBQ=D:\Vb6Raj1\Hospital\HmsData\HITBLT18\Common.Mdb

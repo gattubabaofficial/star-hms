@@ -1,0 +1,13 @@
+"txtBdmName.TabStop",#TRUE#
+"txtBdmName.TabStop",#TRUE#
+"mskIbsSno.TabStop",#TRUE#
+"txtIbsTime.TabStop",#TRUE#
+"dtpIbsDate.TabStop",#TRUE#
+"dtpIbsDischDate.TabStop",#TRUE#
+"txtIbsDischTime.TabStop",#TRUE#
+"txtIbsRemark.TabStop",#TRUE#
+"cmbIbsDischState.TabStop",#TRUE#
+"txtIpgVtmName.TabStop",#TRUE#
+"txtPttName.TabStop",#TRUE#
+"mskPttRegNo.TabStop",#TRUE#
+"mskIpgVchNo.TabStop",#TRUE#

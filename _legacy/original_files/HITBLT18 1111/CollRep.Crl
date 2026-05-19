@@ -1,0 +1,10 @@
+"Day Collection Report","STAR_CollRepDay.Rpt",#FALSE#
+"Day Collection with Doctor Report","STAR_CollRepDayWithDoctor.rpt",#FALSE#
+"Daily Collection Detail","STAR_CollRepDailyDtl.Rpt",#FALSE#
+"Daily Collection Detail Voucher-wise","STAR_CollRepDailyDtlVTypewise.RPT",#TRUE#
+"Daily Collection Detail Wide","STAR_CollRepDailyDtlWide.Rpt",#FALSE#
+"Daily Collection Summary","STAR_CollRepDailySmry.Rpt",#FALSE#
+"Day Collection (Wide) Report","STAR_CollRepDayWide.rpt",#FALSE#
+"Day Collection (Doctor-wise) Report","STAR_CollRepDayWideDoctWse.rpt",#FALSE#
+"Collection (Doctor-wise) Report","STAR_CollRepDoctWseWide.rpt",#FALSE#
+"Collection Voucher-wise Report","STAR_CollRepDayVTypewise.rpt",#FALSE#

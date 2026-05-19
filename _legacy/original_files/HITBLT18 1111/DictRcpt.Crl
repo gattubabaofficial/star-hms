@@ -1,0 +1,6 @@
+"Direct Receipt (Centre)","STAR_DictRcpt_Centre.Rpt",#FALSE#
+"Direct Receipt (Double)","STAR_DictRcpt_Dbl.Rpt",#FALSE#
+"Direct Receipt","STAR_DictRcpt.Rpt",#TRUE#
+"Direct Receipt (58mm)","STAR_DictRcpt_Slip58mm.Rpt",#FALSE#
+"Govt.Bill (Gen.)","STAR_DictRcpt_Govt.Rpt",#FALSE#
+"ECHS.Bill (Gen.)","STAR_DictRcpt_ECHS_Dtl.Rpt",#FALSE#

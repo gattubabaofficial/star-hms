@@ -1,0 +1,8 @@
+"Indoor Admission Report","STAR_IndrRgAdmRepo.Rpt",#TRUE#
+"Indoor Admission Date-wise","STAR_IndrRgAdmRepo_Datewise.Rpt",#FALSE#
+"Indoor Admission Month-wise","STAR_IndrRgAdmRepo_Monthwise.Rpt",#FALSE#
+"Indoor Admission Consultant-wise","STAR_IndrRgAdmRepo_CDctwise.Rpt",#FALSE#
+"Indoor Discharge Report","STAR_IndrRgDischRepo.Rpt",#FALSE#
+"Indoor Discharge Date-wise","STAR_IndrRgDischRepo_Datewise.Rpt",#FALSE#
+"Indoor Discharge Month-wise","STAR_IndrRgDischRepo_Monthwise.Rpt",#FALSE#
+"Indoor Discharge Consultant-wise","STAR_IndrRgDischRepo_CDctwise.Rpt",#FALSE#

@@ -1,0 +1,3 @@
+"Outdoor (Rcpt).Pymt.(Centre)","STAR_OutdPymt_Centre.Rpt",#FALSE#
+"Outdoor (Rcpt).Pymt.(Double)","STAR_OutdPymt_Dbl.Rpt",#FALSE#
+"Outdoor (Rcpt) Payment","STAR_OutdPymt.Rpt",#TRUE#

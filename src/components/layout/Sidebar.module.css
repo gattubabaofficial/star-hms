@@ -1,0 +1,81 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: #adb5bd;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(0,0,0,0.2);
+}
+
+.nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 0;
+}
+
+.menuItem {
+  margin-bottom: 2px;
+}
+
+.menuHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.menuHeader:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+.menuTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.icon {
+  color: #4dabf7;
+}
+
+.subMenu {
+  background: rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.subMenuLink {
+  padding: 8px 20px 8px 50px;
+  font-size: 13px;
+  color: #868e96;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.subMenuLink:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.active {
+  color: #fff;
+  border-left: 3px solid #3bc9db;
+  background: rgba(59, 201, 219, 0.1);
+  padding-left: 47px;
+}

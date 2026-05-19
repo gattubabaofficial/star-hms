@@ -1,0 +1,6 @@
+"Day Collection Report","Getwell_CollRepDay.Rpt",#TRUE#
+"Daily Collection Detail","Getwell_CollRepDailyDtl.Rpt",#FALSE#
+"Daily Collection Summary","Getwell_CollRepDailySmry.Rpt",#FALSE#
+"Day Collection (Wide) Report","Getwell_CollRepDayWide.rpt",#FALSE#
+"Day Collection (Doctor-wise) Report","Getwell_CollRepDayWideDoctWse.rpt",#FALSE#
+"Collection (Doctor-wise) Report","Getwell_CollRepDoctWseWide.rpt",#FALSE#
