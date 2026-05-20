@@ -1,0 +1,5 @@
+"Outdoor Rcpt.(Centre)","STAR_OutdRcpt_Centre.Rpt",#FALSE#
+"Outdoor Rcpt.(Double)","STAR_OutdRcpt_Dbl.Rpt",#TRUE#
+"Outdoor Receipt","STAR_OutdRcpt.Rpt",#FALSE#
+"ECHS Bill (Detailed)","STAR_OutdRcpt_ECHS_Dtl.Rpt",#FALSE#
+"Outdoor Rcpt.ECHS.Smry","_STAR_OutdRcpt_ECHS_Smry.Rpt",#FALSE#

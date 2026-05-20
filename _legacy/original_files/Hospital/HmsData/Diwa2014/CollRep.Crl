@@ -1,0 +1,6 @@
+"Day Collection Report","Diwakar_CollRepDay.Rpt",#TRUE#
+"Daily Collection Detail","Diwakar_CollRepDailyDtl.Rpt",#FALSE#
+"Daily Collection Summary","Diwakar_CollRepDailySmry.Rpt",#FALSE#
+"Day Collection (Wide) Report","Diwakar_CollRepDayWide.rpt",#FALSE#
+"Day Collection (Doctor-wise) Report","Diwakar_CollRepDayWideDoctWse.rpt",#FALSE#
+"Collection (Doctor-wise) Report","Diwakar_CollRepDoctWseWide.rpt",#FALSE#

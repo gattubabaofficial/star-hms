@@ -1,0 +1,4 @@
+"Indoor Receipt (Centre)","STAR_IndrRcpt_Centre.Rpt",#FALSE#
+"Indoor Receipt (Double)","STAR_IndrRcpt_Dbl.Rpt",#FALSE#
+"Indoor Receipt","STAR_IndrRcpt.Rpt",#TRUE#
+"Indoor Receipt (58mm)","STAR_IndrRcpt_Slip58mm.Rpt",#FALSE#

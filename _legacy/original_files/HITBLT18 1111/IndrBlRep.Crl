@@ -1,0 +1,8 @@
+"Indoor Final Bill/Discharge Report","STAR_IndrDischBillRepo_Detailed.Rpt",#FALSE#
+"Indoor Final Bill/Discharge Case.CrossTab","STAR_IndrDischBillRepo_ProcCrossTab.Rpt",#TRUE#
+"Indoor Final Bill/Discharge Date-wise","STAR_IndrDischBillRepo_Datewise.Rpt",#FALSE#
+"Indoor Final Bill/Discharge Month-wise","STAR_IndrDischBillRepo_Monthwise.Rpt",#FALSE#
+"Indoor Final Bill/Discharge Consultant-wise","STAR_IndrDischBillRepo_CDctwise.Rpt",#FALSE#
+"Indoor Final Bill Dtl.Wide.Pymt","STAR_IndrDischBillRepo_DtlWidePymt.Rpt",#FALSE#
+"Indoor Final Bill Dtl.Short.Pymt","STAR_IndrDischBillRepo_DtlShortPymt.Rpt",#FALSE#
+"Indoor Final Bill Daily Smry","STAR_IndrDischBillRepo_DailySmry.Rpt",#FALSE#

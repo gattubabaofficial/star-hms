@@ -1,0 +1,9764 @@
+VERSION 5.00
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Begin VB.Form frmServiceViewRep 
+   Appearance      =   0  'Flat
+   BackColor       =   &H80000005&
+   ClientHeight    =   10980
+   ClientLeft      =   60
+   ClientTop       =   60
+   ClientWidth     =   14520
+   ControlBox      =   0   'False
+   BeginProperty Font 
+      Name            =   "Verdana"
+      Size            =   8.25
+      Charset         =   0
+      Weight          =   400
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
+   EndProperty
+   KeyPreview      =   -1  'True
+   LinkTopic       =   "Form1"
+   ScaleHeight     =   10980
+   ScaleWidth      =   14520
+   ShowInTaskbar   =   0   'False
+   Begin VB.ComboBox cmbPatEntryMode 
+      Appearance      =   0  'Flat
+      Enabled         =   0   'False
+      BeginProperty Font 
+         Name            =   "Verdana"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   315
+      ItemData        =   "ServView.frx":0000
+      Left            =   1560
+      List            =   "ServView.frx":000D
+      Style           =   1  'Simple Combo
+      TabIndex        =   4
+      TabStop         =   0   'False
+      Text            =   "cmbPatEntryMode"
+      Top             =   360
+      Width           =   1455
+   End
+   Begin VB.CommandButton cmdFormEnter 
+      Appearance      =   0  'Flat
+      BackColor       =   &H00FFFFFF&
+      Default         =   -1  'True
+      BeginProperty Font 
+         Name            =   "Arial Black"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   8760
+      MaskColor       =   &H000000FF&
+      TabIndex        =   6
+      TabStop         =   0   'False
+      Top             =   0
+      UseMaskColor    =   -1  'True
+      Width           =   255
+   End
+   Begin VB.CommandButton cmdFormEscape 
+      Appearance      =   0  'Flat
+      BackColor       =   &H008080FF&
+      Cancel          =   -1  'True
+      Caption         =   "X"
+      BeginProperty Font 
+         Name            =   "Arial Black"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   8040
+      MaskColor       =   &H000000FF&
+      Style           =   1  'Graphical
+      TabIndex        =   5
+      TabStop         =   0   'False
+      Top             =   0
+      Width           =   255
+   End
+   Begin VB.ComboBox cmbFormEntryMode 
+      Appearance      =   0  'Flat
+      Enabled         =   0   'False
+      BeginProperty Font 
+         Name            =   "Verdana"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   315
+      ItemData        =   "ServView.frx":0034
+      Left            =   0
+      List            =   "ServView.frx":0041
+      Style           =   1  'Simple Combo
+      TabIndex        =   3
+      TabStop         =   0   'False
+      Text            =   "cmbFormEntryMode"
+      Top             =   360
+      Width           =   1455
+   End
+   Begin VB.Frame frFormSmry 
+      Appearance      =   0  'Flat
+      BackColor       =   &H80000005&
+      Caption         =   "Summary"
+      BeginProperty Font 
+         Name            =   "Verdana"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H80000008&
+      Height          =   9855
+      Left            =   120
+      TabIndex        =   2
+      Top             =   720
+      Width           =   14295
+      Begin VB.Frame frPrintCRList 
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         ForeColor       =   &H80000008&
+         Height          =   3615
+         Left            =   4260
+         TabIndex        =   56
+         Top             =   2880
+         Width           =   5895
+         Begin VB.TextBox txtToTime1 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Left            =   4440
+            MaxLength       =   50
+            TabIndex        =   67
+            TabStop         =   0   'False
+            Text            =   "00:00"
+            Top             =   960
+            Width           =   855
+         End
+         Begin VB.TextBox txtFromTime1 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Left            =   4440
+            MaxLength       =   50
+            TabIndex        =   66
+            TabStop         =   0   'False
+            Text            =   "00:00"
+            Top             =   600
+            Width           =   855
+         End
+         Begin VB.TextBox dtpFromDate1 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   1
+               Format          =   "dd/MM/yyyy"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   3
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Left            =   2160
+            TabIndex        =   43
+            Tag             =   "AhCode"
+            Text            =   "dd/mm/yyyy"
+            Top             =   600
+            Width           =   1575
+         End
+         Begin VB.TextBox dtpToDate1 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   1
+               Format          =   "dd/MM/yyyy"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   3
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Left            =   2160
+            TabIndex        =   44
+            Tag             =   "AhCode"
+            Text            =   "dd/mm/yyyy"
+            Top             =   960
+            Width           =   1575
+         End
+         Begin VB.CommandButton cmdPrintCRL 
+            Appearance      =   0  'Flat
+            BackColor       =   &H00FFFFFF&
+            Caption         =   "&OK"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   9
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   375
+            Left            =   2520
+            Style           =   1  'Graphical
+            TabIndex        =   49
+            Top             =   3000
+            Width           =   855
+         End
+         Begin VB.ComboBox cmbCRList 
+            Height          =   315
+            Left            =   2160
+            Style           =   2  'Dropdown List
+            TabIndex        =   45
+            Top             =   1320
+            Width           =   3495
+         End
+         Begin VB.TextBox mskPrintCopies 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Left            =   2160
+            TabIndex        =   47
+            Text            =   "0"
+            Top             =   2040
+            Width           =   1455
+         End
+         Begin VB.ComboBox cmbPrintDest 
+            Height          =   315
+            Left            =   2160
+            Style           =   2  'Dropdown List
+            TabIndex        =   48
+            Top             =   2400
+            Width           =   3495
+         End
+         Begin VB.ComboBox cmbPrinterList 
+            Height          =   315
+            Left            =   2160
+            Style           =   2  'Dropdown List
+            TabIndex        =   46
+            Top             =   1680
+            Width           =   3495
+         End
+         Begin VB.Label Label1 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Time:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   13
+            Left            =   3840
+            TabIndex        =   65
+            Top             =   960
+            Width           =   615
+         End
+         Begin VB.Label Label1 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Time:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   8
+            Left            =   3840
+            TabIndex        =   64
+            Top             =   600
+            Width           =   615
+         End
+         Begin VB.Label Label1 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "From Date:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   7
+            Left            =   120
+            TabIndex        =   63
+            Top             =   600
+            Width           =   2055
+         End
+         Begin VB.Label Label1 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "To Date:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   0
+            Left            =   120
+            TabIndex        =   62
+            Top             =   960
+            Width           =   2055
+         End
+         Begin VB.Label Label2 
+            Alignment       =   2  'Center
+            Appearance      =   0  'Flat
+            BackColor       =   &H00E0E0E0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   "Print Dialog"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   9
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   375
+            Index           =   36
+            Left            =   0
+            TabIndex        =   61
+            Top             =   0
+            Width           =   5895
+         End
+         Begin VB.Label Label1 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Print Format Name:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   9
+            Left            =   120
+            TabIndex        =   60
+            Top             =   1320
+            Width           =   1935
+         End
+         Begin VB.Label Label1 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "No. of Copies:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   10
+            Left            =   120
+            TabIndex        =   59
+            Top             =   2040
+            Width           =   1935
+         End
+         Begin VB.Label Label1 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Destination:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   11
+            Left            =   120
+            TabIndex        =   58
+            Top             =   2400
+            Width           =   1935
+         End
+         Begin VB.Label Label1 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Printer Name:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   12
+            Left            =   120
+            TabIndex        =   57
+            Top             =   1680
+            Width           =   1935
+         End
+      End
+      Begin VB.Frame frConfigure 
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         ForeColor       =   &H80000008&
+         Height          =   9255
+         Left            =   2820
+         TabIndex        =   68
+         Top             =   120
+         Width           =   8055
+         Begin VB.TextBox txtQryCDctName 
+            Appearance      =   0  'Flat
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Left            =   1920
+            TabIndex        =   14
+            Top             =   1500
+            Width           =   4455
+         End
+         Begin VB.TextBox txtQrySgpName 
+            Appearance      =   0  'Flat
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Left            =   1920
+            TabIndex        =   16
+            Top             =   2100
+            Width           =   4455
+         End
+         Begin VB.TextBox txtQryPttName 
+            Appearance      =   0  'Flat
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Left            =   1920
+            TabIndex        =   13
+            Top             =   1200
+            Width           =   4455
+         End
+         Begin VB.TextBox dtpFromDate 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   1
+               Format          =   "dd/MM/yyyy"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   3
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Left            =   1920
+            TabIndex        =   10
+            Tag             =   "AhCode"
+            Text            =   "dd/mm/yyyy"
+            Top             =   600
+            Width           =   1575
+         End
+         Begin VB.TextBox dtpToDate 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   1
+               Format          =   "dd/MM/yyyy"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   3
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Left            =   4680
+            TabIndex        =   11
+            Tag             =   "AhCode"
+            Text            =   "dd/mm/yyyy"
+            Top             =   600
+            Width           =   1575
+         End
+         Begin VB.Frame frGroupOpt 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Grouped"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   5715
+            Left            =   120
+            TabIndex        =   18
+            Top             =   2820
+            Width           =   3735
+            Begin VB.OptionButton optServDctrServwise 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Serv.Doctor/Service wise"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   240
+               TabIndex        =   28
+               Top             =   3600
+               Width           =   3315
+            End
+            Begin VB.OptionButton optServDctrServGrpwise 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Serv.Doctor/Serv.Grp wise"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   240
+               TabIndex        =   27
+               Top             =   3240
+               Width           =   3315
+            End
+            Begin VB.OptionButton optServDoctorwise 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Service Doctor wise"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   240
+               TabIndex        =   26
+               Top             =   2880
+               Width           =   3315
+            End
+            Begin VB.OptionButton optConsDoctorwise 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Consult Doctor wise"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   240
+               TabIndex        =   25
+               Top             =   2520
+               Width           =   3315
+            End
+            Begin VB.OptionButton optServGrpNServWise 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Service Group/Service-wise"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   240
+               TabIndex        =   31
+               Top             =   4680
+               Width           =   3315
+            End
+            Begin VB.OptionButton optServGrpWise 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Service Group-wise"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   240
+               TabIndex        =   30
+               Top             =   4320
+               Width           =   3315
+            End
+            Begin VB.OptionButton optPatientNamewise 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Patient Name wise"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   240
+               TabIndex        =   23
+               Top             =   1800
+               Width           =   3315
+            End
+            Begin VB.OptionButton optDatewise 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Date-wise"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   240
+               TabIndex        =   22
+               Top             =   1440
+               Width           =   3315
+            End
+            Begin VB.OptionButton optMonthwise 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Month-wise"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   240
+               TabIndex        =   21
+               Top             =   1080
+               Width           =   3315
+            End
+            Begin VB.OptionButton optDetailed 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Detailed"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   240
+               TabIndex        =   20
+               Top             =   720
+               Value           =   -1  'True
+               Width           =   3315
+            End
+            Begin VB.OptionButton optPatientRegNoWise 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Patient Reg.No. wise"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   240
+               TabIndex        =   24
+               Top             =   2160
+               Width           =   3315
+            End
+            Begin VB.OptionButton optServiceWise 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Service-wise"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   240
+               TabIndex        =   29
+               Top             =   3960
+               Width           =   3315
+            End
+            Begin VB.OptionButton optExpanded 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Expanded"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   240
+               TabIndex        =   19
+               Top             =   360
+               Width           =   3315
+            End
+            Begin VB.OptionButton optVTypewise 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Voucher Type-wise"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   240
+               TabIndex        =   32
+               Top             =   5040
+               Width           =   3315
+            End
+         End
+         Begin VB.CommandButton cmdConfigure 
+            Appearance      =   0  'Flat
+            BackColor       =   &H00FFFFFF&
+            Caption         =   "&OK"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   9
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   375
+            Left            =   3480
+            Style           =   1  'Graphical
+            TabIndex        =   42
+            Top             =   8700
+            Width           =   855
+         End
+         Begin VB.TextBox mskQryPttRegNo 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Left            =   1920
+            TabIndex        =   12
+            Text            =   "0"
+            Top             =   900
+            Width           =   1575
+         End
+         Begin VB.Frame frFilterOpt 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Filter By"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   5715
+            Left            =   3960
+            TabIndex        =   69
+            Top             =   2820
+            Width           =   3975
+            Begin VB.CheckBox chkFByLab 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Lab Collection (All)"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   120
+               TabIndex        =   40
+               Top             =   4440
+               Value           =   1  'Checked
+               Width           =   3495
+            End
+            Begin VB.CheckBox chkFByLabRcpt 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Lab Receipts"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   360
+               TabIndex        =   41
+               Top             =   4920
+               Value           =   1  'Checked
+               Width           =   3555
+            End
+            Begin VB.CheckBox chkFByOutdReg 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Outdoor Registration"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   360
+               TabIndex        =   34
+               Top             =   900
+               Value           =   1  'Checked
+               Width           =   3555
+            End
+            Begin VB.CheckBox chkFByOutdRcpt 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Outdoor Receipts"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   360
+               TabIndex        =   35
+               Top             =   1440
+               Value           =   1  'Checked
+               Width           =   3555
+            End
+            Begin VB.CheckBox chkFByIndrRcpt 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Indoor Receipts"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   360
+               TabIndex        =   38
+               Top             =   3120
+               Value           =   1  'Checked
+               Width           =   3555
+            End
+            Begin VB.CheckBox chkFByIndrBill 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Indoor Bill"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   360
+               TabIndex        =   39
+               Top             =   3720
+               Value           =   1  'Checked
+               Width           =   3555
+            End
+            Begin VB.CheckBox chkFByOutdoor 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Outdoor Collection (All)"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   120
+               TabIndex        =   33
+               Top             =   420
+               Value           =   1  'Checked
+               Width           =   3495
+            End
+            Begin VB.CheckBox chkFByIndoor 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Indoor Collection (All)"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   120
+               TabIndex        =   37
+               Top             =   2580
+               Value           =   1  'Checked
+               Width           =   3495
+            End
+            Begin VB.CheckBox chkFByOutdBill 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               Caption         =   "Outdoor Bill"
+               BeginProperty Font 
+                  Name            =   "Verdana"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H80000008&
+               Height          =   285
+               Left            =   360
+               TabIndex        =   36
+               Top             =   1980
+               Value           =   1  'Checked
+               Width           =   3555
+            End
+            Begin VB.Shape Shape1 
+               Height          =   1275
+               Index           =   2
+               Left            =   0
+               Top             =   4320
+               Width           =   3975
+            End
+            Begin VB.Shape Shape1 
+               Height          =   1755
+               Index           =   1
+               Left            =   0
+               Top             =   2460
+               Width           =   3975
+            End
+            Begin VB.Shape Shape1 
+               Height          =   2055
+               Index           =   0
+               Left            =   0
+               Top             =   300
+               Width           =   3975
+            End
+         End
+         Begin VB.TextBox txtQrySrvName 
+            Appearance      =   0  'Flat
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Left            =   1920
+            TabIndex        =   15
+            Top             =   1800
+            Width           =   4455
+         End
+         Begin VB.TextBox txtQryVtmName 
+            Appearance      =   0  'Flat
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Left            =   1920
+            TabIndex        =   17
+            Top             =   2400
+            Width           =   4455
+         End
+         Begin VB.Label Label1 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Consult Doctor:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   16
+            Left            =   120
+            TabIndex        =   78
+            Top             =   1500
+            Width           =   1815
+         End
+         Begin VB.Label Label1 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Service Group:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   15
+            Left            =   120
+            TabIndex        =   77
+            Top             =   2100
+            Width           =   1815
+         End
+         Begin VB.Label Label1 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Patient Name:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   1
+            Left            =   120
+            TabIndex        =   76
+            Top             =   1200
+            Width           =   1815
+         End
+         Begin VB.Label Label2 
+            Alignment       =   2  'Center
+            Appearance      =   0  'Flat
+            BackColor       =   &H00E0E0E0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   "Configure"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   9
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   375
+            Index           =   3
+            Left            =   0
+            TabIndex        =   75
+            Top             =   0
+            Width           =   8055
+         End
+         Begin VB.Label Label1 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "From Date:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   2
+            Left            =   120
+            TabIndex        =   74
+            Top             =   600
+            Width           =   1815
+         End
+         Begin VB.Label Label1 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "To Date:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   3
+            Left            =   3720
+            TabIndex        =   73
+            Top             =   600
+            Width           =   855
+         End
+         Begin VB.Label Label1 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Patient Reg.No:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   5
+            Left            =   120
+            TabIndex        =   72
+            Top             =   900
+            Width           =   1815
+         End
+         Begin VB.Label Label1 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Service Name:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   6
+            Left            =   120
+            TabIndex        =   71
+            Top             =   1800
+            Width           =   1815
+         End
+         Begin VB.Label Label1 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Voucher Type:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   14
+            Left            =   120
+            TabIndex        =   70
+            Top             =   2400
+            Width           =   1815
+         End
+      End
+      Begin VB.CommandButton cmdPrintRep 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00FFFF80&
+         Caption         =   "Print Report"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   9
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   12360
+         TabIndex        =   51
+         Top             =   8760
+         Width           =   1575
+      End
+      Begin VB.CommandButton cmdPrintToExcel 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00FFFF80&
+         Caption         =   "Print to Excel"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   9
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   12360
+         TabIndex        =   52
+         Top             =   9240
+         Width           =   1575
+      End
+      Begin VB.TextBox txtList1Col 
+         Appearance      =   0  'Flat
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Index           =   0
+         Left            =   120
+         MousePointer    =   1  'Arrow
+         TabIndex        =   9
+         TabStop         =   0   'False
+         Top             =   1560
+         Width           =   1335
+      End
+      Begin VB.TextBox txtSearch1Text 
+         Appearance      =   0  'Flat
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Left            =   960
+         TabIndex        =   7
+         Top             =   360
+         Width           =   4215
+      End
+      Begin MSFlexGridLib.MSFlexGrid Mfgrd1 
+         Height          =   7935
+         Left            =   120
+         TabIndex        =   8
+         Top             =   720
+         Width           =   14055
+         _ExtentX        =   24791
+         _ExtentY        =   13996
+         _Version        =   393216
+         RowHeightMin    =   315
+         FocusRect       =   2
+         HighLight       =   2
+         SelectionMode   =   1
+         Appearance      =   0
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin VB.Label lblLabSeleCriteria 
+         Caption         =   "Lab Selection Criteria"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Left            =   120
+         TabIndex        =   83
+         Top             =   9480
+         Width           =   12135
+      End
+      Begin VB.Label lblToDate 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00FFFFC0&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "dd/mm/yyyy"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   285
+         Left            =   9300
+         TabIndex        =   82
+         Top             =   360
+         Width           =   1455
+      End
+      Begin VB.Label lblFromDate 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00FFFFC0&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "dd/mm/yyyy"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   285
+         Left            =   6720
+         TabIndex        =   81
+         Top             =   360
+         Width           =   1455
+      End
+      Begin VB.Label Label1 
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "To Date:"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   285
+         Index           =   18
+         Left            =   8400
+         TabIndex        =   80
+         Top             =   360
+         Width           =   855
+      End
+      Begin VB.Label Label1 
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "From Date:"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   285
+         Index           =   17
+         Left            =   5580
+         TabIndex        =   79
+         Top             =   360
+         Width           =   1155
+      End
+      Begin VB.Label lblIndrSeleCriteria 
+         Caption         =   "Indoor Selection Criteria"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Left            =   120
+         TabIndex        =   54
+         Top             =   9120
+         Width           =   12135
+      End
+      Begin VB.Label lblOutdSeleCriteria 
+         Caption         =   "Outdoor Selection Criteria"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Left            =   120
+         TabIndex        =   53
+         Top             =   8760
+         Width           =   12135
+      End
+      Begin VB.Label Label1 
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Search:"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   255
+         Index           =   4
+         Left            =   120
+         TabIndex        =   50
+         Top             =   360
+         Width           =   735
+      End
+   End
+   Begin VB.TextBox txtVoid 
+      CausesValidation=   0   'False
+      Height          =   375
+      Left            =   0
+      TabIndex        =   0
+      TabStop         =   0   'False
+      Text            =   "Void"
+      Top             =   10200
+      Width           =   375
+   End
+   Begin MSComctlLib.StatusBar StatusBar1 
+      Align           =   2  'Align Bottom
+      Height          =   315
+      Left            =   0
+      TabIndex        =   55
+      Top             =   10665
+      Width           =   14520
+      _ExtentX        =   25612
+      _ExtentY        =   556
+      _Version        =   393216
+      BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
+         NumPanels       =   9
+         BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Object.Width           =   6174
+            MinWidth        =   6174
+            Text            =   "CompanyName"
+            TextSave        =   "CompanyName"
+         EndProperty
+         BeginProperty Panel2 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Object.Width           =   2646
+            MinWidth        =   2646
+            Text            =   "Fin-Year"
+            TextSave        =   "Fin-Year"
+         EndProperty
+         BeginProperty Panel3 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Object.Width           =   3087
+            MinWidth        =   3087
+            Text            =   "UserName"
+            TextSave        =   "UserName"
+         EndProperty
+         BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Text            =   "UserRole"
+            TextSave        =   "UserRole"
+         EndProperty
+         BeginProperty Panel5 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Object.Width           =   2381
+            MinWidth        =   2381
+            Text            =   "CurrentDate"
+            TextSave        =   "CurrentDate"
+         EndProperty
+         BeginProperty Panel6 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Object.Width           =   2381
+            MinWidth        =   2381
+            Text            =   "SystemDate"
+            TextSave        =   "SystemDate"
+         EndProperty
+         BeginProperty Panel7 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Style           =   5
+            Object.Width           =   1764
+            MinWidth        =   1764
+            Text            =   "SystemTime"
+            TextSave        =   "13:24"
+         EndProperty
+         BeginProperty Panel8 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Style           =   1
+            Enabled         =   0   'False
+            Object.Width           =   1764
+            MinWidth        =   1764
+            Text            =   "CapsLock"
+            TextSave        =   "CAPS"
+         EndProperty
+         BeginProperty Panel9 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Style           =   2
+            Object.Width           =   1764
+            MinWidth        =   1764
+            Text            =   "NumLock"
+            TextSave        =   "NUM"
+         EndProperty
+      EndProperty
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Verdana"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
+   Begin VB.Label lblFormHeading 
+      Alignment       =   2  'Center
+      Appearance      =   0  'Flat
+      BackColor       =   &H00E0E0E0&
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   "Service/Bill Report"
+      BeginProperty Font 
+         Name            =   "Verdana"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H80000008&
+      Height          =   375
+      Left            =   0
+      TabIndex        =   1
+      Top             =   0
+      Width           =   9015
+   End
+End
+Attribute VB_Name = "frmServiceViewRep"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+
+Option Explicit
+
+Dim mFormLoaded As Boolean, mLastKeyPressed As Integer, mMaskKeyPressed As Integer
+Dim mQryPttCode As Long, mQryCDctCode As Long, mQrySrvCode As Long, mQrySgpCode As Long, mQryVtmCode As Long
+Dim mRemoteAccess As Boolean, mEntryAccessed As Boolean, mLastRowAccessed As Long, mEntrySaved As Boolean, mEntryAborted As Boolean
+Dim dbAcDatabase As New ADODB.Connection, dbHmsDatabase As New ADODB.Connection, dbGrpDatabase As New ADODB.Connection, dbComDatabase As New ADODB.Connection
+Dim datRecset As New ADODB.Recordset
+Dim mActiveControl As Object, clsListStru As clsSelectQueryStructure
+Dim fcmbAhName As clsComFlexSearch, fcmbAraName As clsComFlexSearch, fcmbStnName As clsComFlexSearch, fcmbVtmName As clsComFlexSearch
+Dim fcmbOldOpgByOpgNo As clsHmsFlexSearch, fcmbOldOpgByPttRegNo As clsHmsFlexSearch, fcmbOldOpgByPttName As clsHmsFlexSearch, fcmbPttName As clsHmsFlexSearch, fcmbPttRegNo As clsHmsFlexSearch, fcmbPcgName As clsHmsFlexSearch, fcmbCDctName As clsHmsFlexSearch, fcmbRByName As clsHmsFlexSearch, fcmbFDigName As clsHmsFlexSearch, fcmbSrvName As clsHmsFlexSearch, fcmbSgpName As clsHmsFlexSearch
+Dim frmTrn As Form
+
+Private Type SmryPara
+mIndex() As Variant
+mFromDate() As Variant
+mToDate() As Variant
+mPttRegNo() As Variant
+mPttCode() As Variant
+mCDctCode() As Variant
+mSrvCode() As Variant
+mSgpCode() As Variant
+mVtmCode() As Variant
+mExpanded() As Variant
+mDetailed() As Variant
+mMonthwise() As Variant
+mDatewise() As Variant
+mPatNameWise() As Variant
+mPatRegNoWise() As Variant
+mConsDctrWise() As Variant
+mServDctrWise() As Variant
+mServDctrServGrpWise() As Variant
+mServDctrServWise() As Variant
+mServWise() As Variant
+mServGrpWise() As Variant
+mServGrpNServWise() As Variant
+mVTypeWise() As Variant
+mRowIndex() As Variant
+
+End Type
+
+Dim SmryParaLayer As SmryPara
+
+Private Sub ClearSmryParaLayer()
+
+With SmryParaLayer
+.mIndex = Array()
+.mFromDate = Array()
+.mToDate = Array()
+.mPttRegNo = Array()
+.mPttCode = Array()
+.mCDctCode = Array()
+.mSrvCode = Array()
+.mSgpCode = Array()
+.mVtmCode = Array()
+.mExpanded = Array()
+.mDetailed = Array()
+.mMonthwise = Array()
+.mDatewise = Array()
+.mPatNameWise = Array()
+.mPatRegNoWise = Array()
+.mConsDctrWise = Array()
+.mServDctrWise = Array()
+.mServDctrServGrpWise = Array()
+.mServDctrServWise = Array()
+.mServWise = Array()
+.mServGrpWise = Array()
+.mServGrpNServWise = Array()
+.mVTypeWise = Array()
+.mRowIndex = Array()
+End With
+
+End Sub
+
+Private Sub ClearRecentSmryParaLayer()
+Dim mIndex As Integer
+
+With SmryParaLayer
+mIndex = UBound(.mIndex)
+If mIndex > LBound(.mIndex) Then
+    mIndex = mIndex - 1
+    ReDim Preserve .mIndex(mIndex)
+    ReDim Preserve .mFromDate(mIndex)
+    ReDim Preserve .mToDate(mIndex)
+    ReDim Preserve .mPttRegNo(mIndex)
+    ReDim Preserve .mPttCode(mIndex)
+    ReDim Preserve .mCDctCode(mIndex)
+    ReDim Preserve .mSrvCode(mIndex)
+    ReDim Preserve .mSgpCode(mIndex)
+    ReDim Preserve .mVtmCode(mIndex)
+    ReDim Preserve .mExpanded(mIndex)
+    ReDim Preserve .mDetailed(mIndex)
+    ReDim Preserve .mMonthwise(mIndex)
+    ReDim Preserve .mDatewise(mIndex)
+    ReDim Preserve .mPatNameWise(mIndex)
+    ReDim Preserve .mPatRegNoWise(mIndex)
+    ReDim Preserve .mConsDctrWise(mIndex)
+    ReDim Preserve .mServDctrWise(mIndex)
+    ReDim Preserve .mServDctrServGrpWise(mIndex)
+    ReDim Preserve .mServDctrServWise(mIndex)
+    ReDim Preserve .mServWise(mIndex)
+    ReDim Preserve .mServGrpWise(mIndex)
+    ReDim Preserve .mServGrpNServWise(mIndex)
+    ReDim Preserve .mVTypeWise(mIndex)
+    ReDim Preserve .mRowIndex(mIndex)
+Else
+    Call ClearSmryParaLayer
+End If
+End With
+
+End Sub
+
+Private Sub AddSmryParaLayer(Optional ByVal mClear As Boolean = False)
+Dim mIndex As Integer
+
+If mClear = True Then
+    Call ClearSmryParaLayer
+End If
+With SmryParaLayer
+mIndex = UBound(.mIndex) + 1
+ReDim Preserve .mIndex(mIndex)
+ReDim Preserve .mFromDate(mIndex)
+ReDim Preserve .mToDate(mIndex)
+ReDim Preserve .mPttRegNo(mIndex)
+ReDim Preserve .mPttCode(mIndex)
+ReDim Preserve .mCDctCode(mIndex)
+ReDim Preserve .mSrvCode(mIndex)
+ReDim Preserve .mSgpCode(mIndex)
+ReDim Preserve .mVtmCode(mIndex)
+ReDim Preserve .mExpanded(mIndex)
+ReDim Preserve .mDetailed(mIndex)
+ReDim Preserve .mMonthwise(mIndex)
+ReDim Preserve .mDatewise(mIndex)
+ReDim Preserve .mPatNameWise(mIndex)
+ReDim Preserve .mPatRegNoWise(mIndex)
+ReDim Preserve .mConsDctrWise(mIndex)
+ReDim Preserve .mServDctrWise(mIndex)
+ReDim Preserve .mServDctrServGrpWise(mIndex)
+ReDim Preserve .mServDctrServWise(mIndex)
+ReDim Preserve .mServWise(mIndex)
+ReDim Preserve .mServGrpWise(mIndex)
+ReDim Preserve .mServGrpNServWise(mIndex)
+ReDim Preserve .mVTypeWise(mIndex)
+ReDim Preserve .mRowIndex(mIndex)
+' -----------------------
+.mIndex(mIndex) = mIndex
+.mFromDate(mIndex) = Ctod(dtpFromDate.Text)
+.mToDate(mIndex) = Ctod(dtpToDate.Text)
+    fcmbPttRegNo.BoundText = CStr(mQryPttCode)
+    fcmbPttName.BoundText = CStr(mQryPttCode)
+    fcmbCDctName.BoundText = CStr(mQryCDctCode)
+    fcmbSrvName.BoundText = CStr(mQrySrvCode)
+    fcmbSgpName.BoundText = CStr(mQrySgpCode)
+    fcmbVtmName.BoundText = CStr(mQryVtmCode)
+.mPttRegNo(mIndex) = Val(fcmbPttRegNo.Text)
+.mPttCode(mIndex) = Val(fcmbPttName.BoundText)
+.mCDctCode(mIndex) = Val(fcmbCDctName.BoundText)
+.mSrvCode(mIndex) = Val(fcmbSrvName.BoundText)
+.mSgpCode(mIndex) = Val(fcmbSgpName.BoundText)
+.mVtmCode(mIndex) = Val(fcmbVtmName.BoundText)
+.mExpanded(mIndex) = optExpanded.Value
+.mDetailed(mIndex) = optDetailed.Value
+.mMonthwise(mIndex) = optMonthwise.Value
+.mDatewise(mIndex) = optDatewise.Value
+.mPatNameWise(mIndex) = optPatientNamewise.Value
+.mPatRegNoWise(mIndex) = optPatientRegNoWise.Value
+.mConsDctrWise(mIndex) = optConsDoctorwise.Value
+.mServDctrWise(mIndex) = optServDoctorwise.Value
+.mServDctrServGrpWise(mIndex) = optServDctrServGrpwise.Value
+.mServDctrServWise(mIndex) = optServDctrServwise.Value
+.mServWise(mIndex) = optServiceWise.Value
+.mServGrpWise(mIndex) = optServGrpWise.Value
+.mServGrpNServWise(mIndex) = optServGrpNServWise.Value
+.mVTypeWise(mIndex) = optVTypewise.Value
+.mRowIndex(mIndex) = -1
+
+End With
+
+End Sub
+
+Private Sub RestoreDefaultSmryPara()
+
+dtpFromDate.Text = Dtoc(DefaultEntryDate)
+dtpToDate.Text = Dtoc(DefaultEntryDate)
+mQryPttCode = 0
+mQryCDctCode = 0
+mQrySrvCode = 0
+mQrySgpCode = 0
+mQryVtmCode = 0
+mskQryPttRegNo.Text = "": fcmbPttRegNo.BoundText = ""
+txtQryPttName.Text = "": fcmbPttName.BoundText = ""
+txtQryCDctName.Text = "": fcmbCDctName.BoundText = ""
+txtQrySrvName.Text = "": fcmbSrvName.BoundText = ""
+txtQrySgpName.Text = "": fcmbSgpName.BoundText = ""
+txtQryVtmName.Text = "": fcmbVtmName.BoundText = ""
+optExpanded.Value = False
+optDetailed.Value = True
+optMonthwise.Value = False
+optDatewise.Value = False
+optPatientNamewise.Value = False
+optPatientRegNoWise.Value = False
+optConsDoctorwise.Value = False
+optServDoctorwise.Value = False
+optServDctrServGrpwise.Value = False
+optServDctrServwise.Value = False
+optServiceWise.Value = False
+optServGrpWise.Value = False
+optServGrpNServWise.Value = False
+optVTypewise.Value = False
+' ----------
+AddSmryParaLayer mClear:=True
+
+End Sub
+
+Private Sub RestoreRecentSmryPara()
+Dim mIndex As Integer
+
+With SmryParaLayer
+mIndex = UBound(.mIndex)
+dtpFromDate.Text = Dtoc(.mFromDate(mIndex))
+dtpToDate.Text = Dtoc(.mToDate(mIndex))
+    mQryPttCode = .mPttCode(mIndex)
+    mQryCDctCode = .mCDctCode(mIndex)
+    mQrySrvCode = .mSrvCode(mIndex)
+    mQrySgpCode = .mSgpCode(mIndex)
+    mQryVtmCode = .mVtmCode(mIndex)
+    fcmbPttRegNo.BoundText = CStr(mQryPttCode): mskQryPttRegNo.Text = fcmbPttRegNo.Text
+    fcmbPttName.BoundText = CStr(mQryPttCode): txtQryPttName.Text = fcmbPttName.Text
+    fcmbCDctName.BoundText = CStr(mQryCDctCode): txtQryCDctName.Text = fcmbCDctName.Text
+    fcmbSrvName.BoundText = CStr(mQrySrvCode): txtQrySrvName.Text = fcmbSrvName.Text
+    fcmbSgpName.BoundText = CStr(mQrySgpCode): txtQrySgpName.Text = fcmbSgpName.Text
+    fcmbVtmName.BoundText = CStr(mQryVtmCode): txtQryVtmName.Text = fcmbVtmName.Text
+optExpanded.Value = .mExpanded(mIndex)
+optDetailed.Value = .mDetailed(mIndex)
+optMonthwise.Value = .mMonthwise(mIndex)
+optDatewise.Value = .mDatewise(mIndex)
+optPatientNamewise.Value = .mPatNameWise(mIndex)
+optPatientRegNoWise.Value = .mPatRegNoWise(mIndex)
+optConsDoctorwise.Value = .mConsDctrWise(mIndex)
+optServDoctorwise.Value = .mServDctrWise(mIndex)
+optServDctrServGrpwise.Value = .mServDctrServGrpWise(mIndex)
+optServDctrServwise.Value = .mServDctrServWise(mIndex)
+optServiceWise.Value = .mServWise(mIndex)
+optServGrpWise.Value = .mServGrpWise(mIndex)
+optServGrpNServWise.Value = .mServGrpNServWise(mIndex)
+optVTypewise.Value = .mVTypeWise(mIndex)
+End With
+
+End Sub
+
+Private Sub RestoreBackSmryPara()
+
+Call ClearRecentSmryParaLayer
+
+With SmryParaLayer
+If UBound(.mIndex) >= LBound(.mIndex) Then
+    Call RestoreRecentSmryPara
+Else
+    Call RestoreDefaultSmryPara
+End If
+End With
+
+End Sub
+
+'Public Property Let RemoteAccessCode(ByVal mAccessCode As Long)
+'mRemoteAccess = True
+'mOpgCode = mAccessCode
+'End Property
+'
+'Public Property Get EntryBoundCode() As Long
+'EntryBoundCode = Val(mskFormBoundField.Text)
+'End Property
+'
+'Public Property Get EntrySaved() As Boolean
+'EntrySaved = mEntrySaved
+'End Property
+'
+'Public Property Get EntryAborted() As Boolean
+'EntryAborted = mEntryAborted
+'End Property
+'
+'Public Property Get PttName() As String
+'PttName = txtPttName.Text
+'End Property
+
+Public Property Get FormAddEditMode() As Integer
+FormAddEditMode = cmbFormEntryMode.ListIndex
+End Property
+
+Public Property Let FormAddEditMode(ByVal New_FormEntryMode As Integer)
+cmbFormEntryMode.ListIndex = New_FormEntryMode
+ChkEntryModeSign cmbFormEntryMode
+
+End Property
+
+Public Property Get SecuMenuName() As String
+SecuMenuName = Me.Name
+End Property
+
+Private Sub chkFByIndoor_Click()
+Dim mNewValue As Integer
+
+mNewValue = chkFByIndoor.Value
+If mNewValue = 0 Or mNewValue = 1 Then
+    'chkFByIndrReg.Value = mNewValue
+    chkFByIndrRcpt.Value = mNewValue
+    'chkFByIndrPymt.Value = mNewValue
+    'chkFByIndrRefd.Value = mNewValue
+    chkFByIndrBill.Value = mNewValue
+    'chkFByIndrBlRefd.Value = mNewValue
+    'chkFByIndrRgPymt.Value = mNewValue
+    'chkFByIndrRgRefd.Value = mNewValue
+End If
+
+If mNewValue = 0 Then
+    chkFByIndoor.Caption = "Indoor Service (None)"
+ElseIf mNewValue = 1 Then
+    chkFByIndoor.Caption = "Indoor Service (All)"
+ElseIf mNewValue = 2 Then
+    chkFByIndoor.Caption = "Indoor Service (Partial)"
+End If
+Call ChkIndrSeleCriteria
+
+End Sub
+
+Private Sub chkFByIndoor_GotFocus()
+FlashActiveControl chkFByIndoor, True
+End Sub
+
+Private Sub chkFByIndoor_LostFocus()
+FlashActiveControl chkFByIndoor, False
+End Sub
+
+Private Sub chkFByIndrBill_Click()
+Call ChkIndrItemCheck
+Call ChkIndrSeleCriteria
+End Sub
+
+Private Sub chkFByIndrBlRefd_Click()
+Call ChkIndrItemCheck
+Call ChkIndrSeleCriteria
+End Sub
+
+'Private Sub chkFByIndrBlRefd_GotFocus()
+'FlashActiveControl chkFByIndrBlRefd, True
+'End Sub
+'
+'Private Sub chkFByIndrBlRefd_LostFocus()
+'FlashActiveControl chkFByIndrBlRefd, False
+'End Sub
+'
+'Private Sub chkFByIndrPymt_Click()
+'Call ChkIndrItemCheck
+'Call ChkIndrSeleCriteria
+'End Sub
+'
+'Private Sub chkFByIndrPymt_GotFocus()
+'FlashActiveControl chkFByIndrPymt, True
+'End Sub
+'
+'Private Sub chkFByIndrPymt_LostFocus()
+'FlashActiveControl chkFByIndrPymt, False
+'End Sub
+
+Private Sub chkFByIndrRcpt_Click()
+Call ChkIndrItemCheck
+Call ChkIndrSeleCriteria
+End Sub
+
+Private Sub chkFByIndrRcpt_GotFocus()
+FlashActiveControl chkFByIndrRcpt, True
+End Sub
+
+Private Sub chkFByIndrRcpt_LostFocus()
+FlashActiveControl chkFByIndrRcpt, False
+End Sub
+
+Private Sub chkFByLab_Click()
+Dim mNewValue As Integer
+
+mNewValue = chkFByLab.Value
+If mNewValue = 0 Or mNewValue = 1 Then
+    chkFByLabRcpt.Value = mNewValue
+End If
+If mNewValue = 0 Then
+    chkFByLab.Caption = "Lab Service (None)"
+ElseIf mNewValue = 1 Then
+    chkFByLab.Caption = "Lab Service (All)"
+ElseIf mNewValue = 2 Then
+    chkFByLab.Caption = "Lab Service (Partial)"
+End If
+Call ChkLabSeleCriteria
+
+End Sub
+
+Private Sub chkFByLab_GotFocus()
+FlashActiveControl chkFByLab, True
+End Sub
+
+Private Sub chkFByLab_LostFocus()
+FlashActiveControl chkFByLab, False
+End Sub
+
+Private Sub chkFByLabRcpt_Click()
+Call ChkLabItemCheck
+Call ChkLabSeleCriteria
+End Sub
+
+Private Sub chkFByLabRcpt_GotFocus()
+FlashActiveControl chkFByLabRcpt, True
+End Sub
+
+Private Sub chkFByLabRcpt_LostFocus()
+FlashActiveControl chkFByLabRcpt, False
+End Sub
+
+'Private Sub chkFByIndrRefd_Click()
+'Call ChkIndrItemCheck
+'Call ChkIndrSeleCriteria
+'End Sub
+'
+'Private Sub chkFByIndrRefd_GotFocus()
+'FlashActiveControl chkFByIndrRefd, True
+'End Sub
+'
+'Private Sub chkFByIndrRefd_LostFocus()
+'FlashActiveControl chkFByIndrRefd, False
+'End Sub
+'
+'Private Sub chkFByIndrReg_Click()
+'Call ChkIndrItemCheck
+'Call ChkIndrSeleCriteria
+'End Sub
+'
+'Private Sub chkFByIndrReg_GotFocus()
+'FlashActiveControl chkFByIndrReg, True
+'End Sub
+'
+'Private Sub chkFByIndrReg_LostFocus()
+'FlashActiveControl chkFByIndrReg, False
+'End Sub
+'
+'Private Sub chkFByIndrRgPymt_Click()
+'Call ChkIndrItemCheck
+'Call ChkIndrSeleCriteria
+'End Sub
+'
+'Private Sub chkFByIndrRgRefd_Click()
+'Call ChkIndrItemCheck
+'Call ChkIndrSeleCriteria
+'End Sub
+'
+'Private Sub chkFByIndrRgRefd_GotFocus()
+'FlashActiveControl chkFByIndrRgRefd, True
+'End Sub
+'
+'Private Sub chkFByIndrRgRefd_LostFocus()
+'FlashActiveControl chkFByIndrRgRefd, False
+'End Sub
+
+Private Sub chkFByOutdBill_Click()
+Call ChkOutdItemCheck
+Call ChkOutdSeleCriteria
+End Sub
+
+Private Sub chkFByOutdBill_GotFocus()
+FlashActiveControl chkFByOutdBill, True
+End Sub
+
+Private Sub chkFByOutdBill_LostFocus()
+FlashActiveControl chkFByOutdBill, False
+End Sub
+
+'Private Sub chkFByOutdBlRefd_Click()
+'Call ChkOutdItemCheck
+'Call ChkOutdSeleCriteria
+'End Sub
+'
+'Private Sub chkFByOutdBlRefd_GotFocus()
+'FlashActiveControl chkFByOutdBlRefd, True
+'End Sub
+'
+'Private Sub chkFByOutdBlRefd_LostFocus()
+'FlashActiveControl chkFByOutdBlRefd, False
+'End Sub
+
+Private Sub chkFByOutdoor_Click()
+Dim mNewValue As Integer
+
+mNewValue = chkFByOutdoor.Value
+If mNewValue = 0 Or mNewValue = 1 Then
+    chkFByOutdReg.Value = mNewValue
+    'chkFByOutdRgRefd.Value = mNewValue
+    chkFByOutdRcpt.Value = mNewValue
+    'chkFByOutdPymt.Value = mNewValue
+    'chkFByOutdRefd.Value = mNewValue
+    chkFByOutdBill.Value = mNewValue
+    'chkFByOutdBlRefd.Value = mNewValue
+End If
+If mNewValue = 0 Then
+    chkFByOutdoor.Caption = "Outdoor Service (None)"
+ElseIf mNewValue = 1 Then
+    chkFByOutdoor.Caption = "Outdoor Service (All)"
+ElseIf mNewValue = 2 Then
+    chkFByOutdoor.Caption = "Outdoor Service (Partial)"
+End If
+Call ChkOutdSeleCriteria
+
+End Sub
+
+Private Sub chkFByOutdoor_GotFocus()
+FlashActiveControl chkFByOutdoor, True
+End Sub
+
+Private Sub chkFByOutdoor_LostFocus()
+FlashActiveControl chkFByOutdoor, False
+End Sub
+
+'Private Sub chkFByOutdPymt_Click()
+'Call ChkOutdItemCheck
+'Call ChkOutdSeleCriteria
+'End Sub
+'
+'Private Sub chkFByOutdPymt_GotFocus()
+'FlashActiveControl chkFByOutdPymt, True
+'End Sub
+'
+'Private Sub chkFByOutdPymt_LostFocus()
+'FlashActiveControl chkFByOutdPymt, False
+'End Sub
+
+Private Sub chkFByOutdRcpt_Click()
+Call ChkOutdItemCheck
+Call ChkOutdSeleCriteria
+End Sub
+
+Private Sub chkFByOutdRcpt_GotFocus()
+FlashActiveControl chkFByOutdRcpt, True
+End Sub
+
+Private Sub chkFByOutdRcpt_LostFocus()
+FlashActiveControl chkFByOutdRcpt, False
+End Sub
+
+'Private Sub chkFByOutdRefd_Click()
+'Call ChkOutdItemCheck
+'Call ChkOutdSeleCriteria
+'End Sub
+'
+'Private Sub chkFByOutdRefd_GotFocus()
+'FlashActiveControl chkFByOutdRefd, True
+'End Sub
+'
+'Private Sub chkFByOutdRefd_LostFocus()
+'FlashActiveControl chkFByOutdRefd, False
+'End Sub
+
+Private Sub chkFByOutdReg_Click()
+Call ChkOutdItemCheck
+Call ChkOutdSeleCriteria
+End Sub
+
+Private Sub chkFByOutdReg_GotFocus()
+FlashActiveControl chkFByOutdReg, True
+End Sub
+
+Private Sub chkFByOutdReg_LostFocus()
+FlashActiveControl chkFByOutdReg, False
+End Sub
+
+Private Sub chkFByIndrBill_GotFocus()
+FlashActiveControl chkFByIndrBill, True
+End Sub
+
+Private Sub chkFByIndrBill_LostFocus()
+FlashActiveControl chkFByIndrBill, False
+End Sub
+
+'Private Sub chkFByIndrRgPymt_GotFocus()
+'FlashActiveControl chkFByIndrRgPymt, True
+'End Sub
+'
+'Private Sub chkFByIndrRgPymt_LostFocus()
+'FlashActiveControl chkFByIndrRgPymt, False
+'End Sub
+
+Private Sub ChkOutdItemCheck()
+
+If chkFByOutdReg.Value = 1 And chkFByOutdRcpt.Value = 1 And chkFByOutdBill.Value = 1 Then    ''' And chkFByOutdRgRefd.Value = 1 And chkFByOutdPymt.Value = 1 And chkFByOutdRefd.Value = 1 And chkFByOutdBlRefd.Value = 1
+    chkFByOutdoor.Value = 1
+ElseIf chkFByOutdReg.Value = 1 Or chkFByOutdRcpt.Value = 1 Or chkFByOutdBill.Value = 1 Then   ''' Or chkFByOutdRgRefd.Value = 1 Or chkFByOutdPymt.Value = 1 Or chkFByOutdRefd.Value = 1 Or chkFByOutdBlRefd.Value = 1
+    chkFByOutdoor.Value = 2
+Else
+    chkFByOutdoor.Value = 0
+End If
+
+End Sub
+
+Private Sub ChkIndrItemCheck()
+
+If chkFByIndrRcpt.Value = 1 And chkFByIndrBill.Value = 1 Then    ''' chkFByIndrReg.Value = 1 And And chkFByIndrPymt.Value = 1 And chkFByIndrRefd.Value = 1 And chkFByIndrBlRefd.Value = 1 And chkFByIndrRgPymt.Value = 1 And chkFByIndrRgRefd.Value = 1
+    chkFByIndoor.Value = 1
+ElseIf chkFByIndrRcpt.Value = 1 Or chkFByIndrBill.Value = 1 Then  ''' chkFByIndrReg.Value = 1 Or Or chkFByIndrPymt.Value = 1 Or chkFByIndrRefd.Value = 1 Or chkFByIndrBlRefd.Value = 1 Or chkFByIndrRgPymt.Value = 1 Or chkFByIndrRgRefd.Value = 1
+    chkFByIndoor.Value = 2
+Else
+    chkFByIndoor.Value = 0
+End If
+
+End Sub
+
+Private Sub ChkLabItemCheck()
+
+If chkFByLabRcpt.Value = 1 Then
+    chkFByLab.Value = 1
+ElseIf chkFByLabRcpt.Value = 1 Then
+    chkFByLab.Value = 2
+Else
+    chkFByLab.Value = 0
+End If
+
+End Sub
+
+Private Sub ChkOutdSeleCriteria()
+
+If chkFByOutdReg.Value = 1 And chkFByOutdRcpt.Value = 1 And chkFByOutdBill.Value = 1 Then    ''' And chkFByOutdRgRefd.Value = 1 And chkFByOutdPymt.Value = 1 And chkFByOutdRefd.Value = 1 And chkFByOutdBlRefd.Value = 1
+    lblOutdSeleCriteria.Caption = chkFByOutdoor.Caption
+ElseIf chkFByOutdReg.Value = 1 Or chkFByOutdRcpt.Value = 1 Or chkFByOutdBill.Value = 1 Then   ''' Or chkFByOutdRgRefd.Value = 1 Or chkFByOutdPymt.Value = 1 Or chkFByOutdRefd.Value = 1 Or chkFByOutdBlRefd.Value = 1
+    With lblOutdSeleCriteria
+    .Caption = ""
+    If chkFByOutdReg.Value = 1 Then
+        .Caption = .Caption & chkFByOutdReg.Caption & ", "
+    End If
+'    If chkFByOutdRgRefd.Value = 1 Then
+'        .Caption = .Caption & chkFByOutdRgRefd.Caption & ", "
+'    End If
+    If chkFByOutdRcpt.Value = 1 Then
+        .Caption = .Caption & chkFByOutdRcpt.Caption & ", "
+    End If
+'    If chkFByOutdPymt.Value = 1 Then
+'        .Caption = .Caption & chkFByOutdPymt.Caption & ", "
+'    End If
+'    If chkFByOutdRefd.Value = 1 Then
+'        .Caption = .Caption & chkFByOutdRefd.Caption & ", "
+'    End If
+    If chkFByOutdBill.Value = 1 Then
+        .Caption = .Caption & chkFByOutdBill.Caption & ", "
+    End If
+'    If chkFByOutdBlRefd.Value = 1 Then
+'        .Caption = .Caption & chkFByOutdBlRefd.Caption & ", "
+'    End If
+    If Right(.Caption, 2) = ", " Then
+        .Caption = Left(.Caption, Len(.Caption) - 2)
+    End If
+    End With
+    
+Else
+    lblOutdSeleCriteria.Caption = chkFByOutdoor.Caption
+End If
+
+End Sub
+
+Private Sub ChkIndrSeleCriteria()
+
+If chkFByIndrRcpt.Value = 1 And chkFByIndrBill.Value = 1 Then        ''' chkFByIndrReg.Value = 1 And And chkFByIndrPymt.Value = 1 And chkFByIndrRefd.Value = 1 And chkFByIndrBlRefd.Value = 1 And chkFByIndrRgPymt.Value = 1 And chkFByIndrRgRefd.Value = 1
+    lblIndrSeleCriteria.Caption = chkFByIndoor.Caption
+ElseIf chkFByIndrRcpt.Value = 1 Or chkFByIndrBill.Value = 1 Then  ''' chkFByIndrReg.Value = 1 Or Or chkFByIndrPymt.Value = 1 Or chkFByIndrRefd.Value = 1 Or chkFByIndrBlRefd.Value = 1 Or chkFByIndrRgPymt.Value = 1 Or chkFByIndrRgRefd.Value = 1
+    With lblIndrSeleCriteria
+    .Caption = ""
+'    If chkFByIndrReg.Value = 1 Then
+'        .Caption = .Caption & chkFByIndrReg.Caption & ", "
+'    End If
+    If chkFByIndrRcpt.Value = 1 Then
+        .Caption = .Caption & chkFByIndrRcpt.Caption & ", "
+    End If
+'    If chkFByIndrPymt.Value = 1 Then
+'        .Caption = .Caption & chkFByIndrPymt.Caption & ", "
+'    End If
+'    If chkFByIndrRefd.Value = 1 Then
+'        .Caption = .Caption & chkFByIndrRefd.Caption & ", "
+'    End If
+    If chkFByIndrBill.Value = 1 Then
+        .Caption = .Caption & chkFByIndrBill.Caption & ", "
+    End If
+'    If chkFByIndrBlRefd.Value = 1 Then
+'        .Caption = .Caption & chkFByIndrBlRefd.Caption & ", "
+'    End If
+'    If chkFByIndrRgPymt.Value = 1 Then
+'        .Caption = .Caption & chkFByIndrRgPymt.Caption & ", "
+'    End If
+'    If chkFByIndrRgRefd.Value = 1 Then
+'        .Caption = .Caption & chkFByIndrRgRefd.Caption & ", "
+'    End If
+    If Right(.Caption, 2) = ", " Then
+        .Caption = Left(.Caption, Len(.Caption) - 2)
+    End If
+    End With
+Else
+    lblIndrSeleCriteria.Caption = chkFByIndoor.Caption
+End If
+
+End Sub
+
+Private Sub ChkLabSeleCriteria()
+
+If chkFByLabRcpt.Value = 1 Then
+    lblLabSeleCriteria.Caption = chkFByLab.Caption
+ElseIf chkFByLabRcpt.Value = 1 Then
+    With lblLabSeleCriteria
+    .Caption = ""
+    If chkFByLabRcpt.Value = 1 Then
+        .Caption = .Caption & chkFByLabRcpt.Caption & ", "
+    End If
+    If Right(.Caption, 2) = ", " Then
+        .Caption = Left(.Caption, Len(.Caption) - 2)
+    End If
+    End With
+    
+Else
+    lblLabSeleCriteria.Caption = chkFByLab.Caption
+End If
+
+End Sub
+
+'Public Property Get PatAddEditMode() As Integer
+'PatAddEditMode = cmbPatEntryMode.ListIndex
+'End Property
+'
+'Public Property Let PatAddEditMode(ByVal New_PatEntryMode As Integer)
+'cmbPatEntryMode.ListIndex = New_PatEntryMode
+'End Property
+'
+'Private Sub chkPttDefAllowed_GotFocus()
+'FlashActiveControl chkPttDefAllowed, True
+'End Sub
+'
+'Private Sub chkPttDefAllowed_LostFocus()
+'FlashActiveControl chkPttDefAllowed, False
+'End Sub
+'
+'Private Sub chkPttDiscAllowed_GotFocus()
+'FlashActiveControl chkPttDiscAllowed, True
+'End Sub
+'
+'Private Sub chkPttDiscAllowed_LostFocus()
+'FlashActiveControl chkPttDiscAllowed, False
+'End Sub
+'
+'Private Sub chkPttInfAllowed_GotFocus()
+'FlashActiveControl chkPttInfAllowed, True
+'End Sub
+'
+'Private Sub chkPttInfAllowed_LostFocus()
+'FlashActiveControl chkPttInfAllowed, False
+'End Sub
+'
+'Private Sub chkPttShowInList_GotFocus()
+'FlashActiveControl chkPttShowInList, True
+'End Sub
+'
+'Private Sub chkPttShowInList_LostFocus()
+'FlashActiveControl chkPttShowInList, False
+'End Sub
+'
+'Private Sub cmbPttRefRela_GotFocus()
+'FlashActiveControl cmbPttRefRela, True
+'End Sub
+'
+'Private Sub cmbPttRefRela_LostFocus()
+'FlashActiveControl cmbPttRefRela, False
+'End Sub
+'
+'Private Sub cmbPttRefRela_Validate(Cancel As Boolean)
+'If cmbPttRefRela.ListIndex = -1 Then
+'    ErrorBox "Invalid Selection !!!"
+'    cmbPttRefRela.SetFocus
+'    Cancel = True
+'End If
+'
+'End Sub
+'
+'Private Sub cmbPttSex_GotFocus()
+'FlashActiveControl cmbPttSex, True
+'End Sub
+'
+'Private Sub cmbPttSex_LostFocus()
+'FlashActiveControl cmbPttSex, False
+'End Sub
+'
+'Private Sub cmbPttSex_Validate(Cancel As Boolean)
+'If cmbPttSex.ListIndex = -1 Then
+'    ErrorBox "Invalid Selection !!!"
+'    cmbPttSex.SetFocus
+'    Cancel = True
+'End If
+'
+'End Sub
+
+Private Sub cmdConfigure_Click()
+If Between(Ctod(dtpFromDate.Text), sFinYrStartDate, sFinYrEndDate) = False Then
+    ErrorBox "Invalid Date Range !!!"
+    dtpFromDate.SetFocus
+    Exit Sub
+End If
+If Between(Ctod(dtpToDate.Text), sFinYrStartDate, sFinYrEndDate) = False Then
+    ErrorBox "Invalid Date Range !!!"
+    dtpToDate.SetFocus
+    Exit Sub
+End If
+If UBound(SmryParaLayer.mIndex) >= LBound(SmryParaLayer.mIndex) Then
+    SmryParaLayer.mRowIndex(UBound(SmryParaLayer.mIndex)) = Mfgrd1.Row
+End If
+Call AddSmryParaLayer
+
+Call SmryList
+MoveRecToLast datRecset
+ShowRecActiveFlexRow datRecset, Mfgrd1
+txtVoid.SetFocus
+Mfgrd1.Enabled = True
+frConfigure.Visible = False
+Mfgrd1.SetFocus
+
+End Sub
+
+Private Sub cmdConfigure_GotFocus()
+FlashActiveControl cmdConfigure, True
+End Sub
+
+Private Sub cmdConfigure_LostFocus()
+FlashActiveControl cmdConfigure, False
+End Sub
+
+Private Sub cmdFormEnter_Click()
+mLastKeyPressed = 13
+If TypeOf Screen.ActiveControl Is MSFlexGrid Then
+    If Screen.ActiveControl.Name = Mfgrd1.Name Then
+        With datRecset
+        If .EOF = False And .BOF = False Then
+            If optDetailed.Value = True Or optExpanded.Value = True Then
+                Mfgrd1_KeyDown vbKeySpace, Shift:=vbCtrlMask
+            Else
+                fcmbPttRegNo.BoundText = CStr(mQryPttCode)
+                fcmbPttName.BoundText = CStr(mQryPttCode)
+                fcmbCDctName.BoundText = CStr(mQryCDctCode)
+                fcmbSrvName.BoundText = CStr(mQrySrvCode)
+                fcmbSgpName.BoundText = CStr(mQrySgpCode)
+                fcmbVtmName.BoundText = CStr(mQryVtmCode)
+                
+                txtVoid.SetFocus
+                If optMonthwise.Value = True Then
+                    dtpFromDate.Text = Dtoc(MonthStartDate(DateSerial(Val(Left(.fields("TrnYrMonth"), 4)), Val(Right(.fields("TrnYrMonth"), 2)), 1)))
+                    dtpToDate.Text = Dtoc(MonthEndDate(DateSerial(Val(Left(.fields("TrnYrMonth"), 4)), Val(Right(.fields("TrnYrMonth"), 2)), 1)))
+                    optMonthwise.Value = False
+                    optDatewise.Value = True
+                    
+                ElseIf optDatewise.Value = True Then
+                    dtpFromDate.Text = Dtoc(.fields("TrnDate"))
+                    dtpToDate.Text = Dtoc(.fields("TrnDate"))
+                    optDatewise.Value = False
+                    If mQrySrvCode > 0 Or mQrySgpCode > 0 Then
+                        optExpanded.Value = True
+                    Else
+                        optDetailed.Value = True
+                    End If
+                    
+                ElseIf optPatientNamewise.Value = True Then
+                    mQryPttCode = .fields("TrnPttCode")
+                    fcmbPttRegNo.BoundText = CStr(mQryPttCode)
+                    fcmbPttName.BoundText = CStr(mQryPttCode)
+                    mskQryPttRegNo.Text = fcmbPttRegNo.Text
+                    txtQryPttName.Text = fcmbPttName.Text
+                    optPatientNamewise.Value = False
+                    optDatewise.Value = True
+                    
+                ElseIf optPatientRegNoWise.Value = True Then
+                    mQryPttCode = .fields("TrnPttCode")
+                    fcmbPttRegNo.BoundText = CStr(mQryPttCode)
+                    fcmbPttName.BoundText = CStr(mQryPttCode)
+                    mskQryPttRegNo.Text = fcmbPttRegNo.Text
+                    txtQryPttName.Text = fcmbPttName.Text
+                    optPatientRegNoWise.Value = False
+                    optDatewise.Value = True
+                    
+                ElseIf optConsDoctorwise.Value = True Then
+                    mQryCDctCode = .fields("TrnDctCode")
+                    fcmbCDctName.BoundText = CStr(mQryCDctCode)
+                    txtQryCDctName.Text = fcmbCDctName.Text
+                    optConsDoctorwise.Value = False
+                    optDatewise.Value = True
+                    
+                ElseIf optServDoctorwise.Value = True Then
+                    AlertBox "Further Listing/Detail Unavailable !!!"
+                    Rem mQrySDctCode = .fields("TrnDctCode")
+                    Rem fcmbSDctName.BoundText = CStr(mQrySDctCode)
+                    Rem txtQrySDctName.Text = fcmbSDctName.Text
+                    Rem optServDoctorwise.Value = False
+                    Rem optDatewise.Value = True
+                    
+                ElseIf optServDctrServGrpwise.Value = True Then
+                    AlertBox "Further Listing/Detail Unavailable !!!"
+                    Rem mQrySDctCode = .fields("TrnDctCode")
+                    Rem fcmbSDctName.BoundText = CStr(mQrySDctCode)
+                    Rem txtQrySDctName.Text = fcmbSDctName.Text
+                    Rem optServDoctorwise.Value = False
+                    Rem optDatewise.Value = True
+                    
+                ElseIf optServDctrServwise.Value = True Then
+                    AlertBox "Further Listing/Detail Unavailable !!!"
+                    Rem mQrySDctCode = .fields("TrnDctCode")
+                    Rem fcmbSDctName.BoundText = CStr(mQrySDctCode)
+                    Rem txtQrySDctName.Text = fcmbSDctName.Text
+                    Rem optServDoctorwise.Value = False
+                    Rem optDatewise.Value = True
+                    
+                ElseIf optServiceWise.Value = True Then
+                    mQrySrvCode = .fields("TrnSrvCode")
+                    fcmbSrvName.BoundText = CStr(mQrySrvCode)
+                    txtQrySrvName.Text = fcmbSrvName.Text
+                    optServiceWise.Value = False
+                    optDatewise.Value = True
+                    
+                ElseIf optServGrpWise.Value = True Then
+                    mQrySgpCode = .fields("TrnSgpCode")
+                    fcmbSgpName.BoundText = CStr(mQrySgpCode)
+                    txtQrySgpName.Text = fcmbSgpName.Text
+                    optServGrpWise.Value = False
+                    optDatewise.Value = True
+                    
+                ElseIf optServGrpNServWise.Value = True Then
+                    mQrySgpCode = .fields("TrnSgpCode"): mQrySrvCode = .fields("TrnSrvCode")
+                    fcmbSgpName.BoundText = CStr(mQrySgpCode): fcmbSrvName.BoundText = CStr(mQrySrvCode)
+                    txtQrySgpName.Text = fcmbSgpName.Text: txtQrySrvName.Text = fcmbSrvName.Text
+                    optServGrpNServWise.Value = False
+                    optDatewise.Value = True
+                    
+                ElseIf optVTypewise.Value = True Then
+                    mQryVtmCode = .fields("TrnVtmCode")
+                    fcmbVtmName.BoundText = CStr(mQryVtmCode)
+                    txtQryVtmName.Text = fcmbVtmName.Text
+                    optVTypewise.Value = False
+                    optDatewise.Value = True
+                    
+                End If
+                If UBound(SmryParaLayer.mIndex) >= LBound(SmryParaLayer.mIndex) Then
+                    SmryParaLayer.mRowIndex(UBound(SmryParaLayer.mIndex)) = Mfgrd1.Row
+                End If
+                Call AddSmryParaLayer
+                
+                Call SmryList
+                MoveRecToLast datRecset
+                ShowRecActiveFlexRow datRecset, Mfgrd1
+                Mfgrd1.SetFocus
+            End If
+        Else
+            ''' Call Data_AddEvent
+        End If
+        End With
+    End If
+ElseIf FormAddEditMode = cFORM_SMRYMODE And frConfigure.Visible = False And frPrintCRList.Visible = False Then
+
+Else
+    SendKeys "{tab}"
+End If
+
+End Sub
+
+Private Sub cmdFormEscape_Click()
+Dim srow As Long, mRecAbsPos As Long
+mLastKeyPressed = 27
+
+If frConfigure.Visible = True Then
+    txtVoid.SetFocus
+    Mfgrd1.Enabled = True
+    frConfigure.Visible = False
+    Mfgrd1.SetFocus
+    Call RestoreRecentSmryPara
+    
+ElseIf frPrintCRList.Visible = True Then
+    txtVoid.SetFocus
+    Mfgrd1.Enabled = True
+    frPrintCRList.Visible = False
+    Mfgrd1.SetFocus
+    
+ElseIf FormAddEditMode = cFORM_SMRYMODE Then
+    If Len(txtSearch1Text.Text) > 0 Then
+        txtSearch1Text.Text = ""
+        Call txtSearch1Text_InterActiveChange
+    Else
+        If UBound(SmryParaLayer.mIndex) > LBound(SmryParaLayer.mIndex) Then
+            txtVoid.SetFocus
+            Call RestoreBackSmryPara
+            Call SmryList
+            
+            srow = SmryParaLayer.mRowIndex(UBound(SmryParaLayer.mIndex))
+            If Mfgrd1.Rows - 1 > srow And srow > 0 Then
+                Mfgrd1.Row = srow
+            Else
+                MoveRecToLast datRecset
+                ShowRecActiveFlexRow datRecset, Mfgrd1
+            End If
+            Mfgrd1.SetFocus
+            
+        Else
+            Unload Me
+        End If
+    End If
+
+End If
+
+End Sub
+
+Private Sub cmdPrintRep_Click()
+Call Data_PrintDialog
+End Sub
+
+Private Sub cmdPrintToExcel_Click()
+Dim clsExcel As New clsExcelApp, mXlsRepPath As String
+Dim srow As Long, scol As Integer
+
+Me.MousePointer = vbHourglass
+mXlsRepPath = App.Path & "\ServRep.xls"
+clsExcel.InitExcelApp
+clsExcel.NewExcelWorkBook mXlsRepPath
+clsExcel.OpenExcelWorkBook mXlsRepPath
+
+clsExcel.SelectCell 1, 1
+For scol = 0 To Mfgrd1.Cols - 1
+    If Mfgrd1.ColWidth(scol) > 0 Then
+        clsExcel.ActiveColFormat ColWidth:=Mfgrd1.ColWidth(scol) / 100
+        If InList(Mfgrd1.ColAlignment(scol), Array(flexAlignLeftTop, flexAlignLeftBottom, 1)) = True Then
+            clsExcel.ActiveColFormat HorizontalAlignment:=xlLeft
+        ElseIf InList(Mfgrd1.ColAlignment(scol), Array(flexAlignRightTop, flexAlignRightBottom, 7)) = True Then
+            clsExcel.ActiveColFormat HorizontalAlignment:=xlRight
+        ElseIf InList(Mfgrd1.ColAlignment(scol), Array(flexAlignCenterTop, flexAlignCenterBottom, flexAlignCenterCenter)) = True Then
+            clsExcel.ActiveColFormat HorizontalAlignment:=xlCenter
+        End If
+        
+        clsExcel.SelectNextColIndex
+    End If
+Next scol
+
+clsExcel.SelectCell 1, 1
+clsExcel.WriteValue "'" & MyCompany.mCmpName
+clsExcel.ActiveCellFormat FontBold:=True, FontSize:=12
+clsExcel.SelectNextRecordIndex
+clsExcel.WriteValue "'" & "Service Report From " & dtpFromDate.Text & " To " & dtpToDate.Text
+clsExcel.ActiveCellFormat FontBold:=True
+clsExcel.SelectNextRecordIndex
+clsExcel.WriteValue "'" & "for " & lblOutdSeleCriteria.Caption & " & " & lblIndrSeleCriteria.Caption & " & " & lblLabSeleCriteria.Caption
+clsExcel.ActiveCellFormat FontBold:=True
+clsExcel.SelectNextRecordIndex
+
+For srow = 0 To Mfgrd1.Rows - 2
+    For scol = 0 To Mfgrd1.Cols - 1
+        If Mfgrd1.ColWidth(scol) > 0 Then
+            clsExcel.WriteValue "'" & Mfgrd1.TextMatrix(srow, scol)
+            If (srow <= Mfgrd1.FixedRows - 1) Or (scol <= Mfgrd1.FixedCols - 1) Or (srow = Mfgrd1.Rows - 2) Then
+                clsExcel.ActiveCellFormat FontBold:=True
+            End If
+            clsExcel.ActiveCellFormat DrawBox:=True
+            
+            clsExcel.SelectNextColIndex
+        End If
+    Next scol
+    clsExcel.SelectNextRecordIndex
+Next srow
+
+clsExcel.CloseExcelWorkBook
+Me.MousePointer = vbNormal
+AlertBox "Done !!!"
+
+clsExcel.OpenExcelWorkBook mXlsRepPath
+clsExcel.Visible = True
+
+clsExcel.CloseExcelApp
+Set clsExcel = Nothing
+
+
+End Sub
+
+Private Sub dtpFromDate_Change()
+lblFromDate.Caption = dtpFromDate.Text
+End Sub
+
+Private Sub dtpFromDate_GotFocus()
+FlashActiveControl dtpFromDate, True
+End Sub
+
+Private Sub dtpFromDate_LostFocus()
+FlashActiveControl dtpFromDate, False
+End Sub
+
+Private Sub dtpFromDate_Validate(Cancel As Boolean)
+dtpFromDate.Text = ToMyDate(dtpFromDate.Text)
+If Between(Ctod(dtpFromDate.Text), sFinYrStartDate, sFinYrEndDate) = False Then
+    ErrorBox "Invalid Date Range !!!"
+    'dtpFromDate.SetFocus
+    'Cancel = True
+End If
+
+End Sub
+
+Private Sub dtpFromDate1_GotFocus()
+FlashActiveControl dtpFromDate1, True
+End Sub
+
+Private Sub dtpFromDate1_LostFocus()
+FlashActiveControl dtpFromDate1, False
+End Sub
+
+Private Sub dtpFromDate1_Validate(Cancel As Boolean)
+dtpFromDate1.Text = ToMyDate(dtpFromDate1.Text)
+If IsFinYrDate(Ctod(dtpFromDate1.Text)) = False Then
+    ErrorBox "Invalid Date Range !!!"
+    dtpFromDate1.SetFocus
+    Cancel = True
+End If
+
+End Sub
+
+Private Sub dtpToDate_Change()
+lblToDate.Caption = dtpToDate.Text
+End Sub
+
+Private Sub dtpToDate1_GotFocus()
+FlashActiveControl dtpToDate1, True
+End Sub
+
+Private Sub dtpToDate1_LostFocus()
+FlashActiveControl dtpToDate1, False
+End Sub
+
+Private Sub dtpToDate1_Validate(Cancel As Boolean)
+dtpToDate1.Text = ToMyDate(dtpToDate1.Text)
+If IsFinYrDate(Ctod(dtpToDate1.Text)) = False Then
+    ErrorBox "Invalid Date Range !!!"
+    dtpToDate1.SetFocus
+    Cancel = True
+End If
+
+End Sub
+
+Private Sub dtpToDate_GotFocus()
+FlashActiveControl dtpToDate, True
+End Sub
+
+Private Sub dtpToDate_LostFocus()
+FlashActiveControl dtpToDate, False
+End Sub
+
+Private Sub dtpToDate_Validate(Cancel As Boolean)
+dtpToDate.Text = ToMyDate(dtpToDate.Text)
+If Between(Ctod(dtpToDate.Text), sFinYrStartDate, sFinYrEndDate) = False Then
+    ErrorBox "Invalid Date Range !!!"
+    'dtpToDate.SetFocus
+    'Cancel = True
+End If
+
+End Sub
+
+Private Sub Form_Activate()
+Dim srow As Long, mTrnCode As Long
+
+If mFormLoaded = False Then
+    MoveRecToFirst datRecset
+    ShowRecActiveFlexRow datRecset, Mfgrd1
+    Mfgrd1.SetFocus
+
+ElseIf mEntryAccessed = True Then
+    srow = Mfgrd1.Row
+    mTrnCode = Val(Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCode")))
+    If mTrnCode > 0 Then
+        Call SmryList
+        If datRecset.RecordCount > 0 Then
+            Call Chk_EntryAccessed
+        End If
+        Mfgrd1.SetFocus
+    End If
+
+Else
+    RefreshDatabase dbHmsDatabase
+    RefreshDatabase dbAcDatabase
+    RefreshDatabase dbGrpDatabase
+    RefreshDatabase dbComDatabase
+    
+End If
+
+mFormLoaded = True
+End Sub
+
+Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
+mLastKeyPressed = KeyCode
+mMaskKeyPressed = Shift
+Select Case KeyCode
+Case vbKeyPageDown
+    If FormAddEditMode = cFORM_SMRYMODE And frConfigure.Visible = True Then
+        Call cmdConfigure_Click
+    End If
+End Select
+
+End Sub
+
+Private Sub Form_KeyPress(KeyAscii As Integer)
+mLastKeyPressed = KeyAscii
+
+End Sub
+
+Private Sub Form_Load()
+Dim colcnt As Integer
+
+mFormLoaded = False
+mEntrySaved = False: mEntryAborted = False
+SetFormSize Me, frmMain
+Call Form_Resize
+chkFByOutdoor.Value = 1
+chkFByIndoor.Value = 1
+chkFByLab.Value = 1
+Call chkFByOutdoor_Click
+Call chkFByIndoor_Click
+Call chkFByLab_Click
+
+Call SetVoidControl(txtVoid)
+txtSearch1Text.Enabled = False
+frConfigure.Visible = False
+frPrintCRList.Visible = False
+
+OpenAcDataSource dbAcDatabase
+OpenHmsDataSource dbHmsDatabase
+OpenGrpDataSource dbGrpDatabase
+OpenComDataSource dbComDatabase
+
+Set clsListStru = New clsSelectQueryStructure
+
+Set fcmbVtmName = New clsComFlexSearch
+Set fcmbVtmName.dbAcDatabase = dbAcDatabase
+fcmbVtmName.blnVTypeMastList = True
+fcmbVtmName.Init
+
+'''Set fcmbAhName = New clsComFlexSearch
+'''Set fcmbAhName.dbAcDatabase = dbAcDatabase
+'''fcmbAhName.blnAchdMastList = True
+'''fcmbAhName.Init
+
+'''Set fcmbPcgName = New clsHmsFlexSearch
+'''Set fcmbPcgName.dbHmsDatabase = dbHmsDatabase
+'''fcmbPcgName.blnPatCatgMstList = True
+'''fcmbPcgName.Init
+
+'''Set fcmbAraName = New clsComFlexSearch
+'''Set fcmbAraName.dbAcDatabase = dbAcDatabase
+'''fcmbAraName.blnAreaMastList = True
+'''fcmbAraName.Init
+
+'''Set fcmbStnName = New clsComFlexSearch
+'''Set fcmbStnName.dbAcDatabase = dbAcDatabase
+'''fcmbStnName.blnStationMastList = True
+'''fcmbStnName.Init
+
+Set fcmbCDctName = New clsHmsFlexSearch
+Set fcmbCDctName.dbHmsDatabase = dbHmsDatabase
+fcmbCDctName.blnDoctMastList = True
+fcmbCDctName.Init
+
+'''Set fcmbRByName = New clsHmsFlexSearch
+'''Set fcmbRByName.dbHmsDatabase = dbHmsDatabase
+'''fcmbRByName.blnRefByMastList = True
+'''fcmbRByName.Init
+
+'''Set fcmbFDigName = New clsHmsFlexSearch
+'''Set fcmbFDigName.dbHmsDatabase = dbHmsDatabase
+'''fcmbFDigName.blnDiagMastList = True
+'''fcmbFDigName.Init
+
+Set fcmbSrvName = New clsHmsFlexSearch
+Set fcmbSrvName.dbHmsDatabase = dbHmsDatabase
+fcmbSrvName.blnServMastList = True
+fcmbSrvName.Init
+
+Set fcmbSgpName = New clsHmsFlexSearch
+Set fcmbSgpName.dbHmsDatabase = dbHmsDatabase
+fcmbSgpName.blnServGrpMstList = True
+fcmbSgpName.Init
+
+Set fcmbPttRegNo = New clsHmsFlexSearch
+Set fcmbPttRegNo.dbHmsDatabase = dbHmsDatabase
+Set fcmbPttRegNo.dbComDatabase = dbComDatabase
+fcmbPttRegNo.blnPatMastListByRegNo = True
+fcmbPttRegNo.mFiltCond = "0 = 1"
+fcmbPttRegNo.Init
+
+Set fcmbPttName = New clsHmsFlexSearch
+Set fcmbPttName.dbHmsDatabase = dbHmsDatabase
+Set fcmbPttName.dbComDatabase = dbComDatabase
+fcmbPttName.blnPatMastListByName = True
+fcmbPttName.mFiltCond = "0 = 1"
+fcmbPttName.Init
+
+'''Set fcmbOldOpgByOpgNo = New clsHmsFlexSearch
+'''Set fcmbOldOpgByOpgNo.dbHmsDatabase = dbHmsDatabase
+'''Set fcmbOldOpgByOpgNo.dbComDatabase = dbComDatabase
+'''fcmbOldOpgByOpgNo.blnOldOpgListByOpgNo = True
+'''fcmbOldOpgByOpgNo.Init
+
+'''Set fcmbOldOpgByPttRegNo = New clsHmsFlexSearch
+'''Set fcmbOldOpgByPttRegNo.dbHmsDatabase = dbHmsDatabase
+'''Set fcmbOldOpgByPttRegNo.dbComDatabase = dbComDatabase
+'''fcmbOldOpgByPttRegNo.blnOldOpgListByPttRegNo = True
+'''fcmbOldOpgByPttRegNo.Init
+
+'''Set fcmbOldOpgByPttName = New clsHmsFlexSearch
+'''Set fcmbOldOpgByPttName.dbHmsDatabase = dbHmsDatabase
+'''Set fcmbOldOpgByPttName.dbComDatabase = dbComDatabase
+'''fcmbOldOpgByPttName.blnOldOpgListByPttName = True
+'''fcmbOldOpgByPttName.Init
+
+Call RestoreDefaultSmryPara
+If mRemoteAccess = True Then
+    optDetailed.Value = True
+    AddSmryParaLayer mClear:=True
+End If
+
+If mRemoteAccess = True Then
+    'datRecset.Open "Select * from OutdReg left join PatMast on OutdReg.OpgPttCode = PatMast.PttCode where OpgCode = " & CStr(mOpgCode) & " order by OpgDate,OpgTime", dbHmsDatabase, adOpenKeyset, adLockOptimistic
+Else
+    'datRecset.Open "Select * from OutdReg left join PatMast on OutdReg.OpgPttCode = PatMast.PttCode order by OpgDate,OpgTime", dbHmsDatabase, adOpenKeyset, adLockOptimistic
+End If
+Mfgrd1.FixedCols = 0
+Call SmryList
+
+ShowEntryMode False
+ShowStatusBarText StatusBar1
+
+End Sub
+
+Private Sub optConsDoctorwise_GotFocus()
+FlashActiveControl optConsDoctorwise, True
+End Sub
+
+Private Sub optConsDoctorwise_LostFocus()
+FlashActiveControl optConsDoctorwise, False
+End Sub
+
+Private Sub optServDctrServGrpwise_GotFocus()
+FlashActiveControl optServDctrServGrpwise, True
+End Sub
+
+Private Sub optServDctrServGrpwise_LostFocus()
+FlashActiveControl optServDctrServGrpwise, False
+End Sub
+
+Private Sub optServDctrServwise_GotFocus()
+FlashActiveControl optServDctrServwise, True
+End Sub
+
+Private Sub optServDctrServwise_LostFocus()
+FlashActiveControl optServDctrServwise, False
+End Sub
+
+Private Sub optServDoctorwise_GotFocus()
+FlashActiveControl optServDoctorwise, True
+End Sub
+
+Private Sub optServDoctorwise_LostFocus()
+FlashActiveControl optServDoctorwise, False
+End Sub
+
+Private Sub optServGrpNServWise_GotFocus()
+FlashActiveControl optServGrpNServWise, True
+End Sub
+
+Private Sub optServGrpNServWise_LostFocus()
+FlashActiveControl optServGrpNServWise, False
+End Sub
+
+Private Sub optServGrpWise_GotFocus()
+FlashActiveControl optServGrpWise, True
+End Sub
+
+Private Sub optServGrpWise_LostFocus()
+FlashActiveControl optServGrpWise, False
+End Sub
+
+Private Sub optVTypewise_GotFocus()
+FlashActiveControl optVTypewise, True
+End Sub
+
+Private Sub optVTypewise_LostFocus()
+FlashActiveControl optVTypewise, False
+End Sub
+
+Private Sub StatusBar1_PanelClick(ByVal Panel As MSComctlLib.Panel)
+ShowStatusBarText StatusBar1
+End Sub
+
+Private Sub Form_Resize()
+lblFormHeading.Width = Me.Width
+cmdFormEscape.Left = Me.Width - (cmdFormEscape.Width * 2)
+cmdFormEnter.Left = Me.Width + cmdFormEscape.Width
+frFormSmry.Left = (Me.Width - frFormSmry.Width) / 2: frFormSmry.Top = cmbFormEntryMode.Top + (cmbFormEntryMode.Height * 1.25)
+'frFormDtl.Left = (Me.Width - frFormDtl.Width) / 2: frFormDtl.Top = frFormSmry.Top
+
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+Set fcmbOldOpgByOpgNo = Nothing
+Set fcmbOldOpgByPttRegNo = Nothing
+Set fcmbOldOpgByPttName = Nothing
+Set fcmbPttRegNo = Nothing
+Set fcmbPttName = Nothing
+Set fcmbAhName = Nothing
+Set fcmbPcgName = Nothing
+Set fcmbAraName = Nothing
+Set fcmbStnName = Nothing
+Set fcmbVtmName = Nothing
+Set fcmbCDctName = Nothing
+Set fcmbRByName = Nothing
+Set fcmbFDigName = Nothing
+Set fcmbSrvName = Nothing
+Set fcmbSgpName = Nothing
+Set clsListStru = Nothing
+Set frmTrn = Nothing
+
+CloseTable datRecset
+CloseDataSource dbAcDatabase
+CloseDataSource dbHmsDatabase
+CloseDataSource dbGrpDatabase
+CloseDataSource dbComDatabase
+End Sub
+
+Private Sub ShowEntryMode(ByVal EntryMode As Boolean)
+If Me.Visible = True Then
+    txtVoid.SetFocus
+End If
+frFormSmry.Visible = Not EntryMode: frFormSmry.Enabled = Not EntryMode
+'frFormDtl.Visible = EntryMode: frFormDtl.Enabled = EntryMode
+'cmdSaveForm.Enabled = EntryMode
+If EntryMode = False Then
+    FormAddEditMode = cFORM_SMRYMODE
+    'PatAddEditMode = cFORM_SMRYMODE
+End If
+
+End Sub
+
+Private Sub mskQryPttRegNo_Change()
+If fcmbPttRegNo.CallFromText_Change = False Then
+    fcmbPttRegNo.CallFromText_Change = True
+    If InterActiveChange(mskQryPttRegNo) = True Then
+        Call ChkPttRegNoListFirstTime
+        
+        fcmbPttRegNo.UserText = Array(mskQryPttRegNo.Text, mskQryPttRegNo.SelStart)
+        fcmbPttRegNo.Show
+        mskQryPttRegNo.Text = fcmbPttRegNo.Text
+        mQryPttCode = Val(fcmbPttRegNo.BoundText)
+        fcmbPttName.BoundText = CStr(mQryPttCode)
+        txtQryPttName.Text = fcmbPttName.Text
+        If fcmbPttRegNo.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbPttRegNo.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub ChkPttRegNoListFirstTime()
+If fcmbPttRegNo.LRecordCount = 0 Then
+    fcmbPttRegNo.mFiltCond = ""
+    fcmbPttRegNo.ReInit
+End If
+
+End Sub
+
+Private Sub mskQryPttRegNo_GotFocus()
+FlashActiveControl mskQryPttRegNo, True
+End Sub
+
+Private Sub mskQryPttRegNo_KeyDown(KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    Call mskQryPttRegNo_Change
+ElseIf MyAddNewKey(Shift, KeyCode) = True Then
+    Rem not required here
+End If
+
+End Sub
+
+Private Sub mskQryPttRegNo_LostFocus()
+FlashActiveControl mskQryPttRegNo, False
+End Sub
+
+Private Sub optDatewise_GotFocus()
+FlashActiveControl optDatewise, True
+End Sub
+
+Private Sub optDatewise_LostFocus()
+FlashActiveControl optDatewise, False
+End Sub
+
+Private Sub optDetailed_GotFocus()
+FlashActiveControl optDetailed, True
+End Sub
+
+Private Sub optDetailed_LostFocus()
+FlashActiveControl optDetailed, False
+End Sub
+
+Private Sub optExpanded_Click()
+FlashActiveControl optExpanded, True
+End Sub
+
+Private Sub optExpanded_LostFocus()
+FlashActiveControl optExpanded, False
+End Sub
+
+Private Sub optMonthwise_GotFocus()
+FlashActiveControl optMonthwise, True
+End Sub
+
+Private Sub optMonthwise_LostFocus()
+FlashActiveControl optMonthwise, False
+End Sub
+
+Private Sub optPatientNameWise_GotFocus()
+FlashActiveControl optPatientNamewise, True
+End Sub
+
+Private Sub optPatientNameWise_LostFocus()
+FlashActiveControl optPatientNamewise, False
+End Sub
+
+Private Sub Data_AddEvent()
+Rem none
+End Sub
+
+Private Sub Data_EditEvent()
+
+'If clsOPG.BeginTran(datRecset.fields("OpgCode")) = False Then
+'    Exit Sub
+'ElseIf clsPAT.BeginMast(datRecset.fields("OpgPttCode")) = False Then
+'    Exit Sub
+'End If
+'mEntrySaved = False: mEntryAborted = False
+'FormAddEditMode = cFORM_EDITMODE
+'PatAddEditMode = cFORM_EDITMODE
+'
+'With datRecset
+'mOpgCode = .fields("OpgCode")
+'mPttCode = .fields("OpgPttCode")
+'clsOPG.GetData mOpgCode
+'clsPAT.GetData mPttCode
+'End With
+'
+'ShowPatData mPttCode
+'ShowOpgData mOpgCode
+'
+'Rem old values
+'Call StorePatOldData
+'Call StoreOpgOldData
+'
+'Call ShowEntryMode(True)
+'txtPttName.SetFocus
+
+End Sub
+
+Private Sub SmryList()
+Dim gcolcount As Integer, acount As Integer, mLow As Integer, mHigh As Integer, mPos As Integer, srow As Long, mColCount As Integer
+Dim aAcntBal As Variant, mBal As Double, mQryStr As String
+Dim mCount_Tot As Double, mAmtAftDisc_Tot As Double, mDiscAmt_Tot As Double, mTotRecdAmt_Tot As Double, mTotRefdAmt_Tot As Double, mBalAmt_Tot As Double
+Dim mCount_Sub As Double, mAmtAftDisc_Sub As Double, mDiscAmt_Sub As Double, mTotRecdAmt_Sub As Double, mTotRefdAmt_Sub As Double, mBalAmt_Sub As Double
+Dim mGrp1Code As Long, mGrp2Code As Long, mPrintSubGrpTot As Boolean
+Dim tRecset As ADODB.Recordset
+
+Me.MousePointer = vbHourglass
+If datRecset.State = 1 Then
+    CloseTable datRecset
+End If
+RefreshDatabase dbHmsDatabase
+RefreshDatabase dbAcDatabase
+RefreshDatabase dbGrpDatabase
+RefreshDatabase dbComDatabase
+clsListStru.Clear
+
+If optMonthwise.Value = True Or optDatewise.Value = True Or optPatientNamewise.Value = True Or optPatientRegNoWise.Value = True Or optConsDoctorwise.Value = True Or optServDoctorwise.Value = True Or optServDctrServGrpwise.Value = True Or optServDctrServwise.Value = True Or optServiceWise.Value = True Or optServGrpWise.Value = True Or optServGrpNServWise.Value = True Or optVTypewise.Value = True Then
+    If optMonthwise.Value = True Then
+        Call CreateMonthlySrmyList
+        
+    ElseIf optDatewise.Value = True Then
+        Call CreateDailySrmyList
+        
+    ElseIf optPatientNamewise.Value = True Then
+        Call CreatePatNameSmryList
+        
+    ElseIf optPatientRegNoWise.Value = True Then
+        Call CreatePatRegNoSmryList
+        
+    ElseIf optConsDoctorwise.Value = True Then
+        Call CreateConsDctrSmryList
+        
+    ElseIf optServDoctorwise.Value = True Then
+        Call CreateServDctrSmryList
+        
+    ElseIf optServDctrServGrpwise.Value = True Then
+        Call CreateServDctrServGrpSmryList
+        
+    ElseIf optServDctrServwise.Value = True Then
+        Call CreateServDctrServSmryList
+        
+    ElseIf optServiceWise.Value = True Then
+        Call CreateServNameSmryList
+        
+    ElseIf optServGrpWise.Value = True Then
+        Call CreateServGrpNameSmryList
+    
+    ElseIf optServGrpNServWise.Value = True Then
+        Call CreateServGrpNServNameSmryList
+    
+    ElseIf optVTypewise.Value = True Then
+        Call CreateVTypeNameSmryList
+    
+    End If
+    
+ElseIf optDetailed.Value = True Then
+    Call CreateDetailedSrmyList
+    
+ElseIf optExpanded.Value = True Then
+    Call CreateExpandedSrmyList
+    
+End If
+
+Mfgrd1.Height = Int(Mfgrd1.Height / Mfgrd1.RowHeightMin) * Mfgrd1.RowHeightMin
+Mfgrd1.Cols = clsListStru.UFields + 1
+gcolcount = 0
+mLow = clsListStru.LFields
+mHigh = clsListStru.UFields
+For acount = mLow To mHigh
+    With Mfgrd1
+    'If .Cols <= gcolcount Then
+    '    .Cols = gcolcount + 1
+    'End If
+    .ColAlignment(gcolcount) = clsListStru.Field_Align(acount)
+    If clsListStru.Field_Show(acount) = True Then
+        .ColWidth(gcolcount) = clsListStru.Field_Width(acount)
+    Else
+        .ColWidth(gcolcount) = 0
+    End If
+    .TextMatrix(0, gcolcount) = clsListStru.Field_Title(acount)
+    End With
+    
+    gcolcount = gcolcount + 1
+Next acount
+If FlexColsWidth(Mfgrd1) > Mfgrd1.Width Then
+    Mfgrd1.SelectionMode = flexSelectionFree
+Else
+    Mfgrd1.SelectionMode = flexSelectionByRow
+End If
+
+mGrp1Code = 0: mGrp2Code = 0
+mCount_Tot = 0: mAmtAftDisc_Tot = 0: mDiscAmt_Tot = 0: mTotRecdAmt_Tot = 0: mTotRefdAmt_Tot = 0: mBalAmt_Tot = 0
+mCount_Sub = 0: mAmtAftDisc_Sub = 0: mDiscAmt_Sub = 0: mTotRecdAmt_Sub = 0: mTotRefdAmt_Sub = 0: mBalAmt_Sub = 0
+srow = 1
+Rem MoveRecToFirst datRecset
+Set tRecset = datRecset.ActiveConnection.Execute(datRecset.Source)
+With tRecset
+Rem If .RecordCount > 0 Then
+If IsValidRec(tRecset) = True Then
+    If optServDctrServGrpwise.Value = True Then
+        mGrp1Code = .fields("TrnDctCode")
+    ElseIf optServDctrServwise.Value = True Then
+        mGrp1Code = .fields("TrnDctCode")
+    End If
+    Do While .EOF = False
+        If optMonthwise.Value = True Then
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnYrMonth")) = .fields("TrnYrMonth")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnMnYear")) = MonthName(Val(Right(.fields("TrnYrMonth"), 2))) & "-" & Left(.fields("TrnYrMonth"), 4)
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(.fields("TrnCount"), mDecimals:=0)
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(.fields("TrnAmtAftDisc_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(.fields("TrnDiscAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRecdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRefdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(.fields("TrnBalAmt_sum"))
+            
+        ElseIf optDatewise.Value = True Then
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDateYMD")) = Format(.fields("TrnDate"), "yyyymmdd")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDate")) = Dtoc(.fields("TrnDate"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(.fields("TrnCount"), mDecimals:=0)
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(.fields("TrnAmtAftDisc_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(.fields("TrnDiscAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRecdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRefdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(.fields("TrnBalAmt_sum"))
+            
+        ElseIf optPatientNamewise.Value = True Then
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttName")) = .fields("PttName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttRegNo")) = ToMyNumFmt(.fields("PttRegNo"), mDecimals:=0)
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttRefName")) = .fields("PttRefName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(.fields("TrnCount"), mDecimals:=0)
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(.fields("TrnAmtAftDisc_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(.fields("TrnDiscAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRecdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRefdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(.fields("TrnBalAmt_sum"))
+            
+        ElseIf optPatientRegNoWise.Value = True Then
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttRegNo")) = ToMyNumFmt(.fields("PttRegNo"), mDecimals:=0)
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttName")) = .fields("PttName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttRefName")) = .fields("PttRefName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(.fields("TrnCount"), mDecimals:=0)
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(.fields("TrnAmtAftDisc_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(.fields("TrnDiscAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRecdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRefdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(.fields("TrnBalAmt_sum"))
+            
+        ElseIf optConsDoctorwise.Value = True Then
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("DctName")) = .fields("DctName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(.fields("TrnCount"), mDecimals:=0)
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(.fields("TrnAmtAftDisc_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(.fields("TrnDiscAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRecdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRefdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(.fields("TrnBalAmt_sum"))
+            
+        ElseIf optServDoctorwise.Value = True Then
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("DctName")) = .fields("DctName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(.fields("TrnCount"), mDecimals:=0)
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(.fields("TrnAmtAftDisc_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(.fields("TrnDiscAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRecdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRefdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(.fields("TrnBalAmt_sum"))
+            
+        ElseIf optServDctrServGrpwise.Value = True Then
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("DctCode")) = .fields("TrnDctCode")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("SgpCode")) = .fields("TrnSgpCode")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("DctName")) = .fields("DctName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("SgpName")) = .fields("SgpName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(.fields("TrnCount"), mDecimals:=0)
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(.fields("TrnAmtAftDisc_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(.fields("TrnDiscAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRecdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRefdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(.fields("TrnBalAmt_sum"))
+            
+            mCount_Sub = mCount_Sub + .fields("TrnCount")
+            mAmtAftDisc_Sub = mAmtAftDisc_Sub + .fields("TrnAmtAftDisc_sum")
+            mDiscAmt_Sub = mDiscAmt_Sub + .fields("TrnDiscAmt_sum")
+            mTotRecdAmt_Sub = mTotRecdAmt_Sub + .fields("TrnTotRecdAmt_sum")
+            mTotRefdAmt_Sub = mTotRefdAmt_Sub + .fields("TrnTotRefdAmt_sum")
+            mBalAmt_Sub = mBalAmt_Sub + .fields("TrnBalAmt_sum")
+            
+        ElseIf optServDctrServwise.Value = True Then
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("DctCode")) = .fields("TrnDctCode")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("SrvCode")) = .fields("TrnSrvCode")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("DctName")) = .fields("DctName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("SrvName")) = .fields("SrvName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(.fields("TrnCount"), mDecimals:=0)
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(.fields("TrnAmtAftDisc_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(.fields("TrnDiscAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRecdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRefdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(.fields("TrnBalAmt_sum"))
+            
+            mCount_Sub = mCount_Sub + .fields("TrnCount")
+            mAmtAftDisc_Sub = mAmtAftDisc_Sub + .fields("TrnAmtAftDisc_sum")
+            mDiscAmt_Sub = mDiscAmt_Sub + .fields("TrnDiscAmt_sum")
+            mTotRecdAmt_Sub = mTotRecdAmt_Sub + .fields("TrnTotRecdAmt_sum")
+            mTotRefdAmt_Sub = mTotRefdAmt_Sub + .fields("TrnTotRefdAmt_sum")
+            mBalAmt_Sub = mBalAmt_Sub + .fields("TrnBalAmt_sum")
+            
+        ElseIf optServiceWise.Value = True Then
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnSrvName")) = .fields("TrnSrvName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(.fields("TrnCount"), mDecimals:=0)
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(.fields("TrnAmtAftDisc_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(.fields("TrnDiscAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRecdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRefdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(.fields("TrnBalAmt_sum"))
+        
+        ElseIf optServGrpWise.Value = True Then
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnSgpName")) = .fields("TrnSgpName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(.fields("TrnCount"), mDecimals:=0)
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(.fields("TrnAmtAftDisc_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(.fields("TrnDiscAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRecdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRefdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(.fields("TrnBalAmt_sum"))
+            
+        ElseIf optServGrpNServWise.Value = True Then
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnSgpName")) = .fields("TrnSgpName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnSrvName")) = .fields("TrnSrvName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(.fields("TrnCount"), mDecimals:=0)
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(.fields("TrnAmtAftDisc_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(.fields("TrnDiscAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRecdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRefdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(.fields("TrnBalAmt_sum"))
+        
+        ElseIf optVTypewise.Value = True Then
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnVtmName")) = .fields("TrnVtmName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(.fields("TrnCount"), mDecimals:=0)
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(.fields("TrnAmtAftDisc_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(.fields("TrnDiscAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRecdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(.fields("TrnTotRefdAmt_sum"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(.fields("TrnBalAmt_sum"))
+        
+        ElseIf optDetailed.Value = True Or optExpanded.Value = True Then
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("tTrnSmryId")) = .fields("tTrnSmryId")      'Format(.fields("TrnDate"), "yyyymmdd") & .fields("TrnType") & Format(.fields("TrnCode"), "0000000")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnType")) = .fields("TrnType")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("VtmSysCode")) = .fields("VtmSysCode")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCode")) = .fields("TrnCode")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("VtmName")) = .fields("VtmName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnVchNo")) = .fields("TrnVchNo")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDate")) = Dtoc(.fields("TrnDate"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc")) = ToMyNumFmt(.fields("TrnAmtAftDisc"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt")) = ToMyNumFmt(.fields("TrnDiscAmt"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt")) = ToMyNumFmt(.fields("TrnTotRecdAmt"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt")) = ToMyNumFmt(.fields("TrnTotRefdAmt"))
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt")) = ToMyNumFmt(.fields("TrnBalAmt"))
+            ' ------------------------------------
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttCode")) = .fields("PttCode")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttName")) = .fields("PttName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttRegNo")) = .fields("PttRegNo")
+            If optExpanded.Value = True Then
+                Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnSrvName")) = .fields("TrnSrvName")
+            End If
+            ' ------------------------------------
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttRefName")) = .fields("PttRefName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttAddr")) = .fields("PttAddr")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PatAraName")) = .fields("AraName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PatStnName")) = .fields("StnName")
+            Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PatPcgName")) = .fields("PcgName")
+        
+        End If
+        If optDetailed.Value = True Or optExpanded.Value = True Then
+            mCount_Tot = mCount_Tot + 1
+            mAmtAftDisc_Tot = mAmtAftDisc_Tot + .fields("TrnAmtAftDisc")
+            mDiscAmt_Tot = mDiscAmt_Tot + .fields("TrnDiscAmt")
+            mTotRecdAmt_Tot = mTotRecdAmt_Tot + .fields("TrnTotRecdAmt")
+            mTotRefdAmt_Tot = mTotRefdAmt_Tot + .fields("TrnTotRefdAmt")
+            mBalAmt_Tot = mBalAmt_Tot + .fields("TrnBalAmt")
+        Else
+            mCount_Tot = mCount_Tot + .fields("TrnCount")
+            mAmtAftDisc_Tot = mAmtAftDisc_Tot + .fields("TrnAmtAftDisc_sum")
+            mDiscAmt_Tot = mDiscAmt_Tot + .fields("TrnDiscAmt_sum")
+            mTotRecdAmt_Tot = mTotRecdAmt_Tot + .fields("TrnTotRecdAmt_sum")
+            mTotRefdAmt_Tot = mTotRefdAmt_Tot + .fields("TrnTotRefdAmt_sum")
+            mBalAmt_Tot = mBalAmt_Tot + .fields("TrnBalAmt_sum")
+        End If
+        
+        srow = srow + 1
+        If Mfgrd1.Rows < srow + 1 Then
+            Mfgrd1.Rows = Mfgrd1.Rows + 1
+        End If
+        
+        .MoveNext
+        
+        If optServDctrServGrpwise.Value = True Or optServDctrServwise.Value = True Then
+            mPrintSubGrpTot = False
+            If .EOF = True Then
+                mPrintSubGrpTot = True
+            Else
+                If optServDctrServGrpwise.Value = True Then
+                    If .fields("TrnDctCode") <> mGrp1Code Then
+                        mPrintSubGrpTot = True
+                        mGrp1Code = .fields("TrnDctCode")
+                    End If
+                ElseIf optServDctrServwise.Value = True Then
+                    If .fields("TrnDctCode") <> mGrp1Code Then
+                        mPrintSubGrpTot = True
+                        mGrp1Code = .fields("TrnDctCode")
+                    End If
+                End If
+            End If
+            If mPrintSubGrpTot = True Then
+                If optServDctrServGrpwise.Value = True Then
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("DctCode")) = ""
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("SgpCode")) = ""
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("DctName")) = ""
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("SgpName")) = "Sub Total"
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(mCount_Sub, mDecimals:=0)
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(mAmtAftDisc_Sub)
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(mDiscAmt_Sub)
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(mTotRecdAmt_Sub)
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(mTotRefdAmt_Sub)
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(mBalAmt_Sub)
+                    
+                    srow = srow + 1
+                    If Mfgrd1.Rows < srow + 1 Then
+                        Mfgrd1.Rows = Mfgrd1.Rows + 1
+                    End If
+                    mCount_Sub = 0: mAmtAftDisc_Sub = 0: mDiscAmt_Sub = 0: mTotRecdAmt_Sub = 0: mTotRefdAmt_Sub = 0: mBalAmt_Sub = 0
+                    
+                ElseIf optServDctrServwise.Value = True Then
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("DctCode")) = ""
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("SrvCode")) = ""
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("DctName")) = ""
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("SrvName")) = "Sub Total"
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(mCount_Sub, mDecimals:=0)
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(mAmtAftDisc_Sub)
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(mDiscAmt_Sub)
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(mTotRecdAmt_Sub)
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(mTotRefdAmt_Sub)
+                    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(mBalAmt_Sub)
+                    
+                    srow = srow + 1
+                    If Mfgrd1.Rows < srow + 1 Then
+                        Mfgrd1.Rows = Mfgrd1.Rows + 1
+                    End If
+                    mCount_Sub = 0: mAmtAftDisc_Sub = 0: mDiscAmt_Sub = 0: mTotRecdAmt_Sub = 0: mTotRefdAmt_Sub = 0: mBalAmt_Sub = 0
+                End If
+            End If
+        End If
+    Loop
+End If
+End With
+CloseTable tRecset
+
+Rem grand total
+If optMonthwise.Value = True Then
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnYrMonth")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnMnYear")) = "Grand Total"
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(mCount_Tot, mDecimals:=0)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(mAmtAftDisc_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(mDiscAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(mTotRecdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(mTotRefdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(mBalAmt_Tot)
+    
+ElseIf optDatewise.Value = True Then
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDateYMD")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDate")) = "Grand Total"
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(mCount_Tot, mDecimals:=0)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(mAmtAftDisc_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(mDiscAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(mTotRecdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(mTotRefdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(mBalAmt_Tot)
+    
+ElseIf optPatientNamewise.Value = True Then
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttName")) = "Grand Total"
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttRegNo")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttRefName")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(mCount_Tot, mDecimals:=0)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(mAmtAftDisc_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(mDiscAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(mTotRecdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(mTotRefdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(mBalAmt_Tot)
+    
+ElseIf optPatientRegNoWise.Value = True Then
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttRegNo")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttName")) = "Grand Total"
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttRefName")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(mCount_Tot, mDecimals:=0)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(mAmtAftDisc_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(mDiscAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(mTotRecdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(mTotRefdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(mBalAmt_Tot)
+    
+ElseIf optConsDoctorwise.Value = True Then
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("DctName")) = "Grand Total"
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(mCount_Tot, mDecimals:=0)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(mAmtAftDisc_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(mDiscAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(mTotRecdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(mTotRefdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(mBalAmt_Tot)
+    
+ElseIf optServDoctorwise.Value = True Then
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("DctName")) = "Grand Total"
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(mCount_Tot, mDecimals:=0)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(mAmtAftDisc_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(mDiscAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(mTotRecdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(mTotRefdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(mBalAmt_Tot)
+    
+ElseIf optServDctrServGrpwise.Value = True Then
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("DctCode")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("SgpCode")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("DctName")) = "Grand Total"
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("SgpName")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(mCount_Tot, mDecimals:=0)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(mAmtAftDisc_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(mDiscAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(mTotRecdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(mTotRefdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(mBalAmt_Tot)
+    
+ElseIf optServDctrServwise.Value = True Then
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("DctCode")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("SrvCode")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("DctName")) = "Grand Total"
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("SrvName")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(mCount_Tot, mDecimals:=0)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(mAmtAftDisc_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(mDiscAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(mTotRecdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(mTotRefdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(mBalAmt_Tot)
+    
+ElseIf optServiceWise.Value = True Then
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnSrvName")) = "Grand Total"
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(mCount_Tot, mDecimals:=0)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(mAmtAftDisc_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(mDiscAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(mTotRecdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(mTotRefdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(mBalAmt_Tot)
+    
+ElseIf optServGrpWise.Value = True Then
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnSgpName")) = "Grand Total"
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(mCount_Tot, mDecimals:=0)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(mAmtAftDisc_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(mDiscAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(mTotRecdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(mTotRefdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(mBalAmt_Tot)
+    
+ElseIf optServGrpNServWise.Value = True Then
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnSgpName")) = "Grand Total"
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnSrvName")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(mCount_Tot, mDecimals:=0)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(mAmtAftDisc_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(mDiscAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(mTotRecdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(mTotRefdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(mBalAmt_Tot)
+    
+ElseIf optVTypewise.Value = True Then
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnVtmName")) = "Grand Total"
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCount")) = ToMyNumFmt(mCount_Tot, mDecimals:=0)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc_sum")) = ToMyNumFmt(mAmtAftDisc_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt_sum")) = ToMyNumFmt(mDiscAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt_sum")) = ToMyNumFmt(mTotRecdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt_sum")) = ToMyNumFmt(mTotRefdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt_sum")) = ToMyNumFmt(mBalAmt_Tot)
+    
+ElseIf optDetailed.Value = True Or optExpanded.Value = True Then
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("tTrnSmryId")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnType")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("VtmSysCode")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCode")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("VtmName")) = "Grand Total (" & CStr(mCount_Tot) & ")"
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnVchNo")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDate")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnAmtAftDisc")) = ToMyNumFmt(mAmtAftDisc_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnDiscAmt")) = ToMyNumFmt(mDiscAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRecdAmt")) = ToMyNumFmt(mTotRecdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnTotRefdAmt")) = ToMyNumFmt(mTotRefdAmt_Tot)
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnBalAmt")) = ToMyNumFmt(mBalAmt_Tot)
+    ' ------------------------------------
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttCode")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttName")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttRegNo")) = ""
+    If optExpanded.Value = True Then
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnSrvName")) = ""
+    End If
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttRefName")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PttAddr")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PatAraName")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PatStnName")) = ""
+    Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("PatPcgName")) = ""
+
+End If
+srow = srow + 1
+If Mfgrd1.Rows < srow + 1 Then
+    Mfgrd1.Rows = Mfgrd1.Rows + 1
+End If
+
+For mColCount = 0 To Mfgrd1.Cols - 1
+    Mfgrd1.TextMatrix(srow, mColCount) = ""
+Next mColCount
+Mfgrd1.Rows = srow + 1
+
+SetFlexColCursor txtList1Col, Mfgrd1
+
+Me.MousePointer = vbNormal
+
+Rem Call CalcDrCrAmtTot
+
+End Sub
+
+Private Sub CreateMonthlySrmyList()
+Dim mQryStr As String
+
+clsListStru.AddFields mExpr:="TrnYrMonth", mAttrib:=cFAT_SYSTEM
+clsListStru.AddFields mExpr:="TrnMnYear", mTitle:="Month", mShowItem:=True, mAlign:=1, mWidth:=2000
+clsListStru.AddFields mExpr:="TrnCount", mTitle:="Count", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnAmtAftDisc_sum", mTitle:="Bill Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnDiscAmt_sum", mTitle:="Discount", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRecdAmt_sum", mTitle:="Recd.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRefdAmt_sum", mTitle:="Refund Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnBalAmt_sum", mTitle:="Bal.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+
+mQryStr = "Select format(TrnDate,'yyyy/MM') as TrnYrMonth" _
+ & ",Count(*) as TrnCount" _
+ & ",Sum(TrnAmtAftDisc) as TrnAmtAftDisc_sum" _
+ & ",Sum(TrnDiscAmt) as TrnDiscAmt_sum" _
+ & ",Sum(TrnTotRecdAmt) as TrnTotRecdAmt_sum" _
+ & ",Sum(TrnTotRefdAmt) as TrnTotRefdAmt_sum" _
+ & ",Sum(TrnBalAmt) as TrnBalAmt_sum"
+mQryStr = mQryStr & " from ("
+Rem reserved query string producing no records
+mQryStr = mQryStr & "Select OpgDate as TrnDate" _
+ & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+ & ",OpgDiscAmt as TrnDiscAmt" _
+ & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+ & ",OpgRfugAmt as TrnTotRefdAmt" _
+ & ",0 as TrnBalAmt" _
+ & " from OutdReg" _
+ & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+ & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+ & " and OpgCode > 0 and 0 = 1" _
+ & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+ & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+ & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+ & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+ & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+Rem outdoor registration --------------------------------------------------------------------------------------
+If chkFByOutdReg.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OpgDate as TrnDate" _
+     & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+     & ",OpgDiscAmt as TrnDiscAmt" _
+     & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+     & ",OpgRfugAmt as TrnTotRefdAmt" _
+     & ",0 as TrnBalAmt" _
+     & " from OutdReg" _
+     & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+     & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OpgCode > 0" _
+     & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+End If
+'Rem outdoor reg.refund
+'If chkFByOutdRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OgfDate as TrnDate" _
+'     & ",(OgfRfugAmt * -1) as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRgRefd" _
+'     & " inner join OutdReg on OutdRgRefd.OgfOpgCode = OutdReg.OpgCode" _
+'     & " where OgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor receipt received amount
+If chkFByOutdRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OrcDate as TrnDate" _
+     & ",OrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",OrcDiscAmt as TrnDiscAmt" _
+     & ",OrcAdvAmt+OrcRecdAmt+OrcDepoAmt as TrnTotRecdAmt" _
+     & ",OrcRefuAmt as TrnTotRefdAmt" _
+     & ",OrcBalAmt as TrnBalAmt" _
+     & " from ((OutdRcpt" _
+     & " inner join OutdHdr on OutdRcpt.OrcCode = OutdHdr.OhrCode)" _
+     & " inner join OutdReg on OutdHdr.OhrOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdRcpt.OrcSrvCode = ServMast.SrvCode" _
+     & " where OrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and OrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor payment
+'If chkFByOutdPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OphDate as TrnDate" _
+'     & ",OphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdPymtHdr" _
+'     & " where OphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor refund
+'If chkFByOutdRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OfhDate as TrnDate" _
+'     & ",(OfhRefuAmt * -1) as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRefdHdr" _
+'     & " where OfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor bill payment
+If chkFByOutdBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OblDate as TrnDate" _
+     & ",OblAmtAftDisc as TrnAmtAftDisc" _
+     & ",OblDiscAmt as TrnDiscAmt" _
+     & ",OblDepoAmt as TrnTotRecdAmt" _
+     & ",OblRefuAmt as TrnTotRefdAmt" _
+     & ",OblBalAmt as TrnBalAmt" _
+     & " from ((OutdBill" _
+     & " inner join OutdBlHdr on OutdBill.OblCode = OutdBlHdr.ObhCode)" _
+     & " inner join OutdReg on OutdBlHdr.ObhOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdBill.OblSrvCode = ServMast.SrvCode" _
+     & " where OblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OblCode > 0" _
+     & IIf(mQryPttCode > 0, " and OblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and ObhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor bill refund
+'If chkFByOutdBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select ObfhDate as TrnDate" _
+'     & ",(ObfhRefuAmt * -1) as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdBlRefdHdr" _
+'     & " where ObfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and ObfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and ObfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and ObfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor advance -----------------------------------------------------------------------------------------
+'If chkFByIndrReg.Value = vbChecked = True Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IpgDate as TrnDate" _
+'     & ",IpgAdvAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrReg" _
+'     & " where IpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IpgCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IpgPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IpgVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor receipt received amount
+If chkFByIndrRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IrcDate as TrnDate" _
+     & ",IrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",IrcDiscAmt as TrnDiscAmt" _
+     & ",IrcAdvAmt+IrcRecdAmt+IrcDepoAmt as TrnTotRecdAmt" _
+     & ",IrcRefuAmt as TrnTotRefdAmt" _
+     & ",IrcBalAmt as TrnBalAmt" _
+     & " from ((IndrRcpt" _
+     & " inner join IndrHdr on IndrRcpt.IrcCode = IndrHdr.IhrCode)" _
+     & " inner join IndrReg on IndrHdr.IhrIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrRcpt.IrcSrvCode = ServMast.SrvCode" _
+     & " where IrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and IrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor payment
+'If chkFByIndrPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IphDate as TrnDate" _
+'     & ",IphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrPymtHdr" _
+'     & " where IphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor refund
+'If chkFByIndrRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IfhDate as TrnDate" _
+'     & ",(IfhRefuAmt * -1) as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRefdHdr" _
+'     & " where IfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor bill payment
+If chkFByIndrBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IblDate as TrnDate" _
+     & ",IblAmtAftDisc as TrnAmtAftDisc" _
+     & ",IblDiscAmt as TrnDiscAmt" _
+     & ",IblAdvAmt+IblDpogAmt+IblDepoAmt as TrnTotRecdAmt" _
+     & ",IblRfugAmt+IblRefuAmt as TrnTotRefdAmt" _
+     & ",IblBalAmt as TrnBalAmt" _
+     & " from ((IndrBill" _
+     & " inner join IndrBlHdr on IndrBill.IblCode = IndrBlHdr.IbhCode)" _
+     & " inner join IndrReg on IndrBlHdr.IbhIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrBill.IblSrvCode = ServMast.SrvCode" _
+     & " where IblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IblCode > 0" _
+     & IIf(mQryPttCode > 0, " and IblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IbhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor bill refund
+'If chkFByIndrBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IbfhDate as TrnDate" _
+'     & ",(IbfhRefuAmt * -1) as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrBlRefdHdr" _
+'     & " where IbfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IbfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IbfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IbfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c payment
+'If chkFByIndrRgPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgtDate as TrnDate" _
+'     & ",IgtDpogAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgPymt" _
+'     & " where IgtDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgtCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgtPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgtVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c refund
+'If chkFByIndrRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgfDate as TrnDate" _
+'     & ",(IgfRfugAmt * -1) as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgRefd" _
+'     & " where IgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab receipt received amount ------------------------------------------------------------------------------
+If chkFByLabRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select LrcDate as TrnDate" _
+     & ",LrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",LrcDiscAmt as TrnDiscAmt" _
+     & ",LrcAdvAmt+LrcRecdAmt+LrcDepoAmt as TrnTotRecdAmt" _
+     & ",LrcRefuAmt as TrnTotRefdAmt" _
+     & ",LrcBalAmt as TrnBalAmt" _
+     & " from (LabRcpt" _
+     & " inner join LabHdr on LabRcpt.LrcCode = LabHdr.LhrCode)" _
+     & " inner join ServMast on LabRcpt.LrcSrvCode = ServMast.SrvCode" _
+     & " where LrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and LrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and LrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and LhrCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and LrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and LhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem lab payment
+'If chkFByLabPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LphDate as TrnDate" _
+'     & ",LphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabPymtHdr" _
+'     & " where LphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab refund
+'If chkFByLabRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LfhDate as TrnDate" _
+'     & ",(LfhRefuAmt * -1) as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabRefdHdr" _
+'     & " where LfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem ----------------------------------
+mQryStr = mQryStr & ")"
+mQryStr = mQryStr & " group by format(TrnDate,'yyyy/MM')" _
+ & " order by format(TrnDate,'yyyy/MM')"
+
+datRecset.open mQryStr, dbComDatabase, adOpenKeyset, adLockReadOnly
+
+End Sub
+
+Private Sub CreateDailySrmyList()
+Dim mQryStr As String
+
+clsListStru.AddFields mExpr:="TrnDateYMD", mAttrib:=cFAT_SYSTEM
+clsListStru.AddFields mExpr:="TrnDate", mTitle:="Date", mShowItem:=True, mAlign:=1, mWidth:=2000
+clsListStru.AddFields mExpr:="TrnCount", mTitle:="Count", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnAmtAftDisc_sum", mTitle:="Bill Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnDiscAmt_sum", mTitle:="Discount", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRecdAmt_sum", mTitle:="Recd.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRefdAmt_sum", mTitle:="Refund Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnBalAmt_sum", mTitle:="Bal.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+
+mQryStr = "Select TrnDate" _
+ & ",Count(*) as TrnCount" _
+ & ",Sum(TrnAmtAftDisc) as TrnAmtAftDisc_sum" _
+ & ",Sum(TrnDiscAmt) as TrnDiscAmt_sum" _
+ & ",Sum(TrnTotRecdAmt) as TrnTotRecdAmt_sum" _
+ & ",Sum(TrnTotRefdAmt) as TrnTotRefdAmt_sum" _
+ & ",Sum(TrnBalAmt) as TrnBalAmt_sum"
+mQryStr = mQryStr & " from ("
+Rem reserved query string producing no records
+mQryStr = mQryStr & "Select OpgDate as TrnDate" _
+ & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+ & ",OpgDiscAmt as TrnDiscAmt" _
+ & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+ & ",OpgRfugAmt as TrnTotRefdAmt" _
+ & ",0 as TrnBalAmt" _
+ & " from OutdReg" _
+ & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+ & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+ & " and OpgCode > 0 and 0 = 1" _
+ & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+ & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+ & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+ & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+ & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+Rem outdoor registration --------------------------------------------------------------------------------------
+If chkFByOutdReg.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & "Select OpgDate as TrnDate" _
+     & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+     & ",OpgDiscAmt as TrnDiscAmt" _
+     & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+     & ",OpgRfugAmt as TrnTotRefdAmt" _
+     & ",0 as TrnBalAmt" _
+     & " from OutdReg" _
+     & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+     & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OpgCode > 0" _
+     & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+End If
+'Rem outdoor reg.refund
+'If chkFByOutdRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OgfDate as TrnDate" _
+'     & ",OgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRgRefd" _
+'     & " inner join OutdReg on OutdRgRefd.OgfOpgCode = OutdReg.OpgCode" _
+'     & " where OgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor receipt received amount
+If chkFByOutdRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OrcDate as TrnDate" _
+     & ",OrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",OrcDiscAmt as TrnDiscAmt" _
+     & ",OrcAdvAmt+OrcRecdAmt+OrcDepoAmt as TrnTotRecdAmt" _
+     & ",OrcRefuAmt as TrnTotRefdAmt" _
+     & ",OrcBalAmt as TrnBalAmt" _
+     & " from ((OutdRcpt" _
+     & " inner join OutdHdr on OutdRcpt.OrcCode = OutdHdr.OhrCode)" _
+     & " inner join OutdReg on OutdHdr.OhrOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdRcpt.OrcSrvCode = ServMast.SrvCode" _
+     & " where OrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and OrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor payment
+'If chkFByOutdPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OphDate as TrnDate" _
+'     & ",OphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdPymtHdr" _
+'     & " where OphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor refund
+'If chkFByOutdRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OfhDate as TrnDate" _
+'     & ",OfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRefdHdr" _
+'     & " where OfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor bill payment
+If chkFByOutdBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OblDate as TrnDate" _
+     & ",OblAmtAftDisc as TrnAmtAftDisc" _
+     & ",OblDiscAmt as TrnDiscAmt" _
+     & ",OblDepoAmt as TrnTotRecdAmt" _
+     & ",OblRefuAmt as TrnTotRefdAmt" _
+     & ",OblBalAmt as TrnBalAmt" _
+     & " from ((OutdBill" _
+     & " inner join OutdBlHdr on OutdBill.OblCode = OutdBlHdr.ObhCode)" _
+     & " inner join OutdReg on OutdBlHdr.ObhOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdBill.OblSrvCode = ServMast.SrvCode" _
+     & " where OblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OblCode > 0" _
+     & IIf(mQryPttCode > 0, " and OblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and ObhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor bill refund
+'If chkFByOutdBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select ObfhDate as TrnDate" _
+'     & ",ObfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdBlRefdHdr" _
+'     & " where ObfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and ObfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and ObfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and ObfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor advance -----------------------------------------------------------------------------------------
+'If chkFByIndrReg.Value = vbChecked = True Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IpgDate as TrnDate" _
+'     & ",IpgAdvAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrReg" _
+'     & " where IpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IpgCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IpgPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IpgVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor receipt received amount
+If chkFByIndrRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IrcDate as TrnDate" _
+     & ",IrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",IrcDiscAmt as TrnDiscAmt" _
+     & ",IrcAdvAmt+IrcRecdAmt+IrcDepoAmt as TrnTotRecdAmt" _
+     & ",IrcRefuAmt as TrnTotRefdAmt" _
+     & ",IrcBalAmt as TrnBalAmt" _
+     & " from ((IndrRcpt" _
+     & " inner join IndrHdr on IndrRcpt.IrcCode = IndrHdr.IhrCode)" _
+     & " inner join IndrReg on IndrHdr.IhrIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrRcpt.IrcSrvCode = ServMast.SrvCode" _
+     & " where IrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and IrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor payment
+'If chkFByIndrPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IphDate as TrnDate" _
+'     & ",IphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrPymtHdr" _
+'     & " where IphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor refund
+'If chkFByIndrRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IfhDate as TrnDate" _
+'     & ",IfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRefdHdr" _
+'     & " where IfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor bill payment
+If chkFByIndrBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IblDate as TrnDate" _
+     & ",IblAmtAftDisc as TrnAmtAftDisc" _
+     & ",IblDiscAmt as TrnDiscAmt" _
+     & ",IblAdvAmt+IblDpogAmt+IblDepoAmt as TrnTotRecdAmt" _
+     & ",IblRfugAmt+IblRefuAmt as TrnTotRefdAmt" _
+     & ",IblBalAmt as TrnBalAmt" _
+     & " from ((IndrBill" _
+     & " inner join IndrBlHdr on IndrBill.IblCode = IndrBlHdr.IbhCode)" _
+     & " inner join IndrReg on IndrBlHdr.IbhIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrBill.IblSrvCode = ServMast.SrvCode" _
+     & " where IblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IblCode > 0" _
+     & IIf(mQryPttCode > 0, " and IblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IbhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor bill refund
+'If chkFByIndrBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IbfhDate as TrnDate" _
+'     & ",IbfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrBlRefdHdr" _
+'     & " where IbfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IbfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IbfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IbfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c payment
+'If chkFByIndrRgPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgtDate as TrnDate" _
+'     & ",IgtDpogAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgPymt" _
+'     & " where IgtDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgtCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgtPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgtVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c refund
+'If chkFByIndrRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgfDate as TrnDate" _
+'     & ",IgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgRefd" _
+'     & " where IgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab receipt received amount ------------------------------------------------------------------------------
+If chkFByLabRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select LrcDate as TrnDate" _
+     & ",LrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",LrcDiscAmt as TrnDiscAmt" _
+     & ",LrcAdvAmt+LrcRecdAmt+LrcDepoAmt as TrnTotRecdAmt" _
+     & ",LrcRefuAmt as TrnTotRefdAmt" _
+     & ",LrcBalAmt as TrnBalAmt" _
+     & " from (LabRcpt" _
+     & " inner join LabHdr on LabRcpt.LrcCode = LabHdr.LhrCode)" _
+     & " inner join ServMast on LabRcpt.LrcSrvCode = ServMast.SrvCode" _
+     & " where LrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and LrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and LrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and LhrCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and LrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and LhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem lab payment
+'If chkFByLabPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LphDate as TrnDate" _
+'     & ",LphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabPymtHdr" _
+'     & " where LphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab refund
+'If chkFByLabRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LfhDate as TrnDate" _
+'     & ",LfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabRefdHdr" _
+'     & " where LfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem ----------------------------------
+mQryStr = mQryStr & ")"
+mQryStr = mQryStr & " group by TrnDate" _
+ & " order by TrnDate"
+
+datRecset.open mQryStr, dbComDatabase, adOpenKeyset, adLockReadOnly
+
+
+End Sub
+
+Private Sub CreatePatNameSmryList()
+Dim mQryStr As String
+
+clsListStru.AddFields mExpr:="PttName", mTitle:="Patient Name", mShowItem:=True, mAlign:=1, mWidth:=3000
+clsListStru.AddFields mExpr:="PttRegNo", mTitle:="Reg.No", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="PttRefName", mTitle:="Care of", mShowItem:=True, mAlign:=1, mWidth:=2000
+clsListStru.AddFields mExpr:="TrnCount", mTitle:="Count", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnAmtAftDisc_sum", mTitle:="Bill Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnDiscAmt_sum", mTitle:="Discount", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRecdAmt_sum", mTitle:="Recd.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRefdAmt_sum", mTitle:="Refund Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnBalAmt_sum", mTitle:="Bal.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+
+mQryStr = "Select PatMast.PttName,t1.TrnPttCode,PatMast.PttRegNo,PatMast.PttRefName" _
+ & ",Count(*) as TrnCount" _
+ & ",Sum(t1.TrnAmtAftDisc) as TrnAmtAftDisc_sum" _
+ & ",Sum(t1.TrnDiscAmt) as TrnDiscAmt_sum" _
+ & ",Sum(t1.TrnTotRecdAmt) as TrnTotRecdAmt_sum" _
+ & ",Sum(t1.TrnTotRefdAmt) as TrnTotRefdAmt_sum" _
+ & ",Sum(t1.TrnBalAmt) as TrnBalAmt_sum"
+mQryStr = mQryStr & " from ("
+Rem reserved query string producing no records
+mQryStr = mQryStr & "Select OpgPttCode as TrnPttCode" _
+ & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+ & ",OpgDiscAmt as TrnDiscAmt" _
+ & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+ & ",OpgRfugAmt as TrnTotRefdAmt" _
+ & ",0 as TrnBalAmt" _
+ & " from OutdReg" _
+ & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+ & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+ & " and OpgCode > 0 and 0 = 1" _
+ & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+ & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+ & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+ & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+ & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+Rem outdoor registration --------------------------------------------------------------------------------------
+If chkFByOutdReg.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OpgPttCode as TrnPttCode" _
+     & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+     & ",OpgDiscAmt as TrnDiscAmt" _
+     & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+     & ",OpgRfugAmt as TrnTotRefdAmt" _
+     & ",0 as TrnBalAmt" _
+     & " from OutdReg" _
+     & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+     & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OpgCode > 0" _
+     & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+End If
+'Rem outdoor reg.refund
+'If chkFByOutdRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OgfPttCode as TrnPttCode" _
+'     & ",OgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRgRefd" _
+'     & " inner join OutdReg on OutdRgRefd.OgfOpgCode = OutdReg.OpgCode" _
+'     & " where OgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor receipt received amount
+If chkFByOutdRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OrcPttCode as TrnPttCode" _
+     & ",OrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",OrcDiscAmt as TrnDiscAmt" _
+     & ",OrcAdvAmt+OrcRecdAmt+OrcDepoAmt as TrnTotRecdAmt" _
+     & ",OrcRefuAmt as TrnTotRefdAmt" _
+     & ",OrcBalAmt as TrnBalAmt" _
+     & " from ((OutdRcpt" _
+     & " inner join OutdHdr on OutdRcpt.OrcCode = OutdHdr.OhrCode)" _
+     & " inner join OutdReg on OutdHdr.OhrOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdRcpt.OrcSrvCode = ServMast.SrvCode" _
+     & " where OrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and OrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor payment
+'If chkFByOutdPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OphPttCode as TrnPttCode" _
+'     & ",OphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdPymtHdr" _
+'     & " where OphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor refund
+'If chkFByOutdRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OfhPttCode as TrnPttCode" _
+'     & ",OfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRefdHdr" _
+'     & " where OfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor bill payment
+If chkFByOutdBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OblPttCode as TrnPttCode" _
+     & ",OblAmtAftDisc as TrnAmtAftDisc" _
+     & ",OblDiscAmt as TrnDiscAmt" _
+     & ",OblDepoAmt as TrnTotRecdAmt" _
+     & ",OblRefuAmt as TrnTotRefdAmt" _
+     & ",OblBalAmt as TrnBalAmt" _
+     & " from ((OutdBill" _
+     & " inner join OutdBlHdr on OutdBill.OblCode = OutdBlHdr.ObhCode)" _
+     & " inner join OutdReg on OutdBlHdr.ObhOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdBill.OblSrvCode = ServMast.SrvCode" _
+     & " where OblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OblCode > 0" _
+     & IIf(mQryPttCode > 0, " and OblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and ObhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor bill refund
+'If chkFByOutdBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select ObfhPttCode as TrnPttCode" _
+'     & ",ObfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdBlRefdHdr" _
+'     & " where ObfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and ObfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and ObfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and ObfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor advance -----------------------------------------------------------------------------------------
+'If chkFByIndrReg.Value = vbChecked = True Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IpgPttCode as TrnPttCode" _
+'     & ",IpgAdvAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrReg" _
+'     & " where IpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IpgCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IpgPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IpgVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor receipt received amount
+If chkFByIndrRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IrcPttCode as TrnPttCode" _
+     & ",IrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",IrcDiscAmt as TrnDiscAmt" _
+     & ",IrcAdvAmt+IrcRecdAmt+IrcDepoAmt as TrnTotRecdAmt" _
+     & ",IrcRefuAmt as TrnTotRefdAmt" _
+     & ",IrcBalAmt as TrnBalAmt" _
+     & " from ((IndrRcpt" _
+     & " inner join IndrHdr on IndrRcpt.IrcCode = IndrHdr.IhrCode)" _
+     & " inner join IndrReg on IndrHdr.IhrIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrRcpt.IrcSrvCode = ServMast.SrvCode" _
+     & " where IrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and IrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor payment
+'If chkFByIndrPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IphPttCode as TrnPttCode" _
+'     & ",IphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrPymtHdr" _
+'     & " where IphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor refund
+'If chkFByIndrRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IfhPttCode as TrnPttCode" _
+'     & ",IfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRefdHdr" _
+'     & " where IfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor bill payment
+If chkFByIndrBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IblPttCode as TrnPttCode" _
+     & ",IblAmtAftDisc as TrnAmtAftDisc" _
+     & ",IblDiscAmt as TrnDiscAmt" _
+     & ",IblAdvAmt+IblDpogAmt+IblDepoAmt as TrnTotRecdAmt" _
+     & ",IblRfugAmt+IblRefuAmt as TrnTotRefdAmt" _
+     & ",IblBalAmt as TrnBalAmt" _
+     & " from ((IndrBill" _
+     & " inner join IndrBlHdr on IndrBill.IblCode = IndrBlHdr.IbhCode)" _
+     & " inner join IndrReg on IndrBlHdr.IbhIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrBill.IblSrvCode = ServMast.SrvCode" _
+     & " where IblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IblCode > 0" _
+     & IIf(mQryPttCode > 0, " and IblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IbhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor bill refund
+'If chkFByIndrBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IbfhPttCode as TrnPttCode" _
+'     & ",IbfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrBlRefdHdr" _
+'     & " where IbfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IbfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IbfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IbfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c payment
+'If chkFByIndrRgPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgtPttCode as TrnPttCode" _
+'     & ",IgtDpogAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgPymt" _
+'     & " where IgtDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgtCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgtPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgtVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c refund
+'If chkFByIndrRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgfPttCode as TrnPttCode" _
+'     & ",IgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgRefd" _
+'     & " where IgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab receipt received amount ------------------------------------------------------------------------------
+If chkFByLabRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select LrcPttCode as TrnPttCode" _
+     & ",LrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",LrcDiscAmt as TrnDiscAmt" _
+     & ",LrcAdvAmt+LrcRecdAmt+LrcDepoAmt as TrnTotRecdAmt" _
+     & ",LrcRefuAmt as TrnTotRefdAmt" _
+     & ",LrcBalAmt as TrnBalAmt" _
+     & " from (LabRcpt" _
+     & " inner join LabHdr on LabRcpt.LrcCode = LabHdr.LhrCode)" _
+     & " inner join ServMast on LabRcpt.LrcSrvCode = ServMast.SrvCode" _
+     & " where LrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and LrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and LrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and LhrCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and LrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and LhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem lab payment
+'If chkFByLabPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LphPttCode as TrnPttCode" _
+'     & ",LphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabPymtHdr" _
+'     & " where LphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab refund
+'If chkFByLabRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LfhPttCode as TrnPttCode" _
+'     & ",LfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabRefdHdr" _
+'     & " where LfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem ----------------------------------
+mQryStr = mQryStr & ")"
+mQryStr = mQryStr & " as t1 inner join PatMast on t1.TrnPttCode=PatMast.PttCode" _
+ & " group by PatMast.PttName,PatMast.PttRegNo,PatMast.PttRefName,t1.TrnPttCode" _
+ & " order by PatMast.PttName,PatMast.PttRegNo,PatMast.PttRefName,t1.TrnPttCode"
+
+datRecset.open mQryStr, dbComDatabase, adOpenKeyset, adLockReadOnly
+
+End Sub
+
+Private Sub CreatePatRegNoSmryList()
+Dim mQryStr As String
+
+clsListStru.AddFields mExpr:="PttRegNo", mTitle:="Reg.No", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="PttName", mTitle:="Patient Name", mShowItem:=True, mAlign:=1, mWidth:=3000
+clsListStru.AddFields mExpr:="PttRefName", mTitle:="Care of", mShowItem:=True, mAlign:=1, mWidth:=2000
+clsListStru.AddFields mExpr:="TrnCount", mTitle:="Count", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnAmtAftDisc_sum", mTitle:="Bill Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnDiscAmt_sum", mTitle:="Discount", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRecdAmt_sum", mTitle:="Recd.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRefdAmt_sum", mTitle:="Refund Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnBalAmt_sum", mTitle:="Bal.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+
+mQryStr = "Select PatMast.PttRegNo,t1.TrnPttCode,PatMast.PttName,PatMast.PttRefName" _
+ & ",Count(*) as TrnCount" _
+ & ",Sum(t1.TrnAmtAftDisc) as TrnAmtAftDisc_sum" _
+ & ",Sum(t1.TrnDiscAmt) as TrnDiscAmt_sum" _
+ & ",Sum(t1.TrnTotRecdAmt) as TrnTotRecdAmt_sum" _
+ & ",Sum(t1.TrnTotRefdAmt) as TrnTotRefdAmt_sum" _
+ & ",Sum(t1.TrnBalAmt) as TrnBalAmt_sum"
+mQryStr = mQryStr & " from ("
+Rem reserved query string producing no records
+mQryStr = mQryStr & "Select OpgPttCode as TrnPttCode" _
+ & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+ & ",OpgDiscAmt as TrnDiscAmt" _
+ & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+ & ",OpgRfugAmt as TrnTotRefdAmt" _
+ & ",0 as TrnBalAmt" _
+ & " from OutdReg" _
+ & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+ & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+ & " and OpgCode > 0 and 0 = 1" _
+ & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+ & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+ & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+ & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+ & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+Rem outdoor registration --------------------------------------------------------------------------------------
+If chkFByOutdReg.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OpgPttCode as TrnPttCode" _
+     & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+     & ",OpgDiscAmt as TrnDiscAmt" _
+     & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+     & ",OpgRfugAmt as TrnTotRefdAmt" _
+     & ",0 as TrnBalAmt" _
+     & " from OutdReg" _
+     & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+     & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OpgCode > 0" _
+     & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+End If
+'Rem outdoor reg.refund
+'If chkFByOutdRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OgfPttCode as TrnPttCode" _
+'     & ",OgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRgRefd" _
+'     & " inner join OutdReg on OutdRgRefd.OgfOpgCode = OutdReg.OpgCode" _
+'     & " where OgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor receipt received amount
+If chkFByOutdRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OrcPttCode as TrnPttCode" _
+     & ",OrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",OrcDiscAmt as TrnDiscAmt" _
+     & ",OrcAdvAmt+OrcRecdAmt+OrcDepoAmt as TrnTotRecdAmt" _
+     & ",OrcRefuAmt as TrnTotRefdAmt" _
+     & ",OrcBalAmt as TrnBalAmt" _
+     & " from ((OutdRcpt" _
+     & " inner join OutdHdr on OutdRcpt.OrcCode = OutdHdr.OhrCode)" _
+     & " inner join OutdReg on OutdHdr.OhrOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdRcpt.OrcSrvCode = ServMast.SrvCode" _
+     & " where OrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and OrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor payment
+'If chkFByOutdPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OphPttCode as TrnPttCode" _
+'     & ",OphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdPymtHdr" _
+'     & " where OphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor refund
+'If chkFByOutdRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OfhPttCode as TrnPttCode" _
+'     & ",OfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRefdHdr" _
+'     & " where OfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor bill payment
+If chkFByOutdBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OblPttCode as TrnPttCode" _
+     & ",OblAmtAftDisc as TrnAmtAftDisc" _
+     & ",OblDiscAmt as TrnDiscAmt" _
+     & ",OblDepoAmt as TrnTotRecdAmt" _
+     & ",OblRefuAmt as TrnTotRefdAmt" _
+     & ",OblBalAmt as TrnBalAmt" _
+     & " from ((OutdBill" _
+     & " inner join OutdBlHdr on OutdBill.OblCode = OutdBlHdr.ObhCode)" _
+     & " inner join OutdReg on OutdBlHdr.ObhOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdBill.OblSrvCode = ServMast.SrvCode" _
+     & " where OblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OblCode > 0" _
+     & IIf(mQryPttCode > 0, " and OblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and ObhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor bill refund
+'If chkFByOutdBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select ObfhPttCode as TrnPttCode" _
+'     & ",ObfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdBlRefdHdr" _
+'     & " where ObfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and ObfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and ObfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and ObfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor advance -----------------------------------------------------------------------------------------
+'If chkFByIndrReg.Value = vbChecked = True Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IpgPttCode as TrnPttCode" _
+'     & ",IpgAdvAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrReg" _
+'     & " where IpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IpgCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IpgPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IpgVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor receipt received amount
+If chkFByIndrRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IrcPttCode as TrnPttCode" _
+     & ",IrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",IrcDiscAmt as TrnDiscAmt" _
+     & ",IrcAdvAmt+IrcRecdAmt+IrcDepoAmt as TrnTotRecdAmt" _
+     & ",IrcRefuAmt as TrnTotRefdAmt" _
+     & ",IrcBalAmt as TrnBalAmt" _
+     & " from ((IndrRcpt" _
+     & " inner join IndrHdr on IndrRcpt.IrcCode = IndrHdr.IhrCode)" _
+     & " inner join IndrReg on IndrHdr.IhrIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrRcpt.IrcSrvCode = ServMast.SrvCode" _
+     & " where IrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and IrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor payment
+'If chkFByIndrPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IphPttCode as TrnPttCode" _
+'     & ",IphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrPymtHdr" _
+'     & " where IphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor refund
+'If chkFByIndrRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IfhPttCode as TrnPttCode" _
+'     & ",IfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRefdHdr" _
+'     & " where IfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor bill payment
+If chkFByIndrBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IblPttCode as TrnPttCode" _
+     & ",IblAmtAftDisc as TrnAmtAftDisc" _
+     & ",IblDiscAmt as TrnDiscAmt" _
+     & ",IblAdvAmt+IblDpogAmt+IblDepoAmt as TrnTotRecdAmt" _
+     & ",IblRfugAmt+IblRefuAmt as TrnTotRefdAmt" _
+     & ",IblBalAmt as TrnBalAmt" _
+     & " from ((IndrBill" _
+     & " inner join IndrBlHdr on IndrBill.IblCode = IndrBlHdr.IbhCode)" _
+     & " inner join IndrReg on IndrBlHdr.IbhIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrBill.IblSrvCode = ServMast.SrvCode" _
+     & " where IblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IblCode > 0" _
+     & IIf(mQryPttCode > 0, " and IblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IbhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor bill refund
+'If chkFByIndrBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IbfhPttCode as TrnPttCode" _
+'     & ",IbfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrBlRefdHdr" _
+'     & " where IbfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IbfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IbfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IbfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c payment
+'If chkFByIndrRgPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgtPttCode as TrnPttCode" _
+'     & ",IgtDpogAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgPymt" _
+'     & " where IgtDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgtCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgtPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgtVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c refund
+'If chkFByIndrRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgfPttCode as TrnPttCode" _
+'     & ",IgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgRefd" _
+'     & " where IgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab receipt received amount ------------------------------------------------------------------------------
+If chkFByLabRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select LrcPttCode as TrnPttCode" _
+     & ",LrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",LrcDiscAmt as TrnDiscAmt" _
+     & ",LrcAdvAmt+LrcRecdAmt+LrcDepoAmt as TrnTotRecdAmt" _
+     & ",LrcRefuAmt as TrnTotRefdAmt" _
+     & ",LrcBalAmt as TrnBalAmt" _
+     & " from (LabRcpt" _
+     & " inner join LabHdr on LabRcpt.LrcCode = LabHdr.LhrCode)" _
+     & " inner join ServMast on LabRcpt.LrcSrvCode = ServMast.SrvCode" _
+     & " where LrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and LrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and LrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and LhrCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and LrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and LhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem lab payment
+'If chkFByLabPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LphPttCode as TrnPttCode" _
+'     & ",LphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabPymtHdr" _
+'     & " where LphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab refund
+'If chkFByLabRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LfhPttCode as TrnPttCode" _
+'     & ",LfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabRefdHdr" _
+'     & " where LfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem ----------------------------------
+mQryStr = mQryStr & ")"
+mQryStr = mQryStr & " as t1 inner join PatMast on t1.TrnPttCode=PatMast.PttCode" _
+ & " group by PatMast.PttRegNo,PatMast.PttName,PatMast.PttRefName,t1.TrnPttCode" _
+ & " order by PatMast.PttRegNo,PatMast.PttName,PatMast.PttRefName,t1.TrnPttCode"
+
+datRecset.open mQryStr, dbComDatabase, adOpenKeyset, adLockReadOnly
+
+End Sub
+
+Private Sub CreateConsDctrSmryList()
+Dim mQryStr As String
+
+clsListStru.AddFields mExpr:="DctName", mTitle:="Consult Doctor Name", mShowItem:=True, mAlign:=1, mWidth:=3000
+clsListStru.AddFields mExpr:="TrnCount", mTitle:="Count", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnAmtAftDisc_sum", mTitle:="Bill Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnDiscAmt_sum", mTitle:="Discount", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRecdAmt_sum", mTitle:="Recd.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRefdAmt_sum", mTitle:="Refund Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnBalAmt_sum", mTitle:="Bal.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+
+mQryStr = "Select DoctMast.DctName,t1.TrnDctCode" _
+ & ",Count(*) as TrnCount" _
+ & ",Sum(t1.TrnAmtAftDisc) as TrnAmtAftDisc_sum" _
+ & ",Sum(t1.TrnDiscAmt) as TrnDiscAmt_sum" _
+ & ",Sum(t1.TrnTotRecdAmt) as TrnTotRecdAmt_sum" _
+ & ",Sum(t1.TrnTotRefdAmt) as TrnTotRefdAmt_sum" _
+ & ",Sum(t1.TrnBalAmt) as TrnBalAmt_sum"
+mQryStr = mQryStr & " from ("
+Rem reserved query string producing no records
+mQryStr = mQryStr & "Select OpgCDctCode as TrnDctCode" _
+ & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+ & ",OpgDiscAmt as TrnDiscAmt" _
+ & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+ & ",OpgRfugAmt as TrnTotRefdAmt" _
+ & ",0 as TrnBalAmt" _
+ & " from OutdReg" _
+ & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+ & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+ & " and OpgCode > 0 and 0 = 1" _
+ & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+ & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+ & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+ & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+ & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+Rem outdoor registration --------------------------------------------------------------------------------------
+If chkFByOutdReg.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OpgCDctCode as TrnDctCode" _
+     & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+     & ",OpgDiscAmt as TrnDiscAmt" _
+     & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+     & ",OpgRfugAmt as TrnTotRefdAmt" _
+     & ",0 as TrnBalAmt" _
+     & " from OutdReg" _
+     & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+     & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OpgCode > 0" _
+     & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+End If
+'Rem outdoor reg.refund
+'If chkFByOutdRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OpgCDctCode as TrnDctCode" _
+'     & ",OgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRgRefd" _
+'     & " inner join OutdReg on OutdRgRefd.OgfOpgCode = OutdReg.OpgCode" _
+'     & " where OgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor receipt received amount
+If chkFByOutdRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OpgCDctCode as TrnDctCode" _
+     & ",OrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",OrcDiscAmt as TrnDiscAmt" _
+     & ",OrcAdvAmt+OrcRecdAmt+OrcDepoAmt as TrnTotRecdAmt" _
+     & ",OrcRefuAmt as TrnTotRefdAmt" _
+     & ",OrcBalAmt as TrnBalAmt" _
+     & " from ((OutdRcpt" _
+     & " inner join OutdHdr on OutdRcpt.OrcCode = OutdHdr.OhrCode)" _
+     & " inner join OutdReg on OutdHdr.OhrOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdRcpt.OrcSrvCode = ServMast.SrvCode" _
+     & " where OrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and OrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor payment
+'If chkFByOutdPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OphCDctCode as TrnDctCode" _
+'     & ",OphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdPymtHdr" _
+'     & " where OphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor refund
+'If chkFByOutdRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OfhCDctCode as TrnDctCode" _
+'     & ",OfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRefdHdr" _
+'     & " where OfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor bill payment
+If chkFByOutdBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OpgCDctCode as TrnDctCode" _
+     & ",OblAmtAftDisc as TrnAmtAftDisc" _
+     & ",OblDiscAmt as TrnDiscAmt" _
+     & ",OblDepoAmt as TrnTotRecdAmt" _
+     & ",OblRefuAmt as TrnTotRefdAmt" _
+     & ",OblBalAmt as TrnBalAmt" _
+     & " from ((OutdBill" _
+     & " inner join OutdBlHdr on OutdBill.OblCode = OutdBlHdr.ObhCode)" _
+     & " inner join OutdReg on OutdBlHdr.ObhOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdBill.OblSrvCode = ServMast.SrvCode" _
+     & " where OblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OblCode > 0" _
+     & IIf(mQryPttCode > 0, " and OblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and ObhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor bill refund
+'If chkFByOutdBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select ObfhCDctCode as TrnDctCode" _
+'     & ",ObfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdBlRefdHdr" _
+'     & " where ObfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and ObfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and ObfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and ObfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor advance -----------------------------------------------------------------------------------------
+'If chkFByIndrReg.Value = vbChecked = True Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IpgCDctCode as TrnDctCode" _
+'     & ",IpgAdvAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrReg" _
+'     & " where IpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IpgCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IpgPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IpgVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor receipt received amount
+If chkFByIndrRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IpgCDctCode as TrnDctCode" _
+     & ",IrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",IrcDiscAmt as TrnDiscAmt" _
+     & ",IrcAdvAmt+IrcRecdAmt+IrcDepoAmt as TrnTotRecdAmt" _
+     & ",IrcRefuAmt as TrnTotRefdAmt" _
+     & ",IrcBalAmt as TrnBalAmt" _
+     & " from ((IndrRcpt" _
+     & " inner join IndrHdr on IndrRcpt.IrcCode = IndrHdr.IhrCode)" _
+     & " inner join IndrReg on IndrHdr.IhrIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrRcpt.IrcSrvCode = ServMast.SrvCode" _
+     & " where IrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and IrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor payment
+'If chkFByIndrPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IphCDctCode as TrnDctCode" _
+'     & ",IphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrPymtHdr" _
+'     & " where IphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor refund
+'If chkFByIndrRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IfhCDctCode as TrnDctCode" _
+'     & ",IfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRefdHdr" _
+'     & " where IfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor bill payment
+If chkFByIndrBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IpgCDctCode as TrnDctCode" _
+     & ",IblAmtAftDisc as TrnAmtAftDisc" _
+     & ",IblDiscAmt as TrnDiscAmt" _
+     & ",IblAdvAmt+IblDpogAmt+IblDepoAmt as TrnTotRecdAmt" _
+     & ",IblRfugAmt+IblRefuAmt as TrnTotRefdAmt" _
+     & ",IblBalAmt as TrnBalAmt" _
+     & " from ((IndrBill" _
+     & " inner join IndrBlHdr on IndrBill.IblCode = IndrBlHdr.IbhCode)" _
+     & " inner join IndrReg on IndrBlHdr.IbhIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrBill.IblSrvCode = ServMast.SrvCode" _
+     & " where IblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IblCode > 0" _
+     & IIf(mQryPttCode > 0, " and IblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IbhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor bill refund
+'If chkFByIndrBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IbfhCDctCode as TrnDctCode" _
+'     & ",IbfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrBlRefdHdr" _
+'     & " where IbfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IbfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IbfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IbfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c payment
+'If chkFByIndrRgPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgtCDctCode as TrnDctCode" _
+'     & ",IgtDpogAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgPymt" _
+'     & " where IgtDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgtCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgtPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgtVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c refund
+'If chkFByIndrRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgfCDctCode as TrnDctCode" _
+'     & ",IgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgRefd" _
+'     & " where IgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab receipt received amount ------------------------------------------------------------------------------
+If chkFByLabRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select LhrCDctCode as TrnDctCode" _
+     & ",LrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",LrcDiscAmt as TrnDiscAmt" _
+     & ",LrcAdvAmt+LrcRecdAmt+LrcDepoAmt as TrnTotRecdAmt" _
+     & ",LrcRefuAmt as TrnTotRefdAmt" _
+     & ",LrcBalAmt as TrnBalAmt" _
+     & " from (LabRcpt" _
+     & " inner join LabHdr on LabRcpt.LrcCode = LabHdr.LhrCode)" _
+     & " inner join ServMast on LabRcpt.LrcSrvCode = ServMast.SrvCode" _
+     & " where LrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and LrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and LrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and LhrCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and LrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and LhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem lab payment
+'If chkFByLabPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LphCDctCode as TrnDctCode" _
+'     & ",LphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabPymtHdr" _
+'     & " where LphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab refund
+'If chkFByLabRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LfhCDctCode as TrnDctCode" _
+'     & ",LfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabRefdHdr" _
+'     & " where LfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem ----------------------------------
+mQryStr = mQryStr & ")"
+mQryStr = mQryStr & " as t1 inner join DoctMast on t1.TrnDctCode = DoctMast.DctCode" _
+ & " group by DoctMast.DctName,t1.TrnDctCode" _
+ & " order by DoctMast.DctName,t1.TrnDctCode"
+
+datRecset.open mQryStr, dbComDatabase, adOpenKeyset, adLockReadOnly
+
+End Sub
+
+Private Sub CreateServDctrSmryList()
+Dim mQryStr As String
+
+clsListStru.AddFields mExpr:="DctName", mTitle:="Service Doctor Name", mShowItem:=True, mAlign:=1, mWidth:=3000
+clsListStru.AddFields mExpr:="TrnCount", mTitle:="Count", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnAmtAftDisc_sum", mTitle:="Bill Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnDiscAmt_sum", mTitle:="Discount", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRecdAmt_sum", mTitle:="Recd.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRefdAmt_sum", mTitle:="Refund Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnBalAmt_sum", mTitle:="Bal.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+
+mQryStr = "Select DoctMast.DctName,t1.TrnDctCode" _
+ & ",Count(*) as TrnCount" _
+ & ",Sum(t1.TrnAmtAftDisc) as TrnAmtAftDisc_sum" _
+ & ",Sum(t1.TrnDiscAmt) as TrnDiscAmt_sum" _
+ & ",Sum(t1.TrnTotRecdAmt) as TrnTotRecdAmt_sum" _
+ & ",Sum(t1.TrnTotRefdAmt) as TrnTotRefdAmt_sum" _
+ & ",Sum(t1.TrnBalAmt) as TrnBalAmt_sum"
+mQryStr = mQryStr & " from ("
+Rem reserved query string producing no records
+mQryStr = mQryStr & "Select OpgCDctCode as TrnDctCode" _
+ & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+ & ",OpgDiscAmt as TrnDiscAmt" _
+ & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+ & ",OpgRfugAmt as TrnTotRefdAmt" _
+ & ",0 as TrnBalAmt" _
+ & " from OutdReg" _
+ & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+ & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+ & " and OpgCode > 0 and 0 = 1" _
+ & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+ & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+ & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+ & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+ & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+Rem outdoor registration --------------------------------------------------------------------------------------
+If chkFByOutdReg.Value = vbChecked Then
+    Rem exceptional case for service doctor hence bypassed
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OpgCDctCode as TrnDctCode" _
+     & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+     & ",OpgDiscAmt as TrnDiscAmt" _
+     & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+     & ",OpgRfugAmt as TrnTotRefdAmt" _
+     & ",0 as TrnBalAmt" _
+     & " from OutdReg" _
+     & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+     & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OpgCode > 0" _
+     & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor reg.refund
+'If chkFByOutdRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OgfCDctCode as TrnDctCode" _
+'     & ",OgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRgRefd" _
+'     & " where OgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor receipt received amount
+If chkFByOutdRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OrdDctCode as TrnDctCode" _
+     & ",OrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",OrcDiscAmt as TrnDiscAmt" _
+     & ",OrcAdvAmt+OrcRecdAmt+OrcDepoAmt as TrnTotRecdAmt" _
+     & ",OrcRefuAmt as TrnTotRefdAmt" _
+     & ",OrcBalAmt as TrnBalAmt" _
+     & " from (((OutdRcpt" _
+     & " inner join OutdHdr on OutdRcpt.OrcCode = OutdHdr.OhrCode)" _
+     & " inner join OutdReg on OutdHdr.OhrOpgCode = OutdReg.OpgCode)" _
+     & " inner join OutdRcDctDtl on OutdRcpt.OrcCode = OutdRcDctDtl.OrdCode and OutdRcpt.OrcICode = OutdRcDctDtl.OrdOrcCode)" _
+     & " inner join ServMast on OutdRcpt.OrcSrvCode = ServMast.SrvCode" _
+     & " where OrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and OrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor payment
+'If chkFByOutdPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OphCDctCode as TrnDctCode" _
+'     & ",OphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdPymtHdr" _
+'     & " where OphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor refund
+'If chkFByOutdRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OfhCDctCode as TrnDctCode" _
+'     & ",OfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRefdHdr" _
+'     & " where OfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor bill payment
+If chkFByOutdBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select ObdDctCode as TrnDctCode" _
+     & ",OblAmtAftDisc as TrnAmtAftDisc" _
+     & ",OblDiscAmt as TrnDiscAmt" _
+     & ",OblDepoAmt as TrnTotRecdAmt" _
+     & ",OblRefuAmt as TrnTotRefdAmt" _
+     & ",OblBalAmt as TrnBalAmt" _
+     & " from (((OutdBill" _
+     & " inner join OutdBlHdr on OutdBill.OblCode = OutdBlHdr.ObhCode)" _
+     & " inner join OutdReg on OutdBlHdr.ObhOpgCode = OutdReg.OpgCode)" _
+     & " inner join OutdBlDctDtl on OutdBill.OblCode = OutdBlDctDtl.ObdCode and OutdBill.OblICode = OutdBlDctDtl.ObdOblCode)" _
+     & " inner join ServMast on OutdBill.OblSrvCode = ServMast.SrvCode" _
+     & " where OblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OblCode > 0" _
+     & IIf(mQryPttCode > 0, " and OblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and ObhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor bill refund
+'If chkFByOutdBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select ObfhCDctCode as TrnDctCode" _
+'     & ",ObfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdBlRefdHdr" _
+'     & " where ObfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and ObfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and ObfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and ObfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor advance -----------------------------------------------------------------------------------------
+'If chkFByIndrReg.Value = vbChecked = True Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IpgCDctCode as TrnDctCode" _
+'     & ",IpgAdvAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrReg" _
+'     & " where IpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IpgCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IpgPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IpgVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor receipt received amount
+If chkFByIndrRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IrdDctCode as TrnDctCode" _
+     & ",IrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",IrcDiscAmt as TrnDiscAmt" _
+     & ",IrcAdvAmt+IrcRecdAmt+IrcDepoAmt as TrnTotRecdAmt" _
+     & ",IrcRefuAmt as TrnTotRefdAmt" _
+     & ",IrcBalAmt as TrnBalAmt" _
+     & " from (((IndrRcpt" _
+     & " inner join IndrHdr on IndrRcpt.IrcCode = IndrHdr.IhrCode)" _
+     & " inner join IndrReg on IndrHdr.IhrIpgCode = IndrReg.IpgCode)" _
+     & " inner join IndrRcDctDtl on IndrRcpt.IrcCode = IndrRcDctDtl.IrdCode and IndrRcpt.IrcICode = IndrRcDctDtl.IrdIrcCode)" _
+     & " inner join ServMast on IndrRcpt.IrcSrvCode = ServMast.SrvCode" _
+     & " where IrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and IrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor payment
+'If chkFByIndrPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IphCDctCode as TrnDctCode" _
+'     & ",IphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrPymtHdr" _
+'     & " where IphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor refund
+'If chkFByIndrRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IfhCDctCode as TrnDctCode" _
+'     & ",IfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRefdHdr" _
+'     & " where IfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor bill payment
+If chkFByIndrBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IbdDctCode as TrnDctCode" _
+     & ",IblAmtAftDisc as TrnAmtAftDisc" _
+     & ",IblDiscAmt as TrnDiscAmt" _
+     & ",IblAdvAmt+IblDpogAmt+IblDepoAmt as TrnTotRecdAmt" _
+     & ",IblRfugAmt+IblRefuAmt as TrnTotRefdAmt" _
+     & ",IblBalAmt as TrnBalAmt" _
+     & " from (((IndrBill" _
+     & " inner join IndrBlHdr on IndrBill.IblCode = IndrBlHdr.IbhCode)" _
+     & " inner join IndrReg on IndrBlHdr.IbhIpgCode = IndrReg.IpgCode)" _
+     & " inner join IndrBlDctDtl on IndrBill.IblCode = IndrBlDctDtl.IbdCode and IndrBill.IblICode = IndrBlDctDtl.IbdIblCode)" _
+     & " inner join ServMast on IndrBill.IblSrvCode = ServMast.SrvCode" _
+     & " where IblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IblCode > 0" _
+     & IIf(mQryPttCode > 0, " and IblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IbhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor bill refund
+'If chkFByIndrBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IbfhCDctCode as TrnDctCode" _
+'     & ",IbfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrBlRefdHdr" _
+'     & " where IbfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IbfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IbfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IbfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c payment
+'If chkFByIndrRgPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgtCDctCode as TrnDctCode" _
+'     & ",IgtDpogAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgPymt" _
+'     & " where IgtDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgtCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgtPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgtVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c refund
+'If chkFByIndrRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgfCDctCode as TrnDctCode" _
+'     & ",IgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgRefd" _
+'     & " where IgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab receipt received amount ------------------------------------------------------------------------------
+If chkFByLabRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select LrdDctCode as TrnDctCode" _
+     & ",LrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",LrcDiscAmt as TrnDiscAmt" _
+     & ",LrcAdvAmt+LrcRecdAmt+LrcDepoAmt as TrnTotRecdAmt" _
+     & ",LrcRefuAmt as TrnTotRefdAmt" _
+     & ",LrcBalAmt as TrnBalAmt" _
+     & " from ((LabRcpt" _
+     & " inner join LabHdr on LabRcpt.LrcCode = LabHdr.LhrCode)" _
+     & " inner join LabRcDctDtl on LabRcpt.LrcCode = LabRcDctDtl.LrdCode and LabRcpt.LrcICode = LabRcDctDtl.LrdLrcCode)" _
+     & " inner join ServMast on LabRcpt.LrcSrvCode = ServMast.SrvCode" _
+     & " where LrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and LrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and LrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and LhrCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and LrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and LhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem lab payment
+'If chkFByLabPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LphCDctCode as TrnDctCode" _
+'     & ",LphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabPymtHdr" _
+'     & " where LphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab refund
+'If chkFByLabRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LfhCDctCode as TrnDctCode" _
+'     & ",LfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabRefdHdr" _
+'     & " where LfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem ----------------------------------
+mQryStr = mQryStr & ")"
+mQryStr = mQryStr & " as t1 inner join DoctMast on t1.TrnDctCode = DoctMast.DctCode" _
+ & " group by DoctMast.DctName,t1.TrnDctCode" _
+ & " order by DoctMast.DctName,t1.TrnDctCode"
+
+datRecset.open mQryStr, dbComDatabase, adOpenKeyset, adLockReadOnly
+
+End Sub
+
+Private Sub CreateServDctrServGrpSmryList()
+Dim mQryStr As String
+
+clsListStru.AddFields mExpr:="DctCode", mAttrib:=cFAT_SYSTEM
+clsListStru.AddFields mExpr:="SgpCode", mAttrib:=cFAT_SYSTEM
+clsListStru.AddFields mExpr:="DctName", mTitle:="Service Doctor Name", mShowItem:=True, mAlign:=1, mWidth:=3000
+clsListStru.AddFields mExpr:="SgpName", mTitle:="Service Group", mShowItem:=True, mAlign:=1, mWidth:=3000
+clsListStru.AddFields mExpr:="TrnCount", mTitle:="Count", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnAmtAftDisc_sum", mTitle:="Bill Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnDiscAmt_sum", mTitle:="Discount", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRecdAmt_sum", mTitle:="Recd.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRefdAmt_sum", mTitle:="Refund Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnBalAmt_sum", mTitle:="Bal.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+
+mQryStr = "Select DoctMast.DctName,ServGrpMst.SgpName,t1.TrnDctCode,t1.TrnSgpCode" _
+ & ",Count(*) as TrnCount" _
+ & ",Sum(t1.TrnAmtAftDisc) as TrnAmtAftDisc_sum" _
+ & ",Sum(t1.TrnDiscAmt) as TrnDiscAmt_sum" _
+ & ",Sum(t1.TrnTotRecdAmt) as TrnTotRecdAmt_sum" _
+ & ",Sum(t1.TrnTotRefdAmt) as TrnTotRefdAmt_sum" _
+ & ",Sum(t1.TrnBalAmt) as TrnBalAmt_sum"
+mQryStr = mQryStr & " from (("
+Rem reserved query string producing no records
+mQryStr = mQryStr & "Select OpgCDctCode as TrnDctCode,SrvSgpCode as TrnSgpCode" _
+ & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+ & ",OpgDiscAmt as TrnDiscAmt" _
+ & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+ & ",OpgRfugAmt as TrnTotRefdAmt" _
+ & ",0 as TrnBalAmt" _
+ & " from OutdReg" _
+ & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+ & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+ & " and OpgCode > 0 and 0 = 1" _
+ & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+ & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+ & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+ & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+ & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+Rem outdoor registration --------------------------------------------------------------------------------------
+If chkFByOutdReg.Value = vbChecked Then
+    Rem exceptional case for service doctor hence bypassed
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OpgCDctCode as TrnDctCode,SrvSgpCode as TrnSgpCode" _
+     & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+     & ",OpgDiscAmt as TrnDiscAmt" _
+     & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+     & ",OpgRfugAmt as TrnTotRefdAmt" _
+     & ",0 as TrnBalAmt" _
+     & " from OutdReg" _
+     & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+     & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OpgCode > 0" _
+     & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor reg.refund
+'If chkFByOutdRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OgfCDctCode as TrnDctCode" _
+'     & ",OgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRgRefd" _
+'     & " where OgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor receipt received amount
+If chkFByOutdRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OrdDctCode as TrnDctCode,SrvSgpCode as TrnSgpCode" _
+     & ",OrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",OrcDiscAmt as TrnDiscAmt" _
+     & ",OrcAdvAmt+OrcRecdAmt+OrcDepoAmt as TrnTotRecdAmt" _
+     & ",OrcRefuAmt as TrnTotRefdAmt" _
+     & ",OrcBalAmt as TrnBalAmt" _
+     & " from (((OutdRcpt" _
+     & " inner join OutdHdr on OutdRcpt.OrcCode = OutdHdr.OhrCode)" _
+     & " inner join OutdReg on OutdHdr.OhrOpgCode = OutdReg.OpgCode)" _
+     & " inner join OutdRcDctDtl on OutdRcpt.OrcCode = OutdRcDctDtl.OrdCode and OutdRcpt.OrcICode = OutdRcDctDtl.OrdOrcCode)" _
+     & " inner join ServMast on OutdRcpt.OrcSrvCode = ServMast.SrvCode" _
+     & " where OrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and OrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor payment
+'If chkFByOutdPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OphCDctCode as TrnDctCode" _
+'     & ",OphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdPymtHdr" _
+'     & " where OphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor refund
+'If chkFByOutdRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OfhCDctCode as TrnDctCode" _
+'     & ",OfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRefdHdr" _
+'     & " where OfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor bill payment
+If chkFByOutdBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select ObdDctCode as TrnDctCode,SrvSgpCode as TrnSgpCode" _
+     & ",OblAmtAftDisc as TrnAmtAftDisc" _
+     & ",OblDiscAmt as TrnDiscAmt" _
+     & ",OblDepoAmt as TrnTotRecdAmt" _
+     & ",OblRefuAmt as TrnTotRefdAmt" _
+     & ",OblBalAmt as TrnBalAmt" _
+     & " from (((OutdBill" _
+     & " inner join OutdBlHdr on OutdBill.OblCode = OutdBlHdr.ObhCode)" _
+     & " inner join OutdReg on OutdBlHdr.ObhOpgCode = OutdReg.OpgCode)" _
+     & " inner join OutdBlDctDtl on OutdBill.OblCode = OutdBlDctDtl.ObdCode and OutdBill.OblICode = OutdBlDctDtl.ObdOblCode)" _
+     & " inner join ServMast on OutdBill.OblSrvCode = ServMast.SrvCode" _
+     & " where OblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OblCode > 0" _
+     & IIf(mQryPttCode > 0, " and OblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and ObhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor bill refund
+'If chkFByOutdBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select ObfhCDctCode as TrnDctCode" _
+'     & ",ObfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdBlRefdHdr" _
+'     & " where ObfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and ObfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and ObfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and ObfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor advance -----------------------------------------------------------------------------------------
+'If chkFByIndrReg.Value = vbChecked = True Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IpgCDctCode as TrnDctCode" _
+'     & ",IpgAdvAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrReg" _
+'     & " where IpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IpgCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IpgPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IpgVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor receipt received amount
+If chkFByIndrRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IrdDctCode as TrnDctCode,SrvSgpCode as TrnSgpCode" _
+     & ",IrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",IrcDiscAmt as TrnDiscAmt" _
+     & ",IrcAdvAmt+IrcRecdAmt+IrcDepoAmt as TrnTotRecdAmt" _
+     & ",IrcRefuAmt as TrnTotRefdAmt" _
+     & ",IrcBalAmt as TrnBalAmt" _
+     & " from (((IndrRcpt" _
+     & " inner join IndrHdr on IndrRcpt.IrcCode = IndrHdr.IhrCode)" _
+     & " inner join IndrReg on IndrHdr.IhrIpgCode = IndrReg.IpgCode)" _
+     & " inner join IndrRcDctDtl on IndrRcpt.IrcCode = IndrRcDctDtl.IrdCode and IndrRcpt.IrcICode = IndrRcDctDtl.IrdIrcCode)" _
+     & " inner join ServMast on IndrRcpt.IrcSrvCode = ServMast.SrvCode" _
+     & " where IrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and IrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor payment
+'If chkFByIndrPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IphCDctCode as TrnDctCode" _
+'     & ",IphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrPymtHdr" _
+'     & " where IphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor refund
+'If chkFByIndrRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IfhCDctCode as TrnDctCode" _
+'     & ",IfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRefdHdr" _
+'     & " where IfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor bill payment
+If chkFByIndrBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IbdDctCode as TrnDctCode,SrvSgpCode as TrnSgpCode" _
+     & ",IblAmtAftDisc as TrnAmtAftDisc" _
+     & ",IblDiscAmt as TrnDiscAmt" _
+     & ",IblAdvAmt+IblDpogAmt+IblDepoAmt as TrnTotRecdAmt" _
+     & ",IblRfugAmt+IblRefuAmt as TrnTotRefdAmt" _
+     & ",IblBalAmt as TrnBalAmt" _
+     & " from (((IndrBill" _
+     & " inner join IndrBlHdr on IndrBill.IblCode = IndrBlHdr.IbhCode)" _
+     & " inner join IndrReg on IndrBlHdr.IbhIpgCode = IndrReg.IpgCode)" _
+     & " inner join IndrBlDctDtl on IndrBill.IblCode = IndrBlDctDtl.IbdCode and IndrBill.IblICode = IndrBlDctDtl.IbdIblCode)" _
+     & " inner join ServMast on IndrBill.IblSrvCode = ServMast.SrvCode" _
+     & " where IblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IblCode > 0" _
+     & IIf(mQryPttCode > 0, " and IblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IbhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor bill refund
+'If chkFByIndrBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IbfhCDctCode as TrnDctCode" _
+'     & ",IbfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrBlRefdHdr" _
+'     & " where IbfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IbfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IbfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IbfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c payment
+'If chkFByIndrRgPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgtCDctCode as TrnDctCode" _
+'     & ",IgtDpogAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgPymt" _
+'     & " where IgtDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgtCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgtPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgtVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c refund
+'If chkFByIndrRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgfCDctCode as TrnDctCode" _
+'     & ",IgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgRefd" _
+'     & " where IgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab receipt received amount ------------------------------------------------------------------------------
+If chkFByLabRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select LrdDctCode as TrnDctCode,SrvSgpCode as TrnSgpCode" _
+     & ",LrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",LrcDiscAmt as TrnDiscAmt" _
+     & ",LrcAdvAmt+LrcRecdAmt+LrcDepoAmt as TrnTotRecdAmt" _
+     & ",LrcRefuAmt as TrnTotRefdAmt" _
+     & ",LrcBalAmt as TrnBalAmt" _
+     & " from ((LabRcpt" _
+     & " inner join LabHdr on LabRcpt.LrcCode = LabHdr.LhrCode)" _
+     & " inner join LabRcDctDtl on LabRcpt.LrcCode = LabRcDctDtl.LrdCode and LabRcpt.LrcICode = LabRcDctDtl.LrdLrcCode)" _
+     & " inner join ServMast on LabRcpt.LrcSrvCode = ServMast.SrvCode" _
+     & " where LrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and LrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and LrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and LhrCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and LrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and LhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem lab payment
+'If chkFByLabPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LphCDctCode as TrnDctCode" _
+'     & ",LphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabPymtHdr" _
+'     & " where LphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab refund
+'If chkFByLabRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LfhCDctCode as TrnDctCode" _
+'     & ",LfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabRefdHdr" _
+'     & " where LfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem ----------------------------------
+mQryStr = mQryStr & ")"
+mQryStr = mQryStr & " as t1" _
+ & " inner join DoctMast on t1.TrnDctCode = DoctMast.DctCode)" _
+ & " inner join ServGrpMst on t1.TrnSgpCode = ServGrpMst.SgpCode" _
+ & " group by DoctMast.DctName,ServGrpMst.SgpName,t1.TrnDctCode,t1.TrnSgpCode" _
+ & " order by DoctMast.DctName,ServGrpMst.SgpName,t1.TrnDctCode,t1.TrnSgpCode"
+
+datRecset.open mQryStr, dbComDatabase, adOpenKeyset, adLockReadOnly
+
+End Sub
+
+Private Sub CreateServDctrServSmryList()
+Dim mQryStr As String
+
+clsListStru.AddFields mExpr:="DctCode", mAttrib:=cFAT_SYSTEM
+clsListStru.AddFields mExpr:="SrvCode", mAttrib:=cFAT_SYSTEM
+clsListStru.AddFields mExpr:="DctName", mTitle:="Service Doctor Name", mShowItem:=True, mAlign:=1, mWidth:=3000
+clsListStru.AddFields mExpr:="SrvName", mTitle:="Service Name", mShowItem:=True, mAlign:=1, mWidth:=3000
+clsListStru.AddFields mExpr:="TrnCount", mTitle:="Count", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnAmtAftDisc_sum", mTitle:="Bill Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnDiscAmt_sum", mTitle:="Discount", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRecdAmt_sum", mTitle:="Recd.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRefdAmt_sum", mTitle:="Refund Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnBalAmt_sum", mTitle:="Bal.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+
+mQryStr = "Select DoctMast.DctName,ServMast.SrvName,t1.TrnDctCode,t1.TrnSrvCode" _
+ & ",Count(*) as TrnCount" _
+ & ",Sum(t1.TrnAmtAftDisc) as TrnAmtAftDisc_sum" _
+ & ",Sum(t1.TrnDiscAmt) as TrnDiscAmt_sum" _
+ & ",Sum(t1.TrnTotRecdAmt) as TrnTotRecdAmt_sum" _
+ & ",Sum(t1.TrnTotRefdAmt) as TrnTotRefdAmt_sum" _
+ & ",Sum(t1.TrnBalAmt) as TrnBalAmt_sum"
+mQryStr = mQryStr & " from (("
+Rem reserved query string producing no records
+mQryStr = mQryStr & "Select OpgCDctCode as TrnDctCode,SrvCode as TrnSrvCode" _
+ & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+ & ",OpgDiscAmt as TrnDiscAmt" _
+ & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+ & ",OpgRfugAmt as TrnTotRefdAmt" _
+ & ",0 as TrnBalAmt" _
+ & " from OutdReg" _
+ & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+ & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+ & " and OpgCode > 0 and 0 = 1" _
+ & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+ & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+ & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+ & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+ & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+Rem outdoor registration --------------------------------------------------------------------------------------
+If chkFByOutdReg.Value = vbChecked Then
+    Rem exceptional case for service doctor hence bypassed
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OpgCDctCode as TrnDctCode,SrvCode as TrnSrvCode" _
+     & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+     & ",OpgDiscAmt as TrnDiscAmt" _
+     & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+     & ",OpgRfugAmt as TrnTotRefdAmt" _
+     & ",0 as TrnBalAmt" _
+     & " from OutdReg" _
+     & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+     & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OpgCode > 0" _
+     & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor reg.refund
+'If chkFByOutdRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OgfCDctCode as TrnDctCode" _
+'     & ",OgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRgRefd" _
+'     & " where OgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor receipt received amount
+If chkFByOutdRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OrdDctCode as TrnDctCode,SrvCode as TrnSrvCode" _
+     & ",OrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",OrcDiscAmt as TrnDiscAmt" _
+     & ",OrcAdvAmt+OrcRecdAmt+OrcDepoAmt as TrnTotRecdAmt" _
+     & ",OrcRefuAmt as TrnTotRefdAmt" _
+     & ",OrcBalAmt as TrnBalAmt" _
+     & " from (((OutdRcpt" _
+     & " inner join OutdHdr on OutdRcpt.OrcCode = OutdHdr.OhrCode)" _
+     & " inner join OutdReg on OutdHdr.OhrOpgCode = OutdReg.OpgCode)" _
+     & " inner join OutdRcDctDtl on OutdRcpt.OrcCode = OutdRcDctDtl.OrdCode and OutdRcpt.OrcICode = OutdRcDctDtl.OrdOrcCode)" _
+     & " inner join ServMast on OutdRcpt.OrcSrvCode = ServMast.SrvCode" _
+     & " where OrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and OrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor payment
+'If chkFByOutdPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OphCDctCode as TrnDctCode" _
+'     & ",OphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdPymtHdr" _
+'     & " where OphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor refund
+'If chkFByOutdRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OfhCDctCode as TrnDctCode" _
+'     & ",OfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRefdHdr" _
+'     & " where OfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor bill payment
+If chkFByOutdBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select ObdDctCode as TrnDctCode,SrvCode as TrnSrvCode" _
+     & ",OblAmtAftDisc as TrnAmtAftDisc" _
+     & ",OblDiscAmt as TrnDiscAmt" _
+     & ",OblDepoAmt as TrnTotRecdAmt" _
+     & ",OblRefuAmt as TrnTotRefdAmt" _
+     & ",OblBalAmt as TrnBalAmt" _
+     & " from (((OutdBill" _
+     & " inner join OutdBlHdr on OutdBill.OblCode = OutdBlHdr.ObhCode)" _
+     & " inner join OutdReg on OutdBlHdr.ObhOpgCode = OutdReg.OpgCode)" _
+     & " inner join OutdBlDctDtl on OutdBill.OblCode = OutdBlDctDtl.ObdCode and OutdBill.OblICode = OutdBlDctDtl.ObdOblCode)" _
+     & " inner join ServMast on OutdBill.OblSrvCode = ServMast.SrvCode" _
+     & " where OblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OblCode > 0" _
+     & IIf(mQryPttCode > 0, " and OblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and ObhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor bill refund
+'If chkFByOutdBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select ObfhCDctCode as TrnDctCode" _
+'     & ",ObfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdBlRefdHdr" _
+'     & " where ObfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and ObfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and ObfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and ObfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor advance -----------------------------------------------------------------------------------------
+'If chkFByIndrReg.Value = vbChecked = True Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IpgCDctCode as TrnDctCode" _
+'     & ",IpgAdvAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrReg" _
+'     & " where IpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IpgCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IpgPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IpgVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor receipt received amount
+If chkFByIndrRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IrdDctCode as TrnDctCode,SrvCode as TrnSrvCode" _
+     & ",IrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",IrcDiscAmt as TrnDiscAmt" _
+     & ",IrcAdvAmt+IrcRecdAmt+IrcDepoAmt as TrnTotRecdAmt" _
+     & ",IrcRefuAmt as TrnTotRefdAmt" _
+     & ",IrcBalAmt as TrnBalAmt" _
+     & " from (((IndrRcpt" _
+     & " inner join IndrHdr on IndrRcpt.IrcCode = IndrHdr.IhrCode)" _
+     & " inner join IndrReg on IndrHdr.IhrIpgCode = IndrReg.IpgCode)" _
+     & " inner join IndrRcDctDtl on IndrRcpt.IrcCode = IndrRcDctDtl.IrdCode and IndrRcpt.IrcICode = IndrRcDctDtl.IrdIrcCode)" _
+     & " inner join ServMast on IndrRcpt.IrcSrvCode = ServMast.SrvCode" _
+     & " where IrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and IrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor payment
+'If chkFByIndrPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IphCDctCode as TrnDctCode" _
+'     & ",IphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrPymtHdr" _
+'     & " where IphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor refund
+'If chkFByIndrRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IfhCDctCode as TrnDctCode" _
+'     & ",IfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRefdHdr" _
+'     & " where IfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor bill payment
+If chkFByIndrBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IbdDctCode as TrnDctCode,SrvCode as TrnSrvCode" _
+     & ",IblAmtAftDisc as TrnAmtAftDisc" _
+     & ",IblDiscAmt as TrnDiscAmt" _
+     & ",IblAdvAmt+IblDpogAmt+IblDepoAmt as TrnTotRecdAmt" _
+     & ",IblRfugAmt+IblRefuAmt as TrnTotRefdAmt" _
+     & ",IblBalAmt as TrnBalAmt" _
+     & " from (((IndrBill" _
+     & " inner join IndrBlHdr on IndrBill.IblCode = IndrBlHdr.IbhCode)" _
+     & " inner join IndrReg on IndrBlHdr.IbhIpgCode = IndrReg.IpgCode)" _
+     & " inner join IndrBlDctDtl on IndrBill.IblCode = IndrBlDctDtl.IbdCode and IndrBill.IblICode = IndrBlDctDtl.IbdIblCode)" _
+     & " inner join ServMast on IndrBill.IblSrvCode = ServMast.SrvCode" _
+     & " where IblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IblCode > 0" _
+     & IIf(mQryPttCode > 0, " and IblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IbhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor bill refund
+'If chkFByIndrBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IbfhCDctCode as TrnDctCode" _
+'     & ",IbfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrBlRefdHdr" _
+'     & " where IbfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IbfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IbfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IbfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c payment
+'If chkFByIndrRgPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgtCDctCode as TrnDctCode" _
+'     & ",IgtDpogAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgPymt" _
+'     & " where IgtDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgtCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgtPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgtVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c refund
+'If chkFByIndrRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgfCDctCode as TrnDctCode" _
+'     & ",IgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgRefd" _
+'     & " where IgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab receipt received amount ------------------------------------------------------------------------------
+If chkFByLabRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select LrdDctCode as TrnDctCode,SrvCode as TrnSrvCode" _
+     & ",LrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",LrcDiscAmt as TrnDiscAmt" _
+     & ",LrcAdvAmt+LrcRecdAmt+LrcDepoAmt as TrnTotRecdAmt" _
+     & ",LrcRefuAmt as TrnTotRefdAmt" _
+     & ",LrcBalAmt as TrnBalAmt" _
+     & " from ((LabRcpt" _
+     & " inner join LabHdr on LabRcpt.LrcCode = LabHdr.LhrCode)" _
+     & " inner join LabRcDctDtl on LabRcpt.LrcCode = LabRcDctDtl.LrdCode and LabRcpt.LrcICode = LabRcDctDtl.LrdLrcCode)" _
+     & " inner join ServMast on LabRcpt.LrcSrvCode = ServMast.SrvCode" _
+     & " where LrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and LrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and LrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and LhrCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and LrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and LhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem lab payment
+'If chkFByLabPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LphCDctCode as TrnDctCode" _
+'     & ",LphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabPymtHdr" _
+'     & " where LphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab refund
+'If chkFByLabRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LfhCDctCode as TrnDctCode" _
+'     & ",LfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabRefdHdr" _
+'     & " where LfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem ----------------------------------
+mQryStr = mQryStr & ")"
+mQryStr = mQryStr & " as t1" _
+ & " inner join DoctMast on t1.TrnDctCode = DoctMast.DctCode)" _
+ & " inner join ServMast on t1.TrnSrvCode = ServMast.SrvCode" _
+ & " group by DoctMast.DctName,ServMast.SrvName,t1.TrnDctCode,t1.TrnSrvCode" _
+ & " order by DoctMast.DctName,ServMast.SrvName,t1.TrnDctCode,t1.TrnSrvCode"
+
+datRecset.open mQryStr, dbComDatabase, adOpenKeyset, adLockReadOnly
+
+End Sub
+
+Private Sub CreateServNameSmryList()
+Dim mQryStr As String
+
+clsListStru.AddFields mExpr:="TrnSrvName", mTitle:="Service Name", mShowItem:=True, mAlign:=1, mWidth:=3000
+clsListStru.AddFields mExpr:="TrnCount", mTitle:="Count", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnAmtAftDisc_sum", mTitle:="Bill Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnDiscAmt_sum", mTitle:="Discount", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRecdAmt_sum", mTitle:="Recd.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRefdAmt_sum", mTitle:="Refund Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnBalAmt_sum", mTitle:="Bal.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+
+mQryStr = "Select " _
+ & " t1.TrnSrvName,t1.TrnSrvCode" _
+ & ",Count(*) as TrnCount" _
+ & ",Sum(t1.TrnAmtAftDisc) as TrnAmtAftDisc_sum" _
+ & ",Sum(t1.TrnDiscAmt) as TrnDiscAmt_sum" _
+ & ",Sum(t1.TrnTotRecdAmt) as TrnTotRecdAmt_sum" _
+ & ",Sum(t1.TrnTotRefdAmt) as TrnTotRefdAmt_sum" _
+ & ",Sum(t1.TrnBalAmt) as TrnBalAmt_sum"
+mQryStr = mQryStr & " from ("
+Rem reserved query string producing no records
+mQryStr = mQryStr & "Select OpgSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+ & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+ & ",OpgDiscAmt as TrnDiscAmt" _
+ & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+ & ",OpgRfugAmt as TrnTotRefdAmt" _
+ & ",0 as TrnBalAmt" _
+ & " from OutdReg" _
+ & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+ & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+ & " and OpgCode > 0 and 0 = 1" _
+ & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+ & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+ & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+ & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+ & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+Rem outdoor registration --------------------------------------------------------------------------------------
+If chkFByOutdReg.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OpgSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+     & ",OpgDiscAmt as TrnDiscAmt" _
+     & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+     & ",OpgRfugAmt as TrnTotRefdAmt" _
+     & ",0 as TrnBalAmt" _
+     & " from OutdReg" _
+     & " inner join ServMast on OutdReg.OpgSrvCode=ServMast.SrvCode" _
+     & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OpgCode > 0" _
+     & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+End If
+'Rem outdoor reg.refund
+'If chkFByOutdRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OgfVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",OgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from (OutdRgRefd" _
+'     & " inner join OutdReg on OutdRgRefd.OgfOpgCode = OutdReg.OpgCode)" _
+'     & " inner join VTypMast on OutdRgRefd.OgfVtmCode = VTypMast.VtmCode" _
+'     & " where OgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor receipt received amount
+If chkFByOutdRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OrcSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",OrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",OrcDiscAmt as TrnDiscAmt" _
+     & ",OrcAdvAmt+OrcRecdAmt+OrcDepoAmt as TrnTotRecdAmt" _
+     & ",OrcRefuAmt as TrnTotRefdAmt" _
+     & ",OrcBalAmt as TrnBalAmt" _
+     & " from ((OutdRcpt" _
+     & " inner join OutdHdr on OutdRcpt.OrcCode = OutdHdr.OhrCode)" _
+     & " inner join OutdReg on OutdHdr.OhrOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdRcpt.OrcSrvCode = ServMast.SrvCode" _
+     & " where OrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and OrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor payment
+'If chkFByOutdPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OphVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",OphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdPymtHdr" _
+'     & " inner join VTypMast on OutdPymtHdr.OphVtmCode = VTypMast.VtmCode" _
+'     & " where OphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor refund
+'If chkFByOutdRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OfhVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",OfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRefdHdr" _
+'     & " inner join VTypMast on OutdRefdHdr.OfhVtmCode = VTypMast.VtmCode" _
+'     & " where OfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor bill payment
+If chkFByOutdBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OblSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",OblAmtAftDisc as TrnAmtAftDisc" _
+     & ",OblDiscAmt as TrnDiscAmt" _
+     & ",OblDepoAmt as TrnTotRecdAmt" _
+     & ",OblRefuAmt as TrnTotRefdAmt" _
+     & ",OblBalAmt as TrnBalAmt" _
+     & " from ((OutdBill" _
+     & " inner join OutdBlHdr on OutdBill.OblCode = OutdBlHdr.ObhCode)" _
+     & " inner join OutdReg on OutdBlHdr.ObhOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdBill.OblSrvCode = ServMast.SrvCode" _
+     & " where OblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OblCode > 0" _
+     & IIf(mQryPttCode > 0, " and OblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and ObhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor bill refund
+'If chkFByOutdBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select ObfhVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",ObfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdBlRefdHdr" _
+'     & " inner join VTypMast on OutdBlRefdHdr.ObfhVtmCode = VTypMast.VtmCode" _
+'     & " where ObfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and ObfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and ObfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and ObfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor advance -----------------------------------------------------------------------------------------
+'If chkFByIndrReg.Value = vbChecked = True Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IpgVtmCode * - 1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IpgAdvAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrReg" _
+'     & " inner join VTypMast on IndrReg.IpgVtmCode = VTypMast.VtmCode" _
+'     & " where IpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IpgCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IpgPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IpgVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor receipt received amount
+If chkFByIndrRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IrcSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",IrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",IrcDiscAmt as TrnDiscAmt" _
+     & ",IrcAdvAmt+IrcRecdAmt+IrcDepoAmt as TrnTotRecdAmt" _
+     & ",IrcRefuAmt as TrnTotRefdAmt" _
+     & ",IrcBalAmt as TrnBalAmt" _
+     & " from ((IndrRcpt" _
+     & " inner join IndrHdr on IndrRcpt.IrcCode = IndrHdr.IhrCode)" _
+     & " inner join IndrReg on IndrHdr.IhrIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrRcpt.IrcSrvCode=ServMast.SrvCode" _
+     & " where IrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and IrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor payment
+'If chkFByIndrPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IphVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrPymtHdr" _
+'     & " inner join VTypMast on IndrPymtHdr.IphVtmCode = VTypMast.VtmCode" _
+'     & " where IphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor refund
+'If chkFByIndrRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IfhVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRefdHdr" _
+'     & " inner join VTypMast on IndrRefdHdr.IfhVtmCode = VTypMast.VtmCode" _
+'     & " where IfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor bill payment
+If chkFByIndrBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IblSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",IblAmtAftDisc as TrnAmtAftDisc" _
+     & ",IblDiscAmt as TrnDiscAmt" _
+     & ",IblAdvAmt+IblDpogAmt+IblDepoAmt as TrnTotRecdAmt" _
+     & ",IblRfugAmt+IblRefuAmt as TrnTotRefdAmt" _
+     & ",IblBalAmt as TrnBalAmt" _
+     & " from ((IndrBill" _
+     & " inner join IndrBlHdr on IndrBill.IblCode = IndrBlHdr.IbhCode)" _
+     & " inner join IndrReg on IndrBlHdr.IbhIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrBill.IblSrvCode=ServMast.SrvCode" _
+     & " where IblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IblCode > 0" _
+     & IIf(mQryPttCode > 0, " and IblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IbhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor bill refund
+'If chkFByIndrBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IbfhVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IbfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrBlRefdHdr" _
+'     & " inner join VTypMast on IndrBlRefdHdr.IbfhVtmCode = VTypMast.VtmCode" _
+'     & " where IbfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IbfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IbfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IbfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c payment
+'If chkFByIndrRgPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgtVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IgtDpogAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgPymt" _
+'     & " inner join VTypMast on IndrRgPymt.IgtVtmCode = VTypMast.VtmCode" _
+'     & " where IgtDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgtCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgtPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgtVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c refund
+'If chkFByIndrRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgfVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgRefd" _
+'     & " inner join VTypMast on IndrRgRefd.IgfVtmCode = VTypMast.VtmCode" _
+'     & " where IgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab receipt received amount ------------------------------------------------------------------------------
+If chkFByLabRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select LrcSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",LrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",LrcDiscAmt as TrnDiscAmt" _
+     & ",LrcAdvAmt+LrcRecdAmt+LrcDepoAmt as TrnTotRecdAmt" _
+     & ",LrcRefuAmt as TrnTotRefdAmt" _
+     & ",LrcBalAmt as TrnBalAmt" _
+     & " from (LabRcpt" _
+     & " inner join LabHdr on LabRcpt.LrcCode = LabHdr.LhrCode)" _
+     & " inner join ServMast on LabRcpt.LrcSrvCode = ServMast.SrvCode" _
+     & " where LrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and LrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and LrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and LhrCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and LrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and LhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem lab payment
+'If chkFByLabPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LphVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",LphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabPymtHdr" _
+'     & " inner join VTypMast on LabPymtHdr.LphVtmCode = VTypMast.VtmCode" _
+'     & " where LphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab refund
+'If chkFByLabRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LfhVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",LfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabRefdHdr" _
+'     & " inner join VTypMast on LabRefdHdr.LfhVtmCode = VTypMast.VtmCode" _
+'     & " where LfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem ----------------------------------
+mQryStr = mQryStr & ")"
+mQryStr = mQryStr & " as t1 group by t1.TrnSrvName,t1.TrnSrvCode" _
+ & " order by t1.TrnSrvName,t1.TrnSrvCode"
+
+datRecset.open mQryStr, dbComDatabase, adOpenKeyset, adLockReadOnly
+
+
+End Sub
+
+Private Sub CreateServGrpNameSmryList()
+Dim mQryStr As String
+
+clsListStru.AddFields mExpr:="TrnSgpName", mTitle:="Service Group Name", mShowItem:=True, mAlign:=1, mWidth:=3000
+clsListStru.AddFields mExpr:="TrnCount", mTitle:="Count", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnAmtAftDisc_sum", mTitle:="Bill Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnDiscAmt_sum", mTitle:="Discount", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRecdAmt_sum", mTitle:="Recd.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRefdAmt_sum", mTitle:="Refund Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnBalAmt_sum", mTitle:="Bal.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+
+mQryStr = "Select " _
+ & " t1.TrnSgpName,t1.TrnSgpCode" _
+ & ",Count(*) as TrnCount" _
+ & ",Sum(t1.TrnAmtAftDisc) as TrnAmtAftDisc_sum" _
+ & ",Sum(t1.TrnDiscAmt) as TrnDiscAmt_sum" _
+ & ",Sum(t1.TrnTotRecdAmt) as TrnTotRecdAmt_sum" _
+ & ",Sum(t1.TrnTotRefdAmt) as TrnTotRefdAmt_sum" _
+ & ",Sum(t1.TrnBalAmt) as TrnBalAmt_sum"
+mQryStr = mQryStr & " from ("
+Rem reserved query string producing no records
+mQryStr = mQryStr & "Select SrvSgpCode as TrnSgpCode,ServGrpMst.SgpName as TrnSgpName" _
+ & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+ & ",OpgDiscAmt as TrnDiscAmt" _
+ & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+ & ",OpgRfugAmt as TrnTotRefdAmt" _
+ & ",0 as TrnBalAmt" _
+ & " from OutdReg" _
+ & " inner join (ServMast inner join ServGrpMst on ServMast.SrvSgpCode = ServGrpMst.SgpCode) on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+ & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+ & " and OpgCode > 0 and 0 = 1" _
+ & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+ & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+ & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+ & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+ & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+Rem outdoor registration --------------------------------------------------------------------------------------
+If chkFByOutdReg.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select SrvSgpCode as TrnSgpCode,ServGrpMst.SgpName as TrnSgpName" _
+     & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+     & ",OpgDiscAmt as TrnDiscAmt" _
+     & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+     & ",OpgRfugAmt as TrnTotRefdAmt" _
+     & ",0 as TrnBalAmt" _
+     & " from (OutdReg" _
+     & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode)" _
+     & " inner join ServGrpMst on ServMast.SrvSgpCode = ServGrpMst.SgpCode" _
+     & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OpgCode > 0" _
+     & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+End If
+'Rem outdoor reg.refund
+'If chkFByOutdRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OgfVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName" _
+'     & ",OgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from (OutdRgRefd" _
+'     & " inner join OutdReg on OutdRgRefd.OgfOpgCode = OutdReg.OpgCode)" _
+'     & " inner join VTypMast on OutdRgRefd.OgfVtmCode = VTypMast.VtmCode" _
+'     & " where OgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor receipt received amount
+If chkFByOutdRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select SrvSgpCode as TrnSgpCode,ServGrpMst.SgpName as TrnSgpName" _
+     & ",OrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",OrcDiscAmt as TrnDiscAmt" _
+     & ",OrcAdvAmt+OrcRecdAmt+OrcDepoAmt as TrnTotRecdAmt" _
+     & ",OrcRefuAmt as TrnTotRefdAmt" _
+     & ",OrcBalAmt as TrnBalAmt" _
+     & " from (((OutdRcpt" _
+     & " inner join OutdHdr on OutdRcpt.OrcCode = OutdHdr.OhrCode)" _
+     & " inner join OutdReg on OutdHdr.OhrOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdRcpt.OrcSrvCode = ServMast.SrvCode)" _
+     & " inner join ServGrpMst on ServMast.SrvSgpCode = ServGrpMst.SgpCode" _
+     & " where OrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and OrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor payment
+'If chkFByOutdPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OphVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName" _
+'     & ",OphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdPymtHdr" _
+'     & " inner join VTypMast on OutdPymtHdr.OphVtmCode = VTypMast.VtmCode" _
+'     & " where OphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor refund
+'If chkFByOutdRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OfhVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName" _
+'     & ",OfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRefdHdr" _
+'     & " inner join VTypMast on OutdRefdHdr.OfhVtmCode = VTypMast.VtmCode" _
+'     & " where OfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor bill payment
+If chkFByOutdBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select SrvSgpCode as TrnSgpCode,ServGrpMst.SgpName as TrnSgpName" _
+     & ",OblAmtAftDisc as TrnAmtAftDisc" _
+     & ",OblDiscAmt as TrnDiscAmt" _
+     & ",OblDepoAmt as TrnTotRecdAmt" _
+     & ",OblRefuAmt as TrnTotRefdAmt" _
+     & ",OblBalAmt as TrnBalAmt" _
+     & " from (((OutdBill" _
+     & " inner join OutdBlHdr on OutdBill.OblCode = OutdBlHdr.ObhCode)" _
+     & " inner join OutdReg on OutdBlHdr.ObhOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdBill.OblSrvCode = ServMast.SrvCode)" _
+     & " inner join ServGrpMst on ServMast.SrvSgpCode = ServGrpMst.SgpCode" _
+     & " where OblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OblCode > 0" _
+     & IIf(mQryPttCode > 0, " and OblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and ObhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor bill refund
+'If chkFByOutdBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select ObfhVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName" _
+'     & ",ObfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdBlRefdHdr" _
+'     & " inner join VTypMast on OutdBlRefdHdr.ObfhVtmCode = VTypMast.VtmCode" _
+'     & " where ObfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and ObfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and ObfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and ObfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor advance -----------------------------------------------------------------------------------------
+'If chkFByIndrReg.Value = vbChecked = True Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IpgVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName" _
+'     & ",IpgAdvAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrReg" _
+'     & " inner join VTypMast on IndrReg.IpgVtmCode = VTypMast.VtmCode" _
+'     & " where IpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IpgCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IpgPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IpgVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor receipt received amount
+If chkFByIndrRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select SrvSgpCode as TrnSgpCode,ServGrpMst.SgpName as TrnSgpName" _
+     & ",IrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",IrcDiscAmt as TrnDiscAmt" _
+     & ",IrcAdvAmt+IrcRecdAmt+IrcDepoAmt as TrnTotRecdAmt" _
+     & ",IrcRefuAmt as TrnTotRefdAmt" _
+     & ",IrcBalAmt as TrnBalAmt" _
+     & " from (((IndrRcpt" _
+     & " inner join IndrHdr on IndrRcpt.IrcCode = IndrHdr.IhrCode)" _
+     & " inner join IndrReg on IndrHdr.IhrIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrRcpt.IrcSrvCode = ServMast.SrvCode)" _
+     & " inner join ServGrpMst on ServMast.SrvSgpCode = ServGrpMst.SgpCode" _
+     & " where IrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and IrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor payment
+'If chkFByIndrPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IphVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName" _
+'     & ",IphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrPymtHdr" _
+'     & " inner join VTypMast on IndrPymtHdr.IphVtmCode = VTypMast.VtmCode" _
+'     & " where IphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor refund
+'If chkFByIndrRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IfhVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName" _
+'     & ",IfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRefdHdr" _
+'     & " inner join VTypMast on IndrRefdHdr.IfhVtmCode = VTypMast.VtmCode" _
+'     & " where IfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor bill payment
+If chkFByIndrBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select SrvSgpCode as TrnSgpCode,ServGrpMst.SgpName as TrnSgpName" _
+     & ",IblAmtAftDisc as TrnAmtAftDisc" _
+     & ",IblDiscAmt as TrnDiscAmt" _
+     & ",IblAdvAmt+IblDpogAmt+IblDepoAmt as TrnTotRecdAmt" _
+     & ",IblRfugAmt+IblRefuAmt as TrnTotRefdAmt" _
+     & ",IblBalAmt as TrnBalAmt" _
+     & " from (((IndrBill" _
+     & " inner join IndrBlHdr on IndrBill.IblCode = IndrBlHdr.IbhCode)" _
+     & " inner join IndrReg on IndrBlHdr.IbhIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrBill.IblSrvCode=ServMast.SrvCode)" _
+     & " inner join ServGrpMst on ServMast.SrvSgpCode = ServGrpMst.SgpCode" _
+     & " where IblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IblCode > 0" _
+     & IIf(mQryPttCode > 0, " and IblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IbhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor bill refund
+'If chkFByIndrBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IbfhVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName" _
+'     & ",IbfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrBlRefdHdr" _
+'     & " inner join VTypMast on IndrBlRefdHdr.IbfhVtmCode = VTypMast.VtmCode" _
+'     & " where IbfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IbfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IbfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IbfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c payment
+'If chkFByIndrRgPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgtVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName" _
+'     & ",IgtDpogAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgPymt" _
+'     & " inner join VTypMast on IndrRgPymt.IgtVtmCode = VTypMast.VtmCode" _
+'     & " where IgtDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgtCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgtPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgtVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c refund
+'If chkFByIndrRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgfVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName" _
+'     & ",IgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgRefd" _
+'     & " inner join VTypMast on IndrRgRefd.IgfVtmCode = VTypMast.VtmCode" _
+'     & " where IgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab receipt received amount ------------------------------------------------------------------------------
+If chkFByLabRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select SrvSgpCode as TrnSgpCode,ServGrpMst.SgpName as TrnSgpName" _
+     & ",LrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",LrcDiscAmt as TrnDiscAmt" _
+     & ",LrcAdvAmt+LrcRecdAmt+LrcDepoAmt as TrnTotRecdAmt" _
+     & ",LrcRefuAmt as TrnTotRefdAmt" _
+     & ",LrcBalAmt as TrnBalAmt" _
+     & " from ((LabRcpt" _
+     & " inner join LabHdr on LabRcpt.LrcCode = LabHdr.LhrCode)" _
+     & " inner join ServMast on LabRcpt.LrcSrvCode = ServMast.SrvCode)" _
+     & " inner join ServGrpMst on ServMast.SrvSgpCode = ServGrpMst.SgpCode" _
+     & " where LrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and LrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and LrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and LhrCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and LrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and LhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem lab payment
+'If chkFByLabPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LphVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName" _
+'     & ",LphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabPymtHdr" _
+'     & " inner join VTypMast on LabPymtHdr.LphVtmCode = VTypMast.VtmCode" _
+'     & " where LphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab refund
+'If chkFByLabRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LfhVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName" _
+'     & ",LfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabRefdHdr" _
+'     & " inner join VTypMast on LabRefdHdr.LfhVtmCode = VTypMast.VtmCode" _
+'     & " where LfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem ----------------------------------
+mQryStr = mQryStr & ")"
+mQryStr = mQryStr & " as t1 group by t1.TrnSgpName,t1.TrnSgpCode" _
+ & " order by t1.TrnSgpName,t1.TrnSgpCode"
+
+datRecset.open mQryStr, dbComDatabase, adOpenKeyset, adLockReadOnly
+
+End Sub
+
+Private Sub CreateServGrpNServNameSmryList()
+Dim mQryStr As String
+
+clsListStru.AddFields mExpr:="TrnSgpName", mTitle:="Service Group Name", mShowItem:=True, mAlign:=1, mWidth:=3000
+clsListStru.AddFields mExpr:="TrnSrvName", mTitle:="Service Name", mShowItem:=True, mAlign:=1, mWidth:=3000
+clsListStru.AddFields mExpr:="TrnCount", mTitle:="Count", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnAmtAftDisc_sum", mTitle:="Bill Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnDiscAmt_sum", mTitle:="Discount", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRecdAmt_sum", mTitle:="Recd.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRefdAmt_sum", mTitle:="Refund Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnBalAmt_sum", mTitle:="Bal.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+
+mQryStr = "Select " _
+ & " t1.TrnSgpName,t1.TrnSgpCode" _
+ & ",t1.TrnSrvName,t1.TrnSrvCode" _
+ & ",Count(*) as TrnCount" _
+ & ",Sum(t1.TrnAmtAftDisc) as TrnAmtAftDisc_sum" _
+ & ",Sum(t1.TrnDiscAmt) as TrnDiscAmt_sum" _
+ & ",Sum(t1.TrnTotRecdAmt) as TrnTotRecdAmt_sum" _
+ & ",Sum(t1.TrnTotRefdAmt) as TrnTotRefdAmt_sum" _
+ & ",Sum(t1.TrnBalAmt) as TrnBalAmt_sum"
+mQryStr = mQryStr & " from ("
+Rem reserved query string producing no records
+mQryStr = mQryStr & "Select SrvSgpCode as TrnSgpCode,ServGrpMst.SgpName as TrnSgpName,OpgSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+ & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+ & ",OpgDiscAmt as TrnDiscAmt" _
+ & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+ & ",OpgRfugAmt as TrnTotRefdAmt" _
+ & ",0 as TrnBalAmt" _
+ & " from (OutdReg" _
+ & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode)" _
+ & " inner join ServGrpMst on ServMast.SrvSgpCode = ServGrpMst.SgpCode" _
+ & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+ & " and OpgCode > 0 and 0 = 1" _
+ & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+ & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+ & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+ & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+ & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+Rem outdoor registration --------------------------------------------------------------------------------------
+If chkFByOutdReg.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select SrvSgpCode as TrnSgpCode,ServGrpMst.SgpName as TrnSgpName,OpgSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+     & ",OpgDiscAmt as TrnDiscAmt" _
+     & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+     & ",OpgRfugAmt as TrnTotRefdAmt" _
+     & ",0 as TrnBalAmt" _
+     & " from (OutdReg" _
+     & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode)" _
+     & " inner join ServGrpMst on ServMast.SrvSgpCode = ServGrpMst.SgpCode" _
+     & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OpgCode > 0" _
+     & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+End If
+'Rem outdoor reg.refund
+'If chkFByOutdRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OgfVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName,OgfVtmCode * -2 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",OgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from (OutdRgRefd" _
+'     & " inner join OutdReg on OutdRgRefd.OgfOpgCode = OutdReg.OpgCode)" _
+'     & " inner join VTypMast on OutdRgRefd.OgfVtmCode = VTypMast.VtmCode" _
+'     & " where OgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor receipt received amount
+If chkFByOutdRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select SrvSgpCode as TrnSgpCode,ServGrpMst.SgpName as TrnSgpName,OrcSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",OrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",OrcDiscAmt as TrnDiscAmt" _
+     & ",OrcAdvAmt+OrcRecdAmt+OrcDepoAmt as TrnTotRecdAmt" _
+     & ",OrcRefuAmt as TrnTotRefdAmt" _
+     & ",OrcBalAmt as TrnBalAmt" _
+     & " from (((OutdRcpt" _
+     & " inner join OutdHdr on OutdRcpt.OrcCode = OutdHdr.OhrCode)" _
+     & " inner join OutdReg on OutdHdr.OhrOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdRcpt.OrcSrvCode = ServMast.SrvCode)" _
+     & " inner join ServGrpMst on ServMast.SrvSgpCode = ServGrpMst.SgpCode" _
+     & " where OrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and OrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor payment
+'If chkFByOutdPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OphVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName,OphVtmCode * -2 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",OphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdPymtHdr" _
+'     & " inner join VTypMast on OutdPymtHdr.OphVtmCode = VTypMast.VtmCode" _
+'     & " where OphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor refund
+'If chkFByOutdRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OfhVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName,OfhVtmCode * -2 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",OfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRefdHdr" _
+'     & " inner join VTypMast on OutdRefdHdr.OfhVtmCode = VTypMast.VtmCode" _
+'     & " where OfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor bill payment
+If chkFByOutdBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select SrvSgpCode as TrnSgpCode,ServGrpMst.SgpName as TrnSgpName,OblSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",OblAmtAftDisc as TrnAmtAftDisc" _
+     & ",OblDiscAmt as TrnDiscAmt" _
+     & ",OblDepoAmt as TrnTotRecdAmt" _
+     & ",OblRefuAmt as TrnTotRefdAmt" _
+     & ",OblBalAmt as TrnBalAmt" _
+     & " from (((OutdBill" _
+     & " inner join OutdBlHdr on OutdBill.OblCode = OutdBlHdr.ObhCode)" _
+     & " inner join OutdReg on OutdBlHdr.ObhOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdBill.OblSrvCode = ServMast.SrvCode)" _
+     & " inner join ServGrpMst on ServMast.SrvSgpCode = ServGrpMst.SgpCode" _
+     & " where OblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OblCode > 0" _
+     & IIf(mQryPttCode > 0, " and OblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and ObhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor bill refund
+'If chkFByOutdBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select ObfhVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName,ObfhVtmCode * -2 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",ObfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdBlRefdHdr" _
+'     & " inner join VTypMast on OutdBlRefdHdr.ObfhVtmCode = VTypMast.VtmCode" _
+'     & " where ObfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and ObfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and ObfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and ObfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor advance -----------------------------------------------------------------------------------------
+'If chkFByIndrReg.Value = vbChecked = True Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IpgVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName,IpgVtmCode * -2 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IpgAdvAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrReg" _
+'     & " inner join VTypMast on IndrReg.IpgVtmCode = VTypMast.VtmCode" _
+'     & " where IpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IpgCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IpgPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IpgVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor receipt received amount
+If chkFByIndrRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select SrvSgpCode as TrnSgpCode,ServGrpMst.SgpName as TrnSgpName,IrcSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",IrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",IrcDiscAmt as TrnDiscAmt" _
+     & ",IrcAdvAmt+IrcRecdAmt+IrcDepoAmt as TrnTotRecdAmt" _
+     & ",IrcRefuAmt as TrnTotRefdAmt" _
+     & ",IrcBalAmt as TrnBalAmt" _
+     & " from (((IndrRcpt" _
+     & " inner join IndrHdr on IndrRcpt.IrcCode = IndrHdr.IhrCode)" _
+     & " inner join IndrReg on IndrHdr.IhrIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrRcpt.IrcSrvCode = ServMast.SrvCode)" _
+     & " inner join ServGrpMst on ServMast.SrvSgpCode = ServGrpMst.SgpCode" _
+     & " where IrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and IrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor payment
+'If chkFByIndrPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IphVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName,IphVtmCode * -2 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrPymtHdr" _
+'     & " inner join VTypMast on IndrPymtHdr.IphVtmCode = VTypMast.VtmCode" _
+'     & " where IphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor refund
+'If chkFByIndrRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IfhVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName,IfhVtmCode * -2 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRefdHdr" _
+'     & " inner join VTypMast on IndrRefdHdr.IfhVtmCode = VTypMast.VtmCode" _
+'     & " where IfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor bill payment
+If chkFByIndrBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select SrvSgpCode as TrnSgpCode,ServGrpMst.SgpName as TrnSgpName,IblSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",IblAmtAftDisc as TrnAmtAftDisc" _
+     & ",IblDiscAmt as TrnDiscAmt" _
+     & ",IblAdvAmt+IblDpogAmt+IblDepoAmt as TrnTotRecdAmt" _
+     & ",IblRfugAmt+IblRefuAmt as TrnTotRefdAmt" _
+     & ",IblBalAmt as TrnBalAmt" _
+     & " from (((IndrBill" _
+     & " inner join IndrBlHdr on IndrBill.IblCode = IndrBlHdr.IbhCode)" _
+     & " inner join IndrReg on IndrBlHdr.IbhIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrBill.IblSrvCode=ServMast.SrvCode)" _
+     & " inner join ServGrpMst on ServMast.SrvSgpCode = ServGrpMst.SgpCode" _
+     & " where IblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IblCode > 0" _
+     & IIf(mQryPttCode > 0, " and IblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IbhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor bill refund
+'If chkFByIndrBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IbfhVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName,IbfhVtmCode * -2 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IbfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrBlRefdHdr" _
+'     & " inner join VTypMast on IndrBlRefdHdr.IbfhVtmCode = VTypMast.VtmCode" _
+'     & " where IbfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IbfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IbfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IbfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c payment
+'If chkFByIndrRgPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgtVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName,IgtVtmCode * -2 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IgtDpogAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgPymt" _
+'     & " inner join VTypMast on IndrRgPymt.IgtVtmCode = VTypMast.VtmCode" _
+'     & " where IgtDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgtCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgtPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgtVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c refund
+'If chkFByIndrRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgfVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName,IgfVtmCode * -2 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgRefd" _
+'     & " inner join VTypMast on IndrRgRefd.IgfVtmCode = VTypMast.VtmCode" _
+'     & " where IgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab receipt received amount ------------------------------------------------------------------------------
+If chkFByLabRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select SrvSgpCode as TrnSgpCode,ServGrpMst.SgpName as TrnSgpName,LrcSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",LrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",LrcDiscAmt as TrnDiscAmt" _
+     & ",LrcAdvAmt+LrcRecdAmt+LrcDepoAmt as TrnTotRecdAmt" _
+     & ",LrcRefuAmt as TrnTotRefdAmt" _
+     & ",LrcBalAmt as TrnBalAmt" _
+     & " from ((LabRcpt" _
+     & " inner join LabHdr on LabRcpt.LrcCode = LabHdr.LhrCode)" _
+     & " inner join ServMast on LabRcpt.LrcSrvCode = ServMast.SrvCode)" _
+     & " inner join ServGrpMst on ServMast.SrvSgpCode = ServGrpMst.SgpCode" _
+     & " where LrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and LrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and LrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and LhrCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and LrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and LhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem lab payment
+'If chkFByLabPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LphVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName,LphVtmCode * -2 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",LphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabPymtHdr" _
+'     & " inner join VTypMast on LabPymtHdr.LphVtmCode = VTypMast.VtmCode" _
+'     & " where LphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab refund
+'If chkFByLabRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LfhVtmCode * -1 as TrnSgpCode,VTypMast.VtmName as TrnSgpName,LfhVtmCode * -2 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",LfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabRefdHdr" _
+'     & " inner join VTypMast on LabRefdHdr.LfhVtmCode = VTypMast.VtmCode" _
+'     & " where LfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem ----------------------------------
+mQryStr = mQryStr & ")"
+mQryStr = mQryStr & " as t1 group by t1.TrnSgpName,t1.TrnSgpCode,t1.TrnSrvName,t1.TrnSrvCode" _
+ & " order by t1.TrnSgpName,t1.TrnSgpCode,t1.TrnSrvName,t1.TrnSrvCode"
+
+datRecset.open mQryStr, dbComDatabase, adOpenKeyset, adLockReadOnly
+
+End Sub
+
+Private Sub CreateVTypeNameSmryList()
+Dim mQryStr As String
+
+clsListStru.AddFields mExpr:="TrnVtmName", mTitle:="Voucher Type", mShowItem:=True, mAlign:=1, mWidth:=3000
+clsListStru.AddFields mExpr:="TrnCount", mTitle:="Count", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnAmtAftDisc_sum", mTitle:="Bill Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnDiscAmt_sum", mTitle:="Discount", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRecdAmt_sum", mTitle:="Recd.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRefdAmt_sum", mTitle:="Refund Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnBalAmt_sum", mTitle:="Bal.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+
+mQryStr = "Select " _
+ & " t1.TrnVtmName,t1.TrnVtmCode" _
+ & ",Count(*) as TrnCount" _
+ & ",Sum(t1.TrnAmtAftDisc) as TrnAmtAftDisc_sum" _
+ & ",Sum(t1.TrnDiscAmt) as TrnDiscAmt_sum" _
+ & ",Sum(t1.TrnTotRecdAmt) as TrnTotRecdAmt_sum" _
+ & ",Sum(t1.TrnTotRefdAmt) as TrnTotRefdAmt_sum" _
+ & ",Sum(t1.TrnBalAmt) as TrnBalAmt_sum"
+mQryStr = mQryStr & " from ("
+Rem reserved query string producing no records
+mQryStr = mQryStr & "Select OpgVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+ & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+ & ",OpgDiscAmt as TrnDiscAmt" _
+ & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+ & ",OpgRfugAmt as TrnTotRefdAmt" _
+ & ",0 as TrnBalAmt" _
+ & " from (OutdReg" _
+ & " inner join VTypMast on OutdReg.OpgVtmCode = VTypMast.VtmCode)" _
+ & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+ & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+ & " and OpgCode > 0 and 0 = 1" _
+ & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+ & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+ & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+ & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+ & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+Rem outdoor registration --------------------------------------------------------------------------------------
+If chkFByOutdReg.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OpgVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+     & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+     & ",OpgDiscAmt as TrnDiscAmt" _
+     & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+     & ",OpgRfugAmt as TrnTotRefdAmt" _
+     & ",0 as TrnBalAmt" _
+     & " from (OutdReg" _
+     & " inner join VTypMast on OutdReg.OpgVtmCode = VTypMast.VtmCode)" _
+     & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+     & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OpgCode > 0" _
+     & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+End If
+'Rem outdoor reg.refund
+'If chkFByOutdRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OgfVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+'     & ",OgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from (OutdRgRefd" _
+'     & " inner join OutdReg on OutdRgRefd.OgfOpgCode = OutdReg.OpgCode)" _
+'     & " inner join VTypMast on OutdRgRefd.OgfVtmCode = VTypMast.VtmCode" _
+'     & " where OgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor receipt received amount
+If chkFByOutdRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select OhrVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+     & ",OrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",OrcDiscAmt as TrnDiscAmt" _
+     & ",OrcAdvAmt+OrcRecdAmt+OrcDepoAmt as TrnTotRecdAmt" _
+     & ",OrcRefuAmt as TrnTotRefdAmt" _
+     & ",OrcBalAmt as TrnBalAmt" _
+     & " from (((OutdRcpt" _
+     & " inner join OutdHdr on OutdRcpt.OrcCode = OutdHdr.OhrCode)" _
+     & " inner join OutdReg on OutdHdr.OhrOpgCode = OutdReg.OpgCode)" _
+     & " inner join VTypMast on OutdHdr.OhrVtmCode = VTypMast.VtmCode)" _
+     & " inner join ServMast on OutdRcpt.OrcSrvCode = ServMast.SrvCode" _
+     & " where OrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and OrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor payment
+'If chkFByOutdPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OphVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+'     & ",OphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdPymtHdr" _
+'     & " inner join VTypMast on OutdPymtHdr.OphVtmCode = VTypMast.VtmCode" _
+'     & " where OphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor refund
+'If chkFByOutdRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select OfhVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+'     & ",OfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRefdHdr" _
+'     & " inner join VTypMast on OutdRefdHdr.OfhVtmCode = VTypMast.VtmCode" _
+'     & " where OfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor bill payment
+If chkFByOutdBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select ObhVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+     & ",OblAmtAftDisc as TrnAmtAftDisc" _
+     & ",OblDiscAmt as TrnDiscAmt" _
+     & ",OblDepoAmt as TrnTotRecdAmt" _
+     & ",OblRefuAmt as TrnTotRefdAmt" _
+     & ",OblBalAmt as TrnBalAmt" _
+     & " from (((OutdBill" _
+     & " inner join OutdBlHdr on OutdBill.OblCode = OutdBlHdr.ObhCode)" _
+     & " inner join OutdReg on OutdBlHdr.ObhOpgCode = OutdReg.OpgCode)" _
+     & " inner join VTypMast on OutdBlHdr.ObhVtmCode = VTypMast.VtmCode)" _
+     & " inner join ServMast on OutdBill.OblSrvCode = ServMast.SrvCode" _
+     & " where OblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OblCode > 0" _
+     & IIf(mQryPttCode > 0, " and OblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and ObhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor bill refund
+'If chkFByOutdBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select ObfhVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+'     & ",ObfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdBlRefdHdr" _
+'     & " inner join VTypMast on OutdBlRefdHdr.ObfhVtmCode = VTypMast.VtmCode" _
+'     & " where ObfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and ObfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and ObfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and ObfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor advance -----------------------------------------------------------------------------------------
+'If chkFByIndrReg.Value = vbChecked = True Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IpgVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+'     & ",IpgAdvAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrReg" _
+'     & " inner join VTypMast on IndrReg.IpgVtmCode = VTypMast.VtmCode" _
+'     & " where IpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IpgCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IpgPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IpgVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor receipt received amount
+If chkFByIndrRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IhrVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+     & ",IrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",IrcDiscAmt as TrnDiscAmt" _
+     & ",IrcAdvAmt+IrcRecdAmt+IrcDepoAmt as TrnTotRecdAmt" _
+     & ",IrcRefuAmt as TrnTotRefdAmt" _
+     & ",IrcBalAmt as TrnBalAmt" _
+     & " from (((IndrRcpt" _
+     & " inner join IndrHdr on IndrRcpt.IrcCode = IndrHdr.IhrCode)" _
+     & " inner join IndrReg on IndrHdr.IhrIpgCode = IndrReg.IpgCode)" _
+     & " inner join VTypMast on IndrHdr.IhrVtmCode = VTypMast.VtmCode)" _
+     & " inner join ServMast on IndrRcpt.IrcSrvCode = ServMast.SrvCode" _
+     & " where IrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and IrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor payment
+'If chkFByIndrPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IphVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+'     & ",IphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrPymtHdr" _
+'     & " inner join VTypMast on IndrPymtHdr.IphVtmCode = VTypMast.VtmCode" _
+'     & " where IphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor refund
+'If chkFByIndrRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IfhVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+'     & ",IfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRefdHdr" _
+'     & " inner join VTypMast on IndrRefdHdr.IfhVtmCode = VTypMast.VtmCode" _
+'     & " where IfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor bill payment
+If chkFByIndrBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select IbhVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+     & ",IblAmtAftDisc as TrnAmtAftDisc" _
+     & ",IblDiscAmt as TrnDiscAmt" _
+     & ",IblAdvAmt+IblDpogAmt+IblDepoAmt as TrnTotRecdAmt" _
+     & ",IblRfugAmt+IblRefuAmt as TrnTotRefdAmt" _
+     & ",IblBalAmt as TrnBalAmt" _
+     & " from (((IndrBill" _
+     & " inner join IndrBlHdr on IndrBill.IblCode = IndrBlHdr.IbhCode)" _
+     & " inner join IndrReg on IndrBlHdr.IbhIpgCode = IndrReg.IpgCode)" _
+     & " inner join VTypMast on IndrBlHdr.IbhVtmCode = VTypMast.VtmCode)" _
+     & " inner join ServMast on IndrBill.IblSrvCode = ServMast.SrvCode" _
+     & " where IblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IblCode > 0" _
+     & IIf(mQryPttCode > 0, " and IblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IbhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor bill refund
+'If chkFByIndrBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IbfhVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+'     & ",IbfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrBlRefdHdr" _
+'     & " inner join VTypMast on IndrBlRefdHdr.IbfhVtmCode = VTypMast.VtmCode" _
+'     & " where IbfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IbfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IbfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IbfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c payment
+'If chkFByIndrRgPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgtVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+'     & ",IgtDpogAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgPymt" _
+'     & " inner join VTypMast on IndrRgPymt.IgtVtmCode = VTypMast.VtmCode" _
+'     & " where IgtDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgtCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgtPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgtVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c refund
+'If chkFByIndrRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select IgfVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+'     & ",IgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgRefd" _
+'     & " inner join VTypMast on IndrRgRefd.IgfVtmCode = VTypMast.VtmCode" _
+'     & " where IgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab receipt received amount ------------------------------------------------------------------------------
+If chkFByLabRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select LhrVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+     & ",LrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",LrcDiscAmt as TrnDiscAmt" _
+     & ",LrcAdvAmt+LrcRecdAmt+LrcDepoAmt as TrnTotRecdAmt" _
+     & ",LrcRefuAmt as TrnTotRefdAmt" _
+     & ",LrcBalAmt as TrnBalAmt" _
+     & " from ((LabRcpt" _
+     & " inner join LabHdr on LabRcpt.LrcCode = LabHdr.LhrCode)" _
+     & " inner join VTypMast on LabHdr.LhrVtmCode = VTypMast.VtmCode)" _
+     & " inner join ServMast on LabRcpt.LrcSrvCode = ServMast.SrvCode" _
+     & " where LrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and LrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and LrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and LhrCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and LrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and LhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem lab payment
+'If chkFByLabPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LphVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+'     & ",LphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabPymtHdr" _
+'     & " inner join VTypMast on LabPymtHdr.LphVtmCode = VTypMast.VtmCode" _
+'     & " where LphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab refund
+'If chkFByLabRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select LfhVtmCode as TrnVtmCode,VTypMast.VtmName as TrnVtmName" _
+'     & ",LfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabRefdHdr" _
+'     & " inner join VTypMast on LabRefdHdr.LfhVtmCode = VTypMast.VtmCode" _
+'     & " where LfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem ----------------------------------
+mQryStr = mQryStr & ")"
+mQryStr = mQryStr & " as t1 group by t1.TrnVtmName,t1.TrnVtmCode" _
+ & " order by t1.TrnVtmName,t1.TrnVtmCode"
+
+datRecset.open mQryStr, dbComDatabase, adOpenKeyset, adLockReadOnly
+
+End Sub
+
+Private Sub CreateDetailedSrmyList()
+Dim mQryStr As String
+
+clsListStru.AddFields mExpr:="tTrnSmryId", mAttrib:=cFAT_SYSTEM
+clsListStru.AddFields mExpr:="TrnType", mAttrib:=cFAT_SYSTEM
+clsListStru.AddFields mExpr:="VtmSysCode", mAttrib:=cFAT_SYSTEM
+clsListStru.AddFields mExpr:="TrnCode", mAttrib:=cFAT_SYSTEM
+clsListStru.AddFields mExpr:="VtmName", mTitle:="Voucher", mAlign:=1, mWidth:=2250, mShowItem:=True
+clsListStru.AddFields mExpr:="TrnVchNo", mTitle:="Vchr.No", mAlign:=7, mWidth:=1250, mShowItem:=True
+clsListStru.AddFields mExpr:="TrnDate", mTitle:="Date", mAlign:=1, mWidth:=1300, mShowItem:=True
+' --------------------------------------
+clsListStru.AddFields mExpr:="PttCode", mAttrib:=cFAT_SYSTEM
+clsListStru.AddFields mExpr:="PttName", mTitle:="Patient Name", mAlign:=1, mWidth:=2500, mShowItem:=True
+clsListStru.AddFields mExpr:="PttRegNo", mTitle:="Reg.No", mAlign:=7, mWidth:=1250, mShowItem:=True
+' --------------------------------------
+clsListStru.AddFields mExpr:="TrnAmtAftDisc", mTitle:="Bill Amt", mAlign:=7, mWidth:=1250, mShowItem:=True
+clsListStru.AddFields mExpr:="TrnDiscAmt", mTitle:="Discount", mAlign:=7, mWidth:=1250, mShowItem:=True
+clsListStru.AddFields mExpr:="TrnTotRecdAmt", mTitle:="Recd.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRefdAmt", mTitle:="Refund Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnBalAmt", mTitle:="Bal.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+' --------------------------------------
+clsListStru.AddFields mExpr:="PttRefName", mTitle:="Care of", mAlign:=1, mWidth:=2000, mShowItem:=True
+clsListStru.AddFields mExpr:="PttAddr", mTitle:="Address", mAlign:=1, mWidth:=2000, mShowItem:=True
+clsListStru.AddFields mExpr:="PatAraName", mTitle:="Area", mAlign:=1, mWidth:=1500, mShowItem:=True
+clsListStru.AddFields mExpr:="PatStnName", mTitle:="Station", mAlign:=1, mWidth:=1500, mShowItem:=True
+clsListStru.AddFields mExpr:="PatPcgName", mTitle:="Category", mAlign:=1, mWidth:=2000, mShowItem:=True
+
+mQryStr = "Select *" _
+ & ",format(TrnDate,'yyyymmdd')+format(TrnVtmCode,'" & cLONGCODESTRFMT & "')+format(TrnCode,'" & CStr(cLONGCODESTRFMT) & "') as tTrnSmryId"
+mQryStr = mQryStr & " from (("
+Rem reserved query string producing no records
+mQryStr = mQryStr & "Select " _
+ & "'Opg' as TrnType" _
+ & ",OpgCode as TrnCode" _
+ & ",OpgDate as TrnDate" _
+ & ",OpgPttCode as TrnPttCode" _
+ & ",OpgVtmCode as TrnVtmCode" _
+ & ",OpgVchNo as TrnVchNo" _
+ & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+ & ",OpgDiscAmt as TrnDiscAmt" _
+ & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+ & ",OpgRfugAmt as TrnTotRefdAmt" _
+ & ",0 as TrnBalAmt" _
+ & " from OutdReg" _
+ & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+ & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+ & " and OpgCode > 0 and True = False" _
+ & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+ & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+ & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+ & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+ & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+Rem outdoor registration --------------------------------------------------------------------------------------
+If chkFByOutdReg.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select " _
+     & "'Opg' as TrnType" _
+     & ",OpgCode as TrnCode" _
+     & ",OpgDate as TrnDate" _
+     & ",OpgPttCode as TrnPttCode" _
+     & ",OpgVtmCode as TrnVtmCode" _
+     & ",OpgVchNo as TrnVchNo" _
+     & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+     & ",OpgDiscAmt as TrnDiscAmt" _
+     & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+     & ",OpgRfugAmt as TrnTotRefdAmt" _
+     & ",0 as TrnBalAmt" _
+     & " from OutdReg" _
+     & " inner join ServMast on OutdReg.OpgSrvCode = ServMast.SrvCode" _
+     & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OpgCode > 0" _
+     & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+End If
+'Rem outdoor reg.refund
+'If chkFByOutdRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Ogf' as TrnType" _
+'     & ",OgfCode as TrnCode" _
+'     & ",OgfDate as TrnDate" _
+'     & ",OgfPttCode as TrnPttCode" _
+'     & ",OgfVtmCode as TrnVtmCode" _
+'     & ",OgfVchNo as TrnVchNo" _
+'     & ",OgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRgRefd" _
+'     & " inner join OutdReg on OutdRgRefd.OgfOpgCode = OutdReg.OpgCode" _
+'     & " where OgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor receipt received amount
+If chkFByOutdRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select " _
+     & "'Orc' as TrnType" _
+     & ",OhrCode as TrnCode" _
+     & ",OhrDate as TrnDate" _
+     & ",OhrPttCode as TrnPttCode" _
+     & ",OhrVtmCode as TrnVtmCode" _
+     & ",OhrVchNo as TrnVchNo" _
+     & ",OhrAmtAftDisc as TrnAmtAftDisc" _
+     & ",OhrDiscAmt as TrnDiscAmt" _
+     & ",OhrAdvAmt+OhrRecdAmt+OhrDepoAmt as TrnTotRecdAmt" _
+     & ",OhrRefuAmt as TrnTotRefdAmt" _
+     & ",OhrBalAmt as TrnBalAmt" _
+     & " from OutdHdr" _
+     & " inner join OutdReg on OutdHdr.OhrOpgCode = OutdReg.OpgCode" _
+     & " where OhrDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OhrCode > 0" _
+     & IIf(mQryPttCode > 0, " and OhrPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+     & IIf(mQryVtmCode > 0, " and OhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor payment
+'If chkFByOutdPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Oph' as TrnType" _
+'     & ",OphCode as TrnCode" _
+'     & ",OphDate as TrnDate" _
+'     & ",OphPttCode as TrnPttCode" _
+'     & ",OphVtmCode as TrnVtmCode" _
+'     & ",OphVchNo as TrnVchNo" _
+'     & ",OphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdPymtHdr" _
+'     & " where OphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor refund
+'If chkFByOutdRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Ofh' as TrnType" _
+'     & ",OfhCode as TrnCode" _
+'     & ",OfhDate as TrnDate" _
+'     & ",OfhPttCode as TrnPttCode" _
+'     & ",OfhVtmCode as TrnVtmCode" _
+'     & ",OfhVchNo as TrnVchNo" _
+'     & ",OfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRefdHdr" _
+'     & " where OfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor bill payment
+If chkFByOutdBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select " _
+     & "'Obl' as TrnType" _
+     & ",ObhCode as TrnCode" _
+     & ",ObhDate as TrnDate" _
+     & ",ObhPttCode as TrnPttCode" _
+     & ",ObhVtmCode as TrnVtmCode" _
+     & ",ObhVchNo as TrnVchNo" _
+     & ",ObhAmtAftDisc as TrnAmtAftDisc" _
+     & ",ObhDiscAmt as TrnDiscAmt" _
+     & ",ObhDepoAmt as TrnTotRecdAmt" _
+     & ",ObhRefuAmt as TrnTotRefdAmt" _
+     & ",ObhBalAmt as TrnBalAmt" _
+     & " from OutdBlHdr" _
+     & " inner join OutdReg on OutdBlHdr.ObhOpgCode = OutdReg.OpgCode" _
+     & " where ObhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and ObhCode > 0" _
+     & IIf(mQryPttCode > 0, " and ObhPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+     & IIf(mQryVtmCode > 0, " and ObhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor bill refund
+'If chkFByOutdBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Obfh' as TrnType" _
+'     & ",ObfhCode as TrnCode" _
+'     & ",ObfhDate as TrnDate" _
+'     & ",ObfhPttCode as TrnPttCode" _
+'     & ",ObfhVtmCode as TrnVtmCode" _
+'     & ",ObfhVchNo as TrnVchNo" _
+'     & ",ObfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdBlRefdHdr" _
+'     & " where ObfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and ObfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and ObfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and ObfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor advance -----------------------------------------------------------------------------------------
+'If chkFByIndrReg.Value = vbChecked = True Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Ipg' as TrnType" _
+'     & ",IpgCode as TrnCode" _
+'     & ",IpgDate as TrnDate" _
+'     & ",IpgPttCode as TrnPttCode" _
+'     & ",IpgVtmCode as TrnVtmCode" _
+'     & ",IpgVchNo as TrnVchNo" _
+'     & ",IpgAdvAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrReg" _
+'     & " where IpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IpgCode > 0 and IpgAdvAmt > 0" _
+'     & IIf(mQryPttCode > 0, " and IpgPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IpgVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor receipt received amount
+If chkFByIndrRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select " _
+     & "'Irc' as TrnType" _
+     & ",IhrCode as TrnCode" _
+     & ",IhrDate as TrnDate" _
+     & ",IhrPttCode as TrnPttCode" _
+     & ",IhrVtmCode as TrnVtmCode" _
+     & ",IhrVchNo as TrnVchNo" _
+     & ",IhrAmtAftDisc as TrnAmtAftDisc" _
+     & ",IhrDiscAmt as TrnDiscAmt" _
+     & ",IhrAdvAmt+IhrRecdAmt+IhrDepoAmt as TrnTotRecdAmt" _
+     & ",IhrRefuAmt as TrnTotRefdAmt" _
+     & ",IhrBalAmt as TrnBalAmt" _
+     & " from IndrHdr" _
+     & " inner join IndrReg on IndrHdr.IhrIpgCode = IndrReg.IpgCode" _
+     & " where IhrDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IhrCode > 0" _
+     & IIf(mQryPttCode > 0, " and IhrPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+     & IIf(mQryVtmCode > 0, " and IhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor payment
+'If chkFByIndrPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Iph' as TrnType" _
+'     & ",IphCode as TrnCode" _
+'     & ",IphDate as TrnDate" _
+'     & ",IphPttCode as TrnPttCode" _
+'     & ",IphVtmCode as TrnVtmCode" _
+'     & ",IphVchNo as TrnVchNo" _
+'     & ",IphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrPymtHdr" _
+'     & " where IphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor refund
+'If chkFByIndrRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Ifh' as TrnType" _
+'     & ",IfhCode as TrnCode" _
+'     & ",IfhDate as TrnDate" _
+'     & ",IfhPttCode as TrnPttCode" _
+'     & ",IfhVtmCode as TrnVtmCode" _
+'     & ",IfhVchNo as TrnVchNo" _
+'     & ",IfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRefdHdr" _
+'     & " where IfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor bill payment
+If chkFByIndrBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select " _
+     & "'Ibl' as TrnType" _
+     & ",IbhCode as TrnCode" _
+     & ",IbhDate as TrnDate" _
+     & ",IbhPttCode as TrnPttCode" _
+     & ",IbhVtmCode as TrnVtmCode" _
+     & ",IbhVchNo as TrnVchNo" _
+     & ",IbhAmtAftDisc as TrnAmtAftDisc" _
+     & ",IbhDiscAmt as TrnDiscAmt" _
+     & ",IbhAdvAmt+IbhDpogAmt+IbhDepoAmt as TrnTotRecdAmt" _
+     & ",IbhRfugAmt+IbhRefuAmt as TrnTotRefdAmt" _
+     & ",IbhBalAmt as TrnBalAmt" _
+     & " from IndrBlHdr" _
+     & " inner join IndrReg on IndrBlHdr.IbhIpgCode = IndrReg.IpgCode" _
+     & " where IbhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IbhCode > 0" _
+     & IIf(mQryPttCode > 0, " and IbhPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+     & IIf(mQryVtmCode > 0, " and IbhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor bill refund
+'If chkFByIndrBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Ibfh' as TrnType" _
+'     & ",IbfhCode as TrnCode" _
+'     & ",IbfhDate as TrnDate" _
+'     & ",IbfhPttCode as TrnPttCode" _
+'     & ",IbfhVtmCode as TrnVtmCode" _
+'     & ",IbfhVchNo as TrnVchNo" _
+'     & ",IbfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrBlRefdHdr" _
+'     & " where IbfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IbfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IbfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IbfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c payment
+'If chkFByIndrRgPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Igt' as TrnType" _
+'     & ",IgtCode as TrnCode" _
+'     & ",IgtDate as TrnDate" _
+'     & ",IgtPttCode as TrnPttCode" _
+'     & ",IgtVtmCode as TrnVtmCode" _
+'     & ",IgtVchNo as TrnVchNo" _
+'     & ",IgtDpogAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgPymt" _
+'     & " where IgtDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgtCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgtPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgtVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c refund
+'If chkFByIndrRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Igf' as TrnType" _
+'     & ",IgfCode as TrnCode" _
+'     & ",IgfDate as TrnDate" _
+'     & ",IgfPttCode as TrnPttCode" _
+'     & ",IgfVtmCode as TrnVtmCode" _
+'     & ",IgfVchNo as TrnVchNo" _
+'     & ",IgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgRefd" _
+'     & " where IgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab receipt received amount ------------------------------------------------------------------------------
+If chkFByLabRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select " _
+     & "'Lrc' as TrnType" _
+     & ",LhrCode as TrnCode" _
+     & ",LhrDate as TrnDate" _
+     & ",LhrPttCode as TrnPttCode" _
+     & ",LhrVtmCode as TrnVtmCode" _
+     & ",LhrVchNo as TrnVchNo" _
+     & ",LhrAmtAftDisc as TrnAmtAftDisc" _
+     & ",LhrDiscAmt as TrnDiscAmt" _
+     & ",LhrAdvAmt+LhrRecdAmt+LhrDepoAmt as TrnTotRecdAmt" _
+     & ",LhrRefuAmt as TrnTotRefdAmt" _
+     & ",LhrBalAmt as TrnBalAmt" _
+     & " from LabHdr" _
+     & " where LhrDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and LhrCode > 0" _
+     & IIf(mQryPttCode > 0, " and LhrPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and LhrCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+     & IIf(mQryVtmCode > 0, " and LhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem lab payment
+'If chkFByLabPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Lph' as TrnType" _
+'     & ",LphCode as TrnCode" _
+'     & ",LphDate as TrnDate" _
+'     & ",LphPttCode as TrnPttCode" _
+'     & ",LphVtmCode as TrnVtmCode" _
+'     & ",LphVchNo as TrnVchNo" _
+'     & ",LphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabPymtHdr" _
+'     & " where LphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab refund
+'If chkFByLabRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Lfh' as TrnType" _
+'     & ",LfhCode as TrnCode" _
+'     & ",LfhDate as TrnDate" _
+'     & ",LfhPttCode as TrnPttCode" _
+'     & ",LfhVtmCode as TrnVtmCode" _
+'     & ",LfhVchNo as TrnVchNo" _
+'     & ",LfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabRefdHdr" _
+'     & " where LfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem ----------------------------------
+mQryStr = mQryStr & ") as t1"
+mQryStr = mQryStr & " inner join (((PatMast ptt" _
+ & " inner join AreaMast ara on ptt.PttAraCode = ara.AraCode)" _
+ & " inner join StsnMast stn on ptt.PttStnCode = stn.StnCode)" _
+ & " inner join PatCatgMst pcg on ptt.PttPcgCode = pcg.PcgCode)" _
+ & " on t1.TrnPttCode = ptt.PttCode)" _
+ & " inner join VTypMast vtm on t1.TrnVtmCode = vtm.VtmCode" _
+ & " order by t1.TrnDate,t1.TrnVtmCode,t1.TrnCode"
+
+datRecset.open mQryStr, dbComDatabase, adOpenKeyset, adLockReadOnly
+
+End Sub
+
+Private Sub CreateExpandedSrmyList()
+Dim mQryStr As String
+
+clsListStru.AddFields mExpr:="tTrnSmryId", mAttrib:=cFAT_SYSTEM
+clsListStru.AddFields mExpr:="TrnType", mAttrib:=cFAT_SYSTEM
+clsListStru.AddFields mExpr:="VtmSysCode", mAttrib:=cFAT_SYSTEM
+clsListStru.AddFields mExpr:="TrnCode", mAttrib:=cFAT_SYSTEM
+clsListStru.AddFields mExpr:="VtmName", mTitle:="Voucher", mAlign:=1, mWidth:=2250, mShowItem:=True
+clsListStru.AddFields mExpr:="TrnVchNo", mTitle:="Vchr.No", mAlign:=7, mWidth:=1250, mShowItem:=True
+clsListStru.AddFields mExpr:="TrnDate", mTitle:="Date", mAlign:=1, mWidth:=1300, mShowItem:=True
+' --------------------------------------
+clsListStru.AddFields mExpr:="PttCode", mAttrib:=cFAT_SYSTEM
+clsListStru.AddFields mExpr:="PttName", mTitle:="Patient Name", mAlign:=1, mWidth:=2500, mShowItem:=True
+clsListStru.AddFields mExpr:="PttRegNo", mTitle:="Reg.No", mAlign:=7, mWidth:=1250, mShowItem:=True
+' --------------------------------------
+clsListStru.AddFields mExpr:="TrnSrvName", mTitle:="Service Name", mAlign:=1, mWidth:=2500, mShowItem:=True
+' --------------------------------------
+clsListStru.AddFields mExpr:="TrnAmtAftDisc", mTitle:="Bill Amt", mAlign:=7, mWidth:=1250, mShowItem:=True
+clsListStru.AddFields mExpr:="TrnDiscAmt", mTitle:="Discount", mAlign:=7, mWidth:=1250, mShowItem:=True
+clsListStru.AddFields mExpr:="TrnTotRecdAmt", mTitle:="Recd.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnTotRefdAmt", mTitle:="Refund Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+clsListStru.AddFields mExpr:="TrnBalAmt", mTitle:="Bal.Amt", mShowItem:=True, mAlign:=7, mWidth:=1500
+' --------------------------------------
+clsListStru.AddFields mExpr:="PttRefName", mTitle:="Care of", mAlign:=1, mWidth:=2000, mShowItem:=True
+clsListStru.AddFields mExpr:="PttAddr", mTitle:="Address", mAlign:=1, mWidth:=2000, mShowItem:=True
+clsListStru.AddFields mExpr:="PatAraName", mTitle:="Area", mAlign:=1, mWidth:=1500, mShowItem:=True
+clsListStru.AddFields mExpr:="PatStnName", mTitle:="Station", mAlign:=1, mWidth:=1500, mShowItem:=True
+clsListStru.AddFields mExpr:="PatPcgName", mTitle:="Category", mAlign:=1, mWidth:=2000, mShowItem:=True
+
+mQryStr = "Select *" _
+ & ",format(TrnDate,'yyyymmdd')+format(TrnVtmCode,'" & cLONGCODESTRFMT & "')+format(TrnCode,'" & CStr(cLONGCODESTRFMT) & "') as tTrnSmryId"
+mQryStr = mQryStr & " from (("
+Rem reserved query string producing no records
+mQryStr = mQryStr & "Select " _
+ & "'Opg' as TrnType" _
+ & ",OpgCode as TrnCode" _
+ & ",OpgDate as TrnDate" _
+ & ",OpgSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+ & ",OpgPttCode as TrnPttCode" _
+ & ",OpgVtmCode as TrnVtmCode" _
+ & ",OpgVchNo as TrnVchNo" _
+ & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+ & ",OpgDiscAmt as TrnDiscAmt" _
+ & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+ & ",OpgRfugAmt as TrnTotRefdAmt" _
+ & ",0 as TrnBalAmt" _
+ & " from OutdReg" _
+ & " inner join ServMast on OutdReg.OpgSrvCode=ServMast.SrvCode" _
+ & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+ & " and OpgCode > 0 and 0 = 1" _
+ & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+ & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+ & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+ & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+ & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+Rem outdoor registration --------------------------------------------------------------------------------------
+If chkFByOutdReg.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select " _
+     & "'Opg' as TrnType" _
+     & ",OpgCode as TrnCode" _
+     & ",OpgDate as TrnDate" _
+     & ",OpgSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",OpgPttCode as TrnPttCode" _
+     & ",OpgVtmCode as TrnVtmCode" _
+     & ",OpgVchNo as TrnVchNo" _
+     & ",OpgAmtAftDisc as TrnAmtAftDisc" _
+     & ",OpgDiscAmt as TrnDiscAmt" _
+     & ",OpgAmtAftDisc as TrnTotRecdAmt" _
+     & ",OpgRfugAmt as TrnTotRefdAmt" _
+     & ",0 as TrnBalAmt" _
+     & " from OutdReg" _
+     & " inner join ServMast on OutdReg.OpgSrvCode=ServMast.SrvCode" _
+     & " where OpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OpgCode > 0" _
+     & IIf(mQryPttCode > 0, " and OpgPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OpgSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OpgVtmCode = " & CStr(mQryVtmCode), "")
+End If
+'Rem outdoor reg.refund
+'If chkFByOutdRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Ogf' as TrnType" _
+'     & ",OgfCode as TrnCode" _
+'     & ",OgfDate as TrnDate" _
+'     & ",OgfVtmCode * - 1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",OgfPttCode as TrnPttCode" _
+'     & ",OgfVtmCode as TrnVtmCode" _
+'     & ",OgfVchNo as TrnVchNo" _
+'     & ",OgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from (OutdRgRefd" _
+'     & " inner join OutdReg on OutdRgRefd.OgfOpgCode = OutdReg.OpgCode)" _
+'     & " inner join VTypMast on OutdRgRefd.OgfVtmCode = VTypMast.VtmCode" _
+'     & " where OgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor receipt received amount
+If chkFByOutdRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select " _
+     & "'Orc' as TrnType" _
+     & ",OrcCode as TrnCode" _
+     & ",OrcDate as TrnDate" _
+     & ",OrcSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",OrcPttCode as TrnPttCode" _
+     & ",OhrVtmCode as TrnVtmCode" _
+     & ",OhrVchNo as TrnVchNo" _
+     & ",OrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",OrcDiscAmt as TrnDiscAmt" _
+     & ",OrcAdvAmt+OrcRecdAmt+OrcDepoAmt as TrnTotRecdAmt" _
+     & ",OrcRefuAmt as TrnTotRefdAmt" _
+     & ",OrcBalAmt as TrnBalAmt" _
+     & " from ((OutdRcpt" _
+     & " inner join OutdHdr on OutdRcpt.OrcCode=OutdHdr.OhrCode)" _
+     & " inner join OutdReg on OutdHdr.OhrOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdRcpt.OrcSrvCode=ServMast.SrvCode" _
+     & " where OrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and OrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and OhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor payment
+'If chkFByOutdPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Oph' as TrnType" _
+'     & ",OphCode as TrnCode" _
+'     & ",OphDate as TrnDate" _
+'     & ",OphVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",OphPttCode as TrnPttCode" _
+'     & ",OphVtmCode as TrnVtmCode" _
+'     & ",OphVchNo as TrnVchNo" _
+'     & ",OphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdPymtHdr" _
+'     & " inner join VTypMast on OutdPymtHdr.OphVtmCode = VTypMast.VtmCode" _
+'     & " where OphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OphVtmCode = " & CStr(mQryVtmCode), "")
+'     Rem & ",-111 as TrnSrvCode,'Outdoor Rcpt Payment' as TrnSrvName"
+'End If
+Rem outdoor refund
+'If chkFByOutdRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Ofh' as TrnType" _
+'     & ",OfhCode as TrnCode" _
+'     & ",OfhDate as TrnDate" _
+'     & ",OfhVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",OfhPttCode as TrnPttCode" _
+'     & ",OfhVtmCode as TrnVtmCode" _
+'     & ",OfhVchNo as TrnVchNo" _
+'     & ",OfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdRefdHdr" _
+'     & " inner join VTypMast on OutdRefdHdr.OfhVtmCode = VTypMast.VtmCode" _
+'     & " where OfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and OfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and OfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and OfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem outdoor bill payment
+If chkFByOutdBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select " _
+     & "'Obl' as TrnType" _
+     & ",OblCode as TrnCode" _
+     & ",OblDate as TrnDate" _
+     & ",OblSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",OblPttCode as TrnPttCode" _
+     & ",ObhVtmCode as TrnVtmCode" _
+     & ",ObhVchNo as TrnVchNo" _
+     & ",OblAmtAftDisc as TrnAmtAftDisc" _
+     & ",OblDiscAmt as TrnDiscAmt" _
+     & ",OblDepoAmt as TrnTotRecdAmt" _
+     & ",OblRefuAmt as TrnTotRefdAmt" _
+     & ",OblBalAmt as TrnBalAmt" _
+     & " from ((OutdBill" _
+     & " inner join OutdBlHdr on OutdBill.OblCode=OutdBlHdr.ObhCode)" _
+     & " inner join OutdReg on OutdBlHdr.ObhOpgCode = OutdReg.OpgCode)" _
+     & " inner join ServMast on OutdBill.OblSrvCode=ServMast.SrvCode" _
+     & " where OblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and OblCode > 0" _
+     & IIf(mQryPttCode > 0, " and OblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and OpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and OblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and ObhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem outdoor bill refund
+'If chkFByOutdBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Obfh' as TrnType" _
+'     & ",ObfhCode as TrnCode" _
+'     & ",ObfhDate as TrnDate" _
+'     & ",ObfhVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",ObfhPttCode as TrnPttCode" _
+'     & ",ObfhVtmCode as TrnVtmCode" _
+'     & ",ObfhVchNo as TrnVchNo" _
+'     & ",ObfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from OutdBlRefdHdr" _
+'     & " inner join VTypMast on OutdBlRefdHdr.ObfhVtmCode = VTypMast.VtmCode" _
+'     & " where ObfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and ObfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and ObfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and ObfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor advance -----------------------------------------------------------------------------------------
+'If chkFByIndrReg.Value = vbChecked = True Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Ipg' as TrnType" _
+'     & ",IpgCode as TrnCode" _
+'     & ",IpgDate as TrnDate" _
+'     & ",IpgVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IpgPttCode as TrnPttCode" _
+'     & ",IpgVtmCode as TrnVtmCode" _
+'     & ",IpgVchNo as TrnVchNo" _
+'     & ",IpgAdvAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrReg" _
+'     & " inner join VTypMast on IndrReg.IpgVtmCode = VTypMast.VtmCode" _
+'     & " where IpgDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IpgCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IpgPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IpgVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor receipt received amount
+If chkFByIndrRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select " _
+     & "'Irc' as TrnType" _
+     & ",IrcCode as TrnCode" _
+     & ",IrcDate as TrnDate" _
+     & ",IrcSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",IrcPttCode as TrnPttCode" _
+     & ",IhrVtmCode as TrnVtmCode" _
+     & ",IhrVchNo as TrnVchNo" _
+     & ",IrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",IrcDiscAmt as TrnDiscAmt" _
+     & ",IrcAdvAmt+IrcRecdAmt+IrcDepoAmt as TrnTotRecdAmt" _
+     & ",IrcRefuAmt as TrnTotRefdAmt" _
+     & ",IrcBalAmt as TrnBalAmt" _
+     & " from ((IndrRcpt" _
+     & " inner join IndrHdr on IndrRcpt.IrcCode=IndrHdr.IhrCode)" _
+     & " inner join IndrReg on IndrHdr.IhrIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrRcpt.IrcSrvCode = ServMast.SrvCode" _
+     & " where IrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and IrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor payment
+'If chkFByIndrPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Iph' as TrnType" _
+'     & ",IphCode as TrnCode" _
+'     & ",IphDate as TrnDate" _
+'     & ",IphVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IphPttCode as TrnPttCode" _
+'     & ",IphVtmCode as TrnVtmCode" _
+'     & ",IphVchNo as TrnVchNo" _
+'     & ",IphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrPymtHdr" _
+'     & " inner join VTypMast on IndrPymtHdr.IphVtmCode = VTypMast.VtmCode" _
+'     & " where IphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IphVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor refund
+'If chkFByIndrRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Ifh' as TrnType" _
+'     & ",IfhCode as TrnCode" _
+'     & ",IfhDate as TrnDate" _
+'     & ",IfhVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IfhPttCode as TrnPttCode" _
+'     & ",IfhVtmCode as TrnVtmCode" _
+'     & ",IfhVchNo as TrnVchNo" _
+'     & ",IfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRefdHdr" _
+'     & " inner join VTypMast on IndrRefdHdr.IfhVtmCode = VTypMast.VtmCode" _
+'     & " where IfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor bill payment
+If chkFByIndrBill.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select " _
+     & "'Ibl' as TrnType" _
+     & ",IblCode as TrnCode" _
+     & ",IblDate as TrnDate" _
+     & ",IblSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",IblPttCode as TrnPttCode" _
+     & ",IbhVtmCode as TrnVtmCode" _
+     & ",IbhVchNo as TrnVchNo" _
+     & ",IblAmtAftDisc as TrnAmtAftDisc" _
+     & ",IblDiscAmt as TrnDiscAmt" _
+     & ",IblAdvAmt+IblDpogAmt+IblDepoAmt as TrnTotRecdAmt" _
+     & ",IblRfugAmt+IblRefuAmt as TrnTotRefdAmt" _
+     & ",IblBalAmt as TrnBalAmt" _
+     & " from ((IndrBill" _
+     & " inner join IndrBlHdr on IndrBill.IblCode=IndrBlHdr.IbhCode)" _
+     & " inner join IndrReg on IndrBlHdr.IbhIpgCode = IndrReg.IpgCode)" _
+     & " inner join ServMast on IndrBill.IblSrvCode=ServMast.SrvCode" _
+     & " where IblDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and IblCode > 0" _
+     & IIf(mQryPttCode > 0, " and IblPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and IpgCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and IblSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and IbhVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem indoor bill refund
+'If chkFByIndrBlRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Ibfh' as TrnType" _
+'     & ",IbfhCode as TrnCode" _
+'     & ",IbfhDate as TrnDate" _
+'     & ",IbfhVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IbfhPttCode as TrnPttCode" _
+'     & ",IbfhVtmCode as TrnVtmCode" _
+'     & ",IbfhVchNo as TrnVchNo" _
+'     & ",IbfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrBlRefdHdr" _
+'     & " inner join VTypMast on IndrBlRefdHdr.IbfhVtmCode = VTypMast.VtmCode" _
+'     & " where IbfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IbfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IbfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IbfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c payment
+'If chkFByIndrRgPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Igt' as TrnType" _
+'     & ",IgtCode as TrnCode" _
+'     & ",IgtDate as TrnDate" _
+'     & ",IgtVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IgtPttCode as TrnPttCode" _
+'     & ",IgtVtmCode as TrnVtmCode" _
+'     & ",IgtVchNo as TrnVchNo" _
+'     & ",IgtDpogAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgPymt" _
+'     & " inner join VTypMast on IndrRgPymt.IgtVtmCode = VTypMast.VtmCode" _
+'     & " where IgtDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgtCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgtPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgtVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem indoor on a/c refund
+'If chkFByIndrRgRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Igf' as TrnType" _
+'     & ",IgfCode as TrnCode" _
+'     & ",IgfDate as TrnDate" _
+'     & ",IgfVtmCode * - 1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",IgfPttCode as TrnPttCode" _
+'     & ",IgfVtmCode as TrnVtmCode" _
+'     & ",IgfVchNo as TrnVchNo" _
+'     & ",IgfRfugAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from IndrRgRefd" _
+'     & " inner join VTypMast on IndrRgRefd.IgfVtmCode = VTypMast.VtmCode" _
+'     & " where IgfDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and IgfCode > 0" _
+'     & IIf(mQryPttCode > 0, " and IgfPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and IgfVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem lab receipt received amount ------------------------------------------------------------------------------
+If chkFByLabRcpt.Value = vbChecked Then
+    mQryStr = mQryStr & " UNION ALL "
+    mQryStr = mQryStr & " Select " _
+     & "'Lrc' as TrnType" _
+     & ",LrcCode as TrnCode" _
+     & ",LrcDate as TrnDate" _
+     & ",LrcSrvCode as TrnSrvCode,ServMast.SrvName as TrnSrvName" _
+     & ",LrcPttCode as TrnPttCode" _
+     & ",LhrVtmCode as TrnVtmCode" _
+     & ",LhrVchNo as TrnVchNo" _
+     & ",LrcAmtAftDisc as TrnAmtAftDisc" _
+     & ",LrcDiscAmt as TrnDiscAmt" _
+     & ",LrcAdvAmt+LrcRecdAmt+LrcDepoAmt as TrnTotRecdAmt" _
+     & ",LrcRefuAmt as TrnTotRefdAmt" _
+     & ",LrcBalAmt as TrnBalAmt" _
+     & " from (LabRcpt" _
+     & " inner join LabHdr on LabRcpt.LrcCode = LabHdr.LhrCode)" _
+     & " inner join ServMast on LabRcpt.LrcSrvCode=ServMast.SrvCode" _
+     & " where LrcDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+     & " and LrcCode > 0" _
+     & IIf(mQryPttCode > 0, " and LrcPttCode = " & CStr(mQryPttCode), "") _
+     & IIf(mQryCDctCode > 0, " and LhrCDctCode = " & CStr(mQryCDctCode), "") _
+     & IIf(mQrySrvCode > 0, " and LrcSrvCode = " & CStr(mQrySrvCode), "") _
+     & IIf(mQrySgpCode > 0, " and SrvSgpCode = " & CStr(mQrySgpCode), "") _
+     & IIf(mQryVtmCode > 0, " and LhrVtmCode = " & CStr(mQryVtmCode), "")
+End If
+Rem lab payment
+'If chkFByLabPymt.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Lph' as TrnType" _
+'     & ",LphCode as TrnCode" _
+'     & ",LphDate as TrnDate" _
+'     & ",LphVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",LphPttCode as TrnPttCode" _
+'     & ",LphVtmCode as TrnVtmCode" _
+'     & ",LphVchNo as TrnVchNo" _
+'     & ",LphDepoAmt as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabPymtHdr" _
+'     & " inner join VTypMast on LabPymtHdr.LphVtmCode = VTypMast.VtmCode" _
+'     & " where LphDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LphCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LphPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LphVtmCode = " & CStr(mQryVtmCode), "")
+'     Rem & ",-111 as TrnSrvCode,'Lab Rcpt Payment' as TrnSrvName"
+'End If
+Rem lab refund
+'If chkFByLabRefd.Value = vbChecked Then
+'    mQryStr = mQryStr & " UNION ALL "
+'    mQryStr = mQryStr & " Select " _
+'     & "'Lfh' as TrnType" _
+'     & ",LfhCode as TrnCode" _
+'     & ",LfhDate as TrnDate" _
+'     & ",LfhVtmCode * -1 as TrnSrvCode,VTypMast.VtmName as TrnSrvName" _
+'     & ",LfhPttCode as TrnPttCode" _
+'     & ",LfhVtmCode as TrnVtmCode" _
+'     & ",LfhVchNo as TrnVchNo" _
+'     & ",LfhRefuAmt * -1 as TrnAmtAftDisc" _
+'     & ",0 as TrnDiscAmt" _
+'     & " from LabRefdHdr" _
+'     & " inner join VTypMast on LabRefdHdr.LfhVtmCode = VTypMast.VtmCode" _
+'     & " where LfhDate between #" & CStr(ToSysDate(Ctod(dtpFromDate.Text))) & "# and #" & CStr(ToSysDate(Ctod(dtpToDate.Text))) & "#" _
+'     & " and LfhCode > 0" _
+'     & IIf(mQryPttCode > 0, " and LfhPttCode = " & CStr(mQryPttCode), "") _
+'     & IIf(mQrySrvCode > 0, " and 0 = 1", "") _
+'     & IIf(mQrySgpCode > 0, " and 0 = 1", "") _
+'     & IIf(mQryVtmCode > 0, " and LfhVtmCode = " & CStr(mQryVtmCode), "")
+'End If
+Rem ----------------------------------
+mQryStr = mQryStr & ") as t1"
+mQryStr = mQryStr & " inner join (((PatMast ptt" _
+ & " inner join AreaMast ara on ptt.PttAraCode = ara.AraCode)" _
+ & " inner join StsnMast stn on ptt.PttStnCode = stn.StnCode)" _
+ & " inner join PatCatgMst pcg on ptt.PttPcgCode = pcg.PcgCode)" _
+ & " on t1.TrnPttCode = ptt.PttCode)" _
+ & " inner join VTypMast vtm on t1.TrnVtmCode = vtm.VtmCode" _
+ & " order by t1.TrnDate,t1.TrnVtmCode,t1.TrnCode"
+
+datRecset.open mQryStr, dbComDatabase, adOpenKeyset, adLockReadOnly
+
+End Sub
+
+Private Function GetActiveControl() As Boolean
+Dim mCnt As Integer
+
+On Error GoTo errhand
+GetActiveControl = False
+If Screen.ActiveForm.Name = Me.Name Then
+    If Screen.ActiveControl.Visible = True And Screen.ActiveControl.Enabled = True Then
+        Set mActiveControl = Screen.ActiveControl
+        GetActiveControl = True
+    End If
+End If
+
+errhand:
+mCnt = mCnt + 1
+If mCnt > 2 Then
+    Exit Function
+End If
+
+End Function
+
+Private Function SetActiveControl() As Boolean
+Dim mCnt As Integer
+
+On Error GoTo errhand
+SetActiveControl = False
+If Screen.ActiveForm.Name = Me.Name And IsEmpty(mActiveControl) = False Then
+    If mActiveControl.Visible = True And mActiveControl.Enabled = True Then
+        mActiveControl.SetFocus
+        SetActiveControl = True
+    End If
+End If
+
+errhand:
+mCnt = mCnt + 1
+If mCnt > 2 Then
+    Exit Function
+End If
+
+End Function
+
+Private Sub Mfgrd1_DblClick()
+Call cmdFormEnter_Click
+End Sub
+
+Private Sub Mfgrd1_GotFocus()
+Mfgrd1.Col = FlexLeftVisibleCol(Mfgrd1)
+Mfgrd1.LeftCol = FlexLeftVisibleCol(Mfgrd1)
+If Mfgrd1.SelectionMode = flexSelectionByRow Then
+    Mfgrd1.ColSel = 0: Mfgrd1.ColSel = Mfgrd1.Cols - 1
+End If
+Call Mfgrd1_RowColChange
+txtSearch1Text.Text = ""
+
+End Sub
+
+Private Sub Mfgrd1_KeyDown(KeyCode As Integer, Shift As Integer)
+Dim srow As Integer, mTrnCode As Long, mTrnSysType As Integer
+
+srow = Mfgrd1.Row
+If Shift = 0 And KeyCode = vbKeyF12 Then
+    fcmbPttRegNo.BoundText = CStr(mQryPttCode)
+    fcmbPttName.BoundText = CStr(mQryPttCode)
+    fcmbCDctName.BoundText = CStr(mQryCDctCode)
+    fcmbSrvName.BoundText = CStr(mQrySrvCode)
+    fcmbSgpName.BoundText = CStr(mQrySgpCode)
+    fcmbVtmName.BoundText = CStr(mQryVtmCode)
+    mskQryPttRegNo.Text = fcmbPttRegNo.Text
+    txtQryPttName.Text = fcmbPttName.Text
+    txtQryCDctName.Text = fcmbCDctName.Text
+    txtQrySrvName.Text = fcmbSrvName.Text
+    txtQrySgpName.Text = fcmbSgpName.Text
+    txtQryVtmName.Text = fcmbVtmName.Text
+    ' ----------------
+    frConfigure.ZOrder
+    frConfigure.Visible = True
+    Mfgrd1.Enabled = False
+    dtpFromDate.SetFocus
+ElseIf MyAddNewKey(Shift, KeyCode) = True Then
+    ''' Call Data_AddEvent
+ElseIf MyDeleteKey(Shift, KeyCode) = True Then
+    If Mfgrd1.Row < Mfgrd1.Rows - 1 And (optDetailed.Value = True Or optExpanded.Value = True) Then
+        'Call Data_DeleteEvent
+    End If
+ElseIf Shift = vbCtrlMask And KeyCode = vbKeySpace Then
+    If srow < Mfgrd1.Rows - 1 And (optDetailed.Value = True Or optExpanded.Value = True) Then
+        mTrnCode = Val(Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("TrnCode")))
+        mTrnSysType = Val(Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("VtmSysCode")))
+        If mTrnCode > 0 Then
+            mEntryAccessed = True
+            mLastRowAccessed = srow
+            Select Case mTrnSysType
+            Case cHMS_VTYPE_OUTDOOR_REG
+                Set frmTrn = New frmOutdoorReg
+            
+            Case cHMS_VTYPE_OUTDOOR_RGREFD
+                Set frmTrn = New frmOutdoorRgRefund
+            
+            Case cHMS_VTYPE_OUTDOOR_RCPT
+                Set frmTrn = New frmOutdoorReceipt
+            
+            Case cHMS_VTYPE_OUTDOOR_PYMT
+                Set frmTrn = New frmOutdoorPymtRcpt
+            
+            Case cHMS_VTYPE_OUTDOOR_REFD
+                Set frmTrn = New frmOutdoorRefdRcpt
+            
+            Case cHMS_VTYPE_OUTDOOR_BILL
+                Set frmTrn = New frmOutdoorBill
+            
+            Case cHMS_VTYPE_INDOOR_REG
+                Set frmTrn = New frmIndoorReg
+            
+            Case cHMS_VTYPE_INDOOR_RCPT
+                Set frmTrn = New frmIndoorReceipt
+            
+            Case cHMS_VTYPE_INDOOR_PYMT
+                Set frmTrn = New frmIndoorPymtRcpt
+            
+            Case cHMS_VTYPE_INDOOR_REFD
+                Set frmTrn = New frmIndoorRefdRcpt
+            
+            Case cHMS_VTYPE_INDOOR_RGPYMT
+                Set frmTrn = New frmIndoorRgPayment
+                
+            Case cHMS_VTYPE_INDOOR_RGREFD
+                Set frmTrn = New frmIndoorRgRefund
+                
+            Case cHMS_VTYPE_INDOOR_BILL
+                Set frmTrn = New frmIndoorBill
+                
+            Case cHMS_VTYPE_INDOOR_BLPYMT
+                Set frmTrn = New frmIndoorBlPayment
+                
+            Case cHMS_VTYPE_INDOOR_BLREFD
+                Set frmTrn = New frmIndoorBlRefund
+                
+            Case cHMS_VTYPE_LAB_RCPT
+                Set frmTrn = New frmLabReceipt
+            
+            Case cHMS_VTYPE_LAB_PYMT
+                Set frmTrn = New frmLabPymtRcpt
+            
+            Case cHMS_VTYPE_LAB_REFD
+                Set frmTrn = New frmLabRefdRcpt
+                
+            Case Else
+                ErrorBox Me.Name & "_Mfgrd1_KeyDown_#4813_[Undefined]"
+                mEntryAccessed = False
+            End Select
+            If Not frmTrn Is Nothing Then
+                frmTrn.RemoteAccessCode = mTrnCode
+                Load frmTrn
+                frmTrn.Show 1
+                Me.ZOrder
+            End If
+            
+        End If
+    End If
+
+End If
+
+End Sub
+
+Private Sub Mfgrd1_KeyPress(KeyAscii As Integer)
+mLastKeyPressed = KeyAscii
+If mMaskKeyPressed = 0 Or mMaskKeyPressed = vbShiftMask Then
+    txtSearch1Text.Text = JoinKeyAscii(txtSearch1Text.Text, KeyAscii)
+    Call txtSearch1Text_InterActiveChange
+End If
+
+End Sub
+
+Private Sub Mfgrd1_RowColChange()
+If datRecset.RecordCount > 0 Then
+    If datRecset.AbsolutePosition <> Mfgrd1.Row - Mfgrd1.FixedRows + 1 Then
+        datRecset.MoveFirst
+        datRecset.Move Mfgrd1.Row - Mfgrd1.FixedRows, 1     ' Mfgrd1.Row is already less by one
+    End If
+End If
+ShowFlexColCursor txtList1Col, Mfgrd1, datRecset
+
+End Sub
+
+Private Sub Mfgrd1_Scroll()
+ShowFlexColCursor txtList1Col, Mfgrd1, datRecset
+End Sub
+
+Private Sub optPatientRegNoWise_GotFocus()
+FlashActiveControl optPatientRegNoWise, True
+End Sub
+
+Private Sub optPatientRegNoWise_LostFocus()
+FlashActiveControl optPatientRegNoWise, False
+End Sub
+
+Private Sub optServiceWise_GotFocus()
+FlashActiveControl optServiceWise, True
+End Sub
+
+Private Sub optServiceWise_LostFocus()
+FlashActiveControl optServiceWise, False
+End Sub
+
+Private Sub Text1_Change()
+
+End Sub
+
+Private Sub txtFromTime1_GotFocus()
+FlashActiveControl txtFromTime1, True
+End Sub
+
+Private Sub txtFromTime1_LostFocus()
+FlashActiveControl txtFromTime1, False
+End Sub
+
+Private Sub txtFromTime1_Validate(Cancel As Boolean)
+txtFromTime1.Text = MinToTime(TimeToMin(txtFromTime1.Text))
+If TimeToMin(txtFromTime1.Text) > cDAYMINUTES Then
+    ErrorBox "Invalid Input !!!"
+    txtFromTime1.SetFocus
+    Cancel = True
+End If
+
+End Sub
+
+Private Sub txtList1Col_DblClick(Index As Integer)
+Call Mfgrd1_DblClick
+End Sub
+
+Private Sub txtList1Col_GotFocus(Index As Integer)
+Mfgrd1.SetFocus
+End Sub
+
+Private Sub txtSearch1Text_InterActiveChange(Optional ByVal mText)
+
+If IsMissing(mText) = True Then ' user is typing is search text box
+    mText = txtSearch1Text.Text
+    SearchRawFlex Mfgrd1, FlexLeftVisibleCol(Mfgrd1), mText
+Else    ' system field search has been requested by programmer
+    If optDetailed.Value = True Or optExpanded.Value = True Then
+        SearchFlex Mfgrd1, clsListStru.GetItemIndex("tTrnSmryId"), mText
+    ElseIf optMonthwise.Value = True Then
+        SearchFlex Mfgrd1, clsListStru.GetItemIndex("TrnYrMonth"), mText
+    ElseIf optDatewise.Value = True Then
+        SearchFlex Mfgrd1, clsListStru.GetItemIndex("TrnDateYMD"), mText
+    ElseIf optPatientNamewise.Value = True Then
+        SearchFlex Mfgrd1, clsListStru.GetItemIndex("PttName"), mText
+    ElseIf optPatientRegNoWise.Value = True Then
+        SearchFlex Mfgrd1, clsListStru.GetItemIndex("PttRegNo"), mText
+    ElseIf optConsDoctorwise.Value = True Then
+        SearchFlex Mfgrd1, clsListStru.GetItemIndex("DctName"), mText
+    ElseIf optServDoctorwise.Value = True Or optServDctrServGrpwise.Value = True Or optServDctrServwise.Value = True Then
+        SearchFlex Mfgrd1, clsListStru.GetItemIndex("DctName"), mText
+    ElseIf optServiceWise.Value = True Then
+        SearchFlex Mfgrd1, clsListStru.GetItemIndex("SrvName"), mText
+    ElseIf optServGrpWise.Value = True Then
+        SearchFlex Mfgrd1, clsListStru.GetItemIndex("SgpName"), mText
+    ElseIf optServGrpNServWise.Value = True Then
+        SearchFlex Mfgrd1, clsListStru.GetItemIndex("SgpName"), mText
+    ElseIf optVTypewise.Value = True Then
+        SearchFlex Mfgrd1, clsListStru.GetItemIndex("VtmName"), mText
+    End If
+End If
+ShowActiveFlexRow Mfgrd1
+
+End Sub
+
+Private Sub txtQryCDctName_Change()
+If fcmbCDctName.CallFromText_Change = False Then
+    fcmbCDctName.CallFromText_Change = True
+    If InterActiveChange(txtQryCDctName) = True Then
+        fcmbCDctName.UserText = Array(txtQryCDctName.Text, txtQryCDctName.SelStart)
+        fcmbCDctName.Show
+        txtQryCDctName.Text = fcmbCDctName.Text
+        mQryCDctCode = Val(fcmbCDctName.BoundText)
+        If fcmbCDctName.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbCDctName.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub txtQryCDctName_GotFocus()
+FlashActiveControl txtQryCDctName, True
+End Sub
+
+Private Sub txtQryCDctName_KeyDown(KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    Call txtQryCDctName_Change
+ElseIf MyAddNewKey(Shift, KeyCode) = True Then
+    Rem not required
+End If
+
+End Sub
+
+Private Sub txtQryCDctName_LostFocus()
+FlashActiveControl txtQryCDctName, False
+End Sub
+
+Private Sub txtQryPttName_Change()
+If fcmbPttName.CallFromText_Change = False Then
+    fcmbPttName.CallFromText_Change = True
+    If InterActiveChange(txtQryPttName) = True Then
+        Call ChkPttNameListFirstTime
+        
+        fcmbPttName.UserText = Array(txtQryPttName.Text, txtQryPttName.SelStart)
+        fcmbPttName.Show
+        txtQryPttName.Text = fcmbPttName.Text
+        mQryPttCode = Val(fcmbPttName.BoundText)
+        fcmbPttRegNo.BoundText = CStr(mQryPttCode)
+        mskQryPttRegNo.Text = fcmbPttRegNo.Text
+        If fcmbPttName.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbPttName.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub ChkPttNameListFirstTime()
+If fcmbPttName.LRecordCount = 0 Then
+    fcmbPttName.mFiltCond = ""
+    fcmbPttName.ReInit
+End If
+
+End Sub
+
+Private Sub txtQryPttName_GotFocus()
+FlashActiveControl txtQryPttName, True
+End Sub
+
+Private Sub txtQryPttName_KeyDown(KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    Call txtQryPttName_Change
+ElseIf MyAddNewKey(Shift, KeyCode) = True Then
+    Rem not required
+End If
+
+End Sub
+
+Private Sub txtQryPttName_LostFocus()
+FlashActiveControl txtQryPttName, False
+End Sub
+
+Private Sub txtQrySgpName_Change()
+If fcmbSgpName.CallFromText_Change = False Then
+    fcmbSgpName.CallFromText_Change = True
+    If InterActiveChange(txtQrySgpName) = True Then
+        fcmbSgpName.UserText = Array(txtQrySgpName.Text, txtQrySgpName.SelStart)
+        fcmbSgpName.Show
+        txtQrySgpName.Text = fcmbSgpName.Text
+        mQrySgpCode = Val(fcmbSgpName.BoundText)
+        If fcmbSgpName.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbSgpName.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub txtQrySgpName_GotFocus()
+FlashActiveControl txtQrySgpName, True
+End Sub
+
+Private Sub txtQrySgpName_KeyDown(KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    Call txtQrySgpName_Change
+End If
+End Sub
+
+Private Sub txtQrySgpName_LostFocus()
+FlashActiveControl txtQrySgpName, False
+End Sub
+
+Private Sub txtQrySgpName_Validate(Cancel As Boolean)
+'Dim mOpgRate As Double, mOpgDiscPer As Double, mOpgInfByPer As Double, mOpgDefByPer As Double
+'
+'If Val(fcmbSgpName.BoundText) <= 0 Then
+'    ErrorBox "Invalid Selection !!!"
+'    txtSgpName.SetFocus
+'    Cancel = True
+'Else
+'    If Val(fcmbSgpName.BoundText) <> mOpgSgpCode_old Or FormAddEditMode = cFORM_ADDMODE Then
+'        Call ChkServRate
+'        Call CalcOpgChg
+'    End If
+'End If
+
+End Sub
+
+Private Sub txtQryVtmName_Change()
+If fcmbVtmName.CallFromText_Change = False Then
+    fcmbVtmName.CallFromText_Change = True
+    If InterActiveChange(txtQryVtmName) = True Then
+        fcmbVtmName.UserText = Array(txtQryVtmName.Text, txtQryVtmName.SelStart)
+        fcmbVtmName.Show
+        txtQryVtmName.Text = fcmbVtmName.Text
+        mQryVtmCode = Val(fcmbVtmName.BoundText)
+        If fcmbVtmName.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbVtmName.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub txtQryVtmName_GotFocus()
+FlashActiveControl txtQryVtmName, True
+End Sub
+
+Private Sub txtQryVtmName_KeyDown(KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    Call txtQryVtmName_Change
+End If
+End Sub
+
+Private Sub txtQryVtmName_LostFocus()
+FlashActiveControl txtQryVtmName, False
+End Sub
+
+Private Sub txtQryVtmName_Validate(Cancel As Boolean)
+'Dim mOpgRate As Double, mOpgDiscPer As Double, mOpgInfByPer As Double, mOpgDefByPer As Double
+'
+'If Val(fcmbVtmName.BoundText) <= 0 Then
+'    ErrorBox "Invalid Selection !!!"
+'    txtVtmName.SetFocus
+'    Cancel = True
+'Else
+'    If Val(fcmbVtmName.BoundText) <> mOpgVtmCode_old Or FormAddEditMode = cFORM_ADDMODE Then
+'        Call ChkServRate
+'        Call CalcOpgChg
+'    End If
+'End If
+
+End Sub
+
+Private Sub txtSearch1Text_GotFocus()
+FlashActiveControl txtSearch1Text, True
+End Sub
+
+Private Sub txtSearch1Text_LostFocus()
+FlashActiveControl txtSearch1Text, False
+End Sub
+
+Private Sub txtQrySrvName_Change()
+If fcmbSrvName.CallFromText_Change = False Then
+    fcmbSrvName.CallFromText_Change = True
+    If InterActiveChange(txtQrySrvName) = True Then
+        fcmbSrvName.UserText = Array(txtQrySrvName.Text, txtQrySrvName.SelStart)
+        fcmbSrvName.Show
+        txtQrySrvName.Text = fcmbSrvName.Text
+        mQrySrvCode = Val(fcmbSrvName.BoundText)
+        If fcmbSrvName.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbSrvName.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub txtQrySrvName_GotFocus()
+FlashActiveControl txtQrySrvName, True
+End Sub
+
+Private Sub txtQrySrvName_KeyDown(KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    Call txtQrySrvName_Change
+End If
+End Sub
+
+Private Sub txtQrySrvName_LostFocus()
+FlashActiveControl txtQrySrvName, False
+End Sub
+
+Private Sub txtQrySrvName_Validate(Cancel As Boolean)
+'Dim mOpgRate As Double, mOpgDiscPer As Double, mOpgInfByPer As Double, mOpgDefByPer As Double
+'
+'If Val(fcmbSrvName.BoundText) <= 0 Then
+'    ErrorBox "Invalid Selection !!!"
+'    txtSrvName.SetFocus
+'    Cancel = True
+'Else
+'    If Val(fcmbSrvName.BoundText) <> mOpgSrvCode_old Or FormAddEditMode = cFORM_ADDMODE Then
+'        Call ChkServRate
+'        Call CalcOpgChg
+'    End If
+'End If
+
+End Sub
+
+Private Sub cmbCRList_GotFocus()
+FlashActiveControl cmbCRList, True
+End Sub
+
+Private Sub cmbCRList_LostFocus()
+FlashActiveControl cmbCRList, False
+End Sub
+
+Private Sub cmbPrintDest_GotFocus()
+FlashActiveControl cmbPrintDest, True
+End Sub
+
+Private Sub cmbPrintDest_LostFocus()
+FlashActiveControl cmbPrintDest, False
+End Sub
+
+Private Sub cmbPrinterList_GotFocus()
+FlashActiveControl cmbPrinterList, True
+End Sub
+
+Private Sub cmbPrinterList_LostFocus()
+FlashActiveControl cmbPrinterList, False
+End Sub
+
+Private Sub mskPrintCopies_GotFocus()
+FlashActiveControl mskPrintCopies, True
+End Sub
+
+Private Sub mskPrintCopies_LostFocus()
+FlashActiveControl mskPrintCopies, False
+End Sub
+
+Private Sub mskPrintCopies_Validate(Cancel As Boolean)
+mskPrintCopies.Text = Val(mskPrintCopies.Text)
+If Val(mskPrintCopies.Text) < 1 Then
+    ErrorBox "Invalid Input !!!"
+    mskPrintCopies.SetFocus
+    Cancel = True
+End If
+
+End Sub
+
+Private Sub cmdPrintCRL_GotFocus()
+FlashActiveControl cmdPrintCRL, True
+End Sub
+
+Private Sub cmdPrintCRL_LostFocus()
+FlashActiveControl cmdPrintCRL, False
+End Sub
+
+Private Sub cmdPrintCRL_Click()
+
+txtFromTime1.Text = MinToTime(TimeToMin(txtFromTime1.Text))
+If TimeToMin(txtFromTime1.Text) > cDAYMINUTES Then
+    ErrorBox "Invalid Input !!!"
+    txtFromTime1.SetFocus
+    Exit Sub
+End If
+txtToTime1.Text = MinToTime(TimeToMin(txtToTime1.Text))
+If TimeToMin(txtToTime1.Text) > cDAYMINUTES Then
+    ErrorBox "Invalid Input !!!"
+    txtToTime1.SetFocus
+    Exit Sub
+End If
+If IsFinYrDate(Ctod(ToMyDate(dtpFromDate1.Text))) = False Then
+    ErrorBox "Invalid Date Range !!!"
+    dtpFromDate1.SetFocus
+    Exit Sub
+End If
+If IsFinYrDate(Ctod(ToMyDate(dtpToDate1.Text))) = False Then
+    ErrorBox "Invalid Date Range !!!"
+    dtpToDate1.SetFocus
+    Exit Sub
+End If
+If cmbCRList.ListIndex < 0 Then
+    ErrorBox "Invalid Print Format Name !!!"
+    cmbCRList.SetFocus
+    Exit Sub
+End If
+If cmbPrinterList.ListIndex < 0 Then
+    ErrorBox "Invalid Print Selection !!!"
+    cmbPrinterList.SetFocus
+    Exit Sub
+End If
+If Val(mskPrintCopies.Text) < 1 Then
+    ErrorBox "Invalid Input !!!"
+    mskPrintCopies.SetFocus
+    Exit Sub
+End If
+If cmbPrintDest.ListIndex < 0 Then
+    ErrorBox "Invalid Print Destination !!!"
+    cmbPrintDest.SetFocus
+    Exit Sub
+End If
+Call Data_PrintEvent
+
+End Sub
+
+Private Sub AssignPrintPara()
+Dim mPrinter As Printer, fhand As Integer, mCRLTitle As String, mCRLFileName As String, mCRLDefault As Boolean, mDefaultCRLIndex As Integer
+
+mDefaultCRLIndex = -1
+mskPrintCopies.Text = 1
+
+AddPrinterToCombo cmbPrinterList
+AddPrintDestToCombo cmbPrintDest
+
+If Dir(ServRepCRLFileFullPath) = "" Then
+    fhand = FreeFile
+    Open ServRepCRLFileFullPath For Output As #fhand
+    Write #fhand, "Day Service Report", "ServRep.Rpt", True
+    Close #fhand
+End If
+
+cmbCRList.Clear
+fhand = FreeFile
+Open ServRepCRLFileFullPath For Input As #fhand
+Do While EOF(fhand) = False
+    Input #fhand, mCRLTitle, mCRLFileName, mCRLDefault
+    If Dir(ServRepCRLFileFullPath(mFileName:=mCRLFileName)) <> "" Then
+        cmbCRList.AddItem mCRLTitle & Space(100) & ServRepCRLFileFullPath(mFileName:=mCRLFileName)
+        If mCRLDefault = True Then
+            mDefaultCRLIndex = cmbCRList.NewIndex
+        End If
+    End If
+Loop
+Close #fhand
+If cmbCRList.ListCount > 0 Then
+    If mDefaultCRLIndex > -1 Then
+        cmbCRList.ListIndex = mDefaultCRLIndex
+    Else
+        cmbCRList.ListIndex = 0
+    End If
+End If
+
+End Sub
+
+Private Sub Data_PrintEvent()
+Dim mFromDate1 As Date, mFromTime1 As Integer, mToDate1 As Date, mToTime1 As Integer
+Dim fCRView As Form
+
+mFromDate1 = Ctod(dtpFromDate1.Text)
+mFromTime1 = TimeToMin(txtFromTime1.Text)
+mToDate1 = Ctod(dtpToDate1.Text)
+mToTime1 = TimeToMin(txtToTime1.Text)
+
+frmMain.Cryst.Reset
+frmMain.Cryst.ReportFileName = Trim(Right(cmbCRList.List(cmbCRList.ListIndex), 100))
+frmMain.Cryst.DiscardSavedData = True
+frmMain.Cryst.DataFiles(0) = dbComDatabaseFullPath
+
+frmMain.Cryst.SelectionFormula = "{vewServDtl.TrnDate} >= Date(" & Format(mFromDate1, "yyyy,mm,dd") & ") and {vewServDtl.TrnDate} <= Date(" & Format(mToDate1, "yyyy,mm,dd") & ") and {vewServDtl.TrnTime} >= " & CStr(mFromTime1) & " and {vewServDtl.TrnTime} <= " & CStr(mToTime1)        '''  & " and {vewServDtl.TrnCmpCode}=" & CStr(sFinYrCmpCode)
+
+frmMain.Cryst.ReportTitle = IIf(mFromDate1 <> mToDate1, "From Date " & Dtoc(mFromDate1) & " To " & Dtoc(mToDate1), "For Date " & Dtoc(mFromDate1)) & IIf(mFromTime1 <> 0 Or mToTime1 <> cDAYMINUTES, " (" & Format(MinToTime(mFromTime1), "HH:MM AM/PM") & " To " & Format(MinToTime(mToTime1), "HH:MM AM/PM") & ")", "")
+
+frmMain.Cryst.CopiesToPrinter = Val(mskPrintCopies.Text)
+frmMain.Cryst.PrinterName = Trim(Left(cmbPrinterList.List(cmbPrinterList.ListIndex), 100))
+frmMain.Cryst.PrinterDriver = Trim(Right(cmbPrinterList.List(cmbPrinterList.ListIndex), 100))
+If cmbPrintDest.ListIndex = 0 Then
+    frmMain.Cryst.Destination = crptToPrinter
+Else
+    frmMain.Cryst.Destination = crptToWindow
+    frmMain.Cryst.WindowState = crptMaximized
+    frmMain.Cryst.WindowShowExportBtn = True
+    frmMain.Cryst.WindowShowPrintBtn = True
+    frmMain.Cryst.WindowShowPrintSetupBtn = True
+    frmMain.Cryst.WindowShowRefreshBtn = True
+    frmMain.Cryst.WindowShowSearchBtn = True
+    frmMain.Cryst.WindowShowZoomCtl = True
+    
+    Set fCRView = New frmCRViewer
+    fCRView.WindowState = 2
+    fCRView.Height = frmMain.Height
+    fCRView.Width = frmMain.Width
+    frmMain.Cryst.WindowParentHandle = fCRView.hWnd
+    fCRView.Caption = cmbCRList.List(cmbCRList.ListIndex)
+End If
+txtVoid.SetFocus
+Mfgrd1.Enabled = True
+frPrintCRList.Visible = False
+Mfgrd1.SetFocus
+
+frmMain.Cryst.Action = 1
+If cmbPrintDest.ListIndex = 1 Then
+    Load fCRView
+    fCRView.ZOrder
+    fCRView.Show 1
+    Set fCRView = Nothing
+End If
+
+End Sub
+
+Private Sub Data_PrintDialog()
+        
+dtpFromDate1.Text = Dtoc(DefaultEntryDate)
+txtFromTime1.Text = MinToTime(0)
+dtpToDate1.Text = Dtoc(DefaultEntryDate)
+txtToTime1.Text = MinToTime(cDAYMINUTES)
+' ----------------
+Call AssignPrintPara
+frPrintCRList.ZOrder
+frPrintCRList.Visible = True
+Mfgrd1.Enabled = False
+cmbPrintDest.SetFocus
+
+End Sub
+
+Private Sub txtToTime1_GotFocus()
+FlashActiveControl txtToTime1, True
+End Sub
+
+Private Sub txtToTime1_LostFocus()
+FlashActiveControl txtToTime1, False
+End Sub
+
+Private Sub txtToTime1_Validate(Cancel As Boolean)
+txtToTime1.Text = MinToTime(TimeToMin(txtToTime1.Text))
+If TimeToMin(txtToTime1.Text) > cDAYMINUTES Then
+    ErrorBox "Invalid Input !!!"
+    txtToTime1.SetFocus
+    Cancel = True
+End If
+
+End Sub
+
+Private Sub Chk_EntryAccessed()
+Dim mTrnDate As Date, mTrnCode As Long, mTrnVtmCode As Long, mSearchIdStr As String
+
+mTrnDate = frmTrn.EntryDate
+mTrnCode = frmTrn.EntryBoundCode
+mTrnVtmCode = frmTrn.EntryVtmCode
+
+If frmTrn.EntrySaved = True Then
+    mSearchIdStr = Format(mTrnDate, "yyyymmdd") & Format(mTrnVtmCode, cLONGCODESTRFMT) & Format(mTrnCode, cLONGCODESTRFMT)
+    SearchRawFlex Mfgrd1, clsListStru.GetItemIndex("tTrnSmryId"), mSearchIdStr
+    
+Else
+    If mLastRowAccessed < Mfgrd1.Rows - 1 Then
+        Mfgrd1.Row = mLastRowAccessed
+    Else
+        Mfgrd1.Row = Mfgrd1.Rows - 1
+    End If
+End If
+
+mEntryAccessed = False
+mLastRowAccessed = -1
+Unload frmTrn
+Set frmTrn = Nothing
+
+End Sub
+
+
+
+
+Rem -------------------------------------------- end of form ---------------------------

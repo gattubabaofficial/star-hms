@@ -1,0 +1,4 @@
+"Indoor (Rcpt)Pymt.(Centre)","STAR_IndrPymt_Centre.Rpt",#FALSE#
+"Indoor (Rcpt)Pymt.(Double)","STAR_IndrPymt_Dbl.Rpt",#FALSE#
+"Indoor (Rcpt)Pymt","STAR_IndrPymt.Rpt",#TRUE#
+"Indoor (Rcpt)Pymt (58mm)","STAR_IndrPymt_Slip58mm.Rpt",#FALSE#

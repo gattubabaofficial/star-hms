@@ -1,0 +1,4 @@
+"Direct Payment (Centre)","STAR_DictPymt_Centre.Rpt",#FALSE#
+"Direct Payment (Double)","STAR_DictPymt_Dbl.Rpt",#FALSE#
+"Direct Payment","STAR_DictPymt.Rpt",#TRUE#
+"Direct Payment (58mm)","STAR_DictPymt_Slip58mm.Rpt",#FALSE#

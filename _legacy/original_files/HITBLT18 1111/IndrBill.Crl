@@ -1,0 +1,16 @@
+"Indoor Bill","STAR_IndrBill.Rpt",#FALSE#
+"Indoor Bill Indexed","STAR_IndrBill_Index.Rpt",#TRUE#
+"Indoor Bill Indexed (Sub-Repo)","STAR_IndrBill_Index_SubRep.Rpt",#FALSE#
+"Indoor Bill (Saras-Detail)","STAR_IndrBill_Saras_Dtl.RPT",#FALSE#
+"Indoor Bill (Saras-Grouped)","STAR_IndrBill_Saras_Grp.RPT",#FALSE#
+"Indoor Bill (Paramount-Detail)","STAR_IndrBill_Paramount_Dtl.RPT",#FALSE#
+"Indoor Bill (Paramount-Grouped)","STAR_IndrBill_Paramount_Grp.RPT",#FALSE#
+"Indoor Bill (Meditech-Detail)","STAR_IndrBill_Meditech_Dtl.RPT",#FALSE#
+"Indoor Bill (Meditech-Smry)","STAR_IndrBill_Meditech_Grp.RPT",#FALSE#
+"Indoor Bill (Bhamashah-Detail)","STAR_IndrBill_Bhamashah_Dtl.RPT",#FALSE#
+"Indoor Bill (Bhamashah-Smry)","STAR_IndrBill_Bhamashah_Smry.RPT",#FALSE#
+"Indoor Bill ECHS.(Detailed)","STAR_IndrBill_Echs_Dtl.rpt",#FALSE#
+"Indoor Bill ECHS.Smry","_STAR_IndrBill_Echs_Smry.rpt",#FALSE#
+"Indoor Bill ECHS.Sub-Date-wise Detailed","_STAR_IndrBill_Echs_SubSDateDtl.rpt",#FALSE#
+"Indoor Bill ECHS.Date-wise Detailed","_STAR_IndrBill_Echs_SDatewiseDtl.rpt",#FALSE#
+"Indoor Bill ECHS.Group-wise Detailed","_STAR_IndrBill_Echs_SGrpwiseDtl.rpt",#FALSE#

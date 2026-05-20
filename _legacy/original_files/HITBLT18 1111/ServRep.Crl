@@ -1,0 +1,18 @@
+"Day Service Report","STAR_ServRepDay.Rpt",#FALSE#
+"Day Service with Doctor Report","STAR_ServRepDayWithDoctor.rpt",#FALSE#
+"Daily Service Detail","STAR_ServRepDailyDtl.Rpt",#FALSE#
+"Daily Service Bill Detail Cross-Tab","STAR_ServRepDailyDtlCrossTab.Rpt",#TRUE#
+"Daily Service Bill Detail Wide","STAR_ServRepDailyDtlWide.Rpt",#FALSE#
+"Daily Service Summary","STAR_ServRepDailyServSmry.Rpt",#FALSE#
+"Daily Service Group Summary","STAR_ServRepDailyServGrpSmry.Rpt",#FALSE#
+"Monthly Service Summary","STAR_ServRepMonthlyServSmry.Rpt",#FALSE#
+"Monthly Service Group Summary","STAR_ServRepMonthlyServGrpSmry.Rpt",#FALSE#
+"Daily Consultant-Wise Service Summary","STAR_ServRepDailyCDctWiseServSmry_Hitkari.Rpt",#FALSE#
+"Daily Referred-By-Wise Service Summary","STAR_ServRepDailyRDctWiseServSmry.Rpt",#FALSE#
+"Consultant-Wise Daily Service Summary","STAR_ServRepCDctWiseDailyServSmry.Rpt",#FALSE#
+"Referred-By-Wise Daily Service Summary","STAR_ServRepRDctWiseDailyServSmry.Rpt",#FALSE#
+"Daily Service Summary","STAR_ServRepDailySmry.Rpt",#FALSE#
+"Day Service (Wide) Report","STAR_ServRepDayWide.rpt",#FALSE#
+"Day Service (Doctor-wise) Report","STAR_ServRepDayWideDoctWse.rpt",#FALSE#
+"Service (Doctor-wise) Report","STAR_ServRepDoctWseWide.rpt",#FALSE#
+"Service Voucher-wise Report","STAR_ServRepDayVTypewise.rpt",#FALSE#
