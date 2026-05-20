@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Plus, Save, Trash2, Search } from 'lucide-react';
+import apiClient from '@/lib/apiClient';
+import LookupField from '@/components/shared/LookupField';
 
 interface PharmacyItem {
   SimCode: number;
@@ -22,14 +24,13 @@ export default function PharmacySale() {
   const [cart, setCart] = useState<SaleDetail[]>([]);
   const [selectedItemCode, setSelectedItemCode] = useState<string>('');
   const [qty, setQty] = useState<number>(1);
-  const [pttCode, setPttCode] = useState<string>('');
+  const [pttCode, setPttCode] = useState<number | null>(null);
   const [totalAmt, setTotalAmt] = useState<number>(0);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/pharmacy/items')
-      .then(res => res.json())
-      .then(data => setItems(data));
+    apiClient.get('/pharmacy/items')
+      .then(res => setItems(res.data));
   }, []);
 
   const addToCart = () => {
@@ -60,19 +61,22 @@ export default function PharmacySale() {
     if (cart.length === 0) return;
     setSaving(true);
     try {
-      const response = await fetch('http://localhost:3001/api/pharmacy/sales', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          header: { pttCode, totalAmt, date: new Date() },
-          details: cart
-        })
+      const response = await apiClient.post('/pharmacy/sales', {
+        SahPttCode: pttCode || null,
+        SahTotalAmt: totalAmt,
+        SahDate: new Date().toISOString(),
+        Details: cart.map(item => ({
+          SalSimCode: item.simCode,
+          SalQty: item.qty,
+          SalRate: item.rate,
+          SalAmount: item.total
+        }))
       });
-      if (response.ok) {
+      if (response) {
         alert('Sale recorded successfully!');
         setCart([]);
         setTotalAmt(0);
-        setPttCode('');
+        setPttCode(null);
       }
     } catch (error) {
       alert('Failed to save sale');
@@ -232,20 +236,13 @@ export default function PharmacySale() {
           }}>
             <h3 style={{ marginBottom: '20px', fontSize: '18px' }}>Patient Details</h3>
             <div style={{ marginBottom: '16px' }}>
-              <label style={{ display: 'block', fontSize: '12px', color: '#868e96', marginBottom: '8px' }}>Patient Code (Optional)</label>
-              <input 
-                type="text" 
-                value={pttCode}
-                onChange={(e) => setPttCode(e.target.value)}
-                placeholder="Walk-in Patient"
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  background: '#1a1a1a',
-                  border: '1px solid #333',
-                  borderRadius: '10px',
-                  color: '#fff'
-                }}
+              <label style={{ display: 'block', fontSize: '12px', color: '#868e96', marginBottom: '8px' }}>Patient Lookup (Optional)</label>
+              <LookupField 
+                endpoint="/opd/patient-master" 
+                valueKey="PttCode" 
+                labelKey="PttName" 
+                value={pttCode} 
+                onChange={(val) => setPttCode(val)} 
               />
             </div>
           </div>

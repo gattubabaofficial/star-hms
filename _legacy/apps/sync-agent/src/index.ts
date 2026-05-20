@@ -30,8 +30,11 @@ const syncTable = async (tableName: string, apiPath: string, idField: string) =>
     
     if (records.length > 0) {
       console.log(`[Sync] Found ${records.length} records in ${tableName}. Pushing to Cloud...`);
+      const apiKey = process.env.API_KEY || 'hms-sync-secret-key';
       for (const record of records) {
-        await axios.post(`${API_URL}/api/${apiPath}`, record);
+        await axios.post(`${API_URL}/api/${apiPath}`, record, {
+          headers: { 'x-api-key': apiKey }
+        });
       }
       console.log(`[Sync] Successfully synced ${tableName}.`);
     } else {

@@ -41,7 +41,7 @@ const MENU_DATA: MenuItem[] = [
     title: 'Hospital Indoor',
     icon: Bed,
     children: [
-      { id: 'ipd-adm', title: 'Admission Registry', path: '/ipd/registration' },
+      { id: 'ipd-adm', title: 'Admission Registry', path: '/ipd/admission' },
       { id: 'ipd-bill', title: 'IPD Billing', path: '/ipd/billing' },
       { id: 'ipd-fin', title: 'Payments & Refunds', path: '/ipd/finance' },
     ]
@@ -62,6 +62,8 @@ const MENU_DATA: MenuItem[] = [
     children: [
       { id: 'ph-sale', title: 'Sales Entry', path: '/pharmacy/sales' },
       { id: 'ph-pur', title: 'Purchase Entry', path: '/pharmacy/purchases' },
+      { id: 'ph-itm', title: 'Item Master', path: '/pharmacy/items' },
+      { id: 'ph-pty', title: 'Party Master', path: '/pharmacy/parties' },
     ]
   },
   {
@@ -69,8 +71,8 @@ const MENU_DATA: MenuItem[] = [
     title: 'Standard Masters',
     icon: Building2,
     children: [
-      { id: 'm-pat', title: 'Patient Master', path: '/masters/patients' },
-      { id: 'm-doc', title: 'Doctor Master', path: '/masters/doctors' },
+      { id: 'm-pat', title: 'Patient Master', path: '/opd/patient-master' },
+      { id: 'm-doc', title: 'Doctor Master', path: '/masters/doctor-master' },
       { id: 'm-rht', title: 'User Rights', path: '/masters/rights' },
     ]
   },
@@ -78,7 +80,10 @@ const MENU_DATA: MenuItem[] = [
     id: 'reports',
     title: 'Reporting',
     icon: ClipboardList,
-    path: '/reports'
+    children: [
+      { id: 'rep-col', title: 'Collection Audit', path: '/reports' },
+      { id: 'rep-cen', title: 'Stay Census', path: '/ipd/census' }
+    ]
   }
 ];
 

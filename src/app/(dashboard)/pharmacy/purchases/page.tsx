@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Plus, Save, Trash2, Users } from 'lucide-react';
+import apiClient from '@/lib/apiClient';
+import LookupField from '@/components/shared/LookupField';
 
 interface PharmacyItem {
   SimCode: number;
@@ -27,13 +29,13 @@ export default function PharmacyPurchase() {
   const [cart, setCart] = useState<PurchaseDetail[]>([]);
   const [selectedItemCode, setSelectedItemCode] = useState<string>('');
   const [qty, setQty] = useState<number>(1);
-  const [prtCode, setPrtCode] = useState<string>('');
+  const [prtCode, setPrtCode] = useState<number | null>(null);
   const [totalAmt, setTotalAmt] = useState<number>(0);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/pharmacy/items').then(res => res.json()).then(data => setItems(data));
-    fetch('http://localhost:3001/api/pharmacy/parties').then(res => res.json()).then(data => setParties(data));
+    apiClient.get('/pharmacy/items').then(res => setItems(res.data));
+    apiClient.get('/pharmacy/parties').then(res => setParties(res.data));
   }, []);
 
   const addToCart = () => {
@@ -67,19 +69,22 @@ export default function PharmacyPurchase() {
     }
     setSaving(true);
     try {
-      const response = await fetch('http://localhost:3001/api/pharmacy/purchases', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          header: { prtCode, totalAmt, date: new Date() },
-          details: cart
-        })
+      const response = await apiClient.post('/pharmacy/purchases', {
+        PuhPrtCode: prtCode,
+        PuhTotalAmt: totalAmt,
+        PuhDate: new Date().toISOString(),
+        Details: cart.map(item => ({
+          PurSimCode: item.simCode,
+          PurQty: item.qty,
+          PurRate: item.rate,
+          PurAmount: item.total
+        }))
       });
-      if (response.ok) {
+      if (response) {
         alert('Purchase recorded successfully!');
         setCart([]);
         setTotalAmt(0);
-        setPrtCode('');
+        setPrtCode(null);
       }
     } catch (error) {
       alert('Failed to save purchase');
@@ -179,10 +184,13 @@ export default function PharmacyPurchase() {
             <h3 style={{ marginBottom: '20px', fontSize: '18px' }}>Supplier Details</h3>
             <div style={{ marginBottom: '16px' }}>
               <label style={{ display: 'block', fontSize: '12px', color: '#868e96', marginBottom: '8px' }}>Select Supplier</label>
-              <select value={prtCode} onChange={(e) => setPrtCode(e.target.value)} style={{ width: '100%', padding: '12px', background: '#1a1a1a', border: '1px solid #333', borderRadius: '10px', color: '#fff' }}>
-                <option value="">-- Choose Party --</option>
-                {parties.map(p => (<option key={p.PryCode} value={p.PryCode}>{p.PryName}</option>))}
-              </select>
+              <LookupField 
+                endpoint="/pharmacy/parties" 
+                valueKey="PryCode" 
+                labelKey="PryName" 
+                value={prtCode} 
+                onChange={(val) => setPrtCode(val)} 
+              />
             </div>
           </div>
 

@@ -26,9 +26,17 @@ export default function IpdBilling() {
   const [details, setDetails] = useState<IPDBillDetail[]>([]);
 
   useEffect(() => {
-    // In actual app, we'd fetch billing history
-    setData([]);
+    fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const res = await apiClient.get('/ipd-billing/billing');
+      setData(res.data);
+    } catch (err) {
+      console.error('Fetch ipd billing error:', err);
+    }
+  };
 
   const fetchAccruedCharges = async (admId: number) => {
     try {
@@ -76,12 +84,40 @@ export default function IpdBilling() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    await apiClient.post('/ipd-billing/billing', {
-      ...currentRecord,
-      IndrBill: details
+    try {
+      await apiClient.post('/ipd-billing/billing', {
+        ...currentRecord,
+        IndrBill: details
+      });
+      fetchData();
+      setMode('View');
+      setActiveTab('summary');
+    } catch (err) {
+      alert('Failed to post IPD invoice');
+    }
+  };
+
+  const cols: ColDef[] = [
+    { field: 'IbhVchNo', headerName: 'Invoice #', width: 120 },
+    { field: 'IbhDate', headerName: 'Date', width: 120, valueFormatter: p => format(new Date(p.value), 'dd/MM/yyyy') },
+    { field: 'Patient.PttName', headerName: 'Patient Name', flex: 1 },
+    { field: 'IbhTotalAmt', headerName: 'Gross Amt', width: 120 },
+    { field: 'IbhDepAmt', headerName: 'Deposits', width: 120 },
+    { field: 'IbhBalAmt', headerName: 'Balance', width: 120 },
+    { field: 'IbhBillType', headerName: 'Bill Type', width: 120 }
+  ];
+
+  const handleRowDoubleClicked = (row: any) => {
+    setCurrentRecord({
+      ...row,
+      IbhDate: format(new Date(row.IbhDate), 'yyyy-MM-dd')
     });
+    setDetails((row.IndrBill || []).map((b: any) => ({
+      ...b,
+      SrvName: b.Service?.SrvName || b.service?.SrvName || 'Accrued Boarding/Services'
+    })));
     setMode('View');
-    setActiveTab('summary');
+    setActiveTab('detail');
   };
 
   const detail = (
@@ -207,9 +243,7 @@ export default function IpdBilling() {
               Create New IPD Bill
             </button>
           </div>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.2)', borderRadius: 12, border: '1px dashed #444', color: '#666' }}>
-             Billing history registry will be implemented in the next sub-phase.
-          </div>
+          <GridModule rowData={data} columnDefs={cols} onRowDoubleClicked={handleRowDoubleClicked} height="100%" />
         </div>
       }
       detailNode={detail}

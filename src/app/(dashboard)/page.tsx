@@ -91,7 +91,7 @@ export default function Dashboard() {
       icon: <Bed />,
       color: '#fab005',
       links: [
-        { label: 'Admission Registry', path: '/ipd/registration' },
+        { label: 'Admission Registry', path: '/ipd/admission' },
         { label: 'IPD Billing', path: '/ipd/billing' },
         { label: 'Payments & Refunds', path: '/ipd/finance' }
       ]
@@ -112,7 +112,8 @@ export default function Dashboard() {
       links: [
         { label: 'Sales Entry', path: '/pharmacy/sales' },
         { label: 'Purchase Entry', path: '/pharmacy/purchases' },
-        { label: 'Item Master', path: '/masters/pharmacy/items' }
+        { label: 'Item Master', path: '/pharmacy/items' },
+        { label: 'Party Master', path: '/pharmacy/parties' }
       ]
     },
     {
@@ -120,9 +121,9 @@ export default function Dashboard() {
       icon: <Settings />,
       color: '#fd7e14',
       links: [
-        { label: 'Patient Master', path: '/masters/patients' },
-        { label: 'Doctor Master', path: '/masters/doctors' },
-        { label: 'Service Master', path: '/masters/services' },
+        { label: 'Patient Master', path: '/opd/patient-master' },
+        { label: 'Doctor Master', path: '/masters/doctor-master' },
+        { label: 'Service Master', path: '/services/master' },
         { label: 'User Rights', path: '/masters/rights' }
       ]
     },

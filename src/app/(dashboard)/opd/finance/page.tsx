@@ -16,11 +16,8 @@ interface Bill {
 
 export default function FinanceModule() {
   const pathname = usePathname();
-  const mode = pathname.split('/')[2]; // /dashboard/opd/finance -> mode is opd. Wait!
-  // Wait, Next.js pathname is /opd/finance (since it's inside (dashboard)).
-  // Let's just use pathname.split('/')[1] or check if 'opd', 'ipd', 'lab' is in pathname
-  const md = pathname.includes('ipd') ? 'ipd' : pathname.includes('lab') ? 'lab' : 'opd';
-  const modeVar = md;
+  const mode = pathname.includes('ipd') ? 'ipd' : pathname.includes('lab') ? 'lab' : 'opd';
+  const modeVar = mode;
   const [bills, setBills] = useState<Bill[]>([]);
   const [selectedBill, setSelectedBill] = useState<Bill | null>(null);
   const [history, setHistory] = useState<{ payments: any[], refunds: any[] }>({ payments: [], refunds: [] });
@@ -33,7 +30,7 @@ export default function FinanceModule() {
   }, [mode]);
 
   const fetchBills = async () => {
-    const endpoint = modeVar === 'opd' ? '/opd/billing' : modeVar === 'ipd' ? '/ipd/admission' : '/lab/billing';
+    const endpoint = modeVar === 'opd' ? '/opd/billing' : modeVar === 'ipd' ? '/ipd-billing/billing' : '/lab/billing';
     try {
       const res = await apiClient.get(endpoint);
       const data = res.data;
