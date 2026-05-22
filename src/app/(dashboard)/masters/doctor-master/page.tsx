@@ -76,8 +76,8 @@ export default function DoctorMaster() {
 
   const summary = (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      <div style={{ padding: '0 0 10px 0' }}>
-        <h2>Consultant Directory</h2>
+      <div style={{ padding: '0 0 10px 0', borderBottom: '1px solid var(--border-color)' }}>
+        <h2 style={{ margin: 0 }}>Consultant Directory</h2>
       </div>
       <FormModeSelector mode={mode} onModeChange={handleModeChange} />
       <div style={{ flex: 1, minHeight: 0 }}>
@@ -87,43 +87,42 @@ export default function DoctorMaster() {
   );
 
   const isReadonly = mode === 'View';
-  const inputStyle = { padding: '8px', background: isReadonly ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.05)', border: '1px solid #555', color: '#fff', borderRadius: 4 };
 
   const detail = (
     <div style={{ padding: '10px 0' }}>
-      <div style={{ padding: '0 0 10px 0', display: 'flex', justifyContent: 'space-between' }}>
-        <h2>Consultant Profile Entry</h2>
+      <div style={{ padding: '0 0 10px 0', display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)', marginBottom: '15px' }}>
+        <h2 style={{ margin: 0 }}>Consultant Profile Entry</h2>
         <FormModeSelector mode={mode} onModeChange={handleModeChange} />
       </div>
 
-      <form onSubmit={handleSave} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', maxWidth: '800px', marginTop: 20 }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label>Doctor Code</label>
-          <input type="text" value={currentRecord?.DctCode || '(Auto)'} disabled style={{ ...inputStyle, background: 'rgba(0,0,0,0.2)' }} />
+      <form onSubmit={handleSave} className="dashboard-grid" style={{ maxWidth: '800px' }}>
+        <div className="form-group">
+          <label className="form-label">Doctor Code</label>
+          <input className="form-control" type="text" value={currentRecord?.DctCode || '(Auto)'} disabled />
         </div>
         
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label>Title</label>
-          <input type="text" disabled={isReadonly} value={currentRecord?.DctTitle || ''} onChange={e => setCurrentRecord({...currentRecord, DctTitle: e.target.value})} style={inputStyle} />
+        <div className="form-group">
+          <label className="form-label">Title</label>
+          <input className="form-control" type="text" disabled={isReadonly} value={currentRecord?.DctTitle || ''} onChange={e => setCurrentRecord({...currentRecord, DctTitle: e.target.value})} />
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', gridColumn: '1 / -1' }}>
-          <label>Name *</label>
-          <input type="text" required disabled={isReadonly} value={currentRecord?.DctName || ''} onChange={e => setCurrentRecord({...currentRecord, DctName: e.target.value})} style={inputStyle} />
+        <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+          <label className="form-label">Name *</label>
+          <input className="form-control" type="text" required disabled={isReadonly} value={currentRecord?.DctName || ''} onChange={e => setCurrentRecord({...currentRecord, DctName: e.target.value})} />
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label>Speciality</label>
-          <input type="text" disabled={isReadonly} value={currentRecord?.DctSpeci || ''} onChange={e => setCurrentRecord({...currentRecord, DctSpeci: e.target.value})} style={inputStyle} />
+        <div className="form-group">
+          <label className="form-label">Speciality</label>
+          <input className="form-control" type="text" disabled={isReadonly} value={currentRecord?.DctSpeci || ''} onChange={e => setCurrentRecord({...currentRecord, DctSpeci: e.target.value})} />
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label>Contact Num</label>
-          <input type="text" disabled={isReadonly} value={currentRecord?.DctTelNo || ''} onChange={e => setCurrentRecord({...currentRecord, DctTelNo: e.target.value})} style={inputStyle} />
+        <div className="form-group">
+          <label className="form-label">Contact Num</label>
+          <input className="form-control" type="text" disabled={isReadonly} value={currentRecord?.DctTelNo || ''} onChange={e => setCurrentRecord({...currentRecord, DctTelNo: e.target.value})} />
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label>Category Mapping</label>
+        <div className="form-group">
+          <label className="form-label">Category Mapping</label>
           <LookupField 
             endpoint="/masters/doctor-category" 
             valueKey="DcgCode" 
@@ -134,8 +133,8 @@ export default function DoctorMaster() {
           />
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label>Security Role Mapping</label>
+        <div className="form-group">
+          <label className="form-label">Security Role Mapping</label>
           <LookupField 
             endpoint="/masters/doctor-role" 
             valueKey="DrlCode" 
@@ -147,9 +146,9 @@ export default function DoctorMaster() {
         </div>
 
         {!isReadonly && (
-          <div style={{ gridColumn: '1 / -1', marginTop: 20 }}>
-            <button type="submit" style={{ padding: '10px 20px', background: '#3bc9db', color: '#0b1420', fontWeight: 'bold', borderRadius: 6, border: 'none', cursor: 'pointer' }}>Save Record</button>
-            <button type="button" onClick={() => { setMode('View'); setActiveTab('summary'); }} style={{ marginLeft: 10, padding: '10px 20px', background: 'transparent', color: '#adb5bd', border: '1px solid #adb5bd', borderRadius: 6, cursor: 'pointer' }}>Cancel</button>
+          <div className="form-actions" style={{ gridColumn: '1 / -1' }}>
+            <button className="btn" type="button" onClick={() => { setMode('View'); setActiveTab('summary'); }}>Cancel</button>
+            <button className="btn btn-primary" type="submit">Save Record</button>
           </div>
         )}
       </form>

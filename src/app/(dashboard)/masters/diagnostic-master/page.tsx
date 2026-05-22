@@ -6,7 +6,7 @@ import FormModeSelector, { FormMode } from '@/components/shared/FormModeSelector
 import GridModule from '@/components/shared/GridModule';
 import { ColDef } from 'ag-grid-community';
 
-export default function DoctorCategory() {
+export default function DiagnosticMaster() {
   const [data, setData] = useState<any[]>([]);
   const [mode, setMode] = useState<FormMode>('View');
   const [activeTab, setActiveTab] = useState<'summary' | 'detail'>('summary');
@@ -17,7 +17,7 @@ export default function DoctorCategory() {
   }, []);
 
   const fetchData = async () => {
-    const res = await apiClient.get('/masters/doctor-category');
+    const res = await apiClient.get('/masters/diag-master');
     setData(res.data);
   };
 
@@ -30,11 +30,11 @@ export default function DoctorCategory() {
   const handleModeChange = (newMode: FormMode) => {
     setMode(newMode);
     if (newMode === 'New') {
-      setCurrentRecord({ DcgName: '' });
+      setCurrentRecord({ DigName: '' });
       setActiveTab('detail');
-    } else if (newMode === 'Delete' && currentRecord.DcgCode) {
-      if (window.confirm('Delete this record?')) {
-        apiClient.delete(`/masters/doctor-category/${currentRecord.DcgCode}`).then(() => {
+    } else if (newMode === 'Delete' && currentRecord.DigCode) {
+      if (window.confirm('Delete this diagnostic logically?')) {
+        apiClient.delete(`/masters/diag-master/${currentRecord.DigCode}`).then(() => {
           fetchData();
           setMode('View');
           setActiveTab('summary');
@@ -45,22 +45,28 @@ export default function DoctorCategory() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (mode === 'New') await apiClient.post('/masters/doctor-category', currentRecord);
-    else if (mode === 'Edit') await apiClient.put(`/masters/doctor-category/${currentRecord.DcgCode}`, currentRecord);
-    fetchData();
-    setMode('View');
-    setActiveTab('summary');
+    try {
+      const payload = { ...currentRecord };
+      if (mode === 'New') await apiClient.post('/masters/diag-master', payload);
+      else if (mode === 'Edit') await apiClient.put(`/masters/diag-master/${currentRecord.DigCode}`, payload);
+      
+      fetchData();
+      setMode('View');
+      setActiveTab('summary');
+    } catch (err) {
+      alert('Save failed!');
+    }
   };
 
   const cols: ColDef[] = [
-    { field: 'DcgCode', headerName: 'Code', width: 80 },
-    { field: 'DcgName', headerName: 'Doctor Category', flex: 1 },
+    { field: 'DigCode', headerName: 'Code', width: 100 },
+    { field: 'DigName', headerName: 'Diagnostic Category / Test', flex: 1 }
   ];
 
   const summary = (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '10px' }}>
       <div style={{ padding: '0 0 10px 0', borderBottom: '1px solid var(--border-color)' }}>
-        <h2 style={{ margin: 0 }}>Doctor Categories</h2>
+        <h2 style={{ margin: 0 }}>Diagnostic Master Directory</h2>
       </div>
       <FormModeSelector mode={mode} onModeChange={handleModeChange} />
       <div style={{ flex: 1, minHeight: 0 }}>
@@ -74,29 +80,25 @@ export default function DoctorCategory() {
   const detail = (
     <div style={{ padding: '10px 0' }}>
       <div style={{ padding: '0 0 10px 0', display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)', marginBottom: '15px' }}>
-        <h2 style={{ margin: 0 }}>Doctor Category Entry</h2>
+        <h2 style={{ margin: 0 }}>Diagnostic Entry</h2>
         <FormModeSelector mode={mode} onModeChange={handleModeChange} />
       </div>
 
-      <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '400px', marginTop: 20 }}>
+      <form onSubmit={handleSave} className="dashboard-grid" style={{ maxWidth: '500px' }}>
         <div className="form-group">
-          <label className="form-label">Category Code</label>
-          <input className="form-control" type="text" value={currentRecord?.DcgCode || '(Auto)'} disabled style={{ padding: '8px',    borderRadius: 4 }} />
+          <label className="form-label">Diagnostic Code</label>
+          <input className="form-control" type="text" value={currentRecord?.DigCode || '(Auto)'} disabled />
         </div>
-        <div className="form-group">
-          <label className="form-label">Category Name *</label>
-          <input className="form-control" 
-            type="text" required disabled={isReadonly}
-            value={currentRecord?.DcgName || ''} 
-            onChange={e => setCurrentRecord({...currentRecord, DcgName: e.target.value})}
-            style={{ padding: '8px', background: isReadonly ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.05)',   borderRadius: 4 }} 
-          />
+        
+        <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+          <label className="form-label">Diagnostic Name *</label>
+          <input className="form-control" type="text" required disabled={isReadonly} value={currentRecord?.DigName || ''} onChange={e => setCurrentRecord({...currentRecord, DigName: e.target.value})} />
         </div>
 
         {!isReadonly && (
-          <div className="form-actions">
-            <button className="btn btn-primary" type="submit">Save Record</button>
+          <div className="form-actions" style={{ gridColumn: '1 / -1' }}>
             <button className="btn" type="button" onClick={() => { setMode('View'); setActiveTab('summary'); }}>Cancel</button>
+            <button className="btn btn-primary" type="submit">Save Record</button>
           </div>
         )}
       </form>

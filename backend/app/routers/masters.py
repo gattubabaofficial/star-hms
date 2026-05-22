@@ -15,6 +15,12 @@ MASTER_CONFIG: Dict[str, Dict[str, Any]] = {
     "referral-category": {"model": models.RefCatgMst, "id_field": "RfgCode", "state_field": "RfgRecState"},
     "user-roles": {"model": models.UserRoleMst, "id_field": "UrlCode", "state_field": "UrlRecState"},
     "patients": {"model": models.PatMast, "id_field": "PttCode", "state_field": "PttRecState"},
+    "area-master": {"model": models.AreaMast, "id_field": "AraCode", "state_field": "AraRecState"},
+    "station-master": {"model": models.StsnMast, "id_field": "StnCode", "state_field": "StnRecState"},
+    "ward-master": {"model": models.WardMast, "id_field": "WrdCode", "state_field": "WrdRecState"},
+    "floor-master": {"model": models.FloorMast, "id_field": "FlrCode", "state_field": "FlrRecState"},
+    "bed-master": {"model": models.BedMast, "id_field": "BdmCode", "state_field": "BdmRecState", "relations": ["ward", "floor", "service"]},
+    "diag-master": {"model": models.DiagMast, "id_field": "DigCode", "state_field": "DigRecState"},
 }
 
 def serialize_model(instance: Any, relations: List[str] = None) -> Dict[str, Any]:

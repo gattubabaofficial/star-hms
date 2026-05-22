@@ -88,11 +88,11 @@ export default function ServiceMaster() {
   );
 
   const isReadonly = mode === 'View';
-  const inputStyle = { padding: '8px', background: isReadonly ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.05)', border: '1px solid #555', color: '#fff', borderRadius: 4 };
+  const inputStyle = { padding: '8px', background: isReadonly ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.05)',   borderRadius: 4 };
 
   const CheckboxItem = ({ label, field }: { label: string, field: string }) => (
-    <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, background: 'rgba(0,0,0,0.2)', padding: '6px 10px', borderRadius: 4, border: '1px solid #444' }}>
-      <input 
+    <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13,  padding: '6px 10px', borderRadius: 4, border: '1px solid #444' }}>
+      <input className="form-control" 
         type="checkbox" 
         disabled={isReadonly} 
         checked={currentRecord[field] || false} 
@@ -113,11 +113,11 @@ export default function ServiceMaster() {
         <div style={{ display: 'flex', gap: 20 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: 100 }}>
             <label>Service Code</label>
-            <input type="text" value={currentRecord?.SrvCode || '(Auto)'} disabled style={{ ...inputStyle, background: 'rgba(0,0,0,0.2)' }} />
+            <input className="form-control" type="text" value={currentRecord?.SrvCode || '(Auto)'} disabled style={{ ...inputStyle }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
             <label>Service Description/Name *</label>
-            <input type="text" required disabled={isReadonly} value={currentRecord?.SrvName || ''} onChange={e => setCurrentRecord({...currentRecord, SrvName: e.target.value})} style={inputStyle} />
+            <input className="form-control" type="text" required disabled={isReadonly} value={currentRecord?.SrvName || ''} onChange={e => setCurrentRecord({...currentRecord, SrvName: e.target.value})}  />
           </div>
         </div>
 
@@ -135,12 +135,12 @@ export default function ServiceMaster() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
             <label>Base Configured Charges</label>
-            <input type="number" disabled={isReadonly} value={currentRecord?.SrvCharges || 0} onChange={e => setCurrentRecord({...currentRecord, SrvCharges: parseFloat(e.target.value)})} style={inputStyle} />
+            <input className="form-control" type="number" disabled={isReadonly} value={currentRecord?.SrvCharges || 0} onChange={e => setCurrentRecord({...currentRecord, SrvCharges: parseFloat(e.target.value)})}  />
           </div>
         </div>
 
-        <h4 style={{ color: '#adb5bd', marginTop: 10 }}>Service Modifier Flags</h4>
-        <div style={{ border: '1px solid #333', padding: 15, borderRadius: 8, display: 'flex', flexWrap: 'wrap', gap: '10px', background: 'rgba(255,255,255,0.02)' }}>
+        <h4 style={{  marginTop: 10 }}>Service Modifier Flags</h4>
+        <div style={{  padding: 15,  display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
           <CheckboxItem label="Rate Value Editable" field="SrvRateEditable" />
           <CheckboxItem label="Amount Value Editable" field="SrvAmtEditable" />
           <CheckboxItem label="Unit Quantity Editable" field="SrvUnitEditable" />
@@ -156,8 +156,8 @@ export default function ServiceMaster() {
 
         {!isReadonly && (
           <div style={{ marginTop: 10 }}>
-            <button type="submit" style={{ padding: '10px 20px', background: '#3bc9db', color: '#0b1420', fontWeight: 'bold', borderRadius: 6, border: 'none', cursor: 'pointer' }}>Apply Service Data</button>
-            <button type="button" onClick={() => { setMode('View'); setActiveTab('summary'); }} style={{ marginLeft: 10, padding: '10px 20px', background: 'transparent', color: '#adb5bd', border: '1px solid #adb5bd', borderRadius: 6, cursor: 'pointer' }}>Cancel</button>
+            <button type="submit" className="btn btn-primary">Apply Service Data</button>
+            <button type="button" onClick={() => { setMode('View'); setActiveTab('summary'); }} style={{ marginLeft: 10, padding: '10px 20px',  border: '1px solid #adb5bd', borderRadius: 6 }}>Cancel</button>
           </div>
         )}
       </form>

@@ -47,14 +47,16 @@ export default function Login() {
       const response = await apiClient.post('/auth/login', {
         username,
         password,
-        companyCode: parseInt(companyCode, 10)
+        companyCode: companyCode.toString()
       });
       
       const { token, user, company } = response.data;
       setAuth(token, user, company);
-      router.push('/');
+      router.push('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Login failed. Please verify credentials.');
+      const msg = err.response?.data?.detail || 'Login failed. Please verify credentials.';
+      alert(msg);
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -72,18 +74,16 @@ export default function Login() {
 
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
-            <label htmlFor="company">Company / Branch</label>
-            <select 
+            <label htmlFor="company">Company Code</label>
+            <input 
               id="company"
+              type="text"
               className={styles.input} 
               value={companyCode}
               onChange={(e) => setCompanyCode(e.target.value)}
-              disabled={loading || companies.length === 0}
-            >
-              {companies.map(c => (
-                <option key={c.CmpCode} value={c.CmpCode}>{c.CmpName}</option>
-              ))}
-            </select>
+              disabled={loading}
+              placeholder="e.g. 1"
+            />
           </div>
 
           <div className={styles.formGroup}>

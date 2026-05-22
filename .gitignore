@@ -43,3 +43,7 @@ next-env.d.ts
 /_legacy/
 _legacy/apps/web/node_modules/.bin/
 backend/app/__pycache__/
+node_modules/
+_legacy/
+__pycache__/
+.idea/

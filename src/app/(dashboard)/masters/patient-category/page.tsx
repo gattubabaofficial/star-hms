@@ -79,9 +79,9 @@ export default function PatientCategory() {
 
   const summary = (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      <div style={{ padding: '0 0 10px 0' }}>
-        <h2>Patient Categories</h2>
-        <p style={{ color: '#adb5bd', fontSize: 14 }}>Manage global patient billing classifications</p>
+      <div style={{ padding: '0 0 10px 0', borderBottom: '1px solid var(--border-color)' }}>
+        <h2 style={{ margin: 0 }}>Patient Categories</h2>
+        <p style={{  fontSize: 14 }}>Manage global patient billing classifications</p>
       </div>
       <FormModeSelector mode={mode} onModeChange={handleModeChange} />
       <div style={{ flex: 1, minHeight: 0 }}>
@@ -94,67 +94,67 @@ export default function PatientCategory() {
 
   const detail = (
     <div style={{ padding: '10px 0' }}>
-      <div style={{ padding: '0 0 10px 0', display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ padding: '0 0 10px 0', display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)', marginBottom: '15px' }}>
         <div>
-          <h2>Patient Category Entry</h2>
-          <p style={{ color: '#adb5bd', fontSize: 14 }}>{mode} Mode</p>
+          <h2 style={{ margin: 0 }}>Patient Category Entry</h2>
+          <p style={{  fontSize: 14 }}>{mode} Mode</p>
         </div>
         <FormModeSelector mode={mode} onModeChange={handleModeChange} />
       </div>
 
-      <form onSubmit={handleSave} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', maxWidth: '800px', marginTop: 20 }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label>Category Code</label>
-          <input type="text" value={currentRecord?.PcgCode || '(Auto)'} disabled style={{ padding: '8px', background: 'rgba(0,0,0,0.2)', border: '1px solid #333', color: '#fff', borderRadius: 4 }} />
+      <form onSubmit={handleSave} className="dashboard-grid" style={{ maxWidth: '800px' }}>
+        <div className="form-group">
+          <label className="form-label">Category Code</label>
+          <input className="form-control" type="text" value={currentRecord?.PcgCode || '(Auto)'} disabled style={{ padding: '8px',    borderRadius: 4 }} />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label>Category Name *</label>
-          <input 
+        <div className="form-group">
+          <label className="form-label">Category Name *</label>
+          <input className="form-control" 
             type="text" 
             required 
             disabled={isReadonly}
             value={currentRecord?.PcgName || ''} 
             onChange={e => setCurrentRecord({...currentRecord, PcgName: e.target.value})}
-            style={{ padding: '8px', background: isReadonly ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.05)', border: '1px solid #555', color: '#fff', borderRadius: 4 }} 
+            style={{ padding: '8px', background: isReadonly ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.05)',   borderRadius: 4 }} 
           />
         </div>
         
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label>Discount %</label>
-          <input 
+        <div className="form-group">
+          <label className="form-label">Discount %</label>
+          <input className="form-control" 
             type="number" 
             disabled={isReadonly}
             value={currentRecord?.PcgDiscPer || 0} 
             onChange={e => setCurrentRecord({...currentRecord, PcgDiscPer: parseFloat(e.target.value)})}
-            style={{ padding: '8px', background: isReadonly ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.05)', border: '1px solid #555', color: '#fff', borderRadius: 4 }} 
+            style={{ padding: '8px', background: isReadonly ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.05)',   borderRadius: 4 }} 
           />
         </div>
 
         <div style={{ gridColumn: '1 / -1', display: 'flex', gap: '20px', marginTop: 10 }}>
           <label style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <input type="checkbox" disabled={isReadonly} checked={currentRecord?.PcgInfAllowed || false} onChange={e => setCurrentRecord({...currentRecord, PcgInfAllowed: e.target.checked})} />
+            <input className="form-control" type="checkbox" disabled={isReadonly} checked={currentRecord?.PcgInfAllowed || false} onChange={e => setCurrentRecord({...currentRecord, PcgInfAllowed: e.target.checked})} />
             Inflation Allowed
           </label>
           <label style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <input type="checkbox" disabled={isReadonly} checked={currentRecord?.PcgDefAllowed || false} onChange={e => setCurrentRecord({...currentRecord, PcgDefAllowed: e.target.checked})} />
+            <input className="form-control" type="checkbox" disabled={isReadonly} checked={currentRecord?.PcgDefAllowed || false} onChange={e => setCurrentRecord({...currentRecord, PcgDefAllowed: e.target.checked})} />
             Deflation Allowed
           </label>
           <label style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <input type="checkbox" disabled={isReadonly} checked={currentRecord?.PcgDiscAllowed || false} onChange={e => setCurrentRecord({...currentRecord, PcgDiscAllowed: e.target.checked})} />
+            <input className="form-control" type="checkbox" disabled={isReadonly} checked={currentRecord?.PcgDiscAllowed || false} onChange={e => setCurrentRecord({...currentRecord, PcgDiscAllowed: e.target.checked})} />
             Discount Allowed
           </label>
           <label style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <input type="checkbox" disabled={isReadonly} checked={currentRecord?.PcgShowInList || false} onChange={e => setCurrentRecord({...currentRecord, PcgShowInList: e.target.checked})} />
+            <input className="form-control" type="checkbox" disabled={isReadonly} checked={currentRecord?.PcgShowInList || false} onChange={e => setCurrentRecord({...currentRecord, PcgShowInList: e.target.checked})} />
             Show In List
           </label>
         </div>
 
         {!isReadonly && (
-          <div style={{ gridColumn: '1 / -1', marginTop: 20 }}>
-            <button type="submit" style={{ padding: '10px 20px', background: '#3bc9db', color: '#0b1420', fontWeight: 'bold', borderRadius: 6, border: 'none', cursor: 'pointer' }}>
+          <div className="form-actions" style={{ gridColumn: '1 / -1' }}>
+            <button className="btn btn-primary" type="submit">
               Save Record
             </button>
-            <button type="button" onClick={() => { setMode('View'); setActiveTab('summary'); }} style={{ marginLeft: 10, padding: '10px 20px', background: 'transparent', color: '#adb5bd', border: '1px solid #adb5bd', borderRadius: 6, cursor: 'pointer' }}>
+            <button className="btn" type="button" onClick={() => { setMode('View'); setActiveTab('summary'); }}>
               Cancel
             </button>
           </div>

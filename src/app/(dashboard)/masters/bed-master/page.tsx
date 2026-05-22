@@ -7,7 +7,7 @@ import GridModule from '@/components/shared/GridModule';
 import LookupField from '@/components/shared/LookupField';
 import { ColDef } from 'ag-grid-community';
 
-export default function ReferralMaster() {
+export default function BedMaster() {
   const [data, setData] = useState<any[]>([]);
   const [mode, setMode] = useState<FormMode>('View');
   const [activeTab, setActiveTab] = useState<'summary' | 'detail'>('summary');
@@ -18,7 +18,7 @@ export default function ReferralMaster() {
   }, []);
 
   const fetchData = async () => {
-    const res = await apiClient.get('/masters/referral-master');
+    const res = await apiClient.get('/masters/bed-master');
     setData(res.data);
   };
 
@@ -31,15 +31,11 @@ export default function ReferralMaster() {
   const handleModeChange = (newMode: FormMode) => {
     setMode(newMode);
     if (newMode === 'New') {
-      setCurrentRecord({
-        RByName: '', RBySpeci: '', RByShare: 0,
-        RByAddr: '', RByTelNo: '', RByEmail: '',
-        RByRfgCode: null
-      });
+      setCurrentRecord({ BdmName: '', BdmWrdCode: null, BdmFlrCode: null, BdmSts: 0 }); // 0 = Available
       setActiveTab('detail');
-    } else if (newMode === 'Delete' && currentRecord.RByCode) {
-      if (window.confirm('Delete this referral record logically?')) {
-        apiClient.delete(`/masters/referral-master/${currentRecord.RByCode}`).then(() => {
+    } else if (newMode === 'Delete' && currentRecord.BdmCode) {
+      if (window.confirm('Delete this bed logically?')) {
+        apiClient.delete(`/masters/bed-master/${currentRecord.BdmCode}`).then(() => {
           fetchData();
           setMode('View');
           setActiveTab('summary');
@@ -52,10 +48,11 @@ export default function ReferralMaster() {
     e.preventDefault();
     try {
       const payload = { ...currentRecord };
-      delete payload.Category;
-
-      if (mode === 'New') await apiClient.post('/masters/referral-master', payload);
-      else if (mode === 'Edit') await apiClient.put(`/masters/referral-master/${currentRecord.RByCode}`, payload);
+      delete payload.ward;
+      delete payload.floor;
+      
+      if (mode === 'New') await apiClient.post('/masters/bed-master', payload);
+      else if (mode === 'Edit') await apiClient.put(`/masters/bed-master/${currentRecord.BdmCode}`, payload);
       
       fetchData();
       setMode('View');
@@ -66,16 +63,16 @@ export default function ReferralMaster() {
   };
 
   const cols: ColDef[] = [
-    { field: 'RByCode', headerName: 'Code', width: 80 },
-    { field: 'RByName', headerName: 'Referral Name', flex: 1 },
-    { field: 'RBySpeci', headerName: 'Speciality', flex: 1 },
-    { field: 'Category.RfgName', headerName: 'Category', flex: 1 }
+    { field: 'BdmCode', headerName: 'Bed Code', width: 100 },
+    { field: 'BdmName', headerName: 'Bed Name/No.', flex: 1 },
+    { field: 'ward.WrdName', headerName: 'Ward', flex: 1 },
+    { field: 'floor.FlrName', headerName: 'Floor', flex: 1 }
   ];
 
   const summary = (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '10px' }}>
       <div style={{ padding: '0 0 10px 0', borderBottom: '1px solid var(--border-color)' }}>
-        <h2 style={{ margin: 0 }}>Referral Directory</h2>
+        <h2 style={{ margin: 0 }}>Bed Master Directory</h2>
       </div>
       <FormModeSelector mode={mode} onModeChange={handleModeChange} />
       <div style={{ flex: 1, minHeight: 0 }}>
@@ -85,56 +82,53 @@ export default function ReferralMaster() {
   );
 
   const isReadonly = mode === 'View';
-  
+
   const detail = (
     <div style={{ padding: '10px 0' }}>
       <div style={{ padding: '0 0 10px 0', display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)', marginBottom: '15px' }}>
-        <h2 style={{ margin: 0 }}>Referral External Config</h2>
+        <h2 style={{ margin: 0 }}>Bed Profile Entry</h2>
         <FormModeSelector mode={mode} onModeChange={handleModeChange} />
       </div>
 
       <form onSubmit={handleSave} className="dashboard-grid" style={{ maxWidth: '800px' }}>
         <div className="form-group">
-          <label className="form-label">Referral Code</label>
-          <input className="form-control" type="text" value={currentRecord?.RByCode || '(Auto)'} disabled />
+          <label className="form-label">Bed Code</label>
+          <input className="form-control" type="text" value={currentRecord?.BdmCode || '(Auto)'} disabled />
+        </div>
+        
+        <div className="form-group">
+          <label className="form-label">Bed Name/No. *</label>
+          <input className="form-control" type="text" required disabled={isReadonly} value={currentRecord?.BdmName || ''} onChange={e => setCurrentRecord({...currentRecord, BdmName: e.target.value})} />
         </div>
 
         <div className="form-group">
-          <label className="form-label">Name *</label>
-          <input className="form-control" type="text" required disabled={isReadonly} value={currentRecord?.RByName || ''} onChange={e => setCurrentRecord({...currentRecord, RByName: e.target.value})} />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Speciality</label>
-          <input className="form-control" type="text" disabled={isReadonly} value={currentRecord?.RBySpeci || ''} onChange={e => setCurrentRecord({...currentRecord, RBySpeci: e.target.value})} />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Contact Num</label>
-          <input className="form-control" type="text" disabled={isReadonly} value={currentRecord?.RByTelNo || ''} onChange={e => setCurrentRecord({...currentRecord, RByTelNo: e.target.value})} />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Email ID</label>
-          <input className="form-control" type="email" disabled={isReadonly} value={currentRecord?.RByEmail || ''} onChange={e => setCurrentRecord({...currentRecord, RByEmail: e.target.value})} />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Referral Category</label>
+          <label className="form-label">Ward Mapping</label>
           <LookupField 
-            endpoint="/masters/referral-category" 
-            valueKey="RfgCode" 
-            labelKey="RfgName" 
-            value={currentRecord?.RByRfgCode} 
-            onChange={(val: any) => setCurrentRecord({...currentRecord, RByRfgCode: val})} 
+            endpoint="/masters/ward-master" 
+            valueKey="WrdCode" 
+            labelKey="WrdName" 
+            value={currentRecord?.BdmWrdCode} 
+            onChange={(val: any) => setCurrentRecord({...currentRecord, BdmWrdCode: val})} 
+            disabled={isReadonly} 
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Floor Mapping</label>
+          <LookupField 
+            endpoint="/masters/floor-master" 
+            valueKey="FlrCode" 
+            labelKey="FlrName" 
+            value={currentRecord?.BdmFlrCode} 
+            onChange={(val: any) => setCurrentRecord({...currentRecord, BdmFlrCode: val})} 
             disabled={isReadonly} 
           />
         </div>
 
         {!isReadonly && (
           <div className="form-actions" style={{ gridColumn: '1 / -1' }}>
-            <button className="btn btn-primary" type="submit">Save Record</button>
             <button className="btn" type="button" onClick={() => { setMode('View'); setActiveTab('summary'); }}>Cancel</button>
+            <button className="btn btn-primary" type="submit">Save Record</button>
           </div>
         )}
       </form>

@@ -57,7 +57,7 @@ export default function StayCensus() {
 
   const columns: ColDef[] = [
     { field: 'IhdVchNo', headerName: 'Adm ID', width: 90 },
-    { field: 'Patient.PttName', headerName: 'Patient Name', flex: 1, cellStyle: { fontWeight: 'bold' } },
+    { field: 'Patient.PttName', headerName: 'Patient Name', flex: 1, cellStyle: {  } },
     { field: 'Doctor.DctName', headerName: 'Consulting Doctor', flex: 1 },
     { field: 'Floor.FlrName', headerName: 'Floor', width: 120 },
     { field: 'Ward.WrdName', headerName: 'Ward', width: 120 },
@@ -85,27 +85,29 @@ export default function StayCensus() {
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h1 style={{ fontSize: '28px', marginBottom: '5px', display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <Building2 color="#3bc9db" size={32} /> Inpatient Stay Census
+            <Building2 color="var(--accent-color)" size={32} /> Inpatient Stay Census
           </h1>
-          <p style={{ color: '#adb5bd' }}>Real-time ward occupancy monitoring and bed allocation statistics.</p>
+          <p style={{ color: 'var(--text-secondary)' }}>Real-time ward occupancy monitoring and bed allocation statistics.</p>
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>
           <button 
             onClick={() => setViewMode('matrix')} 
+            className="btn"
             style={{ 
-              display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 'bold',
-              background: viewMode === 'matrix' ? '#3bc9db' : 'rgba(255,255,255,0.05)',
-              color: viewMode === 'matrix' ? '#0b1420' : '#adb5bd'
+              display: 'flex', alignItems: 'center', gap: '8px',
+              backgroundColor: viewMode === 'matrix' ? 'var(--accent-color)' : 'var(--bg-secondary)',
+              color: viewMode === 'matrix' ? '#fff' : 'var(--text-primary)'
             }}
           >
             <LayoutGrid size={18} /> Spatial Matrix
           </button>
           <button 
             onClick={() => setViewMode('list')} 
+            className="btn"
             style={{ 
-              display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 'bold',
-              background: viewMode === 'list' ? '#3bc9db' : 'rgba(255,255,255,0.05)',
-              color: viewMode === 'list' ? '#0b1420' : '#adb5bd'
+              display: 'flex', alignItems: 'center', gap: '8px',
+              backgroundColor: viewMode === 'list' ? 'var(--accent-color)' : 'var(--bg-secondary)',
+              color: viewMode === 'list' ? '#fff' : 'var(--text-primary)'
             }}
           >
             <ListFilter size={18} /> Directory List
@@ -115,40 +117,40 @@ export default function StayCensus() {
 
       {/* KPI Section */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
-        <div style={{ padding: '20px', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid #333', display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <div style={{ padding: '12px', background: 'rgba(59,201,219,0.1)', borderRadius: '12px' }}>
-            <Bed size={24} color="#3bc9db" />
+        <div className="dashboard-card" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <div style={{ padding: '12px', backgroundColor: '#eef2ff', color: '#4f46e5', borderRadius: '8px' }}>
+            <Bed size={24} />
           </div>
           <div>
-            <div style={{ fontSize: '12px', color: '#adb5bd' }}>Total Capacity</div>
-            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#fff' }}>{totalBedsCount} Beds</div>
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Total Capacity</div>
+            <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{totalBedsCount} Beds</div>
           </div>
         </div>
-        <div style={{ padding: '20px', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid #333', display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <div style={{ padding: '12px', background: 'rgba(250,176,5,0.1)', borderRadius: '12px' }}>
-            <Users size={24} color="#fab005" />
+        <div className="dashboard-card" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <div style={{ padding: '12px', backgroundColor: '#fee2e2', color: '#ef4444', borderRadius: '8px' }}>
+            <Users size={24} />
           </div>
           <div>
-            <div style={{ fontSize: '12px', color: '#adb5bd' }}>Occupied Census</div>
-            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#fab005' }}>{occupiedBedsCount} Patients</div>
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Occupied Census</div>
+            <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{occupiedBedsCount} Patients</div>
           </div>
         </div>
-        <div style={{ padding: '20px', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid #333', display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <div style={{ padding: '12px', background: 'rgba(64,192,87,0.1)', borderRadius: '12px' }}>
-            <CheckCircle2 size={24} color="#40c057" />
+        <div className="dashboard-card" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <div style={{ padding: '12px', backgroundColor: '#dcfce7', color: '#22c55e', borderRadius: '8px' }}>
+            <CheckCircle2 size={24} />
           </div>
           <div>
-            <div style={{ fontSize: '12px', color: '#adb5bd' }}>Vacant Beds</div>
-            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#40c057' }}>{vacantBedsCount} Available</div>
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Vacant Beds</div>
+            <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{vacantBedsCount} Available</div>
           </div>
         </div>
-        <div style={{ padding: '20px', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid #333', display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <div style={{ padding: '12px', background: 'rgba(240,101,149,0.1)', borderRadius: '12px' }}>
-            <Building2 size={24} color="#f06595" />
+        <div className="dashboard-card" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <div style={{ padding: '12px', backgroundColor: '#ffedd5', color: '#f97316', borderRadius: '8px' }}>
+            <Building2 size={24} />
           </div>
           <div>
-            <div style={{ fontSize: '12px', color: '#adb5bd' }}>Occupancy Rate</div>
-            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#f06595' }}>{occupancyRate}%</div>
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Occupancy Rate</div>
+            <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{occupancyRate}%</div>
           </div>
         </div>
       </div>
@@ -156,25 +158,25 @@ export default function StayCensus() {
       {/* Main Census Content */}
       <div style={{ flex: 1, minHeight: '400px' }}>
         {loading ? (
-          <div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#868e96' }}>
+          <div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'var(--text-secondary)' }}>
             Loading live stay census data...
           </div>
         ) : viewMode === 'list' ? (
           <div style={{ height: '500px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <h3 style={{ color: '#3bc9db', margin: 0 }}>Admitted Patients Directory</h3>
+            <h3 style={{ margin: 0, paddingBottom: '10px', borderBottom: '1px solid var(--border-color)' }}>Admitted Patients Directory</h3>
             <GridModule rowData={admissions} columnDefs={columns} height="100%" />
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
             {Object.entries(floorsMap).map(([floorName, wards]) => (
               <div key={floorName} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                <h3 style={{ borderBottom: '1px solid #333', paddingBottom: '8px', color: '#3bc9db', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <Building2 size={20} /> {floorName}
+                <h3 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <Building2 size={20} color="var(--accent-color)" /> {floorName}
                 </h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '20px' }}>
                   {Object.entries(wards).map(([wardName, wardBeds]) => (
-                    <div key={wardName} style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid #222', borderRadius: '12px', padding: '15px' }}>
-                      <h4 style={{ margin: '0 0 12px 0', color: '#adb5bd', fontSize: '14px', borderBottom: '1px solid #222', paddingBottom: '6px' }}>
+                    <div key={wardName} className="dashboard-card" style={{ padding: '15px' }}>
+                      <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', borderBottom: '1px solid var(--border-color)', paddingBottom: '6px' }}>
                         {wardName}
                       </h4>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(90px, 1fr))', gap: '10px' }}>
@@ -186,29 +188,29 @@ export default function StayCensus() {
                               key={bed.BdmCode}
                               style={{ 
                                 padding: '10px', 
-                                borderRadius: '8px', 
-                                border: `1px solid ${isOccupied ? '#fab00533' : '#40c05733'}`,
-                                background: isOccupied ? 'rgba(250,176,5,0.03)' : 'rgba(64,192,87,0.03)',
+                                border: `1px solid ${isOccupied ? '#ef4444' : '#22c55e'}`,
+                                backgroundColor: isOccupied ? '#fef2f2' : '#f0fdf4',
+                                borderRadius: '6px',
                                 display: 'flex', 
                                 flexDirection: 'column', 
                                 gap: '5px',
                                 position: 'relative'
                               }}
                             >
-                              <div style={{ fontSize: '12px', fontWeight: 'bold', color: isOccupied ? '#fab005' : '#40c057' }}>
+                              <div style={{ fontSize: '12px', fontWeight: 'bold', color: isOccupied ? '#dc2626' : '#16a34a' }}>
                                 Bed {bed.BdmName}
                               </div>
                               {isOccupied ? (
                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                  <div style={{ fontSize: '10px', color: '#fff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 500 }} title={activeAdm.Patient?.PttName}>
+                                  <div style={{ fontSize: '11px', color: '#1f2937', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 500 }} title={activeAdm.Patient?.PttName}>
                                     {activeAdm.Patient?.PttName}
                                   </div>
-                                  <div style={{ fontSize: '8px', color: '#adb5bd' }}>
+                                  <div style={{ fontSize: '10px', color: '#6b7280' }}>
                                     Dr. {activeAdm.Doctor?.DctName?.split(' ')[0]}
                                   </div>
                                 </div>
                               ) : (
-                                <div style={{ fontSize: '10px', color: '#868e96', fontStyle: 'italic' }}>Vacant</div>
+                                <div style={{ fontSize: '11px', color: '#16a34a', fontStyle: 'italic' }}>Available</div>
                               )}
                             </div>
                           );

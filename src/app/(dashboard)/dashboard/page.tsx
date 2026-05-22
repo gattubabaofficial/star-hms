@@ -15,58 +15,53 @@ interface MenuCardProps {
   title: string;
   icon: React.ReactNode;
   links: { label: string; path: string }[];
-  color: string;
 }
 
-function MenuCard({ title, icon, links, color }: MenuCardProps) {
+function MenuCard({ title, icon, links }: MenuCardProps) {
   const router = useRouter();
   return (
     <div style={{ 
-      padding: '24px', 
-      background: 'rgba(255,255,255,0.02)', 
-      borderRadius: '20px', 
-      border: `1px solid ${color}33`,
+      padding: '20px', 
+      borderRadius: '8px', 
+      border: `1px solid #d1d5db`,
+      backgroundColor: '#ffffff',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
       display: 'flex',
       flexDirection: 'column',
-      gap: '16px',
-      transition: 'all 0.2s ease',
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <div style={{ padding: '10px', background: `${color}15`, borderRadius: '12px' }}>
-          {React.cloneElement(icon as React.ReactElement<any>, { color, size: 24 })}
+      gap: '16px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: '10px', borderBottom: '1px solid #e5e7eb' }}>
+        <div style={{ padding: '8px', backgroundColor: '#eff6ff', color: '#2563eb', borderRadius: '6px' }}>
+          {React.cloneElement(icon as React.ReactElement<any>, { size: 20 })}
         </div>
-        <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600 }}>{title}</h3>
+        <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: '#1f2937' }}>{title}</h3>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
         {links.map((link, idx) => (
           <button
             key={idx}
             onClick={() => router.push(link.path)}
             style={{
-              padding: '10px 14px',
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.05)',
-              borderRadius: '10px',
+              padding: '8px 12px',
+              borderRadius: '6px',
               textAlign: 'left',
-              color: '#adb5bd',
+              color: '#4b5563',
               fontSize: '14px',
-              cursor: 'pointer',
               transition: 'all 0.2s',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center'
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.1)';
-              (e.currentTarget as HTMLButtonElement).style.color = '#fff';
+              (e.currentTarget as HTMLButtonElement).style.background = '#f3f4f6';
+              (e.currentTarget as HTMLButtonElement).style.color = '#111827';
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.03)';
-              (e.currentTarget as HTMLButtonElement).style.color = '#adb5bd';
+              (e.currentTarget as HTMLButtonElement).style.background = 'transparent';
+              (e.currentTarget as HTMLButtonElement).style.color = '#4b5563';
             }}
           >
             {link.label}
-            <span style={{ fontSize: '12px', opacity: 0.5 }}>→</span>
+            <span style={{ fontSize: '14px', color: '#9ca3af' }}>&rarr;</span>
           </button>
         ))}
       </div>
@@ -79,7 +74,6 @@ export default function Dashboard() {
     {
       title: 'Hospital Outdoor (OPD)',
       icon: <Users />,
-      color: '#40c057',
       links: [
         { label: 'Registration', path: '/opd/registration' },
         { label: 'Billing & Receipt', path: '/opd/billing' },
@@ -89,7 +83,6 @@ export default function Dashboard() {
     {
       title: 'Hospital Indoor (IPD)',
       icon: <Bed />,
-      color: '#fab005',
       links: [
         { label: 'Admission Registry', path: '/ipd/admission' },
         { label: 'IPD Billing', path: '/ipd/billing' },
@@ -99,7 +92,6 @@ export default function Dashboard() {
     {
       title: 'Diagnostic Lab',
       icon: <FlaskConical />,
-      color: '#7950f2',
       links: [
         { label: 'Test Receipts', path: '/lab/billing' },
         { label: 'Payments & Refunds', path: '/lab/finance' }
@@ -108,7 +100,6 @@ export default function Dashboard() {
     {
       title: 'Medical Store (Pharmacy)',
       icon: <ShoppingCart />,
-      color: '#3bc9db',
       links: [
         { label: 'Sales Entry', path: '/pharmacy/sales' },
         { label: 'Purchase Entry', path: '/pharmacy/purchases' },
@@ -119,7 +110,6 @@ export default function Dashboard() {
     {
       title: 'Standard Masters',
       icon: <Settings />,
-      color: '#fd7e14',
       links: [
         { label: 'Patient Master', path: '/opd/patient-master' },
         { label: 'Doctor Master', path: '/masters/doctor-master' },
@@ -130,7 +120,6 @@ export default function Dashboard() {
     {
       title: 'Reporting',
       icon: <ClipboardList />,
-      color: '#f06595',
       links: [
         { label: 'Collection Audit', path: '/reports' },
         { label: 'Stay Census', path: '/ipd/census' }
@@ -139,20 +128,20 @@ export default function Dashboard() {
   ];
 
   return (
-    <div style={{ padding: '40px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
-      <header>
-        <h1 style={{ fontSize: '28px', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <LayoutDashboard color="#3bc9db" size={32} /> HMS Control Center
+    <div style={{ padding: '32px', backgroundColor: '#f9fafb', minHeight: '100vh', display: 'flex', flexDirection: 'column', gap: '32px' }}>
+      <header style={{ paddingBottom: '24px', borderBottom: '1px solid #e5e7eb' }}>
+        <h1 style={{ fontSize: '24px', fontWeight: 600, color: '#111827', margin: '0 0 8px 0', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <LayoutDashboard color="#2563eb" size={28} /> HMS Control Center
         </h1>
-        <p style={{ color: '#adb5bd' }}>
-          Strict Functional Replica Mode: Primary Navigation based on your Offline Software.
+        <p style={{ color: '#6b7280', margin: 0, fontSize: '15px' }}>
+          Primary Navigation Dashboard & Modules
         </p>
       </header>
 
       <div style={{ 
         display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
-        gap: '30px' 
+        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', 
+        gap: '24px' 
       }}>
         {menuGroups.map((group, idx) => (
           <MenuCard 
@@ -160,7 +149,6 @@ export default function Dashboard() {
             title={group.title}
             icon={group.icon}
             links={group.links}
-            color={group.color}
           />
         ))}
       </div>

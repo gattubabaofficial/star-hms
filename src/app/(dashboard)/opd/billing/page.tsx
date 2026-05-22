@@ -160,20 +160,19 @@ export default function Billing() {
   ];
 
   const isReadonly = mode === 'View';
-  const inputStyle = { padding: '8px', background: isReadonly ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.05)', border: '1px solid #555', color: '#fff', borderRadius: 4 };
-
+  
   const detail = (
     <div style={{ padding: '10px 0' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
-        <h2>OPD Invoice Generation</h2>
+        <h2 style={{ margin: 0 }}>OPD Invoice Generation</h2>
         <FormModeSelector mode={mode} onModeChange={handleModeChange} />
       </div>
 
       <form onSubmit={handleSave}>
         {/* Header Fields */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '15px', marginBottom: 25 }}>
+        <div className="dashboard-grid">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-            <label>Patient *</label>
+            <label className="form-label">Patient *</label>
             <LookupField 
               endpoint="/opd/patient-master" 
               valueKey="PttCode" labelKey="PttName" 
@@ -183,7 +182,7 @@ export default function Billing() {
             />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-            <label>Doctor</label>
+            <label className="form-label">Doctor</label>
             <LookupField 
               endpoint="/masters/doctor-master" 
               valueKey="DctCode" labelKey="DctName" 
@@ -193,12 +192,12 @@ export default function Billing() {
             />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-            <label>Bill Date</label>
-            <input type="date" value={currentRecord.OhdDate || ''} disabled={isReadonly} onChange={e => setCurrentRecord({...currentRecord, OhdDate: e.target.value})} style={inputStyle} />
+            <label className="form-label">Bill Date</label>
+            <input className="form-control" type="date" value={currentRecord.OhdDate || ''} disabled={isReadonly} onChange={e => setCurrentRecord({...currentRecord, OhdDate: e.target.value})} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-            <label>Bill Type</label>
-            <select value={currentRecord.OhdBillType || 'Cash'} disabled={isReadonly} onChange={e => setCurrentRecord({...currentRecord, OhdBillType: e.target.value})} style={inputStyle}>
+            <label className="form-label">Bill Type</label>
+            <select className="form-control" value={currentRecord.OhdBillType || 'Cash'} disabled={isReadonly} onChange={e => setCurrentRecord({...currentRecord, OhdBillType: e.target.value})}>
               <option value="Cash">Cash</option>
               <option value="Bank">Bank/Card</option>
               <option value="Credit">Credit</option>
@@ -207,9 +206,9 @@ export default function Billing() {
         </div>
 
         {/* Transaction Grid */}
-        <div style={{ background: 'rgba(0,0,0,0.2)', borderRadius: '8px', overflow: 'hidden', border: '1px solid #333' }}>
+        <div style={{   overflow: 'hidden' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead style={{ background: 'rgba(255,255,255,0.05)', textAlign: 'left' }}>
+            <thead style={{  textAlign: 'left' }}>
               <tr>
                 <th style={{ padding: '10px' }}>Service Description</th>
                 <th style={{ padding: '10px', width: '80px' }}>Units</th>
@@ -232,20 +231,20 @@ export default function Billing() {
                     />
                   </td>
                   <td style={{ padding: '8px' }}>
-                    <input type="number" value={row.ObdUnit} disabled={isReadonly} onChange={e => updateDetailRow(idx, { ObdUnit: parseFloat(e.target.value) || 0 })} style={{ ...inputStyle, width: '100%' }} />
+                    <input className="form-control" type="number" value={row.ObdUnit} disabled={isReadonly} onChange={e => updateDetailRow(idx, { ObdUnit: parseFloat(e.target.value) || 0 })} />
                   </td>
                   <td style={{ padding: '8px' }}>
-                    <input type="number" value={row.ObdRate} disabled={isReadonly} onChange={e => updateDetailRow(idx, { ObdRate: parseFloat(e.target.value) || 0 })} style={{ ...inputStyle, width: '100%' }} />
+                    <input className="form-control" type="number" value={row.ObdRate} disabled={isReadonly} onChange={e => updateDetailRow(idx, { ObdRate: parseFloat(e.target.value) || 0 })} />
                   </td>
                   <td style={{ padding: '8px' }}>
-                    <input type="number" value={row.ObdDiscPer} disabled={isReadonly} onChange={e => updateDetailRow(idx, { ObdDiscPer: parseFloat(e.target.value) || 0 })} style={{ ...inputStyle, width: '100%' }} />
+                    <input className="form-control" type="number" value={row.ObdDiscPer} disabled={isReadonly} onChange={e => updateDetailRow(idx, { ObdDiscPer: parseFloat(e.target.value) || 0 })} />
                   </td>
-                  <td style={{ padding: '8px', fontWeight: 'bold' }}>
+                  <td style={{ padding: '8px' }}>
                     {row.ObdAmtAftDisc.toFixed(2)}
                   </td>
                   {!isReadonly && (
                     <td style={{ padding: '8px' }}>
-                      <button type="button" onClick={() => removeRow(idx)} style={{ background: 'transparent', border: 'none', color: '#ff6b6b', cursor: 'pointer' }}>
+                      <button type="button" onClick={() => removeRow(idx)} className="btn">
                         <Trash2 size={18} />
                       </button>
                     </td>
@@ -255,7 +254,7 @@ export default function Billing() {
             </tbody>
           </table>
           {!isReadonly && (
-            <button type="button" onClick={addRow} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: 10, background: 'transparent', border: 'none', color: '#3bc9db', cursor: 'pointer', fontSize: 13 }}>
+            <button type="button" onClick={addRow} className="btn">
               <Plus size={16} /> Add Service Line
             </button>
           )}
@@ -266,19 +265,19 @@ export default function Billing() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '250px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span>Bill Subtotal:</span>
-              <span style={{ color: '#adb5bd' }}>{(currentRecord.OhdTotalAmt || 0).toFixed(2)}</span>
+              <span >{(currentRecord.OhdTotalAmt || 0).toFixed(2)}</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 18, fontWeight: 'bold', borderTop: '1px solid #444', paddingTop: 10 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 18,  borderTop: '1px solid #444', paddingTop: 10 }}>
               <span>Net Payable:</span>
-              <span style={{ color: '#3bc9db' }}>{(currentRecord.OhdTotalAmt || 0).toFixed(2)}</span>
+              <span >{(currentRecord.OhdTotalAmt || 0).toFixed(2)}</span>
             </div>
             
             {!isReadonly && (
               <div style={{ marginTop: 15, display: 'flex', gap: 10 }}>
-                <button type="submit" style={{ flex: 1, padding: '12px', background: '#3bc9db', color: '#0b1420', fontWeight: 'bold', borderRadius: 6, border: 'none', cursor: 'pointer' }}>
+                <button className="btn btn-primary" type="submit" style={{ flex: 1 }}>
                   Save & Post Bill
                 </button>
-                <button type="button" onClick={() => setActiveTab('summary')} style={{ padding: '12px', background: 'transparent', color: '#adb5bd', border: '1px solid #555', borderRadius: 6, cursor: 'pointer' }}>
+                <button className="btn" type="button" onClick={() => setActiveTab('summary')}>
                   Cancel
                 </button>
               </div>
@@ -296,8 +295,8 @@ export default function Billing() {
       summaryNode={
         <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h2>Billing History</h2>
-            <button onClick={() => handleModeChange('New')} style={{ padding: '8px 16px', background: '#3bc9db', color: '#0b1420', fontWeight: 'bold', borderRadius: 6, border: 'none', cursor: 'pointer' }}>
+            <h2 style={{ margin: 0 }}>Billing History</h2>
+            <button className="btn btn-primary" onClick={() => handleModeChange('New')}>
               New Bill
             </button>
           </div>

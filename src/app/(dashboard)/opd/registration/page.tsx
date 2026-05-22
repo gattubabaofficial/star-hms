@@ -85,8 +85,8 @@ export default function Registration() {
 
   const summary = (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      <div style={{ padding: '0 0 10px 0' }}>
-        <h2>Outpatient Registration Directory</h2>
+      <div style={{ padding: '0 0 10px 0', borderBottom: '1px solid var(--border-color)' }}>
+        <h2 style={{ margin: 0 }}>Outpatient Registration Directory</h2>
       </div>
       <FormModeSelector mode={mode} onModeChange={handleModeChange} />
       <div style={{ flex: 1, minHeight: 0 }}>
@@ -96,8 +96,7 @@ export default function Registration() {
   );
 
   const isReadonly = mode === 'View';
-  const inputStyle = { padding: '8px', background: isReadonly ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.05)', border: '1px solid #555', color: '#fff', borderRadius: 4 };
-
+  
   return (
     <SummaryDetailLayout 
       activeTab={activeTab} 
@@ -105,29 +104,29 @@ export default function Registration() {
       summaryNode={summary} 
       detailNode={
         <div style={{ padding: '10px 0' }}>
-          <div style={{ padding: '0 0 10px 0', display: 'flex', justifyContent: 'space-between' }}>
-            <h2>New Consultation Registration</h2>
-            <div>
-              <button disabled style={{ marginRight: 10, padding: '8px 16px', background: 'transparent', color: '#adb5bd', border: '1px solid #555', borderRadius: 4 }}>
+          <div style={{ padding: '0 0 10px 0', display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)', marginBottom: '15px' }}>
+            <h2 style={{ margin: 0 }}>New Consultation Registration</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <button className="btn" disabled>
                 Print Receipt
               </button>
               <FormModeSelector mode={mode} onModeChange={handleModeChange} />
             </div>
           </div>
 
-          <form onSubmit={handleSave} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', maxWidth: '800px', marginTop: 20 }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-              <label>Voucher Number</label>
-              <input type="text" value={currentRecord?.OpgVchNo || '(Auto)'} disabled style={{ ...inputStyle, background: 'rgba(0,0,0,0.2)' }} />
+          <form onSubmit={handleSave} className="dashboard-grid" style={{ maxWidth: '800px' }}>
+            <div className="form-group">
+              <label className="form-label">Voucher Number</label>
+              <input className="form-control" type="text" value={currentRecord?.OpgVchNo || '(Auto)'} disabled />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-              <label>Registration Date</label>
-              <input type="date" disabled={isReadonly} value={currentRecord?.OpgDate || ''} onChange={e => setCurrentRecord({...currentRecord, OpgDate: e.target.value})} style={inputStyle} />
+            <div className="form-group">
+              <label className="form-label">Registration Date</label>
+              <input className="form-control" type="date" disabled={isReadonly} value={currentRecord?.OpgDate || ''} onChange={e => setCurrentRecord({...currentRecord, OpgDate: e.target.value})} />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', gridColumn: '1 / -1' }}>
-              <label>Patient ID Lookup *</label>
+            <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+              <label className="form-label">Patient ID Lookup *</label>
               <LookupField 
                 endpoint="/opd/patient-master" 
                 valueKey="PttCode" 
@@ -138,8 +137,8 @@ export default function Registration() {
               />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-              <label>Consulting Doctor</label>
+            <div className="form-group">
+              <label className="form-label">Consulting Doctor</label>
               <LookupField 
                 endpoint="/masters/doctor-master" 
                 valueKey="DctCode" 
@@ -150,8 +149,8 @@ export default function Registration() {
               />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-              <label>Referred By</label>
+            <div className="form-group">
+              <label className="form-label">Referred By</label>
               <LookupField 
                 endpoint="/masters/referral-master" 
                 valueKey="RByCode" 
@@ -162,31 +161,31 @@ export default function Registration() {
               />
             </div>
 
-            <hr style={{ gridColumn: '1 / -1', border: 'none', borderBottom: '1px solid #333', margin: '10px 0' }} />
+            <hr style={{ gridColumn: '1 / -1',  borderBottom: '1px solid #333', margin: '10px 0' }} />
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-              <label>Consultation Rate</label>
-              <input type="number" disabled={isReadonly} value={currentRecord?.OpgRate || 0} onChange={e => setCurrentRecord({...currentRecord, OpgRate: parseFloat(e.target.value)})} style={inputStyle} />
+            <div className="form-group">
+              <label className="form-label">Consultation Rate</label>
+              <input className="form-control" type="number" disabled={isReadonly} value={currentRecord?.OpgRate || 0} onChange={e => setCurrentRecord({...currentRecord, OpgRate: parseFloat(e.target.value)})} />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-              <label>Discount %</label>
-              <input type="number" disabled={isReadonly} value={currentRecord?.OpgDiscPer || 0} onChange={e => {
+            <div className="form-group">
+              <label className="form-label">Discount %</label>
+              <input className="form-control" type="number" disabled={isReadonly} value={currentRecord?.OpgDiscPer || 0} onChange={e => {
                 const perc = parseFloat(e.target.value) || 0;
                 const amt = (currentRecord.OpgRate || 0) * (perc / 100);
                 setCurrentRecord({...currentRecord, OpgDiscPer: perc, OpgDiscAmt: amt, OpgAmtAftDisc: (currentRecord.OpgRate || 0) - amt});
-              }} style={inputStyle} />
+              }}  />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-              <label>Calculated Net Amount</label>
-              <input type="number" value={currentRecord?.OpgAmtAftDisc || currentRecord?.OpgRate || 0} disabled style={{ ...inputStyle, background: 'rgba(0,0,0,0.2)' }} />
+            <div className="form-group">
+              <label className="form-label">Calculated Net Amount</label>
+              <input className="form-control" type="number" value={currentRecord?.OpgAmtAftDisc || currentRecord?.OpgRate || 0} disabled />
             </div>
 
             {!isReadonly && (
               <div style={{ gridColumn: '1 / -1', marginTop: 20 }}>
-                <button type="submit" style={{ padding: '10px 20px', background: '#3bc9db', color: '#0b1420', fontWeight: 'bold', borderRadius: 6, border: 'none', cursor: 'pointer' }}>Register Patient</button>
-                <button type="button" onClick={() => { setMode('View'); setActiveTab('summary'); }} style={{ marginLeft: 10, padding: '10px 20px', background: 'transparent', color: '#adb5bd', border: '1px solid #adb5bd', borderRadius: 6, cursor: 'pointer' }}>Cancel</button>
+                <button className="btn btn-primary" type="submit">Register Patient</button>
+                <button className="btn" type="button" onClick={() => { setMode('View'); setActiveTab('summary'); }}>Cancel</button>
               </div>
             )}
           </form>

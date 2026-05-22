@@ -4,7 +4,13 @@ from .routers import auth, masters, opd, services, lab, pharmacy, reporting, fin
 from .routers.opd import router as opd_router
 from .routers.ipd import router as ipd_router, billing_router as ipd_billing_router
 
+from .database import engine
+from . import models
+
 app = FastAPI(title="STAR HMS API", version="1.0.0")
+
+# Initialize database tables
+models.Base.metadata.create_all(bind=engine)
 
 # Set up CORS middleware
 app.add_middleware(

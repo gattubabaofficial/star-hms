@@ -85,11 +85,11 @@ export default function ServiceGroup() {
   );
 
   const isReadonly = mode === 'View';
-  const inputStyle = { padding: '8px', background: isReadonly ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.05)', border: '1px solid #555', color: '#fff', borderRadius: 4 };
+  const inputStyle = { padding: '8px', background: isReadonly ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.05)',   borderRadius: 4 };
 
   const CheckboxItem = ({ label, field }: { label: string, field: string }) => (
-    <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, background: 'rgba(0,0,0,0.2)', padding: '6px 10px', borderRadius: 4, border: '1px solid #444' }}>
-      <input 
+    <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13,  padding: '6px 10px', borderRadius: 4, border: '1px solid #444' }}>
+      <input className="form-control" 
         type="checkbox" 
         disabled={isReadonly} 
         checked={currentRecord[field] || false} 
@@ -111,20 +111,20 @@ export default function ServiceGroup() {
         <div style={{ display: 'flex', gap: 20 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: 100 }}>
             <label>Group Code</label>
-            <input type="text" value={currentRecord?.SgpCode || '(Auto)'} disabled style={{ ...inputStyle, background: 'rgba(0,0,0,0.2)' }} />
+            <input className="form-control" type="text" value={currentRecord?.SgpCode || '(Auto)'} disabled style={{ ...inputStyle }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
             <label>Group Name *</label>
-            <input type="text" required disabled={isReadonly} value={currentRecord?.SgpName || ''} onChange={e => setCurrentRecord({...currentRecord, SgpName: e.target.value})} style={inputStyle} />
+            <input className="form-control" type="text" required disabled={isReadonly} value={currentRecord?.SgpName || ''} onChange={e => setCurrentRecord({...currentRecord, SgpName: e.target.value})}  />
           </div>
         </div>
 
         {/* Matrix Rules */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', background: 'rgba(255,255,255,0.02)', padding: 15, borderRadius: 8, border: '1px solid #333' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px',  padding: 15}}>
           
           {/* Rate Systems */}
           <div>
-            <h4 style={{ color: '#3bc9db', marginBottom: 10 }}>Rate Dependencies</h4>
+            <h4 style={{ marginBottom: 10 }}>Rate Dependencies</h4>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '8px' }}>
               <CheckboxItem label="Enable External Rate System" field="SgpExtRateSys" />
               <CheckboxItem label="Doctor-Wise Rate Dependency" field="SgpDctwseRateSys" />
@@ -151,8 +151,8 @@ export default function ServiceGroup() {
         </div>
 
         {/* Generic Flag Settings */}
-        <div style={{ background: 'rgba(255,255,255,0.02)', padding: 15, borderRadius: 8, border: '1px solid #333' }}>
-            <h4 style={{ color: '#adb5bd', marginBottom: 10 }}>Global Security Toggles</h4>
+        <div style={{  padding: 15}}>
+            <h4 style={{  marginBottom: 10 }}>Global Security Toggles</h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
               <CheckboxItem label="Is Editable by Desk" field="SgpEditable" />
               <CheckboxItem label="Allow Record Inflation" field="SgpInfAllowed" />
@@ -165,8 +165,8 @@ export default function ServiceGroup() {
 
         {!isReadonly && (
           <div style={{ marginTop: 10 }}>
-            <button type="submit" style={{ padding: '10px 20px', background: '#3bc9db', color: '#0b1420', fontWeight: 'bold', borderRadius: 6, border: 'none', cursor: 'pointer' }}>Save Settings Map</button>
-            <button type="button" onClick={() => { setMode('View'); setActiveTab('summary'); }} style={{ marginLeft: 10, padding: '10px 20px', background: 'transparent', color: '#adb5bd', border: '1px solid #adb5bd', borderRadius: 6, cursor: 'pointer' }}>Cancel</button>
+            <button type="submit" className="btn btn-primary">Save Settings Map</button>
+            <button type="button" onClick={() => { setMode('View'); setActiveTab('summary'); }} style={{ marginLeft: 10, padding: '10px 20px',  border: '1px solid #adb5bd', borderRadius: 6 }}>Cancel</button>
           </div>
         )}
       </form>

@@ -102,40 +102,39 @@ export default function PharmacyParties() {
   ];
 
   const isReadonly = mode === 'View';
-  const inputStyle = { padding: '8px', background: isReadonly ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.05)', border: '1px solid #555', color: '#fff', borderRadius: 4, width: '100%' };
-
+  
   const detail = (
     <div style={{ padding: '10px 0' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
-        <h2>Party Supplier Configuration</h2>
+        <h2 style={{ margin: 0 }}>Party Supplier Configuration</h2>
         <FormModeSelector mode={mode} onModeChange={handleModeChange} />
       </div>
 
       <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
           {/* Supplier Info */}
-          <div style={{ padding: 20, background: 'rgba(255,255,255,0.02)', borderRadius: 12, border: '1px solid #333', display: 'flex', flexDirection: 'column', gap: 15 }}>
-            <h3 style={{ margin: 0, fontSize: 16, color: '#3bc9db', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ padding: 20,    display: 'flex', flexDirection: 'column', gap: 15 }}>
+            <h3 style={{ margin: 0, fontSize: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
               <Users size={18} /> Supplier Identification
             </h3>
             <div>
-              <label>Supplier Name *</label>
-              <input 
+              <label className="form-label">Supplier Name *</label>
+              <input className="form-control" 
                 type="text" 
                 required
                 value={currentRecord.PryName || ''} 
                 disabled={isReadonly} 
                 onChange={e => setCurrentRecord({...currentRecord, PryName: e.target.value})} 
-                style={inputStyle} 
+                 
               />
             </div>
             <div>
-              <label>Party Group *</label>
-              <select 
+              <label className="form-label">Party Group *</label>
+              <select className="form-control" 
                 value={currentRecord.PryPgpCode || ''} 
                 disabled={isReadonly} 
                 onChange={e => setCurrentRecord({...currentRecord, PryPgpCode: parseInt(e.target.value) || null})} 
-                style={inputStyle}
+                
               >
                 <option value="">-- Choose Party Group --</option>
                 {groups.map(g => (
@@ -144,12 +143,12 @@ export default function PharmacyParties() {
               </select>
             </div>
             <div>
-              <label>Operating Area *</label>
-              <select 
+              <label className="form-label">Operating Area *</label>
+              <select className="form-control" 
                 value={currentRecord.PryAraCode || ''} 
                 disabled={isReadonly} 
                 onChange={e => setCurrentRecord({...currentRecord, PryAraCode: parseInt(e.target.value) || null})} 
-                style={inputStyle}
+                
               >
                 <option value="">-- Choose Area --</option>
                 {areas.map(a => (
@@ -160,37 +159,37 @@ export default function PharmacyParties() {
           </div>
 
           {/* Contact Details */}
-          <div style={{ padding: 20, background: 'rgba(255,255,255,0.02)', borderRadius: 12, border: '1px solid #333', display: 'flex', flexDirection: 'column', gap: 15 }}>
-            <h3 style={{ margin: 0, fontSize: 16, color: '#3bc9db', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ padding: 20,    display: 'flex', flexDirection: 'column', gap: 15 }}>
+            <h3 style={{ margin: 0, fontSize: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
               <Home size={18} /> Contact & Demographics
             </h3>
             <div>
-              <label>Telephone/Mobile</label>
-              <input 
+              <label className="form-label">Telephone/Mobile</label>
+              <input className="form-control" 
                 type="text" 
                 value={currentRecord.PryTelNo || ''} 
                 disabled={isReadonly} 
                 onChange={e => setCurrentRecord({...currentRecord, PryTelNo: e.target.value})} 
-                style={inputStyle} 
+                 
               />
             </div>
             <div>
-              <label>Email Address</label>
-              <input 
+              <label className="form-label">Email Address</label>
+              <input className="form-control" 
                 type="email" 
                 value={currentRecord.PryEmail || ''} 
                 disabled={isReadonly} 
                 onChange={e => setCurrentRecord({...currentRecord, PryEmail: e.target.value})} 
-                style={inputStyle} 
+                 
               />
             </div>
             <div>
-              <label>Street Address</label>
-              <textarea 
+              <label className="form-label">Street Address</label>
+              <textarea className="form-control" 
                 value={currentRecord.PryAddr || ''} 
                 disabled={isReadonly} 
                 onChange={e => setCurrentRecord({...currentRecord, PryAddr: e.target.value})} 
-                style={{ ...inputStyle, height: 75, resize: 'none' }} 
+                style={{ height: 75, resize: 'none' }} 
               />
             </div>
           </div>
@@ -198,10 +197,10 @@ export default function PharmacyParties() {
 
         {!isReadonly && (
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
-            <button type="submit" style={{ padding: '12px 32px', background: '#3bc9db', color: '#0b1420', fontWeight: 'bold', borderRadius: 8, border: 'none', cursor: 'pointer' }}>
+            <button type="submit" className="btn btn-primary">
               Save Supplier
             </button>
-            <button type="button" onClick={() => setActiveTab('summary')} style={{ padding: '12px 24px', background: 'transparent', color: '#adb5bd', border: '1px solid #555', borderRadius: 8, cursor: 'pointer' }}>
+            <button type="button" onClick={() => setActiveTab('summary')} className="btn">
               Cancel
             </button>
           </div>
@@ -218,9 +217,9 @@ export default function PharmacyParties() {
         <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h2 style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <Settings size={24} color="#3bc9db" /> Supplier Party Master
+              <Settings size={24} color="currentColor" /> Supplier Party Master
             </h2>
-            <button onClick={() => handleModeChange('New')} style={{ padding: '8px 16px', background: '#3bc9db', color: '#0b1420', fontWeight: 'bold', borderRadius: 6, border: 'none', cursor: 'pointer' }}>
+            <button className="btn btn-primary" onClick={() => handleModeChange('New')}>
               New Supplier
             </button>
           </div>

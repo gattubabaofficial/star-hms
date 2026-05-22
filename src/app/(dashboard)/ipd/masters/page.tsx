@@ -68,75 +68,72 @@ export default function InpatientMasters() {
 
   const summary = (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
-      <div style={{ display: 'flex', gap: 10, background: 'rgba(255,255,255,0.05)', padding: 10, borderRadius: 8 }}>
+      <div style={{ display: 'flex', gap: 10,  padding: 10 }}>
         {(['Beds', 'Wards', 'Floors'] as MasterType[]).map(m => (
           <button 
             key={m} 
             onClick={() => { setActiveMaster(m); setMode('View'); setActiveTab('summary'); }}
             style={{ 
-              padding: '8px 16px', borderRadius: 6, border: 'none', cursor: 'pointer',
+              padding: '8px 16px', borderRadius: 6,  
               background: activeMaster === m ? '#3bc9db' : 'transparent',
-              color: activeMaster === m ? '#0b1420' : '#adb5bd',
-              fontWeight: 'bold'
-            }}
+              color: activeMaster === m ? '#0b1420' : '#adb5bd' }}
           >
             {m}
           </button>
         ))}
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h2>Hospital {activeMaster} Framework</h2>
+        <h2 style={{ margin: 0 }}>Hospital {activeMaster} Framework</h2>
         <FormModeSelector mode={mode} onModeChange={handleModeChange} />
       </div>
       <GridModule rowData={data} columnDefs={columnsMap[activeMaster]} onRowDoubleClicked={handleRowDoubleClicked} height="100%" />
     </div>
   );
 
-  const inputStyle = { padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid #555', color: '#fff', borderRadius: 4, width: '100%' };
-
+  
   const detail = (
     <div style={{ padding: '10px 0' }}>
        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
-        <h2>Configure {activeMaster.slice(0, -1)}</h2>
+        <h2 style={{ margin: 0 }}>Configure {activeMaster.slice(0, -1)}</h2>
         <FormModeSelector mode={mode} onModeChange={handleModeChange} />
       </div>
       <form onSubmit={handleSave} style={{ maxWidth: 500, display: 'flex', flexDirection: 'column', gap: 20 }}>
         {activeMaster === 'Floors' && (
           <div>
-            <label>Floor Name</label>
-            <input type="text" value={currentRecord.FlrName || ''} onChange={e => setCurrentRecord({...currentRecord, FlrName: e.target.value})} style={inputStyle} />
+            <label className="form-label">Floor Name</label>
+            <input className="form-control" type="text" value={currentRecord.FlrName || ''} onChange={e => setCurrentRecord({...currentRecord, FlrName: e.target.value})} />
           </div>
         )}
         {activeMaster === 'Wards' && (
           <div>
-            <label>Ward Name</label>
-            <input type="text" value={currentRecord.WrdName || ''} onChange={e => setCurrentRecord({...currentRecord, WrdName: e.target.value})} style={inputStyle} />
+            <label className="form-label">Ward Name</label>
+            <input className="form-control" type="text" value={currentRecord.WrdName || ''} onChange={e => setCurrentRecord({...currentRecord, WrdName: e.target.value})} />
           </div>
         )}
         {activeMaster === 'Beds' && (
           <>
             <div>
-              <label>Bed Identifier/Name</label>
-              <input type="text" value={currentRecord.BdmName || ''} onChange={e => setCurrentRecord({...currentRecord, BdmName: e.target.value})} style={inputStyle} />
+              <label className="form-label">Bed Identifier/Name</label>
+              <input className="form-control" type="text" value={currentRecord.BdmName || ''} onChange={e => setCurrentRecord({...currentRecord, BdmName: e.target.value})} />
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
               <div>
-                <label>Ward Mapping</label>
+                <label className="form-label">Ward Mapping</label>
                 <LookupField endpoint="/ipd/wards" valueKey="WrdCode" labelKey="WrdName" value={currentRecord.BdmWrdCode} onChange={v => setCurrentRecord({...currentRecord, BdmWrdCode: v})} />
               </div>
               <div>
-                <label>Floor Mapping</label>
+                <label className="form-label">Floor Mapping</label>
                 <LookupField endpoint="/ipd/floors" valueKey="FlrCode" labelKey="FlrName" value={currentRecord.BdmFlrCode} onChange={v => setCurrentRecord({...currentRecord, BdmFlrCode: v})} />
               </div>
             </div>
             <div>
-              <label>Service Rate Entity (BdmCharges)</label>
-              <input type="number" value={currentRecord.BdmCharges || 0} onChange={e => setCurrentRecord({...currentRecord, BdmCharges: parseFloat(e.target.value)})} style={inputStyle} />
+              <label className="form-label">Service Rate Entity (BdmCharges)</label>
+              <input className="form-control" type="number" value={currentRecord.BdmCharges || 0} onChange={e => setCurrentRecord({...currentRecord, BdmCharges: parseFloat(e.target.value)})} />
             </div>
           </>
         )}
         {mode !== 'View' && (
-          <button type="submit" style={{ padding: '12px', background: '#3bc9db', color: '#0b1420', fontWeight: 'bold', borderRadius: 6, border: 'none', cursor: 'pointer' }}>
+          <button type="submit" className="btn btn-primary">
             Save Selection
           </button>
         )}

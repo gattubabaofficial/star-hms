@@ -10,6 +10,36 @@ def get_companies(db: Session = Depends(get_db)):
     companies = db.query(models.Company).filter(models.Company.CmpRecState == 1).all()
     # Return as list of simple dicts matching Next.js response keys
     return [{"CmpCode": c.CmpCode, "CmpName": c.CmpName} for c in companies]
+@router.post("/register")
+def register(payload: schemas.LoginRequest, db: Session = Depends(get_db)):
+    # Simple register endpoint. We default to assigning them to company 1 and role 1 for demo purposes.
+    existing = db.query(models.UserMast).filter(models.UserMast.UsrName == payload.username).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Username already exists")
+    # Ensure default role exists to prevent foreign key constraint failure
+    role = db.query(models.UserRoleMst).filter(models.UserRoleMst.UrlCode == 1).first()
+    if not role:
+        role = models.UserRoleMst(UrlCode=1, UrlName="Administrator", UrlRecState=1)
+        db.add(role)
+    
+    # Ensure the requested company exists so they can login
+    cmp_code_int = int(payload.companyCode) if payload.companyCode else 1
+    company = db.query(models.Company).filter(models.Company.CmpCode == cmp_code_int).first()
+    if not company:
+        company = models.Company(CmpCode=cmp_code_int, CmpName=f"Company {cmp_code_int}", CmpRecState=1)
+        db.add(company)
+        
+    db.commit()
+
+    new_user = models.UserMast(
+        UsrName=payload.username,
+        UsrPwd=auth.hash_password(payload.password),
+        UsrUrlCode=1,
+        UsrRecState=1
+    )
+    db.add(new_user)
+    db.commit()
+    return {"message": "User created successfully"}
 
 @router.post("/login", response_model=schemas.LoginResponse)
 def login(payload: schemas.LoginRequest, db: Session = Depends(get_db)):
@@ -32,7 +62,10 @@ def login(payload: schemas.LoginRequest, db: Session = Depends(get_db)):
     if not user:
         user = db.query(models.UserMast).filter(models.UserMast.UsrName == username).first()
 
-    if not user or not auth.compare_password(password, user.UsrPwd):
+    if not user:
+        raise HTTPException(status_code=401, detail="User does not exist")
+        
+    if not auth.compare_password(password, user.UsrPwd):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     # Verify company code selection

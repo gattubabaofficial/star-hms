@@ -2,11 +2,10 @@
 
 import React, { useMemo } from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import { ColDef, GridReadyEvent } from 'ag-grid-community';
+import { ColDef, GridReadyEvent, ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 
-// AG Grid Core Styles
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
+// Register AG Grid modules
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 interface Props {
   rowData: any[];
@@ -26,7 +25,7 @@ export default function GridModule({ rowData, columnDefs, onRowDoubleClicked, he
   }, []);
 
   return (
-    <div className="ag-theme-alpine-dark" style={{ height, width: '100%', borderRadius: 8 }}>
+    <div style={{ height, width: '100%', borderRadius: 8 }}>
       <AgGridReact
         rowData={rowData}
         columnDefs={columnDefs}

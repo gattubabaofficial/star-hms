@@ -1,0 +1,29 @@
+Hospital Management System - Module Status
+
+1. Hospital Masters
+   Status: BUILT (Complete)
+   Details: Core masters (Doctor, Patient Category, Ward, Floor, Bed, Diagnostics) fully implemented with plain CSS and PostgreSQL relationships.
+
+2. OPD Registration & Billing
+   Status: BUILT (Complete)
+   Details: Outpatient registration, dynamic receipt generation, and complex voucher billing mapped to backend router.
+
+3. IPD (Indoor Patient Department)
+   Status: BUILT (Complete)
+   Details: Inpatient admissions, live bed census tracking, and automatic accrued daily boarding charge generation.
+
+4. Pharmacy
+   Status: BUILT (Complete)
+   Details: Item and Party masters configured. Dynamic transaction grids for Purchase Entry and Sales Entry built.
+
+5. Diagnostic Lab
+   Status: BUILT (Complete)
+   Details: Lab billing and test receipt generation mapped to backend models.
+
+6. Administration & Reporting
+   Status: BUILT (Complete)
+   Details: Collection auditing hub deployed. Consolidates multi-department revenue (OPD, IPD, Lab).
+
+7. Legacy Sync Agent
+   Status: BUILT (Complete)
+   Details: Node.js ADODB agent configured to bridge Microsoft Access database (HmsWin.mdb) to the cloud PostgreSQL database.

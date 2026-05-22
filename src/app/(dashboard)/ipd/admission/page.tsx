@@ -92,12 +92,11 @@ export default function Admission() {
       field: 'IhdStatus', 
       headerName: 'Status', 
       width: 120,
-      cellStyle: p => ({ color: p.value === 'Admitted' ? '#3bc9db' : '#adb5bd', fontWeight: 'bold' })
+      cellStyle: p => ({ color: p.value === 'Admitted' ? '#3bc9db' : '#adb5bd',  })
     }
   ];
 
-  const inputStyle = { padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid #555', color: '#fff', borderRadius: 4, width: '100%' };
-
+  
   const availableBeds = beds.filter(b => 
     !b.IndrHdr.some((adm: any) => adm.IhdStatus === 'Admitted') || b.BdmCode === currentRecord.IhdBedCode
   );
@@ -105,10 +104,10 @@ export default function Admission() {
   const detail = (
     <div style={{ padding: '10px 0' }}>
        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 25 }}>
-        <h2>Inpatient Admission Lifecycle</h2>
+        <h2 style={{ margin: 0 }}>Inpatient Admission Lifecycle</h2>
         <div style={{ display: 'flex', gap: 10 }}>
           {currentRecord.IhdStatus === 'Admitted' && mode === 'View' && (
-            <button onClick={handleDischarge} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', background: '#e03131', color: '#fff', borderRadius: 6, border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>
+            <button onClick={handleDischarge} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px',  borderRadius: 6 }}>
               <LogOut size={18} /> Discharge Patient
             </button>
           )}
@@ -119,38 +118,38 @@ export default function Admission() {
       <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 25 }}>
           {/* Patient Details */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: 20, background: 'rgba(255,255,255,0.02)', borderRadius: 12, border: '1px solid #333' }}>
-            <h3 style={{ margin: 0, fontSize: 16, color: '#3bc9db', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div className="dashboard-card">
+            <h3 style={{ margin: 0, fontSize: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
               <UserPlus size={18} /> Administrative Enrollment
             </h3>
             <div>
-              <label>Select Admitting Patient *</label>
+              <label className="form-label">Select Admitting Patient *</label>
               <LookupField endpoint="/opd/patient-master" valueKey="PttCode" labelKey="PttName" value={currentRecord.IhdPttCode} onChange={v => setCurrentRecord({...currentRecord, IhdPttCode: v})} disabled={mode === 'View' || !!currentRecord.IhdCode} />
             </div>
             <div>
-              <label>Consultant In-Charge *</label>
+              <label className="form-label">Consultant In-Charge *</label>
               <LookupField endpoint="/masters/doctor-master" valueKey="DctCode" labelKey="DctName" value={currentRecord.IhdCDctCode} onChange={v => setCurrentRecord({...currentRecord, IhdCDctCode: v})} disabled={mode === 'View'} />
             </div>
              <div>
-              <label>Admission Date</label>
-              <input type="date" value={currentRecord.IhdDate || ''} onChange={e => setCurrentRecord({...currentRecord, IhdDate: e.target.value})} style={inputStyle} disabled={mode === 'View'} />
+              <label className="form-label">Admission Date</label>
+              <input className="form-control" type="date" value={currentRecord.IhdDate || ''} onChange={e => setCurrentRecord({...currentRecord, IhdDate: e.target.value})}  disabled={mode === 'View'} />
             </div>
           </div>
 
           {/* Bed Allocation */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: 20, background: 'rgba(255,255,255,0.02)', borderRadius: 12, border: '1px solid #333' }}>
-             <h3 style={{ margin: 0, fontSize: 16, color: '#3bc9db', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div className="dashboard-card">
+             <h3 style={{ margin: 0, fontSize: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
               <Bed size={18} /> Spatial bed Allocation
             </h3>
             <div>
-              <label>Assigned Bed *</label>
-              <select 
+              <label className="form-label">Assigned Bed *</label>
+              <select className="form-control" 
                 value={currentRecord.IhdBedCode || ''} 
                 onChange={e => {
                   const b = beds.find(x => x.BdmCode === parseInt(e.target.value));
                   setCurrentRecord({...currentRecord, IhdBedCode: b.BdmCode, IhdWrdCode: b.BdmWrdCode, IhdFlrCode: b.BdmFlrCode});
                 }} 
-                style={inputStyle} 
+                 
                 disabled={mode === 'View'}
               >
                 <option value="">-- Choose Available Bed --</option>
@@ -162,11 +161,11 @@ export default function Admission() {
               </select>
             </div>
              <div>
-              <label>Primary Diagnosis / Admission Reason</label>
-              <textarea 
+              <label className="form-label">Primary Diagnosis / Admission Reason</label>
+              <textarea className="form-control" 
                 value={currentRecord.IhdRemark || ''} 
                 onChange={e => setCurrentRecord({...currentRecord, IhdRemark: e.target.value})} 
-                style={{ ...inputStyle, height: 100, resize: 'none' }} 
+                style={{ height: 100, resize: 'none' }} 
                 disabled={mode === 'View'}
               />
             </div>
@@ -175,7 +174,7 @@ export default function Admission() {
 
         {mode === 'New' && (
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button type="submit" style={{ padding: '12px 32px', background: '#3bc9db', color: '#0b1420', fontWeight: 'bold', borderRadius: 8, border: 'none', cursor: 'pointer' }}>
+            <button type="submit" className="btn btn-primary">
               Confirm Admission
             </button>
           </div>
@@ -191,8 +190,8 @@ export default function Admission() {
       summaryNode={
         <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h2>Inpatient Census</h2>
-            <button onClick={() => handleModeChange('New')} style={{ padding: '8px 16px', background: '#3bc9db', color: '#0b1420', fontWeight: 'bold', borderRadius: 6, border: 'none', cursor: 'pointer' }}>
+            <h2 style={{ margin: 0 }}>Inpatient Census</h2>
+            <button className="btn btn-primary" onClick={() => handleModeChange('New')}>
               Admit New Patient
             </button>
           </div>

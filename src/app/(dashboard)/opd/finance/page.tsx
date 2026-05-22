@@ -83,10 +83,10 @@ export default function FinanceModule() {
   };
 
   return (
-    <div style={{ padding: '40px', color: '#fff' }}>
+    <div style={{ padding: '40px' }}>
       <header style={{ marginBottom: '30px' }}>
         <h1 style={{ fontSize: '24px', display: 'flex', alignItems: 'center', gap: '10px', textTransform: 'uppercase' }}>
-          <CreditCard size={28} color="#fab005" /> {mode} Payments & Refunds
+          <CreditCard size={28} color="currentColor" /> {mode} Payments & Refunds
         </h1>
         <p style={{ color: '#868e96', margin: '5px 0 0' }}>Manage financial settlements for {mode.toUpperCase()} billing.</p>
       </header>
@@ -95,13 +95,13 @@ export default function FinanceModule() {
         {/* Left Side: Bill List */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <div style={{ 
-            background: 'rgba(255,255,255,0.03)', 
+             
             borderRadius: '20px',
-            border: '1px solid rgba(255,255,255,0.1)',
+            
             overflow: 'hidden'
           }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <thead style={{ background: 'rgba(255,255,255,0.05)' }}>
+              <thead >
                 <tr>
                   <th style={{ padding: '15px', textAlign: 'left' }}>Bill No.</th>
                   <th style={{ padding: '15px', textAlign: 'left' }}>Patient</th>
@@ -116,10 +116,8 @@ export default function FinanceModule() {
                   <tr 
                     key={bill.id} 
                     style={{ 
-                      borderBottom: '1px solid rgba(255,255,255,0.05)',
-                      background: selectedBill?.id === bill.id ? 'rgba(250, 176, 5, 0.05)' : 'transparent',
-                      cursor: 'pointer'
-                    }}
+                      
+                      background: selectedBill?.id === bill.id ? 'rgba(250, 176, 5, 0.05)' : 'transparent' }}
                     onClick={() => {
                       setSelectedBill(bill);
                       fetchHistory(bill.id);
@@ -128,7 +126,7 @@ export default function FinanceModule() {
                     <td style={{ padding: '15px' }}>#{bill.vchNo}</td>
                     <td style={{ padding: '15px' }}>{bill.pttName}</td>
                     <td style={{ padding: '15px', textAlign: 'right' }}>{bill.totalAmt.toFixed(2)}</td>
-                    <td style={{ padding: '15px', textAlign: 'right', color: '#40c057' }}>{bill.paidAmt.toFixed(2)}</td>
+                    <td style={{ padding: '15px', textAlign: 'right'}}>{bill.paidAmt.toFixed(2)}</td>
                     <td style={{ padding: '15px', textAlign: 'right', color: '#ff6b6b', fontWeight: 600 }}>{bill.balAmt.toFixed(2)}</td>
                     <td style={{ padding: '15px', textAlign: 'center' }}>
                       <span style={{ fontSize: '12px', opacity: 0.5 }}>Select →</span>
@@ -146,7 +144,7 @@ export default function FinanceModule() {
             <div style={{ 
               padding: '60px 40px', 
               textAlign: 'center', 
-              background: 'rgba(255,255,255,0.02)', 
+               
               borderRadius: '20px',
               border: '1px dashed rgba(255,255,255,0.1)'
             }}>
@@ -156,14 +154,12 @@ export default function FinanceModule() {
           ) : (
             <>
               <div style={{ 
-                background: 'rgba(255,255,255,0.03)', 
+                 
                 padding: '24px', 
-                borderRadius: '20px',
-                border: '1px solid rgba(255,255,255,0.1)'
-              }}>
+                borderRadius: '20px'}}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                  <div style={{ padding: '10px', background: '#fab00515', borderRadius: '12px' }}>
-                    <User color="#fab005" size={20} />
+                  <div style={{ padding: '10px', background: '#fab00515' }}>
+                    <User color="currentColor" size={20} />
                   </div>
                   <div>
                     <h3 style={{ margin: 0, fontSize: '16px' }}>{selectedBill.pttName}</h3>
@@ -174,7 +170,7 @@ export default function FinanceModule() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   <div>
                     <label style={{ display: 'block', fontSize: '12px', color: '#868e96', marginBottom: '8px' }}>Amount</label>
-                    <input 
+                    <input className="form-control" 
                       type="number" 
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
@@ -183,9 +179,9 @@ export default function FinanceModule() {
                         width: '100%',
                         padding: '12px',
                         background: '#1a1a1a',
-                        border: '1px solid #333',
+                        
                         borderRadius: '10px',
-                        color: '#fff',
+                        
                         fontSize: '18px'
                       }}
                     />
@@ -196,12 +192,12 @@ export default function FinanceModule() {
                       disabled={loading}
                       style={{
                         padding: '12px',
-                        background: '#40c057',
-                        border: 'none',
+
+                        
                         borderRadius: '10px',
-                        color: '#fff',
+                        
                         fontWeight: 600,
-                        cursor: 'pointer',
+                        
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -216,11 +212,11 @@ export default function FinanceModule() {
                       style={{
                         padding: '12px',
                         background: '#ff6b6b',
-                        border: 'none',
+                        
                         borderRadius: '10px',
-                        color: '#fff',
+                        
                         fontWeight: 600,
-                        cursor: 'pointer',
+                        
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -234,11 +230,9 @@ export default function FinanceModule() {
               </div>
 
               <div style={{ 
-                background: 'rgba(255,255,255,0.03)', 
+                 
                 padding: '24px', 
-                borderRadius: '20px',
-                border: '1px solid rgba(255,255,255,0.1)'
-              }}>
+                borderRadius: '20px'}}>
                 <h3 style={{ marginBottom: '20px', fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <History size={18} color="#adb5bd" /> Transaction History
                 </h3>
@@ -250,12 +244,12 @@ export default function FinanceModule() {
                         display: 'flex', 
                         justifyContent: 'space-between', 
                         padding: '10px', 
-                        background: 'rgba(255,255,255,0.02)',
-                        borderRadius: '8px',
+                        
+                        
                         borderLeft: `4px solid ${item.type === 'PAY' ? '#40c057' : '#ff6b6b'}`
                       }}>
                         <div>
-                          <span style={{ fontSize: '12px', color: '#adb5bd' }}>
+                          <span style={{ fontSize: '12px' }}>
                             {new Date(item.ObpDate || item.ObrDate || item.IpdDate || item.IrdDate || item.LphDate || item.LrhDate).toLocaleDateString()}
                           </span>
                           <div style={{ fontSize: '14px' }}>{item.type} Receipt</div>
