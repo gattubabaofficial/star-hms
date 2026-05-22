@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/_legacy/
+_legacy/apps/web/node_modules/.bin/
+backend/app/__pycache__/
