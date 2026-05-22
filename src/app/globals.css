@@ -1,44 +1,129 @@
 :root {
-  --bg-primary: #f0f0f0;
-  --bg-secondary: #ffffff;
-  --bg-tertiary: #e0e0e0;
-  --text-primary: #333333;
-  --text-secondary: #666666;
-  --border-color: #cccccc;
-  --accent-color: #0078d7;
-  --accent-hover: #005a9e;
-  --danger-color: #d13438;
-  --success-color: #107c10;
-  --font-family: Arial, Helvetica, sans-serif;
-}
+  /* Warm / Off-white Background */
+  --bg-primary: #F8F7F4;
+  --bg-secondary: #FFFFFF;
+  
+  /* Text Colors */
+  --text-primary: #2F3542;
+  --text-secondary: #5B677D;
+  
+  /* Borders & Accents */
+  --border-color: #E5E7EB;
+  --accent-color: #5B8DEF;
+  --accent-hover: #4A76CE;
+  --success-color: #6FAF8F;
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  /* Typography */
+  --font-family: var(--font-inter), 'Inter', 'Open Sans', 'Nunito', 'Roboto', sans-serif;
 }
 
 body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: var(--font-family);
-  font-size: 14px;
-  line-height: 1.4;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Base Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-top: 0;
+}
+
+/* Links */
 a {
   color: var(--accent-color);
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 a:hover {
-  text-decoration: underline;
+  color: var(--accent-hover);
 }
 
-h1, h2, h3, h4, h5, h6 {
-  margin-bottom: 10px;
-  font-weight: 600;
+/* Global Utilities */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font-family);
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+
+.btn:hover {
+  background-color: #f1f3f5;
+  border-color: #d1d5db;
+}
+
+.btn-primary {
+  background-color: var(--accent-color);
+  color: #ffffff;
+  border-color: var(--accent-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
+  color: #ffffff;
+}
+
+/* Common form elements for the clean medical look */
+input, select, textarea {
+  font-family: var(--font-family);
+  font-size: 14px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: border-color 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(91, 141, 239, 0.1);
+}
+
+/* Clean, readable tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--bg-secondary);
+}
+
+th, td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+}
+
+th {
+  font-weight: 500;
+  color: var(--text-secondary);
+  background-color: #fafafa;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+  background-color: #f8fafc;
 }

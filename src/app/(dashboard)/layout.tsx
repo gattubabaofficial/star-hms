@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AppShell from '../../components/layout/AppShell';
 import { useAuthStore } from '../../store/authStore';
+import { useHydrated } from '../../store/useHydration';
 
 export default function DashboardLayout({
   children,
@@ -12,16 +13,24 @@ export default function DashboardLayout({
   const { token } = useAuthStore();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const isHydrated = useHydrated();
 
   useEffect(() => {
     setMounted(true);
-    if (!token) {
+  }, []);
+
+  useEffect(() => {
+    if (mounted && isHydrated && !token) {
       router.replace('/login');
     }
-  }, [token, router]);
+  }, [token, router, mounted, isHydrated]);
 
-  if (!mounted || !token) {
+  if (!mounted || !isHydrated) {
     return <div style={{ padding: 50, textAlign: 'center' }}>Loading System Modules...</div>;
+  }
+
+  if (!token) {
+    return null; // Will redirect in useEffect
   }
 
   return <AppShell>{children}</AppShell>;

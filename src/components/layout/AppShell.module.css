@@ -8,6 +8,11 @@
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-family);
+  transition: grid-template-columns 0.3s ease;
+}
+
+.collapsed {
+  grid-template-columns: 80px 1fr;
 }
 
 .sidebarArea {

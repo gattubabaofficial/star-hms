@@ -1,7 +1,9 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import apiClient from '@/lib/apiClient';
+import { useAuthStore } from '../../store/authStore';
+import { useHydrated } from '../../store/useHydration';
 
 export default function Signup() {
   const [username, setUsername] = useState('');
@@ -10,7 +12,15 @@ export default function Signup() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
+  const { token } = useAuthStore();
+  const isHydrated = useHydrated();
   const router = useRouter();
+
+  useEffect(() => {
+    if (isHydrated && token) {
+      router.replace('/dashboard');
+    }
+  }, [isHydrated, token, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,12 +48,12 @@ export default function Signup() {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#f0f0f0' }}>
-      <div style={{ width: '400px', padding: '30px', backgroundColor: '#fff', border: '1px solid #ccc' }}>
-        <h2 style={{ marginBottom: '10px' }}>Sign Up</h2>
-        <p style={{ color: '#666', marginBottom: '20px' }}>Create a new administrator account.</p>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'var(--bg-primary)', fontFamily: 'var(--font-family)' }}>
+      <div style={{ width: '400px', padding: '30px', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
+        <h2 style={{ marginBottom: '10px', color: 'var(--text-primary)' }}>Sign Up</h2>
+        <p style={{ color: 'var(--text-secondary)', marginBottom: '20px' }}>Create a new administrator account.</p>
 
-        {error && <div style={{ padding: '10px', backgroundColor: '#f8d7da', color: '#721c24', marginBottom: '15px' }}>{error}</div>}
+        {error && <div style={{ padding: '10px', backgroundColor: 'rgba(229, 115, 115, 0.1)', color: 'var(--danger-color)', border: '1px solid var(--danger-color)', borderRadius: '4px', marginBottom: '15px', textAlign: 'center', fontSize: '13px' }}>{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -81,7 +91,7 @@ export default function Signup() {
           </div>
 
           <div className="form-actions" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-            <a href="/login" style={{ fontSize: '14px', color: '#0078d7' }}>Back to Login</a>
+            <a href="/login" style={{ fontSize: '14px', color: 'var(--accent-color)' }}>Back to Login</a>
             <button type="submit" className="btn btn-primary" disabled={loading}>
               {loading ? 'Registering...' : 'Sign Up'}
             </button>

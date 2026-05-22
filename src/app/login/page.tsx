@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import apiClient from '@/lib/apiClient';
 import { useAuthStore } from '../../store/authStore';
+import { useHydrated } from '../../store/useHydration';
 import styles from './Login.module.css';
 
 interface CompanyConfig {
@@ -18,8 +19,15 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
-  const setAuth = useAuthStore((state) => state.setAuth);
+  const { token, setAuth } = useAuthStore();
+  const isHydrated = useHydrated();
   const router = useRouter();
+
+  useEffect(() => {
+    if (isHydrated && token) {
+      router.replace('/dashboard');
+    }
+  }, [isHydrated, token, router]);
 
   useEffect(() => {
     // Fetch companies on mount

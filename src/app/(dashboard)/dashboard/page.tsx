@@ -23,17 +23,17 @@ function MenuCard({ title, icon, links }: MenuCardProps) {
     <div style={{ 
       padding: '20px', 
       borderRadius: '8px', 
-      border: `1px solid #d1d5db`,
-      backgroundColor: '#ffffff',
+      border: `1px solid var(--border-color)`,
+      backgroundColor: 'var(--bg-secondary)',
       boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
       display: 'flex',
       flexDirection: 'column',
       gap: '16px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: '10px', borderBottom: '1px solid #e5e7eb' }}>
-        <div style={{ padding: '8px', backgroundColor: '#eff6ff', color: '#2563eb', borderRadius: '6px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: '10px', borderBottom: '1px solid var(--border-color)' }}>
+        <div style={{ padding: '8px', backgroundColor: 'rgba(91, 141, 239, 0.1)', color: 'var(--accent-color)', borderRadius: '6px' }}>
           {React.cloneElement(icon as React.ReactElement<any>, { size: 20 })}
         </div>
-        <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: '#1f2937' }}>{title}</h3>
+        <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: 'var(--text-primary)' }}>{title}</h3>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
         {links.map((link, idx) => (
@@ -44,24 +44,27 @@ function MenuCard({ title, icon, links }: MenuCardProps) {
               padding: '8px 12px',
               borderRadius: '6px',
               textAlign: 'left',
-              color: '#4b5563',
+              color: 'var(--text-secondary)',
               fontSize: '14px',
               transition: 'all 0.2s',
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'center'
+              alignItems: 'center',
+              backgroundColor: 'transparent',
+              border: 'none',
+              cursor: 'pointer'
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background = '#f3f4f6';
-              (e.currentTarget as HTMLButtonElement).style.color = '#111827';
+              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(91, 141, 239, 0.05)';
+              (e.currentTarget as HTMLButtonElement).style.color = 'var(--accent-hover)';
             }}
             onMouseLeave={(e) => {
               (e.currentTarget as HTMLButtonElement).style.background = 'transparent';
-              (e.currentTarget as HTMLButtonElement).style.color = '#4b5563';
+              (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-secondary)';
             }}
           >
             {link.label}
-            <span style={{ fontSize: '14px', color: '#9ca3af' }}>&rarr;</span>
+            <span style={{ fontSize: '14px', color: 'var(--border-color)' }}>&rarr;</span>
           </button>
         ))}
       </div>
@@ -128,12 +131,12 @@ export default function Dashboard() {
   ];
 
   return (
-    <div style={{ padding: '32px', backgroundColor: '#f9fafb', minHeight: '100vh', display: 'flex', flexDirection: 'column', gap: '32px' }}>
-      <header style={{ paddingBottom: '24px', borderBottom: '1px solid #e5e7eb' }}>
-        <h1 style={{ fontSize: '24px', fontWeight: 600, color: '#111827', margin: '0 0 8px 0', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <LayoutDashboard color="#2563eb" size={28} /> HMS Control Center
+    <div style={{ padding: '32px', backgroundColor: 'var(--bg-primary)', minHeight: '100vh', display: 'flex', flexDirection: 'column', gap: '32px' }}>
+      <header style={{ paddingBottom: '24px', borderBottom: '1px solid var(--border-color)' }}>
+        <h1 style={{ fontSize: '24px', fontWeight: 600, color: 'var(--text-primary)', margin: '0 0 8px 0', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <LayoutDashboard color="var(--accent-color)" size={28} /> HMS Control Center
         </h1>
-        <p style={{ color: '#6b7280', margin: 0, fontSize: '15px' }}>
+        <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '15px' }}>
           Primary Navigation Dashboard & Modules
         </p>
       </header>

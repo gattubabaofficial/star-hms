@@ -1,56 +1,103 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { ShieldCheck, Activity, Users, Building2, FlaskConical } from 'lucide-react';
+import styles from './page.module.css';
 
 export default function LandingPage() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', fontFamily: 'Arial, sans-serif', backgroundColor: '#f0f0f0', color: '#333' }}>
-      <header style={{ padding: '20px', borderBottom: '1px solid #ccc', backgroundColor: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1 style={{ margin: 0, fontSize: '24px' }}>Hospital Management System</h1>
-        <div style={{ display: 'flex', gap: '10px' }}>
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <div className={styles.logo}>
+          <ShieldCheck size={32} color="var(--accent-color)" />
+          HMS SECURE
+        </div>
+        <div className={styles.navButtons}>
           <Link href="/login">
-            <button className="btn">Login</button>
+            <button className="btn">Sign In</button>
           </Link>
           <Link href="/signup">
-            <button className="btn btn-primary">Sign Up</button>
+            <button className="btn btn-primary">Book Demo</button>
           </Link>
         </div>
       </header>
 
-      <main style={{ flex: 1, padding: '40px', maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-        <h2 style={{ fontSize: '32px', marginBottom: '20px' }}>Enterprise Medical Software</h2>
-        <p style={{ fontSize: '18px', color: '#666', marginBottom: '40px', lineHeight: '1.6' }}>
-          A complete, unified solution for Hospital Outdoor (OPD), Indoor (IPD), Pharmacy, Diagnostic Lab, and full financial reporting. Designed for high-density, high-speed data entry.
-        </p>
+      <main>
+        <section className={styles.heroSection}>
+          <div className={styles.heroText}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-color)', fontWeight: 600, marginBottom: '16px' }}>
+              <Activity size={20} />
+              <span>Next-Gen Healthcare IT</span>
+            </div>
+            <h1 className={styles.heroTitle}>
+              Intelligent <span>Hospital Management</span> for Modern Care
+            </h1>
+            <p className={styles.heroSubtitle}>
+              A comprehensive, unified digital solution designed to streamline Hospital Outdoor (OPD), Indoor (IPD), Pharmacy, Diagnostic Labs, and financial workflows with maximum efficiency and clarity.
+            </p>
+            <div className={styles.heroActions}>
+              <Link href="/login">
+                <button className="btn btn-primary" style={{ padding: '16px 32px', fontSize: '16px' }}>
+                  Access Dashboard
+                </button>
+              </Link>
+              <Link href="/signup">
+                <button className="btn" style={{ padding: '16px 32px', fontSize: '16px' }}>
+                  View Features
+                </button>
+              </Link>
+            </div>
+          </div>
+          
+          <div className={styles.heroImageContainer}>
+            <Image 
+              src="/hospital_hero_bg.png" 
+              alt="Hospital Management System Dashboard Mockup" 
+              width={800} 
+              height={600} 
+              className={styles.heroImage}
+              priority
+            />
+          </div>
+        </section>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px', textAlign: 'left' }}>
-          <div style={{ padding: '20px', border: '1px solid #ccc', backgroundColor: '#fff' }}>
-            <h3 style={{ margin: '0 0 10px 0' }}>OPD Registration</h3>
-            <p style={{ margin: 0, color: '#666' }}>Streamlined patient registration and billing workflows.</p>
+        <section className={styles.featuresSection}>
+          <div className={styles.featuresInner}>
+            <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+              <h2 style={{ fontSize: '36px', color: 'var(--text-primary)', marginBottom: '16px' }}>Enterprise-Grade Modules</h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '18px', maxWidth: '600px', margin: '0 auto' }}>
+                Seamlessly integrated modules that handle high-density, high-speed data entry without the visual fatigue.
+              </p>
+            </div>
+            <div className={styles.featuresGrid}>
+              <div className={styles.featureCard}>
+                <Users size={32} className={styles.featureIcon} />
+                <h3 className={styles.featureTitle}>OPD Registration</h3>
+                <p className={styles.featureDesc}>Streamlined outpatient registration, appointments, and billing workflows optimized for high-volume clinics.</p>
+              </div>
+              <div className={styles.featureCard}>
+                <Building2 size={32} className={styles.featureIcon} />
+                <h3 className={styles.featureTitle}>IPD Admissions</h3>
+                <p className={styles.featureDesc}>Real-time bed census, admission registries, and accrued ward billing management all in one place.</p>
+              </div>
+              <div className={styles.featureCard}>
+                <ShieldCheck size={32} className={styles.featureIcon} />
+                <h3 className={styles.featureTitle}>Pharmacy Store</h3>
+                <p className={styles.featureDesc}>Integrated item master, supplier parties management, point of sale, and automated stock alerts.</p>
+              </div>
+              <div className={styles.featureCard}>
+                <FlaskConical size={32} className={styles.featureIcon} />
+                <h3 className={styles.featureTitle}>Diagnostic Lab</h3>
+                <p className={styles.featureDesc}>Comprehensive lab services billing, sample tracking, and seamless financial integration.</p>
+              </div>
+            </div>
           </div>
-          <div style={{ padding: '20px', border: '1px solid #ccc', backgroundColor: '#fff' }}>
-            <h3 style={{ margin: '0 0 10px 0' }}>IPD Admissions</h3>
-            <p style={{ margin: 0, color: '#666' }}>Bed census and accrued ward billing management.</p>
-          </div>
-          <div style={{ padding: '20px', border: '1px solid #ccc', backgroundColor: '#fff' }}>
-            <h3 style={{ margin: '0 0 10px 0' }}>Pharmacy Store</h3>
-            <p style={{ margin: 0, color: '#666' }}>Integrated item master, supplier parties, and point of sale.</p>
-          </div>
-          <div style={{ padding: '20px', border: '1px solid #ccc', backgroundColor: '#fff' }}>
-            <h3 style={{ margin: '0 0 10px 0' }}>Diagnostic Lab</h3>
-            <p style={{ margin: 0, color: '#666' }}>Comprehensive lab services billing and integration.</p>
-          </div>
-        </div>
-
-        <div style={{ marginTop: '40px' }}>
-          <Link href="/login">
-            <button className="btn btn-primary" style={{ padding: '15px 30px', fontSize: '16px' }}>Access Dashboard</button>
-          </Link>
-        </div>
+        </section>
       </main>
 
-      <footer style={{ padding: '20px', textAlign: 'center', borderTop: '1px solid #ccc', backgroundColor: '#e0e0e0', fontSize: '12px' }}>
-        &copy; {new Date().getFullYear()} Star HMS Enterprise. All rights reserved.
+      <footer className={styles.footer}>
+        &copy; {new Date().getFullYear()} HMS Secure Enterprise Software. Designed for Healthcare Professionals. All rights reserved.
       </footer>
     </div>
   );

@@ -225,3 +225,38 @@ erDiagram
         float SahTotalAmt
     }
 ```
+
+## ⚙️ Environment Configuration (`.env`)
+
+Create a `.env` file inside the `backend` directory. Below is the required format and the fields you need to fill:
+
+```env
+# PostgreSQL connection string
+DATABASE_URL=postgresql://<USERNAME>:<PASSWORD>@localhost:5432/<DATABASE_NAME>
+
+# JWT Authentication
+JWT_SECRET=your_super_secret_key_here
+JWT_EXPIRES_IN=24h
+
+# Legacy Sync Configuration
+SYNC_API_KEY=hms-sync-secret-key
+```
+
+- **`DATABASE_URL`**: The connection string to your PostgreSQL instance. Replace `<USERNAME>`, `<PASSWORD>`, and `<DATABASE_NAME>` with your database credentials.
+- **`JWT_SECRET`**: A strong, random string used to sign JWT tokens.
+- **`JWT_EXPIRES_IN`**: Token validity duration.
+- **`SYNC_API_KEY`**: Secret key used by the legacy Node.js sync agent to securely transfer data.
+
+## 🛢️ PostgreSQL Database Setup
+
+To run this system, you need to create a PostgreSQL database. Follow these steps:
+
+1. **Install PostgreSQL**: Download and install PostgreSQL from the [official website](https://www.postgresql.org/download/).
+2. **Open psql or pgAdmin**: Connect to your default Postgres server.
+3. **Create the Database**: Run the following SQL command to create the database:
+   ```sql
+   CREATE DATABASE "star-hms";
+   ```
+4. **Update `.env`**: Make sure your `.env` file reflects the newly created database name and the password you set during installation:
+   `DATABASE_URL=postgresql://postgres:your_password@localhost:5432/star-hms`
+5. **Initialize Tables**: When you run the FastAPI backend (`python -m uvicorn app.main:app`), SQLAlchemy will automatically detect the connection and generate the required tables.

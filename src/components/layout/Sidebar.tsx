@@ -12,9 +12,12 @@ import {
   ShieldCheck,
   ChevronRight, 
   ChevronDown,
-  LayoutDashboard
+  LayoutDashboard,
+  LogOut,
+  Menu
 } from 'lucide-react';
 import styles from './Sidebar.module.css';
+import { useAuthStore } from '../../store/authStore';
 
 interface MenuItem {
   id: string;
@@ -25,7 +28,7 @@ interface MenuItem {
 }
 
 const MENU_DATA: MenuItem[] = [
-  { id: 'dashboard', title: 'Home Dashboard', icon: LayoutDashboard, path: '/' },
+  { id: 'dashboard', title: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
   {
     id: 'opd',
     title: 'Hospital Outdoor',
@@ -87,22 +90,31 @@ const MENU_DATA: MenuItem[] = [
   }
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isCollapsed, toggleCollapse }: { isCollapsed?: boolean, toggleCollapse?: () => void }) {
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const router = useRouter();
   const pathname = usePathname();
+  const logout = useAuthStore((state) => state.logout);
+
+  const handleLogout = () => {
+    logout();
+    router.push('/login');
+  };
 
   const toggleExpand = (id: string) => {
     setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
   return (
-    <div className={styles.sidebar}>
+    <div className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ''}`}>
       <div className={styles.logo}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <ShieldCheck size={24} color="#3bc9db" />
-          <span style={{ fontWeight: 700, letterSpacing: '1px' }}>HMS SECURE</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1 }}>
+          <ShieldCheck size={24} color="var(--accent-color)" style={{ minWidth: '24px' }} />
+          {!isCollapsed && <span style={{ fontWeight: 700, letterSpacing: '1px' }}>HMS SECURE</span>}
         </div>
+        <button className={styles.collapseBtn} onClick={toggleCollapse}>
+          <Menu size={20} />
+        </button>
       </div>
       <nav className={styles.nav}>
         {MENU_DATA.map((item) => {
@@ -122,16 +134,16 @@ export default function Sidebar() {
                   }
                 }}
               >
-                <div className={styles.menuTitle}>
+                <div className={styles.menuTitle} title={item.title}>
                   <Icon size={18} className={styles.icon} />
-                  <span>{item.title}</span>
+                  {!isCollapsed && <span>{item.title}</span>}
                 </div>
-                {hasChildren && (
+                {hasChildren && !isCollapsed && (
                   isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />
                 )}
               </div>
               
-              {hasChildren && isExpanded && (
+              {hasChildren && isExpanded && !isCollapsed && (
                 <div className={styles.subMenu}>
                   {item.children!.map((child) => (
                     <Link 
@@ -148,6 +160,12 @@ export default function Sidebar() {
           );
         })}
       </nav>
+      <div className={styles.logoutContainer}>
+        <button className={styles.logoutBtn} onClick={handleLogout} title="Logout">
+          <LogOut size={18} style={{ minWidth: '18px' }} />
+          {!isCollapsed && <span>Logout</span>}
+        </button>
+      </div>
     </div>
   );
 }

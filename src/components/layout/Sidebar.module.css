@@ -2,7 +2,40 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  color: #adb5bd;
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.collapsed .menuHeader {
+  justify-content: center;
+  padding: 10px;
+}
+
+.collapsed .menuTitle {
+  justify-content: center;
+}
+
+.collapsed .logo {
+  padding: 20px 10px;
+  justify-content: center;
+}
+
+.collapseBtn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.collapseBtn:hover {
+  background: rgba(0,0,0,0.05);
+  color: var(--text-primary);
 }
 
 .logo {
@@ -10,11 +43,11 @@
   align-items: center;
   gap: 12px;
   padding: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border-color);
   font-size: 20px;
   font-weight: 700;
-  color: #fff;
-  background: rgba(0,0,0,0.2);
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
 }
 
 .nav {
@@ -38,8 +71,8 @@
 }
 
 .menuHeader:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
+  background-color: rgba(91, 141, 239, 0.05);
+  color: var(--accent-color);
 }
 
 .menuTitle {
@@ -50,11 +83,11 @@
 }
 
 .icon {
-  color: #4dabf7;
+  color: var(--accent-color);
 }
 
 .subMenu {
-  background: rgba(0, 0, 0, 0.15);
+  background-color: var(--bg-primary);
   padding: 8px 0;
   display: flex;
   flex-direction: column;
@@ -63,19 +96,49 @@
 .subMenuLink {
   padding: 8px 20px 8px 50px;
   font-size: 13px;
-  color: #868e96;
+  color: var(--text-secondary);
   text-decoration: none;
   transition: all 0.2s;
 }
 
 .subMenuLink:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  background-color: rgba(91, 141, 239, 0.05);
 }
 
 .active {
-  color: #fff;
-  border-left: 3px solid #3bc9db;
-  background: rgba(59, 201, 219, 0.1);
+  color: var(--accent-hover);
+  border-left: 3px solid var(--accent-color);
+  background-color: rgba(91, 141, 239, 0.1);
   padding-left: 47px;
+  font-weight: 600;
+}
+
+.logoutContainer {
+  padding: 10px;
+  border-top: 1px solid var(--border-color);
+}
+
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.logoutBtn:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.collapsed .logoutBtn {
+  justify-content: center;
 }
