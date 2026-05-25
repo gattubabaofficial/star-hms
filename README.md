@@ -1,262 +1,188 @@
-# Star HMS (Hospital Management System)
+# STAR HMS (Hospital Management System)
 
-A comprehensive, fully modernized Hospital Management System (HMS) built to replace legacy Microsoft Access systems while maintaining a highly performant, traditional desktop-like interface. 
-
-This project bridges legacy workflows into a modern web ecosystem using **React (Next.js)** on the frontend and **Python (FastAPI) + PostgreSQL** on the backend.
+STAR HMS is a comprehensive, modern, and highly responsive Hospital Management System built to handle Outpatient (OPD) and Inpatient (IPD) workflows, hospital masters configuration, pharmacy stock management, and laboratory operations. It features a React-based frontend styled with Tailwind CSS and a Python FastAPI backend powered by PostgreSQL.
 
 ---
 
-## 🏗️ Architecture & Technology Stack
+## 🏥 Modules & Features (Tabs)
 
-- **Frontend**: Next.js 16 (React) with standard `ag-grid-community` for complex data grids.
-- **Styling**: Pure CSS (`forms.css`, `layout.css`, `globals.css`). The UI purposefully avoids utility classes like TailwindCSS to enforce a traditional, dense, and plain software aesthetic typical of enterprise hospital systems.
-- **Backend**: FastAPI (Python 3.13) paired with SQLAlchemy 2.0 ORM.
-- **Database**: PostgreSQL for robust relational data integrity and transaction handling.
-- **Legacy Integration**: Node.js ADODB sync agent (`_legacy/apps/sync-agent`) configured to bridge data from older Microsoft Access (`.mdb`) files to the new cloud infrastructure.
+### 1. Dashboard
+- **Overview**: Provides a bird's-eye view of hospital operations. Displays quick statistics like total active OPD patients, currently admitted IPD patients, and recent financial transactions.
 
-## 📦 System Modules
+### 2. OPD (Outpatient Department)
+- **Overview**: Dashboard specifically for outpatient metrics and recent registrations.
+- **Registration**: Register new patients for doctor consultations. Features quick inline-creation of new patients, doctors, and diagnoses if they don't exist in the masters.
+- **Billing**: Generate bills for OPD services and consultations.
+- **Payment / Refund**: Record advance payments, clear outstanding bills, or initiate refunds for OPD patients.
+- **Receipt Viewer**: View and print generated receipts and invoices.
 
-The application is structured into interconnected operational modules:
+### 3. IPD (Inpatient Department)
+- **Overview**: Dashboard for inpatient metrics, including admitted vs. discharged patient counts, and a bulk **"Add Room Layout"** feature to quickly generate floors, wards, and beds.
+- **Bed Status**: A live, visually rich layout of hospital beds organized into collapsible/compressible tabs by Floor and Ward. Displays real-time occupancy with color-coding (Red = Occupied, Green = Vacant) and hover tooltips showing patient details.
+- **Admission**: Admit patients into specific floors, wards, and beds. 
+- **Billing / Payment / Refund**: End-to-end financial management for admitted patients.
+- **Receipt Viewer**: View and print IPD receipts.
 
-### 1. Hospital Masters
-Core infrastructure setup for the entire hospital ecosystem.
-- **Directories**: Doctors, Patient Categories, Wards, Floors, Beds, and Diagnostic Services.
-- **Features**: Complete CRUD operations, real-time mapping, and logical deletion states.
+### 4. Hospital Masters
+A centralized configuration module to manage core hospital data entities:
+- **Patients**: Manage demographic and contact details of all registered patients.
+- **Doctors & Referred By**: Manage consulting doctors and referring entities.
+- **Diagnostics & Services**: Configure hospital services, service groups, and diagnostic categories.
+- **Infrastructure (Floors, Wards, Beds)**: Define the physical layout of the hospital.
 
-### 2. Outpatient Department (OPD)
-Handling day-to-day ambulatory patient visits.
-- **Registration**: Auto-generation of patient codes and consultation vouchers.
-- **Billing**: Multi-service grid billing with dynamic discount percentages and doctor share calculators.
+### 5. Pharmacy
+- **Purchase Entry**: Record new medicine stock purchases from vendors.
+- **Sales Dispense**: Dispense medicines to patients and generate bills.
+- **Stock Register**: View real-time inventory levels of all pharmacy items.
 
-### 3. Indoor Patient Department (IPD)
-Managing complex inpatient hospital stays.
-- **Admissions**: Reserving beds and establishing care links with specific consultants.
-- **Bed Census**: Live visual dashboard of occupied vs available beds across all wards.
-- **IPD Billing**: Automatic daily boarding charge accruals and complex discharge billing.
+### 6. Laboratory
+- Manage laboratory tests, diagnostic reports, and lab billing workflows.
 
-### 4. Pharmacy & Diagnostic Lab
-Inventory and ancillary revenue centers.
-- **Pharmacy**: Supplier/Party masters, Drug/Item masters. Dynamic grids for Purchase Entry and Retail Sales.
-- **Lab**: Diagnostic test mapping and lab service billing.
-
-### 5. Administration & Reporting
-Top-level auditing and oversight.
-- **Collection Hub**: Unified dashboard querying and combining revenue streams from OPD, IPD, and the Lab based on configurable date ranges.
-
-## 🚀 Getting Started
-
-### 1. Backend Setup
-Navigate to the `backend` directory, install requirements, and start the FastAPI server:
-
-```bash
-cd backend
-pip install -r requirements.txt
-python -m uvicorn app.main:app --reload
-```
-The backend API will be available at `http://localhost:8000`.
-
-### 2. Frontend Setup
-From the project root, install Node dependencies and run the Next.js development server:
-
-```bash
-npm install
-npm run dev
-```
-The frontend application will be available at `http://localhost:3000`.
-
-### 3. Sync Agent (Optional)
-If running the legacy synchronization bridge:
-```bash
-cd _legacy/apps/sync-agent
-npm install
-npm run dev
-```
-
-## 🎨 UI/UX Philosophy
-
-This project strictly adheres to a "desktop-software" paradigm on the web:
-- **No Tailwind/Utility Clutter**: Components rely on standard `.form-control`, `.form-group`, and `.btn` semantic class names.
-- **Density Over Whitespace**: Designed for rapid data entry by hospital administrators who prefer high information density over spaced-out consumer designs.
-- **Summary/Detail Layouts**: Uniform master-detail views allowing users to seamlessly transition between looking at a grid of data and entering complex forms.
+### 7. System
+- **Sync Configuration**: Manage data synchronization settings.
+- **User Management**: Admin controls for users and role-based permissions.
 
 ---
-*Built to bring legacy hospital infrastructure into the modern web era.*
 
-## 🗄️ Database Entity-Relationship Diagram
+## 📊 Database ER Diagram
 
-Below is the current relational data structure represented in an ER Diagram (Table Form) showing all key entities, attributes, and relationships.
+The database is built on PostgreSQL using SQLAlchemy ORM. Below is a simplified Entity-Relationship (ER) diagram representing the core tables and their relationships across the system.
 
 ```mermaid
 erDiagram
-    %% --- Administration & Auth ---
-    Company {
-        int CmpCode PK
-        string CmpName
-    }
-    UserRoleMst ||--o{ UserMast : "has"
-    UserMast ||--o{ UserRightMst : "has_rights"
-    UserRoleMst {
-        int UrlCode PK
-        string UrlName
-    }
-    UserMast {
-        int UsrCode PK
-        string UsrName
-        int UsrUrlCode FK
-        string UsrPwd
-    }
-
-    %% --- Core Masters ---
-    PatCatgMst ||--o{ PatMast : "categorizes"
-    AreaMast ||--o{ PatMast : "locates"
-    StsnMast ||--o{ PatMast : "stations"
-    
+    %% Core Masters
     PatMast {
         int PttCode PK
         string PttName
-        int PttRegNo
-        int PttPcgCode FK
-        int PttAraCode FK
+        string PttMobile
+        string PttSex
+        string PttType
     }
-
-    DoctCatgMst ||--o{ DoctMast : "categorizes"
-    DoctRoleMst ||--o{ DoctMast : "roles"
     DoctMast {
         int DctCode PK
         string DctName
-        int DctDcgCode FK
-        int DctDrlCode FK
     }
-
-    RefCatgMst ||--o{ RefByMast : "categorizes"
-    RefByMast {
-        int RByCode PK
-        string RByName
-        int RByRfgCode FK
-    }
-
-    %% --- IPD Masters ---
-    WardMast ||--o{ BedMast : "contains"
-    FloorMast ||--o{ BedMast : "contains"
-    ServMast ||--o{ BedMast : "links_charges"
     BedMast {
         int BdmCode PK
         string BdmName
-        int BdmWrdCode FK
         int BdmFlrCode FK
-        int BdmSrvCode FK
+        int BdmWrdCode FK
+        boolean is_occupied
+    }
+    FloorMast {
+        int FlrCode PK
+        string FlrName
+    }
+    WardMast {
+        int WrdCode PK
+        string WrdName
     }
 
-    %% --- Services ---
-    ServGrpMst ||--o{ ServMast : "groups"
-    ServMast ||--o{ ServRateMst : "has_rates"
-    ServMast {
-        int SrvCode PK
-        string SrvName
-        int SrvSgpCode FK
-        float SrvCharges
-    }
-
-    %% --- Transactions: OPD ---
-    PatMast ||--o{ OutdHdr : "billed_in"
-    DoctMast ||--o{ OutdHdr : "consults_in"
-    OutdHdr ||--o{ OutdBill : "has_items"
+    %% OPD Module
     OutdHdr {
-        int OhdCode PK
-        int OhdPttCode FK
-        int OhdCDctCode FK
-        float OhdTotalAmt
+        int OpgCode PK
+        int OpgPttCode FK
+        int OpgCDctCode FK
+        float OpgRate
     }
     OutdBill {
-        int ObdCode PK
-        int ObdOhdCode FK
-        int ObdSrvCode FK
-        float ObdRate
+        int OblCode PK
+        int OblOpgCode FK
+        float OblNetAmt
+    }
+    OutdPymtHdr {
+        int OpmCode PK
+        int OpmOpgCode FK
+        float OpmAmt
     }
 
-    %% --- Transactions: IPD ---
-    PatMast ||--o{ IndrHdr : "admitted_in"
-    WardMast ||--o{ IndrHdr : "stays_in"
-    BedMast ||--o{ IndrHdr : "occupies"
-    IndrHdr ||--o{ IndrBlHdr : "generates_bill"
-    IndrBlHdr ||--o{ IndrBill : "has_items"
-    
+    %% IPD Module
     IndrHdr {
         int IhdCode PK
         int IhdPttCode FK
-        int IhdWrdCode FK
+        int IhdCDctCode FK
         int IhdBedCode FK
         string IhdStatus
     }
-    IndrBlHdr {
-        int IbhCode PK
-        int IbhIhdCode FK
-        float IbhTotalAmt
+    IndrBill {
+        int IblCode PK
+        int IblIhdCode FK
+        float IblNetAmt
     }
 
-    %% --- Transactions: Pharmacy (Purchases & Sales) ---
-    SubItmGrpMst ||--o{ SubItmMast : "groups"
-    PartyGrpMst ||--o{ PartyMast : "groups"
+    %% Relationships
+    FloorMast ||--o{ BedMast : "Contains"
+    WardMast ||--o{ BedMast : "Contains"
     
-    SubItmMast {
-        int SimCode PK
-        string SimName
-        int SimSigCode FK
-    }
-    PartyMast {
-        int PryCode PK
-        string PryName
-        int PryPgpCode FK
-    }
-
-    PartyMast ||--o{ MedPurchHdr : "supplies"
-    MedPurchHdr ||--o{ MedPurchDtl : "has_items"
-    MedPurchHdr {
-        int PuhCode PK
-        int PuhPrtCode FK
-        float PuhTotalAmt
-    }
-
-    PatMast ||--o{ MedSaleHdr : "buys"
-    MedSaleHdr ||--o{ MedSaleDtl : "has_items"
-    MedSaleHdr {
-        int SahCode PK
-        int SahPttCode FK
-        float SahTotalAmt
-    }
+    PatMast ||--o{ OutdHdr : "Registers for OPD"
+    DoctMast ||--o{ OutdHdr : "Consults (OPD)"
+    OutdHdr ||--o| OutdBill : "Generates"
+    OutdHdr ||--o{ OutdPymtHdr : "Has Payments"
+    
+    PatMast ||--o{ IndrHdr : "Admitted in IPD"
+    DoctMast ||--o{ IndrHdr : "Consults (IPD)"
+    BedMast ||--o| IndrHdr : "Occupies"
+    IndrHdr ||--o| IndrBill : "Generates"
 ```
 
-## ⚙️ Environment Configuration (`.env`)
+> **Note**: This is a simplified, high-level view highlighting the most critical relationships. The actual database contains over 40+ tables including granular details for Pharmacy (`SubItmMast`, `StkTrans`), Lab (`LabHdr`, `LabRcpt`), and robust authentication (`UserMast`, `UserRoleMst`).
 
-Create a `.env` file inside the `backend` directory. Below is the required format and the fields you need to fill:
+---
 
-```env
-# PostgreSQL connection string
-DATABASE_URL=postgresql://<USERNAME>:<PASSWORD>@localhost:5432/<DATABASE_NAME>
+## 🚀 Setup & Installation Guide
 
-# JWT Authentication
-JWT_SECRET=your_super_secret_key_here
-JWT_EXPIRES_IN=24h
+Follow these steps to run STAR HMS locally on your machine.
 
-# Legacy Sync Configuration
-SYNC_API_KEY=hms-sync-secret-key
-```
-
-- **`DATABASE_URL`**: The connection string to your PostgreSQL instance. Replace `<USERNAME>`, `<PASSWORD>`, and `<DATABASE_NAME>` with your database credentials.
-- **`JWT_SECRET`**: A strong, random string used to sign JWT tokens.
-- **`JWT_EXPIRES_IN`**: Token validity duration.
-- **`SYNC_API_KEY`**: Secret key used by the legacy Node.js sync agent to securely transfer data.
-
-## 🛢️ PostgreSQL Database Setup
-
-To run this system, you need to create a PostgreSQL database. Follow these steps:
-
-1. **Install PostgreSQL**: Download and install PostgreSQL from the [official website](https://www.postgresql.org/download/).
-2. **Open psql or pgAdmin**: Connect to your default Postgres server.
-3. **Create the Database**: Run the following SQL command to create the database:
+### 1. Database Setup (PostgreSQL)
+1. Install [PostgreSQL](https://www.postgresql.org/download/).
+2. Open `psql` or pgAdmin and create a new database:
    ```sql
-   CREATE DATABASE "star-hms";
+   CREATE DATABASE hospital_db;
    ```
-4. **Update `.env`**: Make sure your `.env` file reflects the newly created database name and the password you set during installation:
-   `DATABASE_URL=postgresql://postgres:your_password@localhost:5432/star-hms`
-5. **Initialize Tables**: When you run the FastAPI backend (`python -m uvicorn app.main:app`), SQLAlchemy will automatically detect the connection and generate the required tables.
+3. (Optional) Create a specific user/password for the application.
+4. Open the file `backend/database.py` and ensure the `DATABASE_URL` matches your local Postgres credentials:
+   ```python
+   # Example: postgresql://username:password@localhost/dbname
+   DATABASE_URL = "postgresql://postgres:postgres@localhost/hospital_db"
+   ```
+
+### 2. Backend Setup (FastAPI)
+The backend is powered by Python and FastAPI.
+
+1. Navigate to the root directory of the project in your terminal.
+2. (Optional but recommended) Create a virtual environment:
+   ```bash
+   python -m venv venv
+   venv\Scripts\activate  # For Windows
+   ```
+3. Install the required Python packages:
+   ```bash
+   pip install "fastapi[all]" sqlalchemy psycopg2-binary passlib "bcrypt==4.0.1" pyjwt python-multipart
+   ```
+   *(Note: Ensure `bcrypt==4.0.1` is used to prevent compatibility issues with `passlib`)*
+4. Start the backend server:
+   ```bash
+   python -m uvicorn backend.main:app --reload
+   ```
+   The backend will automatically create all database tables on startup. The API docs will be available at `http://127.0.0.1:8000/docs`.
+
+### 3. Frontend Setup (React + Vite)
+The frontend is powered by React, Vite, and Tailwind CSS.
+
+1. Open a new terminal and navigate to the `frontend` directory:
+   ```bash
+   cd frontend
+   ```
+2. Install the required Node modules:
+   ```bash
+   npm install
+   ```
+3. Start the Vite development server:
+   ```bash
+   npm run dev
+   ```
+4. Open your browser and navigate to the local URL provided by Vite (usually `http://localhost:5173`).
+
+---
+
+**You are now ready to use STAR HMS!**
