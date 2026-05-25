@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme {
+  --color-medical-bg: #F8F7F4;
+  --color-medical-mutedblue: #5B8DEF;
+  --color-medical-softgreen: #6FAF8F;
+  --color-medical-text: #2F3542;
+}
+
+@layer base {
+  body {
+    @apply bg-medical-bg text-medical-text font-sans antialiased;
+  }
+}
+
+@layer utilities {
+  .btn-primary {
+    @apply bg-medical-mutedblue text-white px-4 py-2 rounded shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors;
+  }
+  .btn-secondary {
+    @apply bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-medical-mutedblue focus:ring-offset-2 transition-colors;
+  }
+  .btn-success {
+    @apply bg-medical-softgreen text-white px-4 py-2 rounded shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors;
+  }
+  .input-field {
+    @apply w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-medical-mutedblue focus:border-medical-mutedblue bg-white transition-all outline-none;
+  }
+  .card {
+    @apply bg-white border border-gray-200 rounded-lg shadow-sm p-4;
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
