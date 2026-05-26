@@ -177,7 +177,7 @@ def get_bed_occupancy_report(db: Session = Depends(get_db)):
         FloorMast, FloorMast.FlrCode == BedMast.BdmFlrCode
     ).filter(
         IBedState.IbbsRecState == 1,
-        IndrHdr.IhdStatus == 'A'
+        IndrHdr.IhdStatus == 'Admitted'
     ).all()
 
     return [
