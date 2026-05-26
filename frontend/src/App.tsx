@@ -109,6 +109,9 @@ function App() {
             
             {/* Reports */}
             <Route path="/reports" element={<ReportsHub />} />
+            <Route path="/reports/collection" element={<CollectionReport />} />
+            <Route path="/reports/services" element={<ServiceReport />} />
+            <Route path="/reports/bed-status" element={<BedStatusReport />} />
             
             {/* Laboratory */}
             <Route path="/lab" element={<LabDashboard />} />

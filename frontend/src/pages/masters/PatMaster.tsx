@@ -47,12 +47,12 @@ export function PatMaster() {
 
   // Mutations
   const createMutation = useMutation({
-    mutationFn: async (newItem: typeof defaultFormData) => (await api.post('/masters/patients', newItem)).data,
+    mutationFn: async (newItem: any) => (await api.post('/masters/patients', newItem)).data,
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['patients'] }); resetForm(); }
   });
 
   const updateMutation = useMutation({
-    mutationFn: async (item: Patient) => {
+    mutationFn: async (item: any) => {
       const { PttCode, ...data } = item;
       return (await api.put(`/masters/patients/${PttCode}`, data)).data;
     },

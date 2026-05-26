@@ -12,17 +12,17 @@ export function PharmacyMasters() {
         <InlineMasterGrid
           title="Items / Medicines"
           endpoint="/pharmacy/items"
-          masterName="SubItmMast"
-          primaryKey="SimCode"
-          textField="SimName"
+          queryKey="pharmacy-items"
+          pkField="SimCode"
+          nameField="SimName"
         />
 
         <InlineMasterGrid
           title="Vendors / Parties"
           endpoint="/pharmacy/parties"
-          masterName="PartyMast"
-          primaryKey="PtyCode"
-          textField="PtyName"
+          queryKey="pharmacy-parties"
+          pkField="PtyCode"
+          nameField="PtyName"
         />
       </div>
     </div>

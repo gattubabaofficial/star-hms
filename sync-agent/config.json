@@ -1,0 +1,14 @@
+{
+  "mdbPath": "C:\\HmsData\\Company001.mdb",
+  "apiUrl": "http://localhost:8000/api/sync/push",
+  "apiKey": "sync-shared-secret",
+  "syncIntervalMinutes": 15,
+  "tables": [
+    "PatMast", "DoctMast", "ServMast", "BedMast",
+    "OutdReg", "OutdHdr", "OutdBill", "OutdBlDctDtl",
+    "OutdRcpt", "IndrHdr", "IBedState", "IndrBlHdr",
+    "IndrBill", "LabHdr", "LabRcpt",
+    "IndrStk", "OutdStk"
+  ],
+  "conflictStrategy": "local-wins"
+}
