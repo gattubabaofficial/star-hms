@@ -85,7 +85,7 @@ def get_pharmacy_report(start_date: date, end_date: date, db: Session = Depends(
 def get_collection_report(start_date: date, end_date: date, db: Session = Depends(get_db)):
     collections = []
     
-    opd_reg = db.query(func.count(OutdRcpt.OrcCode).label("count"), func.sum(OutdRcpt.OrcAmt).label("total")).filter(
+    opd_reg = db.query(func.count(OutdRcpt.OrcCode).label("count"), func.sum(OutdRcpt.OrcRecvdAmt).label("total")).filter(
         OutdRcpt.OrcDate >= start_date, OutdRcpt.OrcDate <= end_date, OutdRcpt.OrcRecState == 1
     ).first()
     if opd_reg and opd_reg.count:
@@ -152,6 +152,12 @@ def get_service_report(start_date: date, end_date: date, db: Session = Depends(g
 
     return [ServiceReportItem(**s) for s in services_dict.values()]
 
+def calculate_age(dob: date) -> str:
+    if not dob:
+        return ""
+    today = date.today()
+    return str(today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day)))
+
 @router.get("/bed-occupancy", response_model=List[BedOccupancyItem])
 def get_bed_occupancy_report(db: Session = Depends(get_db)):
     occupancy = db.query(
@@ -159,9 +165,9 @@ def get_bed_occupancy_report(db: Session = Depends(get_db)):
         IndrHdr.IhdVchNo,
         IndrHdr.IhdDate.label("AdmissionDate"),
         PatMast.PttName.label("PatientName"),
-        PatMast.PttAge.label("Age"),
+        PatMast.PttDob.label("Dob"),
         PatMast.PttSex.label("Gender"),
-        PatMast.PttMobNo.label("Mobile"),
+        PatMast.PttTelNo.label("Mobile"),
         BedMast.BdmName.label("BedName"),
         WardMast.WrdName.label("WardName"),
         FloorMast.FlrName.label("FloorName")
@@ -185,7 +191,7 @@ def get_bed_occupancy_report(db: Session = Depends(get_db)):
             IhdCode=row.IhdCode,
             IhdVchNo=row.IhdVchNo,
             PatientName=row.PatientName,
-            Age=str(row.Age) if row.Age else '',
+            Age=calculate_age(row.Dob),
             Gender=row.Gender or '',
             Mobile=row.Mobile or '',
             AdmissionDate=row.AdmissionDate,
