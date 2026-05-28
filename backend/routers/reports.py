@@ -97,14 +97,14 @@ def get_collection_report(start_date: date, end_date: date, db: Session = Depend
     if opd_bill and opd_bill.count:
         collections.append(CollectionReportItem(Date=start_date, Module="OPD Billing", TotalAmount=opd_bill.total or 0, TransactionCount=opd_bill.count))
         
-    ipd_adv = db.query(func.count(IndrRgPymt.IrpCode).label("count"), func.sum(IndrRgPymt.IrpAmt).label("total")).filter(
-        IndrRgPymt.IrpDate >= start_date, IndrRgPymt.IrpDate <= end_date, IndrRgPymt.IrpRecState == 1
+    ipd_adv = db.query(func.count(IndrRgPymt.IgtCode).label("count"), func.sum(IndrRgPymt.IgtDpogAmt).label("total")).filter(
+        IndrRgPymt.IgtDate >= start_date, IndrRgPymt.IgtDate <= end_date, IndrRgPymt.IgtRecState == 1
     ).first()
     if ipd_adv and ipd_adv.count:
         collections.append(CollectionReportItem(Date=start_date, Module="IPD Advance", TotalAmount=ipd_adv.total or 0, TransactionCount=ipd_adv.count))
 
-    ipd_bill = db.query(func.count(IndrBlDpogDtl.IpdCode).label("count"), func.sum(IndrBlDpogDtl.IpdAmt).label("total")).filter(
-        IndrBlDpogDtl.IpdDate >= start_date, IndrBlDpogDtl.IpdDate <= end_date, IndrBlDpogDtl.IpdRecState == 1
+    ipd_bill = db.query(func.count(IndrBlDpogDtl.IbpyICode).label("count"), func.sum(IndrBlDpogDtl.IbpyDepoAmt).label("total")).filter(
+        IndrBlDpogDtl.IbpyDate >= start_date, IndrBlDpogDtl.IbpyDate <= end_date, IndrBlDpogDtl.IbpyRecState == 1
     ).first()
     if ipd_bill and ipd_bill.count:
         collections.append(CollectionReportItem(Date=start_date, Module="IPD Billing", TotalAmount=ipd_bill.total or 0, TransactionCount=ipd_bill.count))
@@ -172,17 +172,17 @@ def get_bed_occupancy_report(db: Session = Depends(get_db)):
         WardMast.WrdName.label("WardName"),
         FloorMast.FlrName.label("FloorName")
     ).select_from(IBedState).join(
-        IndrHdr, IndrHdr.IhdCode == IBedState.IbbsICode
+        IndrHdr, IndrHdr.IhdCode == IBedState.IbsIpgCode
     ).join(
         PatMast, PatMast.PttCode == IndrHdr.IhdPttCode
     ).join(
-        BedMast, BedMast.BdmCode == IBedState.IbbsIbsCode
+        BedMast, BedMast.BdmCode == IBedState.IbsBdmCode
     ).join(
         WardMast, WardMast.WrdCode == BedMast.BdmWrdCode
     ).join(
         FloorMast, FloorMast.FlrCode == BedMast.BdmFlrCode
     ).filter(
-        IBedState.IbbsRecState == 1,
+        IBedState.IbsRecState == 1,
         IndrHdr.IhdStatus == 'Admitted'
     ).all()
 

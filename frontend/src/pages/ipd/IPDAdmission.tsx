@@ -1,11 +1,21 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
 import { Save, ArrowLeft } from 'lucide-react';
+import { useFormValidation } from '../../lib/useFormValidation';
+import { useFormKeyboard } from '../../lib/useFormKeyboard';
 import { SearchableSelectWithCreate } from '../../components/ui/SearchableSelectWithCreate';
+import { PatientModal } from '../../components/shared/PatientModal';
 
 export function IPDAdmission() {
+  const formRef = useRef<HTMLFormElement>(null);
+  useFormKeyboard(formRef);
+  useFormValidation(formRef);
+
+  const [showPatientModal, setShowPatientModal] = useState(false);
+  const [patientSearchTerm, setPatientSearchTerm] = useState('');
+
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -27,7 +37,7 @@ export function IPDAdmission() {
   const { data: floors } = useQuery({ queryKey: ['floors'], queryFn: async () => (await api.get<any[]>('/masters/floors')).data });
   const { data: beds } = useQuery({ queryKey: ['beds'], queryFn: async () => (await api.get<any[]>('/masters/beds')).data });
 
-  const patientOpts = patients?.map(p => ({ value: p.PttCode, label: `${p.PttName}${p.PttMobile ? ` (${p.PttMobile})` : ''}` })) || [];
+  const patientOpts = patients?.map(p => ({ value: p.PttCode, label: `${p.PttName}${p.PttTelNo ? ` (${p.PttTelNo})` : ''}` })) || [];
   const doctorOpts = doctors?.map(d => ({ value: d.DctCode, label: d.DctName })) || [];
   const refByOpts = refBys?.map(r => ({ value: r.RByCode, label: r.RByName })) || [];
   const wardOpts = wards?.map(w => ({ value: w.WrdCode, label: w.WrdName })) || [];
@@ -35,92 +45,11 @@ export function IPDAdmission() {
   const bedOpts = beds?.map(b => ({ value: b.BdmCode, label: b.BdmName })) || [];
 
   const createPatient = async (name: string) => {
-    let finalName = name;
-    if (!finalName || !finalName.trim()) {
-      const input = window.prompt("Enter Patient Name:");
-      if (!input || !input.trim()) return;
-      finalName = input.trim();
-    }
-    try {
-      const res = await api.post('/masters/patients', { PttName: finalName, PttType: 'Indoor', PttGender: 'M' });
-      queryClient.invalidateQueries({ queryKey: ['patients'] });
-      setFormData({ ...formData, IhdPttCode: res.data.PttCode });
-    } catch(e) { alert("Failed to create patient"); }
+    setPatientSearchTerm(name);
+    setShowPatientModal(true);
   };
 
-  const createDoctor = async (name: string) => {
-    let finalName = name;
-    if (!finalName || !finalName.trim()) {
-      const input = window.prompt("Enter Doctor Name:");
-      if (!input || !input.trim()) return;
-      finalName = input.trim();
-    }
-    try {
-      const res = await api.post('/masters/doctors', { DctName: finalName });
-      queryClient.invalidateQueries({ queryKey: ['doctors'] });
-      setFormData({ ...formData, IhdCDctCode: res.data.DctCode });
-    } catch (e) { alert("Failed to create doctor"); }
-  };
 
-  const createRefBy = async (name: string) => {
-    let finalName = name;
-    if (!finalName || !finalName.trim()) {
-      const input = window.prompt("Enter Referred By Name:");
-      if (!input || !input.trim()) return;
-      finalName = input.trim();
-    }
-    try {
-      const res = await api.post('/masters/ref-bys', { RByName: finalName });
-      queryClient.invalidateQueries({ queryKey: ['ref-bys'] });
-      setFormData({ ...formData, IhdRByCode: res.data.RByCode });
-    } catch (e) { alert("Failed to create referred by"); }
-  };
-
-  const createFloor = async (name: string) => {
-    let finalName = name;
-    if (!finalName || !finalName.trim()) {
-      const input = window.prompt("Enter Floor Name (e.g. Ground Floor):");
-      if (!input || !input.trim()) return;
-      finalName = input.trim();
-    }
-    try {
-      const res = await api.post('/masters/floors', { FlrName: finalName });
-      queryClient.invalidateQueries({ queryKey: ['floors'] });
-      setFormData({ ...formData, IhdFlrCode: res.data.FlrCode });
-    } catch (e) { alert("Failed to create floor"); }
-  };
-
-  const createWard = async (name: string) => {
-    let finalName = name;
-    if (!finalName || !finalName.trim()) {
-      const input = window.prompt("Enter Ward/Room Name (e.g. ICU, General Ward):");
-      if (!input || !input.trim()) return;
-      finalName = input.trim();
-    }
-    try {
-      const res = await api.post('/masters/wards', { WrdName: finalName });
-      queryClient.invalidateQueries({ queryKey: ['wards'] });
-      setFormData({ ...formData, IhdWrdCode: res.data.WrdCode });
-    } catch (e) { alert("Failed to create ward"); }
-  };
-
-  const createBed = async (name: string) => {
-    let finalName = name;
-    if (!finalName || !finalName.trim()) {
-      const input = window.prompt("Enter Bed Name/Number (e.g. Bed-01):");
-      if (!input || !input.trim()) return;
-      finalName = input.trim();
-    }
-    try {
-      const res = await api.post('/masters/beds', { 
-        BdmName: finalName,
-        BdmFlrCode: formData.IhdFlrCode,
-        BdmWrdCode: formData.IhdWrdCode
-      });
-      queryClient.invalidateQueries({ queryKey: ['beds'] });
-      setFormData({ ...formData, IhdBedCode: res.data.BdmCode });
-    } catch (e) { alert("Failed to create bed"); }
-  };
 
   const mutation = useMutation({
     mutationFn: async (data: typeof formData) => (await api.post('/ipd/admissions', data)).data,
@@ -149,11 +78,11 @@ export function IPDAdmission() {
       </div>
 
       <div className="card">
-        <form onSubmit={handleSave} className="space-y-8">
+        <form ref={formRef} onSubmit={handleSave} className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Admission Date</label>
-              <input type="date" value={formData.IhdDate} onChange={e => setFormData({...formData, IhdDate: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-medical-mutedblue focus:border-medical-mutedblue" required />
+              <input type="date" value={formData.IhdDate} onChange={e => setFormData({...formData, IhdDate: e.target.value})} className="input-field" required />
             </div>
             
             <div>
@@ -163,12 +92,12 @@ export function IPDAdmission() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Consulting Doctor</label>
-              <SearchableSelectWithCreate options={doctorOpts} value={formData.IhdCDctCode} onChange={(v) => setFormData({...formData, IhdCDctCode: v as number})} onCreateNew={createDoctor} placeholder="Select Doctor" createLabel="Doctor" />
+              <SearchableSelectWithCreate options={doctorOpts} value={formData.IhdCDctCode} onChange={(v) => setFormData({...formData, IhdCDctCode: v as number})} placeholder="Select Doctor" />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Referred By</label>
-              <SearchableSelectWithCreate options={refByOpts} value={formData.IhdRByCode} onChange={(v) => setFormData({...formData, IhdRByCode: v as number})} onCreateNew={createRefBy} placeholder="Select Refer-By" createLabel="Referred By" />
+              <SearchableSelectWithCreate options={refByOpts} value={formData.IhdRByCode} onChange={(v) => setFormData({...formData, IhdRByCode: v as number})} placeholder="Select Refer-By" />
             </div>
           </div>
 
@@ -177,15 +106,15 @@ export function IPDAdmission() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Floor</label>
-                <SearchableSelectWithCreate options={floorOpts} value={formData.IhdFlrCode} onChange={(v) => setFormData({...formData, IhdFlrCode: v as number})} onCreateNew={createFloor} placeholder="Select Floor" createLabel="Floor" />
+                <SearchableSelectWithCreate options={floorOpts} value={formData.IhdFlrCode} onChange={(v) => setFormData({...formData, IhdFlrCode: v as number})} placeholder="Select Floor" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Ward</label>
-                <SearchableSelectWithCreate options={wardOpts} value={formData.IhdWrdCode} onChange={(v) => setFormData({...formData, IhdWrdCode: v as number})} onCreateNew={createWard} placeholder="Select Ward" createLabel="Ward" />
+                <SearchableSelectWithCreate options={wardOpts} value={formData.IhdWrdCode} onChange={(v) => setFormData({...formData, IhdWrdCode: v as number})} placeholder="Select Ward" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Bed <span className="text-red-500">*</span></label>
-                <SearchableSelectWithCreate options={bedOpts} value={formData.IhdBedCode} onChange={(v) => setFormData({...formData, IhdBedCode: v as number})} onCreateNew={createBed} placeholder="Select Bed" createLabel="Bed" />
+                <SearchableSelectWithCreate options={bedOpts} value={formData.IhdBedCode} onChange={(v) => setFormData({...formData, IhdBedCode: v as number})} placeholder="Select Bed" />
               </div>
             </div>
           </div>
@@ -195,23 +124,33 @@ export function IPDAdmission() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Deposit Amount (₹)</label>
-                <input type="number" value={formData.IhdAdvAmt} onChange={e => setFormData({...formData, IhdAdvAmt: Number(e.target.value)})} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+                <input type="number" value={formData.IhdAdvAmt} onChange={e => setFormData({...formData, IhdAdvAmt: Number(e.target.value)})} className="input-field" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Remarks</label>
-                <input type="text" value={formData.IhdRemark} onChange={e => setFormData({...formData, IhdRemark: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+                <input type="text" value={formData.IhdRemark} onChange={e => setFormData({...formData, IhdRemark: e.target.value})} className="input-field" />
               </div>
             </div>
           </div>
 
           <div className="flex justify-end gap-4 border-t border-gray-100 pt-6">
-            <button type="button" onClick={() => navigate('/ipd')} className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Cancel</button>
+            <button type="button" onClick={() => navigate('/ipd')} className="btn-secondary px-6">Cancel</button>
             <button type="submit" disabled={mutation.isPending} className="btn-primary flex items-center gap-2 px-8">
               <Save size={18} /> Admit Patient
             </button>
           </div>
         </form>
       </div>
+      <PatientModal
+        isOpen={showPatientModal}
+        onClose={() => setShowPatientModal(false)}
+        initialName={patientSearchTerm}
+        defaultType="Indoor"
+        onSave={(id) => {
+          queryClient.invalidateQueries({ queryKey: ['patients'] });
+          setFormData(prev => ({ ...prev, IhdPttCode: id }));
+        }}
+      />
     </div>
   );
 }

@@ -5,6 +5,9 @@ import { PatMaster } from './PatMaster';
 import { BedMaster } from './BedMaster';
 import { ServMaster } from './ServMaster';
 import { ServGrpMaster } from './ServGrpMaster';
+import PatCatgMaster from './PatCatgMaster';
+import RefByMaster from './RefByMaster';
+import RefToMaster from './RefToMaster';
 
 type MasterTab = 'Doctors' | 'Patients' | 'Beds' | 'Services' | 'ServiceGroups' | 'General';
 
@@ -53,15 +56,23 @@ export function HospitalMasters() {
                 ))}
               </ul>
             </div>
-            <div className="flex-1">
-              <InlineMasterGrid 
-                key={conf.id}
-                title={conf.title} 
-                endpoint={conf.endpoint} 
-                queryKey={conf.id} 
-                pkField={conf.pk} 
-                nameField={conf.name} 
-              />
+            <div className="flex-1 overflow-auto">
+              {activeGeneral === 'pat-categories' ? (
+                <PatCatgMaster />
+              ) : activeGeneral === 'ref-bys' ? (
+                <RefByMaster />
+              ) : activeGeneral === 'ref-tos' ? (
+                <RefToMaster />
+              ) : (
+                <InlineMasterGrid 
+                  key={conf.id}
+                  title={conf.title} 
+                  endpoint={conf.endpoint} 
+                  queryKey={conf.id} 
+                  pkField={conf.pk} 
+                  nameField={conf.name} 
+                />
+              )}
             </div>
           </div>
         );

@@ -9,12 +9,14 @@ interface OPDReg {
   OpgDate: string;
   OpgPttCode: number;
   OpgAmtAftDisc: number;
+  OpgRfugAmt: number;
 }
 
 export function OPDDashboard() {
   const { data: registrations, isLoading } = useQuery({
     queryKey: ['opd-registrations'],
-    queryFn: async () => (await api.get<OPDReg[]>('/opd/registrations')).data
+    queryFn: async () => (await api.get<OPDReg[]>('/opd/registrations')).data,
+    refetchInterval: 30000
   });
 
   const todayCount = registrations?.length || 0;
@@ -66,6 +68,7 @@ export function OPDDashboard() {
                 <th className="py-3 px-4 font-medium text-sm text-gray-600">Vch No</th>
                 <th className="py-3 px-4 font-medium text-sm text-gray-600">Date</th>
                 <th className="py-3 px-4 font-medium text-sm text-gray-600">Patient ID</th>
+                <th className="py-3 px-4 font-medium text-sm text-gray-600">Status</th>
                 <th className="py-3 px-4 font-medium text-sm text-gray-600 text-right">Amount (₹)</th>
               </tr>
             </thead>
@@ -80,6 +83,13 @@ export function OPDDashboard() {
                     <td className="py-3 px-4 text-sm text-gray-800">OPD-{reg.OpgVchNo}</td>
                     <td className="py-3 px-4 text-sm text-gray-600">{reg.OpgDate}</td>
                     <td className="py-3 px-4 text-sm font-medium text-medical-mutedblue">PTT-{reg.OpgPttCode}</td>
+                    <td className="py-3 px-4 text-sm">
+                      {reg.OpgRfugAmt > 0 ? (
+                        <span className="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-700">Refunded</span>
+                      ) : (
+                        <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">Active</span>
+                      )}
+                    </td>
                     <td className="py-3 px-4 text-sm font-semibold text-gray-800 text-right">{reg.OpgAmtAftDisc.toFixed(2)}</td>
                   </tr>
                 ))

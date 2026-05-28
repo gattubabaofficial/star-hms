@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
 import { Save, ArrowLeft, Plus, Trash2 } from 'lucide-react';
+import { useFormValidation } from '../../lib/useFormValidation';
+import { useFormKeyboard } from '../../lib/useFormKeyboard';
 import { SearchableSelectWithCreate } from '../../components/ui/SearchableSelectWithCreate';
 
 interface BillItem {
@@ -16,6 +18,10 @@ interface BillItem {
 }
 
 export function IPDBilling() {
+  const formRef = useRef<HTMLFormElement>(null);
+  useFormKeyboard(formRef);
+  useFormValidation(formRef);
+
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   
@@ -113,11 +119,11 @@ export function IPDBilling() {
         </div>
       </div>
 
-      <form onSubmit={handleSave} className="space-y-6">
+      <form ref={formRef} onSubmit={handleSave} className="space-y-6">
         <div className="card grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Discharge Date</label>
-            <input type="date" value={header.IbhDate} onChange={e => setHeader({...header, IbhDate: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-medical-mutedblue focus:border-medical-mutedblue" required />
+            <input type="date" value={header.IbhDate} onChange={e => setHeader({...header, IbhDate: e.target.value})} className="input-field" required />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Select Admission <span className="text-red-500">*</span></label>
@@ -185,7 +191,7 @@ export function IPDBilling() {
         </div>
 
         <div className="flex justify-end gap-4">
-          <button type="button" onClick={() => navigate('/ipd')} className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Cancel</button>
+          <button type="button" onClick={() => navigate('/ipd')} className="btn-secondary px-6">Cancel</button>
           <button type="submit" disabled={mutation.isPending} className="btn-success flex items-center gap-2 px-8">
             <Save size={18} /> Finalize & Discharge
           </button>

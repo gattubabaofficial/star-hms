@@ -12,6 +12,10 @@ from backend.schemas.system import (
     UserRoleCreate, UserRoleResponse,
     UserCreate, UserResponse
 )
+from backend.models.opd import OutdReg
+from backend.models.ipd import IndrHdr
+from backend.models.lab import LabHdr
+from backend.models.pharmacy import OutdStk
 
 router = APIRouter()
 
@@ -120,3 +124,25 @@ def get_backup(db: Session = Depends(get_db)):
             "Content-Disposition": f"attachment; filename=star-hms-backup-{datetime.now().strftime('%Y%m%d%H%M%S')}.json"
         }
     )
+
+# -----------------------------------------------------
+# Dashboard Stats
+# -----------------------------------------------------
+@router.get("/dashboard-stats")
+def get_dashboard_stats(db: Session = Depends(get_db)):
+    today = datetime.now().date()
+    
+    opd_today = db.query(OutdReg).filter(OutdReg.OpgDate == today, OutdReg.OpgRecState == 1).count()
+    ipd_today = db.query(IndrHdr).filter(IndrHdr.IhdDate == today, IndrHdr.IhdRecState == 1).count()
+    lab_today = db.query(LabHdr).filter(LabHdr.LhdDate == today, LabHdr.LhdRecState == 1).count()
+    
+    from sqlalchemy import func
+    pharmacy_sales = db.query(func.sum(OutdStk.OskNetAmt)).filter(OutdStk.OskDate == today, OutdStk.OskRecState == 1).scalar()
+    
+    return {
+        "opdPatients": opd_today,
+        "ipdAdmissions": ipd_today,
+        "labReports": lab_today,
+        "pharmacySales": pharmacy_sales or 0
+    }
+

@@ -4,7 +4,8 @@ from sqlalchemy import func
 from typing import List
 
 from backend.database import get_db
-from backend.models.ipd import IndrHdr, IBedState, IndrBlHdr, IndrBill
+from backend.models.ipd import IndrHdr, IBedState, IndrBlHdr, IndrBill, IndrBlDctDtl
+from backend.models.masters import DoctMast
 from backend.schemas.ipd import (
     IndrHdrCreate, IndrHdrResponse,
     IndrBlHdrCreate, IndrBlHdrResponse
@@ -35,9 +36,11 @@ def create_ipd_admission(admin_in: IndrHdrCreate, db: Session = Depends(get_db))
     # Create initial Bed State if Bed is selected
     if db_hdr.IhdBedCode:
         db_bed_state = IBedState(
-            IbbsICode=db_hdr.IhdCode,
-            IbbsIbsCode=db_hdr.IhdBedCode,
-            IbbsFromDate=db_hdr.IhdDate
+            IbsIpgCode=db_hdr.IhdCode,
+            IbsBdmCode=db_hdr.IhdBedCode,
+            IbsDate=db_hdr.IhdDate,
+            IbsPttCode=db_hdr.IhdPttCode,
+            IbsRecState=1
         )
         db.add(db_bed_state)
 
@@ -70,7 +73,7 @@ def create_ipd_bill(bill_in: IndrBlHdrCreate, db: Session = Depends(get_db)):
     # Insert Details
     for idx, detail in enumerate(bill_in.details):
         db_dtl = IndrBill(
-            **detail.model_dump(),
+            **detail.model_dump(exclude={"IbdSno"}),
             IbdIbhCode=db_hdr.IbhCode,
             IbdSno=idx + 1
         )
@@ -82,12 +85,30 @@ def create_ipd_bill(bill_in: IndrBlHdrCreate, db: Session = Depends(get_db)):
         admin.IhdStatus = 'Discharged'
         admin.IhdDischDate = db_hdr.IbhDate
 
+        # Automatically insert doctor share record if doctor is specified on the admission
+        if admin.IhdCDctCode:
+            dct = db.query(DoctMast).filter(DoctMast.DctCode == admin.IhdCDctCode).first()
+            dct_share = dct.DctShare if dct else 0.0
+            db_dct_dtl = IndrBlDctDtl(
+                IddIbhCode=db_hdr.IbhCode,
+                IddDctCode=admin.IhdCDctCode,
+                IddSharePer=dct_share,
+                IddShareAmt=db_hdr.IbhTotalAmt * dct_share / 100.0,
+                IddRecState=1
+            )
+            db.add(db_dct_dtl)
+
     db.commit()
     db.refresh(db_hdr)
     return db_hdr
 
 # -----------------------------------------------------
 # IPD Payments & Refunds
+# Uses legacy-matching field names from models/ipd.py:
+#   IndrRgPymt: IgtCode, IgtIpgCode, IgtDpogAmt, IgtDate, IgtPttCode
+#   IndrBlDpogDtl: IbpyICode, IbpyIbhCode, IbpyDepoAmt, IbpyDate
+#   IndrRgRefd: IgfCode, IgfIpgCode, IgfRfugAmt, IgfDate, IgfPttCode
+#   IndrBlRfugDtl: IbfdICode, IbfdIbhCode, IbfdRefuAmt, IbfdDate
 # -----------------------------------------------------
 from backend.schemas.ipd import IpdPaymentRequest, IpdRefundRequest, IpdTransactionType
 from backend.models.ipd import IndrRgPymt, IndrBlDpogDtl, IndrRgRefd, IndrBlRfugDtl
@@ -95,7 +116,12 @@ from backend.models.ipd import IndrRgPymt, IndrBlDpogDtl, IndrRgRefd, IndrBlRfug
 @router.post("/payments")
 def create_ipd_payment(payment: IpdPaymentRequest, db: Session = Depends(get_db)):
     if payment.transaction_type == IpdTransactionType.REGISTRATION:
-        db_payment = IndrRgPymt(IrpIhdCode=payment.ref_id, IrpAmt=payment.amount, IrpDate=payment.date)
+        # Legacy table: IndrRgPymt — advance deposit against registration
+        db_payment = IndrRgPymt(
+            IgtIpgCode=payment.ref_id,
+            IgtDpogAmt=payment.amount,
+            IgtDate=payment.date
+        )
         db.add(db_payment)
         # Update admission advance
         admin = db.query(IndrHdr).filter(IndrHdr.IhdCode == payment.ref_id).first()
@@ -103,8 +129,12 @@ def create_ipd_payment(payment: IpdPaymentRequest, db: Session = Depends(get_db)
             admin.IhdAdvAmt += payment.amount
             
     elif payment.transaction_type == IpdTransactionType.BILL:
-        # Deposit against bill
-        db_payment = IndrBlDpogDtl(IbpIbhCode=payment.ref_id, IbpAmt=payment.amount, IbpDate=payment.date)
+        # Legacy table: IndrBlPymtDtl (IndrBlDpogDtl) — deposit against a specific bill
+        db_payment = IndrBlDpogDtl(
+            IbpyIbhCode=payment.ref_id,
+            IbpyDepoAmt=payment.amount,
+            IbpyDate=payment.date
+        )
         db.add(db_payment)
         # Update bill balance
         bill = db.query(IndrBlHdr).filter(IndrBlHdr.IbhCode == payment.ref_id).first()
@@ -121,7 +151,12 @@ def create_ipd_payment(payment: IpdPaymentRequest, db: Session = Depends(get_db)
 @router.post("/refunds")
 def create_ipd_refund(refund: IpdRefundRequest, db: Session = Depends(get_db)):
     if refund.transaction_type == IpdTransactionType.REGISTRATION:
-        db_refund = IndrRgRefd(IrfIhdCode=refund.ref_id, IrfAmt=refund.amount, IrfDate=refund.date)
+        # Legacy table: IndrRgRefd — refund against registration advance
+        db_refund = IndrRgRefd(
+            IgfIpgCode=refund.ref_id,
+            IgfRfugAmt=refund.amount,
+            IgfDate=refund.date
+        )
         db.add(db_refund)
         admin = db.query(IndrHdr).filter(IndrHdr.IhdCode == refund.ref_id).first()
         if admin:
@@ -129,12 +164,18 @@ def create_ipd_refund(refund: IpdRefundRequest, db: Session = Depends(get_db)):
             admin.IhdAdvAmt -= refund.amount
             
     elif refund.transaction_type == IpdTransactionType.BILL:
-        db_refund = IndrBlRfugDtl(IbrIbhCode=refund.ref_id, IbrAmt=refund.amount, IbrDate=refund.date)
+        # Legacy table: IndrBlRefdDtl (IndrBlRfugDtl) — refund against a specific bill
+        db_refund = IndrBlRfugDtl(
+            IbfdIbhCode=refund.ref_id,
+            IbfdRefuAmt=refund.amount,
+            IbfdDate=refund.date
+        )
         db.add(db_refund)
         bill = db.query(IndrBlHdr).filter(IndrBlHdr.IbhCode == refund.ref_id).first()
         if bill:
             # Refunds increase the balance again
             bill.IbhBalAmt += refund.amount
+            bill.IbhRfugAmt += refund.amount
             
     else:
         raise HTTPException(status_code=400, detail="Invalid transaction type for IPD refund")

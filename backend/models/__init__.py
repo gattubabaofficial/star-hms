@@ -10,7 +10,8 @@ from backend.models.opd import (
     OutdRcpt, OutdRcDctDtl, OutdPymtHdr, OutdRefdHdr, OutdRgRefd
 )
 from backend.models.ipd import (
-    IndrHdr, IBedState, IndrBlHdr, IndrBill, IndrBlDctDtl, IndrBlDpogDtl, IndrBlRfugDtl,
+    IndrHdr, IBedState, IndrBlHdr, IndrBill, IndrBlDctDtl,
+    IndrBlPymtHdr, IndrBlDpogDtl, IndrBlRefdHdr, IndrBlRfugDtl,
     IndrReg, IndrRgPymt, IndrRgRefd
 )
 from backend.models.lab import (
@@ -29,7 +30,8 @@ __all__ = [
     "FloorMast", "WardMast", "ServGrpMst", "ServMast", "ServRateMst", "DoctMast", "RefByMast", "RefToMast", "PatMast", "BedMast",
     "OutdReg", "OutdHdr", "OutdBill", "OutdBlDctDtl", "OutdBlPymtHdr", "OutdBlRefdHdr",
     "OutdRcpt", "OutdRcDctDtl", "OutdPymtHdr", "OutdRefdHdr", "OutdRgRefd",
-    "IndrHdr", "IBedState", "IndrBlHdr", "IndrBill", "IndrBlDctDtl", "IndrBlDpogDtl", "IndrBlRfugDtl",
+    "IndrHdr", "IBedState", "IndrBlHdr", "IndrBill", "IndrBlDctDtl",
+    "IndrBlPymtHdr", "IndrBlDpogDtl", "IndrBlRefdHdr", "IndrBlRfugDtl",
     "IndrReg", "IndrRgPymt", "IndrRgRefd",
     "LabHdr", "LabRcpt", "LabRcDctDtl", "LabPymtHdr", "LabRefdHdr",
     "SubItmGrpMst", "SubItmMast", "PartyGrpMst", "PartyMast",

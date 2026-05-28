@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { SummaryDetailLayout } from '../../components/layout/SummaryDetailLayout';
 import api from '../../lib/api';
 import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
+import { useFormValidation } from '../../lib/useFormValidation';
+import { useFormKeyboard } from '../../lib/useFormKeyboard';
 
 interface Floor {
   FlrCode: number;
@@ -11,6 +13,10 @@ interface Floor {
 }
 
 export function FloorMaster() {
+  const formRef = useRef<HTMLFormElement>(null);
+  useFormKeyboard(formRef);
+  useFormValidation(formRef);
+
   const queryClient = useQueryClient();
   const [selectedItem, setSelectedItem] = useState<Floor | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -81,10 +87,10 @@ export function FloorMaster() {
       {(!isEditing && !selectedItem) ? (
         <div className="h-full flex items-center justify-center text-gray-400 text-sm">Select an item from the list or click Add New</div>
       ) : (
-        <form onSubmit={handleSave} className="space-y-6 max-w-lg">
+        <form ref={formRef} onSubmit={handleSave} className="space-y-6 max-w-lg">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Floor Name <span className="text-red-500">*</span></label>
-            <input type="text" required disabled={!isEditing} value={formData.FlrName} onChange={(e) => setFormData({ ...formData, FlrName: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" placeholder="e.g. First Floor" />
+            <input type="text" required disabled={!isEditing} value={formData.FlrName} onChange={(e) => setFormData({ ...formData, FlrName: e.target.value })} className="input-field" placeholder="e.g. First Floor" />
           </div>
           <div>
              <label className="flex items-center gap-2 text-sm text-gray-700">

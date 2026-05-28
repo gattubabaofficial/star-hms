@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../../lib/api';
 import { Bed, Users, Calendar, ArrowRight, LayoutGrid, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Modal } from '../../components/ui/Modal';
 
 interface IPDAdmissions {
   IhdCode: number;
@@ -19,7 +20,8 @@ export function IPDDashboard() {
 
   const { data: admissions, isLoading } = useQuery({
     queryKey: ['ipd-admissions'],
-    queryFn: async () => (await api.get<IPDAdmissions[]>('/ipd/admissions')).data
+    queryFn: async () => (await api.get<IPDAdmissions[]>('/ipd/admissions')).data,
+    refetchInterval: 30000
   });
 
   const layoutMutation = useMutation({
@@ -117,67 +119,57 @@ export function IPDDashboard() {
       </div>
 
       {/* Room Layout Modal */}
-      {showLayoutModal && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-gray-50/50">
-              <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <LayoutGrid size={20} className="text-medical-mutedblue" />
-                Add Room Layout
-              </h2>
-              <button onClick={() => setShowLayoutModal(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
-                <X size={20} />
-              </button>
-            </div>
-            
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Floor Name <span className="text-red-500">*</span></label>
-                <input 
-                  type="text" 
-                  className="input-field" 
-                  placeholder="e.g. 1st Floor" 
-                  value={layoutForm.floor_name}
-                  onChange={e => setLayoutForm({...layoutForm, floor_name: e.target.value})}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Ward/Room Name <span className="text-red-500">*</span></label>
-                <input 
-                  type="text" 
-                  className="input-field" 
-                  placeholder="e.g. ICU, Room 101" 
-                  value={layoutForm.ward_name}
-                  onChange={e => setLayoutForm({...layoutForm, ward_name: e.target.value})}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Number of Beds <span className="text-red-500">*</span></label>
-                <input 
-                  type="number" 
-                  min="1"
-                  className="input-field" 
-                  value={layoutForm.num_beds}
-                  onChange={e => setLayoutForm({...layoutForm, num_beds: parseInt(e.target.value) || 1})}
-                />
-              </div>
-            </div>
-
-            <div className="p-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
-              <button onClick={() => setShowLayoutModal(false)} className="btn-secondary">
-                Cancel
-              </button>
-              <button 
-                onClick={() => layoutMutation.mutate(layoutForm)} 
-                disabled={layoutMutation.isPending || !layoutForm.floor_name || !layoutForm.ward_name}
-                className="btn-primary"
-              >
-                {layoutMutation.isPending ? 'Creating...' : 'Create Layout'}
-              </button>
-            </div>
+      <Modal 
+        isOpen={showLayoutModal} 
+        onClose={() => setShowLayoutModal(false)} 
+        title="Add Room Layout"
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Floor Name <span className="text-red-500">*</span></label>
+            <input 
+              type="text" 
+              className="input-field" 
+              placeholder="e.g. 1st Floor" 
+              value={layoutForm.floor_name}
+              onChange={e => setLayoutForm({...layoutForm, floor_name: e.target.value})}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Ward/Room Name <span className="text-red-500">*</span></label>
+            <input 
+              type="text" 
+              className="input-field" 
+              placeholder="e.g. ICU, Room 101" 
+              value={layoutForm.ward_name}
+              onChange={e => setLayoutForm({...layoutForm, ward_name: e.target.value})}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Number of Beds <span className="text-red-500">*</span></label>
+            <input 
+              type="number" 
+              min="1"
+              className="input-field" 
+              value={layoutForm.num_beds}
+              onChange={e => setLayoutForm({...layoutForm, num_beds: parseInt(e.target.value) || 1})}
+            />
           </div>
         </div>
-      )}
+
+        <div className="mt-6 pt-4 border-t border-gray-100 flex justify-end gap-3">
+          <button onClick={() => setShowLayoutModal(false)} className="btn-secondary">
+            Cancel
+          </button>
+          <button 
+            onClick={() => layoutMutation.mutate(layoutForm)} 
+            disabled={layoutMutation.isPending || !layoutForm.floor_name || !layoutForm.ward_name}
+            className="btn-primary"
+          >
+            {layoutMutation.isPending ? 'Creating...' : 'Create Layout'}
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }

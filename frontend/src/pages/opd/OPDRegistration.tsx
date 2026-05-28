@@ -1,13 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
 import { Save, ArrowLeft } from 'lucide-react';
 import { SearchableSelectWithCreate } from '../../components/ui/SearchableSelectWithCreate';
+import { useFormKeyboard } from '../../lib/useFormKeyboard';
+import { useFormValidation } from '../../lib/useFormValidation';
+import { PatientModal } from '../../components/shared/PatientModal';
 
 export function OPDRegistration() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const formRef = useRef<HTMLFormElement>(null);
+  useFormKeyboard(formRef);
+  useFormValidation(formRef);
+  
+  const [showPatientModal, setShowPatientModal] = useState(false);
+  const [patientSearchTerm, setPatientSearchTerm] = useState('');
+
   const [formData, setFormData] = useState({
     OpgDate: new Date().toISOString().split('T')[0],
     OpgPttCode: null as number | null,
@@ -24,54 +34,16 @@ export function OPDRegistration() {
   const { data: doctors } = useQuery({ queryKey: ['doctors'], queryFn: async () => (await api.get<any[]>('/masters/doctors')).data });
   const { data: diagnostics } = useQuery({ queryKey: ['diagnostics'], queryFn: async () => (await api.get<any[]>('/masters/diagnostics')).data });
 
-  const patientOpts = patients?.map(p => ({ value: p.PttCode, label: `${p.PttName}${p.PttMobile ? ` (${p.PttMobile})` : ''}` })) || [];
+  const patientOpts = patients?.map(p => ({ value: p.PttCode, label: `${p.PttName}${p.PttTelNo ? ` (${p.PttTelNo})` : ''}` })) || [];
   const doctorOpts = doctors?.map(d => ({ value: d.DctCode, label: d.DctName })) || [];
   const diagOpts = diagnostics?.map(d => ({ value: d.DigCode, label: d.DigName })) || [];
 
   const createPatient = async (name: string) => {
-    let finalName = name;
-    if (!finalName || !finalName.trim()) {
-      const input = window.prompt("Enter Patient Name:");
-      if (!input || !input.trim()) return;
-      finalName = input.trim();
-    }
-    
-    try {
-      const res = await api.post('/masters/patients', { PttName: finalName, PttSex: 'M' });
-      queryClient.invalidateQueries({ queryKey: ['patients'] });
-      setFormData({ ...formData, OpgPttCode: res.data.PttCode });
-    } catch (err) {
-      alert("Failed to create patient. Please try again.");
-    }
+    setPatientSearchTerm(name);
+    setShowPatientModal(true);
   };
 
-  const createDoctor = async (name: string) => {
-    let finalName = name;
-    if (!finalName || !finalName.trim()) {
-      const input = window.prompt("Enter Doctor Name:");
-      if (!input || !input.trim()) return;
-      finalName = input.trim();
-    }
-    try {
-      const res = await api.post('/masters/doctors', { DctName: finalName });
-      queryClient.invalidateQueries({ queryKey: ['doctors'] });
-      setFormData({ ...formData, OpgCDctCode: res.data.DctCode });
-    } catch (err) { alert("Failed to create doctor"); }
-  };
 
-  const createDiagnosis = async (name: string) => {
-    let finalName = name;
-    if (!finalName || !finalName.trim()) {
-      const input = window.prompt("Enter Diagnosis Name:");
-      if (!input || !input.trim()) return;
-      finalName = input.trim();
-    }
-    try {
-      const res = await api.post('/masters/diagnostics', { DigName: finalName });
-      queryClient.invalidateQueries({ queryKey: ['diagnostics'] });
-      setFormData({ ...formData, OpgPDigCode: res.data.DigCode });
-    } catch (err) { alert("Failed to create diagnosis"); }
-  };
 
   useEffect(() => {
     const discAmt = (formData.OpgRate * formData.OpgDiscPer) / 100;
@@ -104,11 +76,11 @@ export function OPDRegistration() {
       </div>
 
       <div className="card">
-        <form onSubmit={handleSave} className="space-y-8">
+        <form ref={formRef} onSubmit={handleSave} className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-              <input type="date" value={formData.OpgDate} onChange={e => setFormData({...formData, OpgDate: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-medical-mutedblue focus:border-medical-mutedblue" required />
+              <input type="date" value={formData.OpgDate} onChange={e => setFormData({...formData, OpgDate: e.target.value})} className="input-field" required />
             </div>
             
             <div>
@@ -129,9 +101,7 @@ export function OPDRegistration() {
                 options={doctorOpts}
                 value={formData.OpgCDctCode}
                 onChange={(v) => setFormData({...formData, OpgCDctCode: v as number})}
-                onCreateNew={createDoctor}
                 placeholder="Select Doctor"
-                createLabel="Doctor"
               />
             </div>
 
@@ -141,9 +111,7 @@ export function OPDRegistration() {
                 options={diagOpts}
                 value={formData.OpgPDigCode}
                 onChange={(v) => setFormData({...formData, OpgPDigCode: v as number})}
-                onCreateNew={createDiagnosis}
                 placeholder="Select Diagnosis"
-                createLabel="Diagnosis"
               />
             </div>
           </div>
@@ -153,11 +121,11 @@ export function OPDRegistration() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Consultation Fee (₹)</label>
-                <input type="number" value={formData.OpgRate} onChange={e => setFormData({...formData, OpgRate: Number(e.target.value)})} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+                <input type="number" value={formData.OpgRate} onChange={e => setFormData({...formData, OpgRate: Number(e.target.value)})} className="input-field" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Discount %</label>
-                <input type="number" value={formData.OpgDiscPer} onChange={e => setFormData({...formData, OpgDiscPer: Number(e.target.value)})} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+                <input type="number" value={formData.OpgDiscPer} onChange={e => setFormData({...formData, OpgDiscPer: Number(e.target.value)})} className="input-field" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Discount Amt (₹)</label>
@@ -171,13 +139,23 @@ export function OPDRegistration() {
           </div>
 
           <div className="flex justify-end gap-4 border-t border-gray-100 pt-6">
-            <button type="button" onClick={() => navigate('/opd')} className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Cancel</button>
+            <button type="button" onClick={() => navigate('/opd')} className="btn-secondary px-6">Cancel</button>
             <button type="submit" disabled={mutation.isPending} className="btn-primary flex items-center gap-2 px-8">
               <Save size={18} /> Save Registration
             </button>
           </div>
         </form>
       </div>
+      <PatientModal
+        isOpen={showPatientModal}
+        onClose={() => setShowPatientModal(false)}
+        initialName={patientSearchTerm}
+        defaultType="Outdoor"
+        onSave={(id) => {
+          queryClient.invalidateQueries({ queryKey: ['patients'] });
+          setFormData(prev => ({ ...prev, OpgPttCode: id }));
+        }}
+      />
     </div>
   );
 }

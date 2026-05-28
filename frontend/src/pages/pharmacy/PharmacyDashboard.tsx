@@ -6,12 +6,14 @@ import { Link } from 'react-router-dom';
 export function PharmacyDashboard() {
   const { data: sales, isLoading: salesLoading } = useQuery({
     queryKey: ['pharmacy-sales'],
-    queryFn: async () => (await api.get<any[]>('/pharmacy/sales')).data
+    queryFn: async () => (await api.get<any[]>('/pharmacy/sales')).data,
+    refetchInterval: 30000
   });
 
   const { data: purchases, isLoading: purchasesLoading } = useQuery({
     queryKey: ['pharmacy-purchases'],
-    queryFn: async () => (await api.get<any[]>('/pharmacy/purchases')).data
+    queryFn: async () => (await api.get<any[]>('/pharmacy/purchases')).data,
+    refetchInterval: 30000
   });
 
   const todaySalesCount = sales?.length || 0;

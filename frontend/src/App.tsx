@@ -38,25 +38,10 @@ const OpdReceipt = lazy(() => import('./pages/opd/OpdReceipt').then(m => ({ defa
 const IpdReceipt = lazy(() => import('./pages/ipd/IpdReceipt').then(m => ({ default: m.IpdReceipt })));
 const LabReceipt = lazy(() => import('./pages/lab/LabReceipt').then(m => ({ default: m.LabReceipt })));
 const SyncDashboard = lazy(() => import('./pages/system/SyncDashboard').then(m => ({ default: m.SyncDashboard })));
+const Dashboard = lazy(() => import('./pages/Dashboard').then(m => ({ default: m.Dashboard })));
 
 const queryClient = new QueryClient();
 
-function Dashboard() {
-  return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold text-medical-text">Dashboard</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Placeholder cards */}
-        {['OPD Patients Today', 'IPD Admissions', 'Lab Reports Pending', 'Pharmacy Sales'].map((title, i) => (
-          <div key={i} className="card">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">{title}</h3>
-            <p className="text-3xl font-bold text-medical-mutedblue">--</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 function PlaceholderPage({ title }: { title: string }) {
   return (

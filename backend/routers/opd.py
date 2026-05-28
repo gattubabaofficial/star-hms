@@ -4,7 +4,8 @@ from sqlalchemy import func
 from typing import List
 
 from backend.database import get_db
-from backend.models.opd import OutdReg, OutdHdr, OutdBill
+from backend.models.opd import OutdReg, OutdHdr, OutdBill, OutdBlDctDtl
+from backend.models.masters import DoctMast
 from backend.schemas.opd import (
     OutdRegCreate, OutdRegResponse,
     OutdHdrCreate, OutdHdrResponse
@@ -61,11 +62,24 @@ def create_opd_bill(bill_in: OutdHdrCreate, db: Session = Depends(get_db)):
     # Insert Details
     for idx, detail in enumerate(bill_in.details):
         db_dtl = OutdBill(
-            **detail.model_dump(),
+            **detail.model_dump(exclude={"ObdSno"}),
             ObdOhdCode=db_hdr.OhdCode,
             ObdSno=idx + 1
         )
         db.add(db_dtl)
+
+    # Automatically insert doctor share record if doctor is specified
+    if db_hdr.OhdCDctCode:
+        dct = db.query(DoctMast).filter(DoctMast.DctCode == db_hdr.OhdCDctCode).first()
+        dct_share = dct.DctShare if dct else 0.0
+        db_dct_dtl = OutdBlDctDtl(
+            OddOhdCode=db_hdr.OhdCode,
+            OddDctCode=db_hdr.OhdCDctCode,
+            OddSharePer=dct_share,
+            OddShareAmt=db_hdr.OhdTotalAmt * dct_share / 100.0,
+            OddRecState=1
+        )
+        db.add(db_dct_dtl)
 
     db.commit()
     return db_hdr

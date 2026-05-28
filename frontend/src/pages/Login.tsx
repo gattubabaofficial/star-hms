@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import api from '../lib/api';
 import { HeartPulse } from 'lucide-react';
+import { useFormValidation } from '../lib/useFormValidation';
 
 interface Company {
   CmpCode: number;
@@ -93,7 +94,7 @@ export function Login() {
                   required
                   value={selectedCompany}
                   onChange={(e) => setSelectedCompany(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm bg-white"
+                  className="input-field"
                 >
                   {companies.length === 0 && <option value="">Loading workspaces...</option>}
                   {companies.map(c => (
@@ -113,7 +114,7 @@ export function Login() {
                   required
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm"
+                  className="input-field"
                 />
               </div>
             </div>
@@ -128,7 +129,7 @@ export function Login() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm"
+                  className="input-field"
                 />
               </div>
             </div>

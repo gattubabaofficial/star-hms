@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
 import { Save, ArrowLeft, Plus, Trash2 } from 'lucide-react';
+import { useFormValidation } from '../../lib/useFormValidation';
+import { useFormKeyboard } from '../../lib/useFormKeyboard';
 import { SearchableSelectWithCreate } from '../../components/ui/SearchableSelectWithCreate';
 
 interface PurchaseItem {
@@ -17,6 +19,10 @@ interface PurchaseItem {
 }
 
 export function StockInward() {
+  const formRef = useRef<HTMLFormElement>(null);
+  useFormKeyboard(formRef);
+  useFormValidation(formRef);
+
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   
@@ -115,7 +121,7 @@ export function StockInward() {
         </div>
       </div>
 
-      <form onSubmit={handleSave} className="space-y-6">
+      <form ref={formRef} onSubmit={handleSave} className="space-y-6">
         <div className="card grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
@@ -127,7 +133,7 @@ export function StockInward() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Supplier Ref No (Bill No)</label>
-            <input type="text" value={header.IskRefNo} onChange={e => setHeader({...header, IskRefNo: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+            <input type="text" value={header.IskRefNo} onChange={e => setHeader({...header, IskRefNo: e.target.value})} className="input-field" />
           </div>
         </div>
 

@@ -33,21 +33,21 @@ class IndrHdrResponse(IndrHdrBase):
         from_attributes = True
 
 # -----------------------------------
-# Bed State (IBedState)
+# Bed State (IBedState) — Legacy field names
 # -----------------------------------
 class IBedStateBase(BaseModel):
-    IbbsIbsCode: Optional[int] = None # BedMast.BdmCode
-    IbbsFromDate: Optional[date] = None
-    IbbsToDate: Optional[date] = None
-    IbbsRemark: Optional[str] = None
-    IbbsRecState: int = 1
+    IbsBdmCode: Optional[int] = None  # BedMast.BdmCode
+    IbsDate: Optional[date] = None  # From date
+    IbsDischDate: Optional[date] = None  # To date (discharge)
+    IbsRemark: Optional[str] = None
+    IbsRecState: int = 1
 
 class IBedStateCreate(IBedStateBase):
     pass
 
 class IBedStateResponse(IBedStateBase):
-    IbbsCode: int
-    IbbsICode: int
+    IbsCode: int
+    IbsIpgCode: int
     
     class Config:
         from_attributes = True
@@ -84,6 +84,7 @@ class IndrBlHdrBase(BaseModel):
     IbhDiscPer: float = 0.0
     IbhDepAmt: float = 0.0
     IbhBalAmt: float = 0.0
+    IbhRfugAmt: float = 0.0
     IbhStatus: Optional[str] = None
     IbhRemark: Optional[str] = None
 

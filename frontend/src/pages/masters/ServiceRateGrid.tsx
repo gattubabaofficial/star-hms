@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../../lib/api';
 import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
+import { useFormValidation } from '../../lib/useFormValidation';
+import { useFormKeyboard } from '../../lib/useFormKeyboard';
 import { format } from 'date-fns';
 
 interface ServiceRateGridProps {
@@ -35,6 +37,9 @@ const defaultRate: Omit<ServiceRate, 'SrmCode' | 'SrmSrvCode'> = {
 };
 
 export const ServiceRateGrid: React.FC<ServiceRateGridProps> = ({ serviceId }) => {
+  const formRef = useRef<HTMLFormElement>(null);
+  useFormKeyboard(formRef);
+  useFormValidation(formRef);
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(defaultRate);
@@ -120,7 +125,7 @@ export const ServiceRateGrid: React.FC<ServiceRateGridProps> = ({ serviceId }) =
       </div>
 
       {isEditing ? (
-        <form onSubmit={handleSave} className="bg-gray-50 p-4 rounded-md border border-gray-200 space-y-4 mb-6">
+        <form ref={formRef} onSubmit={handleSave} className="bg-gray-50 p-4 rounded-md border border-gray-200 space-y-4 mb-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">Rate Type</label>

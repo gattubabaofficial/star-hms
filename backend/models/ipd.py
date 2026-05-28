@@ -26,23 +26,29 @@ class IndrHdr(Base):
     IhdRecState = Column(SmallInteger, nullable=False, default=1)
     IhdCmpCode = Column(SmallInteger, nullable=False, default=1)
 
+# Legacy: IBedState — Bed occupancy tracking
 class IBedState(Base):
     __tablename__ = "IBedState"
-    IbbsCode = Column(Integer, primary_key=True, index=True)
-    IbbsICode = Column(Integer, ForeignKey("IndrHdr.IhdCode"), nullable=False)
-    IbbsIbsCode = Column(Integer, ForeignKey("BedMast.BdmCode"))
-    IbbsFromDate = Column(Date)
-    IbbsFromTime = Column(Integer)
-    IbbsToDate = Column(Date)
-    IbbsToTime = Column(Integer)
-    IbbsUnit = Column(Double, default=1.0)
-    IbbsIblICode = Column(Integer)
-    IbbsIpgCode = Column(Integer)
-    IbbsSno = Column(SmallInteger)
-    IbbsTrnCode = Column(Integer)
-    IbbsRemark = Column(String(50))
-    IbbsRecState = Column(SmallInteger, nullable=False, default=1)
+    IbsCode = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    IbsSno = Column(SmallInteger)
+    IbsVtmCode = Column(Integer)
+    IbsPrefix = Column(String(10))
+    IbsVchNo = Column(Integer)
+    IbsPostfix = Column(String(10))
+    IbsDate = Column(Date)
+    IbsTime = Column(Integer)
+    IbsIpgCode = Column(Integer, ForeignKey("IndrReg.IpgCode"))
+    IbsBdmCode = Column(Integer, ForeignKey("BedMast.BdmCode"))
+    IbsDischDate = Column(Date)
+    IbsDischTime = Column(Integer)
+    IbsPttCode = Column(Integer, ForeignKey("PatMast.PttCode"))
+    IbsDischState = Column(SmallInteger)
+    IbsLIbsCode = Column(Integer)
+    IbsRemark = Column(String(50))
+    IbsRecState = Column(SmallInteger, nullable=False, default=1)
+    IbsCmpCode = Column(SmallInteger, nullable=False, default=1)
 
+# Legacy: IndrBlHdr — IPD Bill Header
 class IndrBlHdr(Base):
     __tablename__ = "IndrBlHdr"
     IbhCode = Column(Integer, primary_key=True, index=True)
@@ -65,6 +71,7 @@ class IndrBlHdr(Base):
     IbhRecState = Column(SmallInteger, nullable=False, default=1)
     IbhCmpCode = Column(SmallInteger, nullable=False, default=1)
 
+# Legacy: IndrBill — IPD Bill Line Items (service details)
 class IndrBill(Base):
     __tablename__ = "IndrBill"
     IbdCode = Column(Integer, primary_key=True, index=True)
@@ -79,6 +86,7 @@ class IndrBill(Base):
     IbdAmtAftDisc = Column(Double, default=0.0)
     IbdRecState = Column(SmallInteger, nullable=False, default=1)
 
+# Legacy: IndrBlDctDtl — IPD Bill Doctor Detail
 class IndrBlDctDtl(Base):
     __tablename__ = "IndrBlDctDtl"
     IddCode = Column(Integer, primary_key=True, index=True)
@@ -88,43 +96,132 @@ class IndrBlDctDtl(Base):
     IddShareAmt = Column(Double, default=0.0)
     IddRecState = Column(SmallInteger, nullable=False, default=1)
 
+# Legacy: IndrBlPymtHdr — IPD Bill Payment Header
+class IndrBlPymtHdr(Base):
+    __tablename__ = "IndrBlPymtHdr"
+    IbphCode = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    IbphIpgCode = Column(Integer, ForeignKey("IndrReg.IpgCode"))
+    IbphVtmCode = Column(Integer)
+    IbphPrefix = Column(String(10))
+    IbphVchNo = Column(Integer)
+    IbphPostfix = Column(String(10))
+    IbphDate = Column(Date)
+    IbphTime = Column(Integer)
+    IbphOldIbphCode = Column(Integer)
+    IbphPttCode = Column(Integer, ForeignKey("PatMast.PttCode"))
+    IbphDepoAmt = Column(Double, default=0.0)
+    IbphRemark = Column(String(50))
+    IbphRecState = Column(SmallInteger, nullable=False, default=1)
+    IbphCmpCode = Column(SmallInteger, nullable=False, default=1)
+
+# Legacy: IndrBlPymtDtl — IPD Bill Payment Detail (deposit against a specific bill)
 class IndrBlDpogDtl(Base):
-    __tablename__ = "IndrBlDpogDtl"
-    IpdCode = Column(Integer, primary_key=True, index=True)
-    IpdIbhCode = Column(Integer, ForeignKey("IndrBlHdr.IbhCode"))
-    IpdAmt = Column(Double, default=0.0)
-    IpdDate = Column(Date)
-    IpdRecState = Column(SmallInteger, nullable=False, default=1)
+    __tablename__ = "IndrBlPymtDtl"
+    IbpyICode = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    IbpyCode = Column(Integer)
+    IbpySno = Column(SmallInteger)
+    IbpyDate = Column(Date)
+    IbpyPttCode = Column(Integer, ForeignKey("PatMast.PttCode"))
+    IbpyIbhCode = Column(Integer, ForeignKey("IndrBlHdr.IbhCode"))
+    IbpyDepoAmt = Column(Double, default=0.0)
+    IbpyRemark = Column(String(50))
+    IbpyRecState = Column(SmallInteger, nullable=False, default=1)
+    IbpyCmpCode = Column(SmallInteger, nullable=False, default=1)
 
+# Legacy: IndrBlRefdHdr — IPD Bill Refund Header
+class IndrBlRefdHdr(Base):
+    __tablename__ = "IndrBlRefdHdr"
+    IbfhCode = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    IbfhIpgCode = Column(Integer, ForeignKey("IndrReg.IpgCode"))
+    IbfhVtmCode = Column(Integer)
+    IbfhPrefix = Column(String(10))
+    IbfhVchNo = Column(Integer)
+    IbfhPostfix = Column(String(10))
+    IbfhDate = Column(Date)
+    IbfhTime = Column(Integer)
+    IbfhOldIbfhCode = Column(Integer)
+    IbfhPttCode = Column(Integer, ForeignKey("PatMast.PttCode"))
+    IbfhRefuAmt = Column(Double, default=0.0)
+    IbfhRemark = Column(String(50))
+    IbfhRecState = Column(SmallInteger, nullable=False, default=1)
+    IbfhCmpCode = Column(SmallInteger, nullable=False, default=1)
+
+# Legacy: IndrBlRefdDtl — IPD Bill Refund Detail (refund against a specific bill)
 class IndrBlRfugDtl(Base):
-    __tablename__ = "IndrBlRfugDtl"
-    IrdCode = Column(Integer, primary_key=True, index=True)
-    IrdIbhCode = Column(Integer, ForeignKey("IndrBlHdr.IbhCode"))
-    IrdAmt = Column(Double, default=0.0)
-    IrdDate = Column(Date)
-    IrdRecState = Column(SmallInteger, nullable=False, default=1)
+    __tablename__ = "IndrBlRefdDtl"
+    IbfdICode = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    IbfdCode = Column(Integer)
+    IbfdSno = Column(SmallInteger)
+    IbfdDate = Column(Date)
+    IbfdPttCode = Column(Integer, ForeignKey("PatMast.PttCode"))
+    IbfdIbhCode = Column(Integer, ForeignKey("IndrBlHdr.IbhCode"))
+    IbfdRefuAmt = Column(Double, default=0.0)
+    IbfdRemark = Column(String(50))
+    IbfdRecState = Column(SmallInteger, nullable=False, default=1)
+    IbfdCmpCode = Column(SmallInteger, nullable=False, default=1)
 
+# Legacy: IndrReg — IPD Registration (intermediate table linking admission to payments/refunds)
 class IndrReg(Base):
     __tablename__ = "IndrReg"
-    IrgCode = Column(Integer, primary_key=True, index=True)
-    IrgIhdCode = Column(Integer, ForeignKey("IndrHdr.IhdCode"), nullable=False)
-    IrgDate = Column(Date, nullable=False)
-    IrgAmt = Column(Double, default=0.0)
-    IrgType = Column(String(20))
-    IrgRecState = Column(SmallInteger, nullable=False, default=1)
+    IpgCode = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    IpgVtmCode = Column(Integer)
+    IpgPrefix = Column(String(10))
+    IpgVchNo = Column(Integer)
+    IpgPostfix = Column(String(10))
+    IpgDate = Column(Date)
+    IpgTime = Column(Integer)
+    IpgOldIpgCode = Column(Integer)
+    IpgCDctCode = Column(Integer, ForeignKey("DoctMast.DctCode"))
+    IpgRByCode = Column(Integer)
+    IpgRToCode = Column(Integer)
+    IpgPttCode = Column(Integer, ForeignKey("PatMast.PttCode"))
+    IpgPDigCode = Column(Integer, ForeignKey("DiagMast.DigCode"))
+    IpgFDigCode = Column(Integer, ForeignKey("DiagMast.DigCode"))
+    IpgBdmCode = Column(Integer, ForeignKey("BedMast.BdmCode"))
+    IpgIbsCode = Column(Integer)
+    IpgDischDate = Column(Date)
+    IpgDischTime = Column(Integer)
+    IpgAdvAmt = Column(Double, default=0.0)
+    IpgRemark = Column(String(50))
+    IpgRecState = Column(SmallInteger, nullable=False, default=1)
+    IpgCmpCode = Column(SmallInteger, nullable=False, default=1)
 
+# Legacy: IndrRgPymt — IPD Registration Payment (advance deposit)
 class IndrRgPymt(Base):
     __tablename__ = "IndrRgPymt"
-    IrpCode = Column(Integer, primary_key=True, index=True)
-    IrpIrgCode = Column(Integer, ForeignKey("IndrReg.IrgCode"))
-    IrpDate = Column(Date, nullable=False)
-    IrpAmt = Column(Double, default=0.0)
-    IrpRecState = Column(SmallInteger, nullable=False, default=1)
+    IgtCode = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    IgtIpgCode = Column(Integer, ForeignKey("IndrReg.IpgCode"))
+    IgtVtmCode = Column(Integer)
+    IgtPrefix = Column(String(10))
+    IgtVchNo = Column(Integer)
+    IgtPostfix = Column(String(10))
+    IgtDate = Column(Date)
+    IgtTime = Column(Integer)
+    IgtOldIgtCode = Column(Integer)
+    IgtPttCode = Column(Integer, ForeignKey("PatMast.PttCode"))
+    IgtDpogAmt = Column(Double, default=0.0)
+    IgtAdjAmt = Column(Double, default=0.0)
+    IgtBalAmt = Column(Double, default=0.0)
+    IgtRemark = Column(String(50))
+    IgtCmpCode = Column(SmallInteger, nullable=False, default=1)
+    IgtRecState = Column(SmallInteger, nullable=False, default=1)
 
+# Legacy: IndrRgRefd — IPD Registration Refund
 class IndrRgRefd(Base):
     __tablename__ = "IndrRgRefd"
-    IrrCode = Column(Integer, primary_key=True, index=True)
-    IrrIrgCode = Column(Integer, ForeignKey("IndrReg.IrgCode"))
-    IrrDate = Column(Date, nullable=False)
-    IrrAmt = Column(Double, default=0.0)
-    IrrRecState = Column(SmallInteger, nullable=False, default=1)
+    IgfCode = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    IgfIpgCode = Column(Integer, ForeignKey("IndrReg.IpgCode"))
+    IgfVtmCode = Column(Integer)
+    IgfPrefix = Column(String(10))
+    IgfVchNo = Column(Integer)
+    IgfPostfix = Column(String(10))
+    IgfDate = Column(Date)
+    IgfTime = Column(Integer)
+    IgfOldIgfCode = Column(Integer)
+    IgfPttCode = Column(Integer, ForeignKey("PatMast.PttCode"))
+    IgfRfugAmt = Column(Double, default=0.0)
+    IgfAdjAmt = Column(Double, default=0.0)
+    IgfBalAmt = Column(Double, default=0.0)
+    IgfRemark = Column(String(50))
+    IgfRecState = Column(SmallInteger, nullable=False, default=1)
+    IgfCmpCode = Column(SmallInteger, nullable=False, default=1)

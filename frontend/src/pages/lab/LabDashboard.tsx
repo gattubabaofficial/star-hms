@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom';
 export function LabDashboard() {
   const { data: bills, isLoading } = useQuery({
     queryKey: ['lab-bills'],
-    queryFn: async () => (await api.get<any[]>('/lab/registrations')).data
+    queryFn: async () => (await api.get<any[]>('/lab/registrations')).data,
+    refetchInterval: 30000
   });
 
   const todayCount = bills?.length || 0;
@@ -53,21 +54,29 @@ export function LabDashboard() {
                 <th className="py-2 px-3 font-medium text-sm text-gray-600">Date</th>
                 <th className="py-2 px-3 font-medium text-sm text-gray-600">Patient ID</th>
                 <th className="py-2 px-3 font-medium text-sm text-gray-600">Doctor ID</th>
+                <th className="py-2 px-3 font-medium text-sm text-gray-600">Status</th>
                 <th className="py-2 px-3 font-medium text-sm text-gray-600 text-right">Net Amount</th>
               </tr>
             </thead>
             <tbody>
-              {isLoading ? <tr><td colSpan={5} className="py-4 text-center">Loading...</td></tr> : 
+              {isLoading ? <tr><td colSpan={6} className="py-4 text-center">Loading...</td></tr> : 
                 bills?.slice(0, 10).map(b => (
                 <tr key={b.LhdCode} className="border-b border-gray-50 hover:bg-gray-50">
                   <td className="py-2 px-3 text-sm font-medium">LAB-{b.LhdVchNo}</td>
                   <td className="py-2 px-3 text-sm text-gray-600">{b.LhdDate}</td>
                   <td className="py-2 px-3 text-sm text-gray-800">PTT-{b.LhdPttCode}</td>
                   <td className="py-2 px-3 text-sm text-gray-600">{b.LhdCDctCode ? `DCT-${b.LhdCDctCode}` : 'N/A'}</td>
+                  <td className="py-2 px-3 text-sm">
+                    {b.LhdRfugAmt > 0 ? (
+                      <span className="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-700">Refunded</span>
+                    ) : (
+                      <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">Active</span>
+                    )}
+                  </td>
                   <td className="py-2 px-3 text-sm font-medium text-right text-blue-600">₹{b.LhdTotalAmt.toFixed(2)}</td>
                 </tr>
               ))}
-              {bills?.length === 0 && <tr><td colSpan={5} className="py-4 text-center text-gray-500">No lab registrations found.</td></tr>}
+              {bills?.length === 0 && <tr><td colSpan={6} className="py-4 text-center text-gray-500">No lab registrations found.</td></tr>}
             </tbody>
           </table>
         </div>

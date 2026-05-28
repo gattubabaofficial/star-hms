@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { SummaryDetailLayout } from '../../components/layout/SummaryDetailLayout';
 import api from '../../lib/api';
 import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
+import { useFormValidation } from '../../lib/useFormValidation';
+import { useFormKeyboard } from '../../lib/useFormKeyboard';
 import { SearchableSelectWithCreate } from '../../components/ui/SearchableSelectWithCreate';
 
 interface Doct {
@@ -31,6 +33,10 @@ const defaultFormData = {
 };
 
 export function DoctMaster() {
+  const formRef = useRef<HTMLFormElement>(null);
+  useFormKeyboard(formRef);
+  useFormValidation(formRef);
+
   const queryClient = useQueryClient();
   const [selectedItem, setSelectedItem] = useState<Doct | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -152,15 +158,15 @@ export function DoctMaster() {
           Select an item from the list or click Add New
         </div>
       ) : (
-        <form onSubmit={handleSave} className="space-y-4 max-w-2xl">
+        <form ref={formRef} onSubmit={handleSave} className="space-y-4 max-w-2xl">
           <div className="grid grid-cols-4 gap-4">
             <div className="col-span-1">
               <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
-              <input type="text" disabled={!isEditing} value={formData.DctTitle || ''} onChange={(e) => setFormData({ ...formData, DctTitle: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" placeholder="Dr." />
+              <input type="text" disabled={!isEditing} value={formData.DctTitle || ''} onChange={(e) => setFormData({ ...formData, DctTitle: e.target.value })} className="input-field" placeholder="Dr." />
             </div>
             <div className="col-span-3">
               <label className="block text-sm font-medium text-gray-700 mb-1">Doctor Name <span className="text-red-500">*</span></label>
-              <input type="text" required disabled={!isEditing} value={formData.DctName} onChange={(e) => setFormData({ ...formData, DctName: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" placeholder="e.g. John Doe" />
+              <input type="text" required disabled={!isEditing} value={formData.DctName} onChange={(e) => setFormData({ ...formData, DctName: e.target.value })} className="input-field" placeholder="e.g. John Doe" />
             </div>
           </div>
 
@@ -192,27 +198,27 @@ export function DoctMaster() {
           <div className="grid grid-cols-2 gap-4">
              <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Specialization</label>
-              <input type="text" disabled={!isEditing} value={formData.DctSpeci || ''} onChange={(e) => setFormData({ ...formData, DctSpeci: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" placeholder="e.g. Cardiologist" />
+              <input type="text" disabled={!isEditing} value={formData.DctSpeci || ''} onChange={(e) => setFormData({ ...formData, DctSpeci: e.target.value })} className="input-field" placeholder="e.g. Cardiologist" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Doctor Share (%)</label>
-              <input type="number" step="0.01" disabled={!isEditing} value={formData.DctShare} onChange={(e) => setFormData({ ...formData, DctShare: parseFloat(e.target.value) || 0 })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" />
+              <input type="number" step="0.01" disabled={!isEditing} value={formData.DctShare} onChange={(e) => setFormData({ ...formData, DctShare: parseFloat(e.target.value) || 0 })} className="input-field" />
             </div>
           </div>
 
           <div>
              <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
-             <input type="text" disabled={!isEditing} value={formData.DctAddr || ''} onChange={(e) => setFormData({ ...formData, DctAddr: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" />
+             <input type="text" disabled={!isEditing} value={formData.DctAddr || ''} onChange={(e) => setFormData({ ...formData, DctAddr: e.target.value })} className="input-field" />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
              <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Contact No.</label>
-              <input type="text" disabled={!isEditing} value={formData.DctTelNo || ''} onChange={(e) => setFormData({ ...formData, DctTelNo: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" />
+              <input type="text" disabled={!isEditing} value={formData.DctTelNo || ''} onChange={(e) => setFormData({ ...formData, DctTelNo: e.target.value })} className="input-field" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-              <input type="email" disabled={!isEditing} value={formData.DctEmail || ''} onChange={(e) => setFormData({ ...formData, DctEmail: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" />
+              <input type="email" disabled={!isEditing} value={formData.DctEmail || ''} onChange={(e) => setFormData({ ...formData, DctEmail: e.target.value })} className="input-field" />
             </div>
           </div>
 

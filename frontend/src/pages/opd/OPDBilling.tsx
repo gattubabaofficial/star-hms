@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
 import { Save, ArrowLeft, Plus, Trash2 } from 'lucide-react';
+import { useFormValidation } from '../../lib/useFormValidation';
+import { useFormKeyboard } from '../../lib/useFormKeyboard';
 import { SearchableSelectWithCreate } from '../../components/ui/SearchableSelectWithCreate';
 
 interface BillItem {
@@ -16,6 +18,10 @@ interface BillItem {
 }
 
 export function OPDBilling() {
+  const formRef = useRef<HTMLFormElement>(null);
+  useFormKeyboard(formRef);
+  useFormValidation(formRef);
+
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   
@@ -39,7 +45,7 @@ export function OPDBilling() {
   const { data: doctors } = useQuery({ queryKey: ['doctors'], queryFn: async () => (await api.get<any[]>('/masters/doctors')).data });
   const { data: services } = useQuery({ queryKey: ['services'], queryFn: async () => (await api.get<any[]>('/masters/services')).data });
 
-  const patientOpts = patients?.map(p => ({ value: p.PttCode, label: `${p.PttName} (${p.PttMobile || 'N/A'})` })) || [];
+  const patientOpts = patients?.map(p => ({ value: p.PttCode, label: `${p.PttName} (${p.PttTelNo || 'N/A'})` })) || [];
   const doctorOpts = doctors?.map(d => ({ value: d.DctCode, label: d.DctName })) || [];
   const serviceOpts = services?.map(s => ({ value: s.SrvCode, label: s.SrvName, rate: s.SrvCharges })) || [];
 
@@ -111,11 +117,11 @@ export function OPDBilling() {
         </div>
       </div>
 
-      <form onSubmit={handleSave} className="space-y-6">
+      <form ref={formRef} onSubmit={handleSave} className="space-y-6">
         <div className="card grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-            <input type="date" value={header.OhdDate} onChange={e => setHeader({...header, OhdDate: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-medical-mutedblue focus:border-medical-mutedblue" required />
+            <input type="date" value={header.OhdDate} onChange={e => setHeader({...header, OhdDate: e.target.value})} className="input-field" required />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Patient <span className="text-red-500">*</span></label>
@@ -187,7 +193,7 @@ export function OPDBilling() {
         </div>
 
         <div className="flex justify-end gap-4">
-          <button type="button" onClick={() => navigate('/opd')} className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Cancel</button>
+          <button type="button" onClick={() => navigate('/opd')} className="btn-secondary px-6">Cancel</button>
           <button type="submit" disabled={mutation.isPending} className="btn-success flex items-center gap-2 px-8">
             <Save size={18} /> Generate Bill
           </button>

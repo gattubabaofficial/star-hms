@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { SummaryDetailLayout } from '../../components/layout/SummaryDetailLayout';
 import api from '../../lib/api';
 import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
+import { useFormValidation } from '../../lib/useFormValidation';
+import { useFormKeyboard } from '../../lib/useFormKeyboard';
 import { SearchableSelectWithCreate } from '../../components/ui/SearchableSelectWithCreate';
 
 interface Bed {
@@ -39,6 +41,10 @@ const defaultFormData = {
 };
 
 export function BedMaster() {
+  const formRef = useRef<HTMLFormElement>(null);
+  useFormKeyboard(formRef);
+  useFormValidation(formRef);
+
   const queryClient = useQueryClient();
   const [selectedItem, setSelectedItem] = useState<Bed | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -48,6 +54,7 @@ export function BedMaster() {
   const { data: items, isLoading } = useQuery({ queryKey: ['beds'], queryFn: async () => (await api.get<Bed[]>('/masters/beds')).data });
   const { data: wards } = useQuery({ queryKey: ['wards'], queryFn: async () => (await api.get<{WrdCode: number, WrdName: string}[]>('/masters/wards')).data });
   const { data: floors } = useQuery({ queryKey: ['floors'], queryFn: async () => (await api.get<{FlrCode: number, FlrName: string}[]>('/masters/floors')).data });
+  const { data: services } = useQuery({ queryKey: ['services'], queryFn: async () => (await api.get<{SrvCode: number, SrvName: string}[]>('/masters/services')).data });
 
   // Mutations
   const createMutation = useMutation({
@@ -108,6 +115,7 @@ export function BedMaster() {
   // Options for Dropdowns
   const wardOptions = wards?.map(w => ({ value: w.WrdCode, label: w.WrdName })) || [];
   const floorOptions = floors?.map(f => ({ value: f.FlrCode, label: f.FlrName })) || [];
+  const serviceOptions = services?.map(s => ({ value: s.SrvCode, label: s.SrvName })) || [];
 
   const handleCreateWard = async (name: string) => {
     const res = await api.post('/masters/wards', { WrdName: name });
@@ -119,6 +127,12 @@ export function BedMaster() {
     const res = await api.post('/masters/floors', { FlrName: name, FlrShowInList: true });
     queryClient.invalidateQueries({ queryKey: ['floors'] });
     setFormData({ ...formData, BdmFlrCode: res.data.FlrCode });
+  };
+
+  const handleCreateService = async (name: string) => {
+    const res = await api.post('/masters/services', { SrvName: name, SrvCharges: formData.BdmCharges });
+    queryClient.invalidateQueries({ queryKey: ['services'] });
+    setFormData({ ...formData, BdmSrvCode: res.data.SrvCode });
   };
 
   const ListComponent = (
@@ -160,19 +174,19 @@ export function BedMaster() {
   const DetailComponent = (
     <div>
       {(!isEditing && !selectedItem) ? (
-        <div className="h-full flex items-center justify-center text-gray-400 text-sm">
+        <div className="h-full flex items-center justify-center text-gray-400 text-sm mt-20">
           Select an item from the list or click Add New
         </div>
       ) : (
-        <form onSubmit={handleSave} className="space-y-4 max-w-2xl">
+        <form ref={formRef} onSubmit={handleSave} className="space-y-4 max-w-2xl">
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Bed Name <span className="text-red-500">*</span></label>
-              <input type="text" required disabled={!isEditing} value={formData.BdmName} onChange={(e) => setFormData({ ...formData, BdmName: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" placeholder="e.g. Bed 101" />
+              <input type="text" required disabled={!isEditing} value={formData.BdmName} onChange={(e) => setFormData({ ...formData, BdmName: e.target.value })} className="input-field" placeholder="e.g. Bed 101" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Charges</label>
-              <input type="number" step="0.01" disabled={!isEditing} value={formData.BdmCharges} onChange={(e) => setFormData({ ...formData, BdmCharges: parseFloat(e.target.value) || 0 })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" />
+              <label className="block text-sm font-medium text-gray-700 mb-1">Charges (₹)</label>
+              <input type="number" step="0.01" disabled={!isEditing} value={formData.BdmCharges} onChange={(e) => setFormData({ ...formData, BdmCharges: parseFloat(e.target.value) || 0 })} className="input-field" />
             </div>
           </div>
 
@@ -201,17 +215,44 @@ export function BedMaster() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
-            <label className="flex items-center gap-2 text-sm text-gray-700">
-              <input type="checkbox" disabled={!isEditing} checked={formData.BdmDiscAllowed} onChange={(e) => setFormData({ ...formData, BdmDiscAllowed: e.target.checked })} className="rounded border-gray-300 text-medical-mutedblue focus:ring-medical-mutedblue" />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Associated Billing Service</label>
+              <SearchableSelectWithCreate
+                options={serviceOptions}
+                value={formData.BdmSrvCode}
+                onChange={(val) => setFormData({ ...formData, BdmSrvCode: val as number })}
+                onCreateNew={handleCreateService}
+                placeholder="Select Service"
+                disabled={!isEditing}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Check-out Time (Hour, 0-23)</label>
+              <input 
+                type="number" 
+                min="0" 
+                max="23" 
+                disabled={!isEditing} 
+                value={formData.BdmChkTime ?? ''} 
+                onChange={(e) => setFormData({ ...formData, BdmChkTime: e.target.value ? parseInt(e.target.value) : null })} 
+                className="input-field" 
+                placeholder="e.g. 12" 
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4 py-2">
+            <label className="flex items-center gap-2 text-sm text-gray-700 select-none">
+              <input type="checkbox" disabled={!isEditing} checked={formData.BdmDiscAllowed} onChange={(e) => setFormData({ ...formData, BdmDiscAllowed: e.target.checked })} className="rounded border-gray-300 text-medical-mutedblue focus:ring-medical-mutedblue h-4 w-4" />
               Discount Allowed
             </label>
-            <label className="flex items-center gap-2 text-sm text-gray-700">
-              <input type="checkbox" disabled={!isEditing} checked={formData.BdmFreeAllot} onChange={(e) => setFormData({ ...formData, BdmFreeAllot: e.target.checked })} className="rounded border-gray-300 text-medical-mutedblue focus:ring-medical-mutedblue" />
+            <label className="flex items-center gap-2 text-sm text-gray-700 select-none">
+              <input type="checkbox" disabled={!isEditing} checked={formData.BdmFreeAllot} onChange={(e) => setFormData({ ...formData, BdmFreeAllot: e.target.checked })} className="rounded border-gray-300 text-medical-mutedblue focus:ring-medical-mutedblue h-4 w-4" />
               Free Allotment
             </label>
-             <label className="flex items-center gap-2 text-sm text-gray-700">
-              <input type="checkbox" disabled={!isEditing} checked={formData.BdmShowInList} onChange={(e) => setFormData({ ...formData, BdmShowInList: e.target.checked })} className="rounded border-gray-300 text-medical-mutedblue focus:ring-medical-mutedblue" />
+             <label className="flex items-center gap-2 text-sm text-gray-700 select-none">
+              <input type="checkbox" disabled={!isEditing} checked={formData.BdmShowInList} onChange={(e) => setFormData({ ...formData, BdmShowInList: e.target.checked })} className="rounded border-gray-300 text-medical-mutedblue focus:ring-medical-mutedblue h-4 w-4" />
               Show In List
             </label>
           </div>
@@ -219,11 +260,11 @@ export function BedMaster() {
           <div className="grid grid-cols-2 gap-4">
              <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Discount %</label>
-              <input type="number" step="0.01" disabled={!isEditing || !formData.BdmDiscAllowed} value={formData.BdmDiscPer} onChange={(e) => setFormData({ ...formData, BdmDiscPer: parseFloat(e.target.value) || 0 })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" />
+              <input type="number" step="0.01" disabled={!isEditing || !formData.BdmDiscAllowed} value={formData.BdmDiscPer} onChange={(e) => setFormData({ ...formData, BdmDiscPer: parseFloat(e.target.value) || 0 })} className="input-field" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Check-out Time Basis</label>
-              <select disabled={!isEditing} value={formData.BdmChkOutTimeBasis || ''} onChange={(e) => setFormData({ ...formData, BdmChkOutTimeBasis: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50">
+              <select disabled={!isEditing} value={formData.BdmChkOutTimeBasis || ''} onChange={(e) => setFormData({ ...formData, BdmChkOutTimeBasis: e.target.value })} className="input-field">
                 <option value="">None</option>
                 <option value="24 Hours">24 Hours</option>
                 <option value="Midnight">Midnight</option>
@@ -234,7 +275,7 @@ export function BedMaster() {
 
           <div>
              <label className="block text-sm font-medium text-gray-700 mb-1">Remark</label>
-             <input type="text" disabled={!isEditing} value={formData.BdmRemark || ''} onChange={(e) => setFormData({ ...formData, BdmRemark: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" />
+             <input type="text" disabled={!isEditing} value={formData.BdmRemark || ''} onChange={(e) => setFormData({ ...formData, BdmRemark: e.target.value })} className="input-field" />
           </div>
 
           <div className="flex gap-3 pt-4 border-t border-gray-100">

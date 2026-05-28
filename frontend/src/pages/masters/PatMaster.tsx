@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { SummaryDetailLayout } from '../../components/layout/SummaryDetailLayout';
 import api from '../../lib/api';
 import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
+import { useFormValidation } from '../../lib/useFormValidation';
+import { useFormKeyboard } from '../../lib/useFormKeyboard';
 import { SearchableSelectWithCreate } from '../../components/ui/SearchableSelectWithCreate';
 
 interface Patient {
@@ -12,12 +14,17 @@ interface Patient {
   PttDob: string | null;
   PttPcgCode: number | null;
   PttAraCode: number | null;
+  PttStnCode: number | null;
   PttAddr: string | null;
   PttTelNo: string | null;
   PttSMSNo: string | null;
   PttEmail: string | null;
   PttRefName: string | null;
   PttRefRela: string | null;
+  PttInfAllowed: boolean;
+  PttDefAllowed: boolean;
+  PttDiscAllowed: boolean;
+  PttDiscPer: number;
 }
 
 const defaultFormData = {
@@ -26,15 +33,24 @@ const defaultFormData = {
   PttDob: '',
   PttPcgCode: null as number | null,
   PttAraCode: null as number | null,
+  PttStnCode: null as number | null,
   PttAddr: '',
   PttTelNo: '',
   PttSMSNo: '',
   PttEmail: '',
   PttRefName: '',
   PttRefRela: '',
+  PttInfAllowed: false,
+  PttDefAllowed: false,
+  PttDiscAllowed: false,
+  PttDiscPer: 0.0,
 };
 
 export function PatMaster() {
+  const formRef = useRef<HTMLFormElement>(null);
+  useFormKeyboard(formRef);
+  useFormValidation(formRef);
+
   const queryClient = useQueryClient();
   const [selectedItem, setSelectedItem] = useState<Patient | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -44,6 +60,7 @@ export function PatMaster() {
   const { data: items, isLoading } = useQuery({ queryKey: ['patients'], queryFn: async () => (await api.get<Patient[]>('/masters/patients')).data });
   const { data: categories } = useQuery({ queryKey: ['pat-categories'], queryFn: async () => (await api.get<{PcgCode: number, PcgName: string}[]>('/masters/pat-categories')).data });
   const { data: areas } = useQuery({ queryKey: ['areas'], queryFn: async () => (await api.get<{AraCode: number, AraName: string}[]>('/masters/areas')).data });
+  const { data: stations } = useQuery({ queryKey: ['stations'], queryFn: async () => (await api.get<{StnCode: number, StnName: string}[]>('/masters/stations')).data });
 
   // Mutations
   const createMutation = useMutation({
@@ -76,12 +93,17 @@ export function PatMaster() {
       PttDob: item.PttDob ? String(item.PttDob) : '',
       PttPcgCode: item.PttPcgCode,
       PttAraCode: item.PttAraCode,
+      PttStnCode: item.PttStnCode,
       PttAddr: item.PttAddr || '',
       PttTelNo: item.PttTelNo || '',
       PttSMSNo: item.PttSMSNo || '',
       PttEmail: item.PttEmail || '',
       PttRefName: item.PttRefName || '',
       PttRefRela: item.PttRefRela || '',
+      PttInfAllowed: item.PttInfAllowed || false,
+      PttDefAllowed: item.PttDefAllowed || false,
+      PttDiscAllowed: item.PttDiscAllowed || false,
+      PttDiscPer: item.PttDiscPer || 0.0,
     });
     setIsEditing(false);
   };
@@ -107,6 +129,7 @@ export function PatMaster() {
   // Options for Dropdowns
   const catgOptions = categories?.map(c => ({ value: c.PcgCode, label: c.PcgName })) || [];
   const areaOptions = areas?.map(a => ({ value: a.AraCode, label: a.AraName })) || [];
+  const stationOptions = stations?.map(s => ({ value: s.StnCode, label: s.StnName })) || [];
 
   const handleCreateCategory = async (name: string) => {
     const res = await api.post('/masters/pat-categories', { PcgName: name });
@@ -118,6 +141,12 @@ export function PatMaster() {
     const res = await api.post('/masters/areas', { AraName: name });
     queryClient.invalidateQueries({ queryKey: ['areas'] });
     setFormData({ ...formData, PttAraCode: res.data.AraCode });
+  };
+
+  const handleCreateStation = async (name: string) => {
+    const res = await api.post('/masters/stations', { StnName: name });
+    queryClient.invalidateQueries({ queryKey: ['stations'] });
+    setFormData({ ...formData, PttStnCode: res.data.StnCode });
   };
 
   const ListComponent = (
@@ -157,22 +186,22 @@ export function PatMaster() {
   );
 
   const DetailComponent = (
-    <div>
+    <div className="pb-8">
       {(!isEditing && !selectedItem) ? (
-        <div className="h-full flex items-center justify-center text-gray-400 text-sm">
+        <div className="h-full flex items-center justify-center text-gray-400 text-sm mt-20">
           Select an item from the list or click Add New
         </div>
       ) : (
-        <form onSubmit={handleSave} className="space-y-4 max-w-2xl">
+        <form ref={formRef} onSubmit={handleSave} className="space-y-4 max-w-2xl">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Patient Name <span className="text-red-500">*</span></label>
-            <input type="text" required disabled={!isEditing} value={formData.PttName} onChange={(e) => setFormData({ ...formData, PttName: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" placeholder="e.g. John Doe" />
+            <input type="text" required disabled={!isEditing} value={formData.PttName} onChange={(e) => setFormData({ ...formData, PttName: e.target.value })} className="input-field" placeholder="e.g. John Doe" />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
              <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Gender</label>
-              <select disabled={!isEditing} value={formData.PttSex || 'Male'} onChange={(e) => setFormData({ ...formData, PttSex: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50">
+              <select disabled={!isEditing} value={formData.PttSex || 'Male'} onChange={(e) => setFormData({ ...formData, PttSex: e.target.value })} className="input-field">
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
@@ -180,11 +209,11 @@ export function PatMaster() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
-              <input type="date" disabled={!isEditing} value={formData.PttDob} onChange={(e) => setFormData({ ...formData, PttDob: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" />
+              <input type="date" disabled={!isEditing} value={formData.PttDob} onChange={(e) => setFormData({ ...formData, PttDob: e.target.value })} className="input-field" />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
               <SearchableSelectWithCreate
@@ -207,25 +236,59 @@ export function PatMaster() {
                 disabled={!isEditing}
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Station</label>
+              <SearchableSelectWithCreate
+                options={stationOptions}
+                value={formData.PttStnCode}
+                onChange={(val) => setFormData({ ...formData, PttStnCode: val as number })}
+                onCreateNew={handleCreateStation}
+                placeholder="Select Station"
+                disabled={!isEditing}
+              />
+            </div>
           </div>
 
           <div>
              <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
-             <input type="text" disabled={!isEditing} value={formData.PttAddr || ''} onChange={(e) => setFormData({ ...formData, PttAddr: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" />
+             <input type="text" disabled={!isEditing} value={formData.PttAddr || ''} onChange={(e) => setFormData({ ...formData, PttAddr: e.target.value })} className="input-field" />
           </div>
 
           <div className="grid grid-cols-3 gap-4">
              <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Contact No.</label>
-              <input type="text" disabled={!isEditing} value={formData.PttTelNo || ''} onChange={(e) => setFormData({ ...formData, PttTelNo: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" />
+              <input type="text" disabled={!isEditing} value={formData.PttTelNo || ''} onChange={(e) => setFormData({ ...formData, PttTelNo: e.target.value })} className="input-field" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">SMS No.</label>
-              <input type="text" disabled={!isEditing} value={formData.PttSMSNo || ''} onChange={(e) => setFormData({ ...formData, PttSMSNo: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" />
+              <input type="text" disabled={!isEditing} value={formData.PttSMSNo || ''} onChange={(e) => setFormData({ ...formData, PttSMSNo: e.target.value })} className="input-field" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-              <input type="email" disabled={!isEditing} value={formData.PttEmail || ''} onChange={(e) => setFormData({ ...formData, PttEmail: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" />
+              <input type="email" disabled={!isEditing} value={formData.PttEmail || ''} onChange={(e) => setFormData({ ...formData, PttEmail: e.target.value })} className="input-field" />
+            </div>
+          </div>
+
+          <div className="bg-gray-50 p-4 rounded-md border border-gray-100 space-y-3">
+            <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Patient Settings & Discounts</h4>
+            <div className="grid grid-cols-3 gap-4">
+              <label className="flex items-center gap-2 text-sm text-gray-700">
+                <input type="checkbox" disabled={!isEditing} checked={formData.PttInfAllowed} onChange={(e) => setFormData({ ...formData, PttInfAllowed: e.target.checked })} className="rounded border-gray-300 text-medical-mutedblue h-4 w-4" />
+                Influenza Allowed
+              </label>
+              <label className="flex items-center gap-2 text-sm text-gray-700">
+                <input type="checkbox" disabled={!isEditing} checked={formData.PttDefAllowed} onChange={(e) => setFormData({ ...formData, PttDefAllowed: e.target.checked })} className="rounded border-gray-300 text-medical-mutedblue h-4 w-4" />
+                Default Allowed
+              </label>
+              <label className="flex items-center gap-2 text-sm text-gray-700">
+                <input type="checkbox" disabled={!isEditing} checked={formData.PttDiscAllowed} onChange={(e) => setFormData({ ...formData, PttDiscAllowed: e.target.checked })} className="rounded border-gray-300 text-medical-mutedblue h-4 w-4" />
+                Discount Allowed
+              </label>
+            </div>
+
+            <div className="pt-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Discount Percentage (%)</label>
+              <input type="number" step="0.01" disabled={!isEditing || !formData.PttDiscAllowed} value={formData.PttDiscPer} onChange={(e) => setFormData({ ...formData, PttDiscPer: parseFloat(e.target.value) || 0.0 })} className="input-field" placeholder="e.g. 5.00" />
             </div>
           </div>
 

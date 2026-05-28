@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { SummaryDetailLayout } from '../../components/layout/SummaryDetailLayout';
 import api from '../../lib/api';
 import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
+import { useFormValidation } from '../../lib/useFormValidation';
+import { useFormKeyboard } from '../../lib/useFormKeyboard';
 import { SearchableSelectWithCreate } from '../../components/ui/SearchableSelectWithCreate';
 import { ServiceRateGrid } from './ServiceRateGrid';
 
@@ -40,6 +42,10 @@ const defaultFormData: Omit<Service, 'SrvCode'> = {
 };
 
 export function ServMaster() {
+  const formRef = useRef<HTMLFormElement>(null);
+  useFormKeyboard(formRef);
+  useFormValidation(formRef);
+
   const queryClient = useQueryClient();
   const [selectedItem, setSelectedItem] = useState<Service | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -126,11 +132,11 @@ export function ServMaster() {
       {(!isEditing && !selectedItem) ? (
         <div className="h-full flex items-center justify-center text-gray-400 text-sm mt-20">Select an item from the list or click Add New</div>
       ) : (
-        <form onSubmit={handleSave} className="space-y-6 max-w-4xl">
+        <form ref={formRef} onSubmit={handleSave} className="space-y-6 max-w-4xl">
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Service Name <span className="text-red-500">*</span></label>
-              <input type="text" required disabled={!isEditing} value={formData.SrvName} onChange={(e) => setFormData({ ...formData, SrvName: e.target.value })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" placeholder="e.g. Complete Blood Count (CBC)" />
+              <input type="text" required disabled={!isEditing} value={formData.SrvName} onChange={(e) => setFormData({ ...formData, SrvName: e.target.value })} className="input-field" placeholder="e.g. Complete Blood Count (CBC)" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Service Group</label>
@@ -148,11 +154,22 @@ export function ServMaster() {
           <div className="grid grid-cols-2 gap-4">
             <div>
                <label className="block text-sm font-medium text-gray-700 mb-1">Base Charges (₹)</label>
-               <input type="number" step="0.01" disabled={!isEditing} value={formData.SrvCharges} onChange={(e) => setFormData({ ...formData, SrvCharges: parseFloat(e.target.value) || 0 })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" />
+               <input type="number" step="0.01" disabled={!isEditing} value={formData.SrvCharges} onChange={(e) => setFormData({ ...formData, SrvCharges: parseFloat(e.target.value) || 0 })} className="input-field" />
             </div>
             <div>
                <label className="block text-sm font-medium text-gray-700 mb-1">Max Discount %</label>
-               <input type="number" step="0.01" disabled={!isEditing || !formData.SrvDiscAllowed} value={formData.SrvDiscPer} onChange={(e) => setFormData({ ...formData, SrvDiscPer: parseFloat(e.target.value) || 0 })} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50" />
+               <input type="number" step="0.01" disabled={!isEditing || !formData.SrvDiscAllowed} value={formData.SrvDiscPer} onChange={(e) => setFormData({ ...formData, SrvDiscPer: parseFloat(e.target.value) || 0 })} className="input-field" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+               <label className="block text-sm font-medium text-gray-700 mb-1">Account Head Code (AhCode)</label>
+               <input type="number" disabled={!isEditing} value={formData.SrvAhCode ?? ''} onChange={(e) => setFormData({ ...formData, SrvAhCode: e.target.value ? parseInt(e.target.value) : null })} className="input-field" placeholder="e.g. 501" />
+            </div>
+            <div>
+               <label className="block text-sm font-medium text-gray-700 mb-1">Sorting Index</label>
+               <input type="number" disabled={!isEditing} value={formData.SrvIndex} onChange={(e) => setFormData({ ...formData, SrvIndex: parseInt(e.target.value) || 0 })} className="input-field" />
             </div>
           </div>
 

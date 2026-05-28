@@ -1,12 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../../lib/api';
 import { Building2, Users, Save, Shield, Trash2, CheckSquare } from 'lucide-react';
+import { useFormValidation } from '../../lib/useFormValidation';
+import { useFormKeyboard } from '../../lib/useFormKeyboard';
 import { useAuthStore } from '../../store/authStore';
 
 const MODULES = ["Dashboard", "OPD", "IPD", "Hospital Masters", "Reports", "Pharmacy", "Laboratory", "System"];
 
 export function SystemDashboard() {
+  const formRef = useRef<HTMLFormElement>(null);
+  useFormKeyboard(formRef);
+  useFormValidation(formRef);
+
   const queryClient = useQueryClient();
   const currentUser = useAuthStore(state => state.user);
   const [activeTab, setActiveTab] = useState<'profile' | 'users'>('profile');
@@ -19,7 +25,8 @@ export function SystemDashboard() {
 
   const { data: companyData, isLoading: compLoading } = useQuery({
     queryKey: ['company'],
-    queryFn: async () => (await api.get('/system/company')).data
+    queryFn: async () => (await api.get('/system/company')).data,
+    refetchInterval: 30000
   });
 
   useEffect(() => {
@@ -40,8 +47,10 @@ export function SystemDashboard() {
   };
 
   // User Management State
-  const { data: roles } = useQuery({ queryKey: ['roles'], queryFn: async () => (await api.get<any[]>('/system/roles')).data });
-  const { data: users } = useQuery({ queryKey: ['users'], queryFn: async () => (await api.get<any[]>('/system/users')).data });
+  const { data: roles } = useQuery({ queryKey: ['roles'], queryFn: async () => (await api.get<any[]>('/system/roles')).data,
+    refetchInterval: 30000 });
+  const { data: users } = useQuery({ queryKey: ['users'], queryFn: async () => (await api.get<any[]>('/system/users')).data,
+    refetchInterval: 30000 });
 
   const [newUser, setNewUser] = useState({ UsrName: '', UsrUrlCode: 0, UsrPwd: '' });
   
@@ -122,39 +131,39 @@ export function SystemDashboard() {
         <div className="card max-w-3xl">
           <h2 className="text-lg font-semibold text-gray-800 mb-6">Hospital Information</h2>
           {compLoading ? <p>Loading...</p> : (
-            <form onSubmit={handleCompanySave} className="space-y-4">
+            <form ref={formRef} onSubmit={handleCompanySave} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Hospital Name (Company) <span className="text-red-500">*</span></label>
-                <input type="text" value={company.CmpName} onChange={e => setCompany({...company, CmpName: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-md" required />
+                <input type="text" value={company.CmpName} onChange={e => setCompany({...company, CmpName: e.target.value})} className="input-field" required />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
-                <input type="text" value={company.CmpAddress || ''} onChange={e => setCompany({...company, CmpAddress: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+                <input type="text" value={company.CmpAddress || ''} onChange={e => setCompany({...company, CmpAddress: e.target.value})} className="input-field" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
-                  <input type="text" value={company.CmpCity || ''} onChange={e => setCompany({...company, CmpCity: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+                  <input type="text" value={company.CmpCity || ''} onChange={e => setCompany({...company, CmpCity: e.target.value})} className="input-field" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
-                  <input type="text" value={company.CmpState || ''} onChange={e => setCompany({...company, CmpState: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+                  <input type="text" value={company.CmpState || ''} onChange={e => setCompany({...company, CmpState: e.target.value})} className="input-field" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                  <input type="text" value={company.CmpOPhone || ''} onChange={e => setCompany({...company, CmpOPhone: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+                  <input type="text" value={company.CmpOPhone || ''} onChange={e => setCompany({...company, CmpOPhone: e.target.value})} className="input-field" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input type="email" value={company.CmpEmail || ''} onChange={e => setCompany({...company, CmpEmail: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+                  <input type="email" value={company.CmpEmail || ''} onChange={e => setCompany({...company, CmpEmail: e.target.value})} className="input-field" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Website</label>
-                  <input type="text" value={company.CmpWebsite || ''} onChange={e => setCompany({...company, CmpWebsite: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+                  <input type="text" value={company.CmpWebsite || ''} onChange={e => setCompany({...company, CmpWebsite: e.target.value})} className="input-field" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Registration No. (Reg1)</label>
-                  <input type="text" value={company.CmpReg1 || ''} onChange={e => setCompany({...company, CmpReg1: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+                  <input type="text" value={company.CmpReg1 || ''} onChange={e => setCompany({...company, CmpReg1: e.target.value})} className="input-field" />
                 </div>
               </div>
               <div className="pt-4 flex justify-end">
@@ -173,7 +182,7 @@ export function SystemDashboard() {
           <div className="card">
             <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"><Shield size={18}/> Roles & Privileges</h2>
             
-            <form onSubmit={handleRoleSubmit} className="mb-6 space-y-4">
+            <form ref={formRef} onSubmit={handleRoleSubmit} className="mb-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">New Role Name <span className="text-red-500">*</span></label>
                 <input type="text" placeholder="e.g. Receptionist" value={newRoleName} onChange={e => setNewRoleName(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" required />
@@ -233,7 +242,7 @@ export function SystemDashboard() {
           {/* Users Management */}
           <div className="card">
             <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"><Users size={18}/> System Users</h2>
-            <form onSubmit={e => { e.preventDefault(); if(newUser.UsrUrlCode && newUser.UsrName && newUser.UsrPwd) userMut.mutate(newUser); else alert('All fields required'); }} className="space-y-4 mb-6 border-b pb-6">
+            <form ref={formRef} onSubmit={e => { e.preventDefault(); if(newUser.UsrUrlCode && newUser.UsrName && newUser.UsrPwd) userMut.mutate(newUser); else alert('All fields required'); }} className="space-y-4 mb-6 border-b pb-6">
               <div>
                 <label className="block text-xs text-gray-600 mb-1">Username</label>
                 <input type="text" placeholder="Username" value={newUser.UsrName} onChange={e => setNewUser({...newUser, UsrName: e.target.value})} className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm" required />

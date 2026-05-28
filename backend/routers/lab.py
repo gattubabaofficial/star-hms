@@ -4,7 +4,8 @@ from sqlalchemy import func
 from typing import List
 
 from backend.database import get_db
-from backend.models.lab import LabHdr, LabRcpt
+from backend.models.lab import LabHdr, LabRcpt, LabRcDctDtl
+from backend.models.masters import DoctMast
 from backend.schemas.lab import LabHdrCreate, LabHdrResponse
 
 router = APIRouter()
@@ -30,6 +31,18 @@ def create_lab_registration(reg_in: LabHdrCreate, db: Session = Depends(get_db))
             LrdSno=idx + 1
         )
         db.add(db_dtl)
+
+    # Automatically insert doctor share record if doctor is specified
+    if db_hdr.LhdCDctCode:
+        dct = db.query(DoctMast).filter(DoctMast.DctCode == db_hdr.LhdCDctCode).first()
+        dct_share = dct.DctShare if dct else 0.0
+        db_dct_dtl = LabRcDctDtl(
+            LddLhdCode=db_hdr.LhdCode,
+            LddDctCode=db_hdr.LhdCDctCode,
+            LddSharePer=dct_share,
+            LddRecState=1
+        )
+        db.add(db_dct_dtl)
 
     db.commit()
     db.refresh(db_hdr)

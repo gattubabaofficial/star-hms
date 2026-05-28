@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import api from '../../lib/api';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
+import { useFormValidation } from '../../lib/useFormValidation';
+import { useFormKeyboard } from '../../lib/useFormKeyboard';
 
 interface PaymentRefundFormProps {
   moduleName: 'OPD' | 'IPD' | 'Lab';
@@ -10,6 +12,10 @@ interface PaymentRefundFormProps {
 }
 
 export function PaymentRefundForm({ moduleName, actionType, endpoint, transactionTypes }: PaymentRefundFormProps) {
+  const formRef = useRef<HTMLFormElement>(null);
+  useFormKeyboard(formRef);
+  useFormValidation(formRef);
+
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,7 +60,7 @@ export function PaymentRefundForm({ moduleName, actionType, endpoint, transactio
       </div>
 
       <div className="card p-6">
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
           
           {success && (
             <div className="p-3 bg-green-50 text-green-700 rounded-md flex items-center gap-2">

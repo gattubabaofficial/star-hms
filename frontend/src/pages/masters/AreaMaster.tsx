@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { SummaryDetailLayout } from '../../components/layout/SummaryDetailLayout';
 import api from '../../lib/api';
 import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
+import { useFormValidation } from '../../lib/useFormValidation';
+import { useFormKeyboard } from '../../lib/useFormKeyboard';
 
 interface Area {
   AraCode: number;
@@ -11,6 +13,10 @@ interface Area {
 }
 
 export function AreaMaster() {
+  const formRef = useRef<HTMLFormElement>(null);
+  useFormKeyboard(formRef);
+  useFormValidation(formRef);
+
   const queryClient = useQueryClient();
   const [selectedArea, setSelectedArea] = useState<Area | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -143,7 +149,7 @@ export function AreaMaster() {
           Select an area from the list or click Add New
         </div>
       ) : (
-        <form onSubmit={handleSave} className="space-y-6 max-w-lg">
+        <form ref={formRef} onSubmit={handleSave} className="space-y-6 max-w-lg">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Area Name <span className="text-red-500">*</span>
@@ -154,7 +160,7 @@ export function AreaMaster() {
               disabled={!isEditing}
               value={formData.AraName}
               onChange={(e) => setFormData({ ...formData, AraName: e.target.value })}
-              className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm disabled:bg-gray-50 disabled:text-gray-500"
+              className="input-field"
               placeholder="e.g. North Metropolis"
             />
           </div>

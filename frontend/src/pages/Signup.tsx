@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../lib/api';
 import { Building2, ShieldCheck, ChevronRight } from 'lucide-react';
+import { useFormValidation } from '../lib/useFormValidation';
 
 export function Signup() {
   const [formData, setFormData] = useState({
