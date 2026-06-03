@@ -16,7 +16,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }
         className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden animate-fade-in-up"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-gray-50">
+        <div className="flex justify-between items-center p-4 border-b border-medical-border bg-gray-50">
           <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
           <button 
             onClick={onClose}
@@ -35,3 +35,4 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }
     </div>
   );
 };
+

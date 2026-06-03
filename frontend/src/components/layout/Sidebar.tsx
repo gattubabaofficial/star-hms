@@ -109,9 +109,9 @@ export const Sidebar: React.FC = () => {
   const navItems = navItemsRaw.filter(item => hasAccess(item.requiredModule));
 
   return (
-    <aside className="w-64 bg-white border-r border-medical-lightgray h-full flex flex-col shadow-sm z-10">
-      <div className="p-4 border-b border-medical-lightgray flex items-center gap-3">
-        <div className="w-8 h-8 bg-medical-mutedblue rounded-md flex items-center justify-center text-white font-bold text-lg">
+    <aside className="w-64 bg-white border-r border-medical-border h-full flex flex-col shadow-sm z-10">
+      <div className="p-4 border-b border-medical-border flex items-center gap-3">
+        <div className="w-8 h-8 bg-medical-primary rounded-md flex items-center justify-center text-white font-bold text-lg">
           S
         </div>
         <div>
@@ -152,7 +152,7 @@ export const Sidebar: React.FC = () => {
                             className={({ isActive }) =>
                               `flex items-center gap-3 px-3 py-1.5 text-sm rounded-md transition-colors ${
                                 isActive 
-                                  ? 'bg-blue-50 text-medical-mutedblue font-medium' 
+                                  ? 'bg-blue-50 text-medical-primary font-medium' 
                                   : 'text-gray-500 hover:bg-gray-50 hover:text-medical-text'
                               }`
                             }
@@ -171,7 +171,7 @@ export const Sidebar: React.FC = () => {
                   className={({ isActive }) =>
                     `flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
                       isActive 
-                        ? 'bg-medical-mutedblue text-white font-medium shadow-sm' 
+                        ? 'bg-medical-primary text-white font-medium shadow-sm' 
                         : 'text-gray-600 hover:bg-gray-50 hover:text-medical-text'
                     }`
                   }
@@ -187,3 +187,4 @@ export const Sidebar: React.FC = () => {
     </aside>
   );
 };
+

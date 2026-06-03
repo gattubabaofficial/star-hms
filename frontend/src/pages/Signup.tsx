@@ -59,7 +59,7 @@ export function Signup() {
   return (
     <div className="min-h-screen bg-medical-bg flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md flex flex-col items-center">
-        <div className="w-16 h-16 bg-medical-mutedblue rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-blue-200">
+        <div className="w-16 h-16 bg-medical-primary rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-blue-200">
           <Building2 className="w-8 h-8 text-white" />
         </div>
         <h2 className="mt-2 text-center text-3xl font-extrabold text-medical-text">
@@ -71,7 +71,7 @@ export function Signup() {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-6 shadow sm:rounded-2xl border border-gray-100">
+        <div className="bg-white py-8 px-6 shadow sm:rounded-2xl border border-medical-border">
           <form className="space-y-6" onSubmit={handleSignup}>
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
@@ -87,7 +87,7 @@ export function Signup() {
                   required
                   value={formData.company_name}
                   onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-medical-border rounded-md shadow-sm focus:outline-none focus:ring-medical-primary focus:border-medical-primary sm:text-sm"
                   placeholder="e.g. Apollo Super Specialty"
                 />
               </div>
@@ -101,7 +101,7 @@ export function Signup() {
                   required
                   value={formData.admin_username}
                   onChange={(e) => setFormData({ ...formData, admin_username: e.target.value })}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-medical-border rounded-md shadow-sm focus:outline-none focus:ring-medical-primary focus:border-medical-primary sm:text-sm"
                   placeholder="e.g. admin"
                 />
               </div>
@@ -115,7 +115,7 @@ export function Signup() {
                   required
                   value={formData.admin_password}
                   onChange={(e) => setFormData({ ...formData, admin_password: e.target.value })}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-medical-border rounded-md shadow-sm focus:outline-none focus:ring-medical-primary focus:border-medical-primary sm:text-sm"
                 />
               </div>
             </div>
@@ -128,7 +128,7 @@ export function Signup() {
                   required
                   value={formData.confirm_password}
                   onChange={(e) => setFormData({ ...formData, confirm_password: e.target.value })}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-medical-mutedblue focus:border-medical-mutedblue sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-medical-border rounded-md shadow-sm focus:outline-none focus:ring-medical-primary focus:border-medical-primary sm:text-sm"
                 />
               </div>
             </div>
@@ -137,15 +137,15 @@ export function Signup() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-medical-mutedblue hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-medical-mutedblue disabled:opacity-50 transition-colors"
+                className="w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-medical-primary hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-medical-primary disabled:opacity-50 transition-colors"
               >
                 {isLoading ? 'Creating Workspace...' : 'Register Hospital'}
               </button>
             </div>
           </form>
 
-          <div className="mt-6 border-t border-gray-100 pt-6 text-center">
-            <Link to="/login" className="text-sm text-medical-mutedblue hover:text-blue-700 font-medium">
+          <div className="mt-6 border-t border-medical-border pt-6 text-center">
+            <Link to="/login" className="text-sm text-medical-primary hover:text-blue-700 font-medium">
               Already registered? Login instead
             </Link>
           </div>
@@ -154,3 +154,5 @@ export function Signup() {
     </div>
   );
 }
+
+

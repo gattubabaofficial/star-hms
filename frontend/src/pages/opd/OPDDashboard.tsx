@@ -41,7 +41,7 @@ export function OPDDashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="card flex items-center gap-4">
-          <div className="p-3 bg-blue-50 text-medical-mutedblue rounded-lg"><Users size={24} /></div>
+          <div className="p-3 bg-blue-50 text-medical-primary rounded-lg"><Users size={24} /></div>
           <div>
             <h3 className="text-sm font-medium text-gray-500">Today's Patients</h3>
             <p className="text-2xl font-bold text-gray-800">{todayCount}</p>
@@ -64,7 +64,7 @@ export function OPDDashboard() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-gray-200 bg-gray-50">
+              <tr className="border-b border-medical-border bg-gray-50">
                 <th className="py-3 px-4 font-medium text-sm text-gray-600">Vch No</th>
                 <th className="py-3 px-4 font-medium text-sm text-gray-600">Date</th>
                 <th className="py-3 px-4 font-medium text-sm text-gray-600">Patient ID</th>
@@ -82,7 +82,7 @@ export function OPDDashboard() {
                   <tr key={reg.OpgCode} className="border-b border-gray-50 hover:bg-gray-50">
                     <td className="py-3 px-4 text-sm text-gray-800">OPD-{reg.OpgVchNo}</td>
                     <td className="py-3 px-4 text-sm text-gray-600">{reg.OpgDate}</td>
-                    <td className="py-3 px-4 text-sm font-medium text-medical-mutedblue">PTT-{reg.OpgPttCode}</td>
+                    <td className="py-3 px-4 text-sm font-medium text-medical-primary">PTT-{reg.OpgPttCode}</td>
                     <td className="py-3 px-4 text-sm">
                       {reg.OpgRfugAmt > 0 ? (
                         <span className="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-700">Refunded</span>
@@ -101,3 +101,5 @@ export function OPDDashboard() {
     </div>
   );
 }
+
+

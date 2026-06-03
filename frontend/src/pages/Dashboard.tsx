@@ -64,7 +64,7 @@ export function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="card lg:col-span-2 min-h-[400px]">
           <div className="flex items-center gap-2 mb-6">
-            <Activity size={20} className="text-medical-mutedblue" />
+            <Activity size={20} className="text-medical-primary" />
             <h2 className="text-lg font-semibold text-gray-800">OPD Patient Traffic (Last 7 Days)</h2>
           </div>
           <div className="h-72 w-full">
@@ -91,7 +91,7 @@ export function Dashboard() {
 
         <div className="card min-h-[400px]">
           <div className="flex items-center gap-2 mb-6">
-            <TrendingUp size={20} className="text-medical-mutedblue" />
+            <TrendingUp size={20} className="text-medical-primary" />
             <h2 className="text-lg font-semibold text-gray-800">Revenue Trend</h2>
           </div>
           <div className="h-72 w-full">
@@ -119,3 +119,4 @@ export function Dashboard() {
     </div>
   );
 }
+

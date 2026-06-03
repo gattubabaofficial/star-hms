@@ -18,9 +18,9 @@ export const StatusBar: React.FC<StatusBarProps> = ({ company, finYear, user, ro
   }, []);
 
   return (
-    <div className="h-8 bg-white border-t border-medical-lightgray flex items-center justify-between px-4 text-xs text-gray-600 shadow-sm z-10 w-full">
+    <div className="h-8 bg-white border-t border-medical-border flex items-center justify-between px-4 text-xs text-gray-600 shadow-sm z-10 w-full">
       <div className="flex items-center gap-6">
-        <div className="flex items-center gap-1.5 font-medium text-medical-mutedblue">
+        <div className="flex items-center gap-1.5 font-medium text-medical-primary">
           <Building size={14} />
           {company}
         </div>
@@ -47,3 +47,4 @@ export const StatusBar: React.FC<StatusBarProps> = ({ company, finYear, user, ro
     </div>
   );
 };
+

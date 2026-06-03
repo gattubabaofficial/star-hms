@@ -53,10 +53,9 @@ export function IPDAdmission() {
 
   const mutation = useMutation({
     mutationFn: async (data: typeof formData) => (await api.post('/ipd/admissions', data)).data,
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['ipd-admissions'] });
-      alert('Patient admitted successfully!');
-      navigate('/ipd');
+      navigate('/ipd/receipt', { state: { autoSelectVchNo: data.IhdVchNo, type: 'adm' } });
     }
   });
 
@@ -119,7 +118,7 @@ export function IPDAdmission() {
             </div>
           </div>
 
-          <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <div className="bg-gray-50 p-6 rounded-lg border border-medical-border">
             <h3 className="text-lg font-medium text-gray-800 mb-4">Advance Deposit</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -133,7 +132,7 @@ export function IPDAdmission() {
             </div>
           </div>
 
-          <div className="flex justify-end gap-4 border-t border-gray-100 pt-6">
+          <div className="flex justify-end gap-4 border-t border-medical-border pt-6">
             <button type="button" onClick={() => navigate('/ipd')} className="btn-secondary px-6">Cancel</button>
             <button type="submit" disabled={mutation.isPending} className="btn-primary flex items-center gap-2 px-8">
               <Save size={18} /> Admit Patient
@@ -154,3 +153,4 @@ export function IPDAdmission() {
     </div>
   );
 }
+

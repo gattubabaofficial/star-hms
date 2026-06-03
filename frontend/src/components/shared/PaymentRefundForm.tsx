@@ -9,9 +9,10 @@ interface PaymentRefundFormProps {
   actionType: 'Payment' | 'Refund';
   endpoint: string;
   transactionTypes: { label: string; value: string }[];
+  onSuccess?: (data: any, type: string) => void;
 }
 
-export function PaymentRefundForm({ moduleName, actionType, endpoint, transactionTypes }: PaymentRefundFormProps) {
+export function PaymentRefundForm({ moduleName, actionType, endpoint, transactionTypes, onSuccess }: PaymentRefundFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   useFormKeyboard(formRef);
   useFormValidation(formRef);
@@ -34,13 +35,16 @@ export function PaymentRefundForm({ moduleName, actionType, endpoint, transactio
     setSuccess(false);
 
     try {
-      await api.post(endpoint, {
+      const res = await api.post(endpoint, {
         ...formData,
         ref_id: parseInt(formData.ref_id),
         amount: parseFloat(formData.amount)
       });
       setSuccess(true);
       setFormData({ ...formData, ref_id: '', amount: '' }); // reset fields
+      if (onSuccess) {
+        onSuccess(res.data, formData.transaction_type);
+      }
     } catch (err: any) {
       setError(err.response?.data?.detail || 'An error occurred during the transaction.');
     } finally {
@@ -125,7 +129,7 @@ export function PaymentRefundForm({ moduleName, actionType, endpoint, transactio
             </div>
           </div>
 
-          <div className="flex justify-end pt-4 border-t border-gray-100">
+          <div className="flex justify-end pt-4 border-t border-medical-border">
             <button 
               type="submit" 
               disabled={loading}
@@ -139,3 +143,4 @@ export function PaymentRefundForm({ moduleName, actionType, endpoint, transactio
     </div>
   );
 }
+

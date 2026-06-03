@@ -64,7 +64,7 @@ export const SearchableSelectWithCreate: React.FC<SearchableSelectWithCreateProp
   return (
     <div className="relative w-full" ref={wrapperRef}>
       <div 
-        className={`flex items-center justify-between w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus-within:ring-1 focus-within:ring-medical-mutedblue focus-within:border-medical-mutedblue ${disabled ? 'opacity-60 cursor-not-allowed bg-gray-50' : 'cursor-text'}`}
+        className={`flex items-center justify-between w-full px-3 py-2 bg-white border border-medical-border rounded-md shadow-sm focus-within:ring-1 focus-within:ring-medical-primary focus-within:border-medical-primary ${disabled ? 'opacity-60 cursor-not-allowed bg-gray-50' : 'cursor-text'}`}
         onClick={() => !disabled && setIsOpen(true)}
       >
         {!isOpen && selectedOption ? (
@@ -90,7 +90,7 @@ export const SearchableSelectWithCreate: React.FC<SearchableSelectWithCreateProp
       </div>
 
       {isOpen && !disabled && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
+        <div className="absolute z-50 w-full mt-1 bg-white border border-medical-border rounded-md shadow-lg max-h-60 overflow-auto">
           <ul className="py-1 text-sm text-gray-700">
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option) => (
@@ -100,7 +100,7 @@ export const SearchableSelectWithCreate: React.FC<SearchableSelectWithCreateProp
                   onClick={() => handleSelect(option.value)}
                 >
                   <span>{option.label}</span>
-                  {value === option.value && <Check size={14} className="text-medical-mutedblue" />}
+                  {value === option.value && <Check size={14} className="text-medical-primary" />}
                 </li>
               ))
             ) : (
@@ -126,3 +126,5 @@ export const SearchableSelectWithCreate: React.FC<SearchableSelectWithCreateProp
     </div>
   );
 };
+
+

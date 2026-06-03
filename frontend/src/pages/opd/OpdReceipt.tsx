@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import api from '../../lib/api';
 import { Printer, Search, FileText } from 'lucide-react';
 import { format } from 'date-fns';
+import { PrintLayout, PrintHeader, PrintPatientDemographics, PrintTable, PrintFooter } from '../../components/shared/PrintTemplates';
 
 export function OpdReceipt() {
+  const location = useLocation();
+  const state = location.state as { autoSelectVchNo?: number, type?: 'bill' | 'reg' } | null;
+
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRecord, setSelectedRecord] = useState<any>(null);
-  const [recordType, setRecordType] = useState<'bill' | 'reg'>('bill');
+  const [recordType, setRecordType] = useState<'bill' | 'reg'>(state?.type || 'bill');
 
   const { data: bills, isLoading: billsLoading } = useQuery({
     queryKey: ['opdBills'],
@@ -37,6 +42,18 @@ export function OpdReceipt() {
     window.print();
   };
 
+  useEffect(() => {
+    if (state?.autoSelectVchNo) {
+      if (state.type === 'bill' && bills) {
+        const found = bills.find(b => b.OhdVchNo === state.autoSelectVchNo);
+        if (found) setSelectedRecord(found);
+      } else if (state.type === 'reg' && regs) {
+        const found = regs.find(r => r.OpgVchNo === state.autoSelectVchNo);
+        if (found) setSelectedRecord(found);
+      }
+    }
+  }, [state, bills, regs]);
+
   const filteredBills = bills?.filter(b => 
     b.OhdVchNo.toString().includes(searchTerm) || 
     getPatientName(b.OhdPttCode).toLowerCase().includes(searchTerm.toLowerCase())
@@ -50,20 +67,20 @@ export function OpdReceipt() {
   return (
     <div className="flex h-full -m-6 print:m-0 print:block">
       {/* Sidebar - Hidden on Print */}
-      <div className="w-80 bg-white border-r border-gray-200 flex flex-col print:hidden">
-        <div className="p-4 border-b border-gray-200 bg-gray-50">
+      <div className="w-80 bg-white border-r border-medical-border flex flex-col print:hidden">
+        <div className="p-4 border-b border-medical-border bg-gray-50">
           <h2 className="text-lg font-bold text-gray-800">OPD Receipts</h2>
           <div className="mt-4 space-y-3">
             <div className="flex bg-gray-200 p-1 rounded-md">
               <button 
                 onClick={() => { setRecordType('bill'); setSelectedRecord(null); }}
-                className={`flex-1 py-1 text-sm font-medium rounded ${recordType === 'bill' ? 'bg-white shadow-sm text-medical-mutedblue' : 'text-gray-600 hover:text-gray-800'}`}
+                className={`flex-1 py-1 text-sm font-medium rounded ${recordType === 'bill' ? 'bg-white shadow-sm text-medical-primary' : 'text-gray-600 hover:text-gray-800'}`}
               >
                 Bills
               </button>
               <button 
                 onClick={() => { setRecordType('reg'); setSelectedRecord(null); }}
-                className={`flex-1 py-1 text-sm font-medium rounded ${recordType === 'reg' ? 'bg-white shadow-sm text-medical-mutedblue' : 'text-gray-600 hover:text-gray-800'}`}
+                className={`flex-1 py-1 text-sm font-medium rounded ${recordType === 'reg' ? 'bg-white shadow-sm text-medical-primary' : 'text-gray-600 hover:text-gray-800'}`}
               >
                 Registrations
               </button>
@@ -75,7 +92,7 @@ export function OpdReceipt() {
                 placeholder="Search Patient or VchNo..." 
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-medical-mutedblue focus:ring-1 focus:ring-medical-mutedblue"
+                className="w-full pl-9 pr-3 py-2 border border-medical-border rounded-md text-sm focus:outline-none focus:border-medical-primary focus:ring-1 focus:ring-medical-primary"
               />
             </div>
           </div>
@@ -89,7 +106,7 @@ export function OpdReceipt() {
                 <li 
                   key={bill.OhdCode} 
                   onClick={() => setSelectedRecord(bill)}
-                  className={`p-3 cursor-pointer hover:bg-gray-50 transition-colors ${selectedRecord?.OhdCode === bill.OhdCode ? 'bg-blue-50 border-l-4 border-medical-mutedblue' : 'border-l-4 border-transparent'}`}
+                  className={`p-3 cursor-pointer hover:bg-gray-50 transition-colors ${selectedRecord?.OhdCode === bill.OhdCode ? 'bg-blue-50 border-l-4 border-medical-primary' : 'border-l-4 border-transparent'}`}
                 >
                   <div className="flex justify-between items-start">
                     <div>
@@ -108,7 +125,7 @@ export function OpdReceipt() {
                 <li 
                   key={reg.OpgCode} 
                   onClick={() => setSelectedRecord(reg)}
-                  className={`p-3 cursor-pointer hover:bg-gray-50 transition-colors ${selectedRecord?.OpgCode === reg.OpgCode ? 'bg-blue-50 border-l-4 border-medical-mutedblue' : 'border-l-4 border-transparent'}`}
+                  className={`p-3 cursor-pointer hover:bg-gray-50 transition-colors ${selectedRecord?.OpgCode === reg.OpgCode ? 'bg-blue-50 border-l-4 border-medical-primary' : 'border-l-4 border-transparent'}`}
                 >
                   <div className="flex justify-between items-start">
                     <div>
@@ -129,102 +146,57 @@ export function OpdReceipt() {
         {selectedRecord ? (
           <>
             {/* Header Toolbar - Hidden on Print */}
-            <div className="bg-white p-4 border-b border-gray-200 flex justify-end gap-3 print:hidden">
+            <div className="bg-white p-4 border-b border-medical-border flex justify-end gap-3 print:hidden">
               <button onClick={handlePrint} className="btn-primary flex items-center gap-2">
                 <Printer size={18} /> Print Receipt
               </button>
             </div>
 
-            {/* Printable Area */}
-            <div className="flex-1 p-8 overflow-y-auto print:p-0 print:overflow-visible">
-              <div className="max-w-2xl mx-auto bg-white border border-gray-200 p-8 shadow-sm print:border-none print:shadow-none print:max-w-none print:w-full">
-                
-                {/* Hospital Header */}
-                <div className="text-center border-b-2 border-gray-800 pb-4 mb-6">
-                  <h1 className="text-2xl font-bold uppercase text-gray-900 tracking-wide">{company?.CmpName || 'HOSPITAL NAME'}</h1>
-                  <p className="text-sm text-gray-600">{company?.CmpAddress}, {company?.CmpCity}</p>
-                  <p className="text-sm text-gray-600">Phone: {company?.CmpOPhone} {company?.CmpEmail ? `| Email: ${company?.CmpEmail}` : ''}</p>
-                  <div className="mt-3 font-bold text-lg uppercase bg-gray-100 py-1 inline-block px-6 rounded">
-                    {recordType === 'bill' ? 'OPD BILL RECEIPT' : 'OPD REGISTRATION RECEIPT'}
-                  </div>
-                </div>
+            {/* Printable Area using Standard Templates */}
+            <PrintLayout>
+              <PrintHeader 
+                hospitalName={company?.CmpName || 'STAR HOSPITAL'} 
+                address={`${company?.CmpAddress || ''}, ${company?.CmpCity || ''}`}
+                contact={`Ph: ${company?.CmpOPhone || ''}`}
+                title={recordType === 'bill' ? 'OPD BILL RECEIPT' : 'OPD REGISTRATION RECEIPT'}
+              />
+              
+              <PrintPatientDemographics 
+                patient={{
+                  name: getPatientName(selectedRecord.OhdPttCode || selectedRecord.OpgPttCode),
+                  regNo: selectedRecord.OhdPttCode || selectedRecord.OpgPttCode,
+                  date: format(new Date(selectedRecord.OhdDate || selectedRecord.OpgDate), 'dd/MM/yyyy'),
+                  doctor: 'Consulting Doctor' // Needs proper mapping
+                }}
+              />
 
-                {/* Patient Info */}
-                <div className="flex justify-between text-sm mb-6 border-b border-gray-200 pb-4">
-                  <div className="space-y-1">
-                    <p><span className="font-semibold text-gray-700">Patient Name:</span> <span className="font-bold text-gray-900">{getPatientName(selectedRecord.OhdPttCode || selectedRecord.OpgPttCode)}</span></p>
-                    <p><span className="font-semibold text-gray-700">Patient ID:</span> {selectedRecord.OhdPttCode || selectedRecord.OpgPttCode}</p>
-                  </div>
-                  <div className="space-y-1 text-right">
-                    <p><span className="font-semibold text-gray-700">Receipt No:</span> {selectedRecord.OhdVchNo || selectedRecord.OpgVchNo}</p>
-                    <p><span className="font-semibold text-gray-700">Date:</span> {format(new Date(selectedRecord.OhdDate || selectedRecord.OpgDate), 'dd MMM yyyy')}</p>
-                  </div>
-                </div>
+              <PrintTable 
+                columns={[
+                  { header: 'Description', accessor: 'desc' },
+                  { header: 'Amount (₹)', accessor: 'amt', align: 'right' }
+                ]}
+                data={[
+                  { 
+                    desc: recordType === 'bill' ? 'Outpatient Consultation & Services' : 'OPD Registration Fee',
+                    amt: (recordType === 'bill' ? selectedRecord.OhdTotalAmt : selectedRecord.OpgRegAmt)?.toFixed(2)
+                  }
+                ]}
+              />
 
-                {/* Body */}
-                <div className="mb-12">
-                  <table className="w-full text-sm text-left">
-                    <thead className="border-b border-gray-300">
-                      <tr>
-                        <th className="py-2 font-semibold text-gray-800">Description</th>
-                        <th className="py-2 font-semibold text-gray-800 text-right">Amount (₹)</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                      {recordType === 'bill' ? (
-                        <tr>
-                          <td className="py-3 text-gray-700">Outpatient Consultation & Services</td>
-                          <td className="py-3 text-right font-medium">{selectedRecord.OhdTotalAmt.toFixed(2)}</td>
-                        </tr>
-                      ) : (
-                        <tr>
-                          <td className="py-3 text-gray-700">OPD Registration Fee</td>
-                          <td className="py-3 text-right font-medium">{selectedRecord.OpgRegAmt.toFixed(2)}</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Totals */}
-                <div className="flex justify-end border-t-2 border-gray-800 pt-4 mb-16">
-                  <div className="w-64 space-y-2 text-sm">
-                    {recordType === 'bill' && (
-                      <>
-                        <div className="flex justify-between text-gray-600">
-                          <span>Discount:</span>
-                          <span>- ₹{selectedRecord.OhdDiscAmt.toFixed(2)}</span>
-                        </div>
-                        <div className="flex justify-between text-gray-600">
-                          <span>Deposited:</span>
-                          <span>- ₹{selectedRecord.OhdDepAmt.toFixed(2)}</span>
-                        </div>
-                      </>
-                    )}
-                    <div className="flex justify-between font-bold text-lg pt-2 border-t border-gray-200">
-                      <span>Total Net Amount:</span>
-                      <span>₹{(recordType === 'bill' ? selectedRecord.OhdNetAmt : selectedRecord.OpgRegAmt).toFixed(2)}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Footer Signatures */}
-                <div className="flex justify-between text-sm mt-20 pt-8 border-t border-gray-200">
-                  <div className="text-center">
-                    <p className="border-t border-gray-400 w-32 pt-1 font-medium text-gray-600">Patient's Signature</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="border-t border-gray-400 w-32 pt-1 font-medium text-gray-600">Authorized Signatory</p>
-                  </div>
-                </div>
-
-                <div className="text-center text-xs text-gray-400 mt-8">
-                  <p>Thank you for choosing {company?.CmpName}. Get well soon!</p>
-                  <p>Printed on {format(new Date(), 'dd/MM/yyyy HH:mm')}</p>
-                </div>
-
-              </div>
-            </div>
+              <PrintFooter 
+                totals={[
+                  ...(recordType === 'bill' ? [
+                    { label: 'Discount', value: `- ₹${selectedRecord.OhdDiscAmt?.toFixed(2) || '0.00'}` },
+                    { label: 'Deposited', value: `- ₹${selectedRecord.OhdDepAmt?.toFixed(2) || '0.00'}` }
+                  ] : []),
+                  { 
+                    label: 'Net Amount', 
+                    value: (recordType === 'bill' ? selectedRecord.OhdNetAmt : selectedRecord.OpgRegAmt)?.toFixed(2) || '0.00' 
+                  }
+                ]}
+                generatedBy="System Admin"
+              />
+            </PrintLayout>
           </>
         ) : (
           <div className="h-full flex flex-col items-center justify-center text-gray-400 print:hidden">
@@ -236,3 +208,5 @@ export function OpdReceipt() {
     </div>
   );
 }
+
+

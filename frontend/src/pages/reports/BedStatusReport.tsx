@@ -39,7 +39,7 @@ export function BedStatusReport() {
         </div>
 
         {isLoading ? (
-          <div className="py-12 flex justify-center"><div className="w-8 h-8 border-4 border-medical-mutedblue border-t-transparent rounded-full animate-spin"></div></div>
+          <div className="py-12 flex justify-center"><div className="w-8 h-8 border-4 border-medical-primary border-t-transparent rounded-full animate-spin"></div></div>
         ) : (
           <div>
             <div className="mb-6 flex items-center gap-3 bg-blue-50 p-4 rounded-lg border border-blue-100">
@@ -80,7 +80,7 @@ export function BedStatusReport() {
                       <td>{format(new Date(item.AdmissionDate), 'dd/MM/yyyy')}</td>
                       <td>{item.FloorName}</td>
                       <td>{item.WardName}</td>
-                      <td className="font-bold text-medical-mutedblue">{item.BedName}</td>
+                      <td className="font-bold text-medical-primary">{item.BedName}</td>
                     </tr>
                   ))
                 )}
@@ -92,3 +92,4 @@ export function BedStatusReport() {
     </div>
   );
 }
+

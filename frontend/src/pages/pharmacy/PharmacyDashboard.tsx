@@ -39,7 +39,7 @@ export function PharmacyDashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="card flex items-center gap-4">
-          <div className="p-3 bg-blue-50 text-medical-mutedblue rounded-lg"><Pill size={24} /></div>
+          <div className="p-3 bg-blue-50 text-medical-primary rounded-lg"><Pill size={24} /></div>
           <div>
             <h3 className="text-sm font-medium text-gray-500">Today's Sales</h3>
             <p className="text-2xl font-bold text-gray-800">{todaySalesCount}</p>
@@ -67,7 +67,7 @@ export function PharmacyDashboard() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-gray-200 bg-gray-50">
+                <tr className="border-b border-medical-border bg-gray-50">
                   <th className="py-2 px-3 font-medium text-sm text-gray-600">Bill No</th>
                   <th className="py-2 px-3 font-medium text-sm text-gray-600">Date</th>
                   <th className="py-2 px-3 font-medium text-sm text-gray-600 text-right">Net Amount</th>
@@ -92,7 +92,7 @@ export function PharmacyDashboard() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-gray-200 bg-gray-50">
+                <tr className="border-b border-medical-border bg-gray-50">
                   <th className="py-2 px-3 font-medium text-sm text-gray-600">PO No</th>
                   <th className="py-2 px-3 font-medium text-sm text-gray-600">Date</th>
                   <th className="py-2 px-3 font-medium text-sm text-gray-600 text-right">Net Amount</th>
@@ -115,3 +115,5 @@ export function PharmacyDashboard() {
     </div>
   );
 }
+
+

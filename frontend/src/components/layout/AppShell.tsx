@@ -17,7 +17,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-medical-offwhite">
+    <div className="flex flex-col h-screen overflow-hidden bg-medical-bg">
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
         <main className="flex-1 overflow-auto p-6">
@@ -28,3 +28,4 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     </div>
   );
 };
+

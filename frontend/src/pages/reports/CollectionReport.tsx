@@ -36,7 +36,7 @@ export function CollectionReport() {
         </div>
         
         <div className="flex gap-3">
-          <div className="flex items-center gap-4 bg-white p-2 rounded-lg shadow-sm border border-gray-100">
+          <div className="flex items-center gap-4 bg-white p-2 rounded-lg shadow-sm border border-medical-border">
             <div className="flex items-center gap-2">
               <Calendar size={18} className="text-gray-400" />
               <input 
@@ -72,7 +72,7 @@ export function CollectionReport() {
         </div>
 
         {isLoading ? (
-          <div className="py-12 flex justify-center"><div className="w-8 h-8 border-4 border-medical-mutedblue border-t-transparent rounded-full animate-spin"></div></div>
+          <div className="py-12 flex justify-center"><div className="w-8 h-8 border-4 border-medical-primary border-t-transparent rounded-full animate-spin"></div></div>
         ) : (
           <div>
             <div className="grid grid-cols-2 gap-4 mb-6">
@@ -126,3 +126,5 @@ export function CollectionReport() {
     </div>
   );
 }
+
+

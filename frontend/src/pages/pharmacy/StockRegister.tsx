@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import api from '../../lib/api';
 import { Search, Download, Package } from 'lucide-react';
 import { format } from 'date-fns';
+import { PrintLayout, PrintHeader, PrintTable, PrintFooter } from '../../components/shared/PrintTemplates';
 
 export function StockRegister() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -26,6 +27,11 @@ export function StockRegister() {
 
   const totalItems = stockItems?.length || 0;
   const outOfStock = stockItems?.filter(item => item.CurrentStock <= 0).length || 0;
+
+  const { data: company } = useQuery({
+    queryKey: ['company'],
+    queryFn: async () => (await api.get<any>('/system/company')).data
+  });
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
@@ -52,17 +58,20 @@ export function StockRegister() {
         </div>
       </div>
 
-      <div className="card print:shadow-none print:border-none print:p-0">
-        <div className="hidden print:block mb-6 text-center border-b pb-4">
-          <h2 className="text-2xl font-bold text-gray-800">STAR HMS</h2>
-          <h3 className="text-xl font-semibold mt-1">Pharmacy Stock Register</h3>
-          <p className="text-sm text-gray-600 mt-2">
-            Generated on: {format(new Date(), 'dd MMM yyyy, hh:mm a')}
-          </p>
+      <div className="card print:shadow-none print:border-none print:p-0 print:bg-transparent">
+        <div className="hidden print:block">
+          <PrintLayout>
+            <PrintHeader 
+              hospitalName={company?.CmpName || 'STAR HOSPITAL'} 
+              address={`${company?.CmpAddress || ''}, ${company?.CmpCity || ''}`}
+              contact={`Ph: ${company?.CmpOPhone || ''}`}
+              title="PHARMACY STOCK REGISTER"
+            />
+          </PrintLayout>
         </div>
 
         {isLoading ? (
-          <div className="py-12 flex justify-center"><div className="w-8 h-8 border-4 border-medical-mutedblue border-t-transparent rounded-full animate-spin"></div></div>
+          <div className="py-12 flex justify-center"><div className="w-8 h-8 border-4 border-medical-primary border-t-transparent rounded-full animate-spin"></div></div>
         ) : (
           <div>
             <div className="grid grid-cols-2 gap-4 mb-6 print:hidden">
@@ -86,45 +95,76 @@ export function StockRegister() {
               </div>
             </div>
 
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Item Code</th>
-                  <th>Item Name</th>
-                  <th>Group</th>
-                  <th className="text-right">Total Inward</th>
-                  <th className="text-right">Total Outward</th>
-                  <th className="text-right">Current Stock</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredItems?.length === 0 ? (
+            <div className="print:hidden">
+              <table className="data-table">
+                <thead>
                   <tr>
-                    <td colSpan={6} className="text-center py-8 text-gray-500">No items found matching your search.</td>
+                    <th>Item Code</th>
+                    <th>Item Name</th>
+                    <th>Group</th>
+                    <th className="text-right">Total Inward</th>
+                    <th className="text-right">Total Outward</th>
+                    <th className="text-right">Current Stock</th>
                   </tr>
-                ) : (
-                  filteredItems?.map((item, index) => (
-                    <tr key={index}>
-                      <td className="font-mono text-gray-500 text-sm">{item.SimCode}</td>
-                      <td className="font-medium text-gray-800">{item.ItemName}</td>
-                      <td>
-                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                          {item.GroupName}
-                        </span>
-                      </td>
-                      <td className="text-right text-gray-600">{item.InwardQty}</td>
-                      <td className="text-right text-gray-600">{item.OutwardQty}</td>
-                      <td className={`text-right font-bold ${item.CurrentStock <= 0 ? 'text-red-600' : 'text-green-600'}`}>
-                        {item.CurrentStock}
-                      </td>
+                </thead>
+                <tbody>
+                  {filteredItems?.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="text-center py-8 text-gray-500">No items found matching your search.</td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : (
+                    filteredItems?.map((item, index) => (
+                      <tr key={index}>
+                        <td className="font-mono text-gray-500 text-sm">{item.SimCode}</td>
+                        <td className="font-medium text-gray-800">{item.ItemName}</td>
+                        <td>
+                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                            {item.GroupName}
+                          </span>
+                        </td>
+                        <td className="text-right text-gray-600">{item.InwardQty}</td>
+                        <td className="text-right text-gray-600">{item.OutwardQty}</td>
+                        <td className={`text-right font-bold ${item.CurrentStock <= 0 ? 'text-red-600' : 'text-green-600'}`}>
+                          {item.CurrentStock}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="hidden print:block">
+              <PrintTable 
+                columns={[
+                  { header: 'Item Code', accessor: 'code' },
+                  { header: 'Item Name', accessor: 'name' },
+                  { header: 'Group', accessor: 'group' },
+                  { header: 'Inward', accessor: 'in', align: 'right' },
+                  { header: 'Outward', accessor: 'out', align: 'right' },
+                  { header: 'Current Stock', accessor: 'stock', align: 'right' }
+                ]}
+                data={(filteredItems || []).map(item => ({
+                  code: item.SimCode,
+                  name: item.ItemName,
+                  group: item.GroupName,
+                  in: item.InwardQty,
+                  out: item.OutwardQty,
+                  stock: item.CurrentStock
+                }))}
+              />
+              <PrintFooter 
+                totals={[
+                  { label: 'Total Registered Items', value: totalItems.toString() },
+                  { label: 'Out of Stock Items', value: outOfStock.toString() }
+                ]}
+                generatedBy="System Admin"
+              />
+            </div>
           </div>
         )}
       </div>
     </div>
   );
 }
+

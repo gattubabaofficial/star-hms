@@ -47,7 +47,7 @@ export const SyncDashboard: React.FC = () => {
         </div>
         <button 
           onClick={() => refetch()}
-          className="flex items-center gap-2 bg-white border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-50 text-sm font-medium"
+          className="flex items-center gap-2 bg-white border border-medical-border px-4 py-2 rounded-md hover:bg-gray-50 text-sm font-medium"
         >
           <RefreshCw size={16} />
           Refresh
@@ -55,7 +55,7 @@ export const SyncDashboard: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-lg border border-gray-200 p-6 flex items-center gap-4">
+        <div className="bg-white rounded-lg border border-medical-border p-6 flex items-center gap-4">
           <div className="p-3 bg-green-100 text-green-600 rounded-full">
             <CheckCircle size={24} />
           </div>
@@ -65,7 +65,7 @@ export const SyncDashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6 flex items-center gap-4">
+        <div className="bg-white rounded-lg border border-medical-border p-6 flex items-center gap-4">
           <div className="p-3 bg-blue-100 text-blue-600 rounded-full">
             <Clock size={24} />
           </div>
@@ -77,7 +77,7 @@ export const SyncDashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6 flex items-center gap-4">
+        <div className="bg-white rounded-lg border border-medical-border p-6 flex items-center gap-4">
           <div className="p-3 bg-purple-100 text-purple-600 rounded-full">
             <RefreshCw size={24} />
           </div>
@@ -88,8 +88,8 @@ export const SyncDashboard: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200 flex-1 overflow-hidden flex flex-col">
-        <div className="p-4 border-b border-gray-200 bg-gray-50">
+      <div className="bg-white rounded-lg border border-medical-border flex-1 overflow-hidden flex flex-col">
+        <div className="p-4 border-b border-medical-border bg-gray-50">
           <h2 className="text-sm font-semibold text-gray-700">Recent Sync Logs</h2>
         </div>
         <div className="overflow-auto flex-1">
@@ -139,3 +139,4 @@ export const SyncDashboard: React.FC = () => {
     </div>
   );
 };
+

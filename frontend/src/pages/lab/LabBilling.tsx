@@ -146,7 +146,7 @@ export function LabBilling() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-max">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
+                <tr className="bg-gray-50 border-b border-medical-border">
                   <th className="py-2 px-2 text-sm font-medium text-gray-600 w-1/3">Test Name (Service)</th>
                   <th className="py-2 px-2 text-sm font-medium text-gray-600">Unit</th>
                   <th className="py-2 px-2 text-sm font-medium text-gray-600">Rate (₹)</th>
@@ -157,13 +157,13 @@ export function LabBilling() {
               </thead>
               <tbody>
                 {items.map((item, idx) => (
-                  <tr key={idx} className="border-b border-gray-100">
+                  <tr key={idx} className="border-b border-medical-border">
                     <td className="py-2 px-2">
                       <SearchableSelectWithCreate options={serviceOpts} value={item.LrdSrvCode} onChange={(v) => handleServiceSelect(idx, v as number)} placeholder="Search test..." />
                     </td>
-                    <td className="py-2 px-2"><input type="number" value={item.LrdUnit} onChange={e => handleItemChange(idx, 'LrdUnit', Number(e.target.value))} className="w-full p-1 border border-gray-300 rounded" /></td>
-                    <td className="py-2 px-2"><input type="number" value={item.LrdRate} onChange={e => handleItemChange(idx, 'LrdRate', Number(e.target.value))} className="w-full p-1 border border-gray-300 rounded" /></td>
-                    <td className="py-2 px-2"><input type="number" value={item.LrdDiscPer} onChange={e => handleItemChange(idx, 'LrdDiscPer', Number(e.target.value))} className="w-full p-1 border border-gray-300 rounded" /></td>
+                    <td className="py-2 px-2"><input type="number" value={item.LrdUnit} onChange={e => handleItemChange(idx, 'LrdUnit', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded" /></td>
+                    <td className="py-2 px-2"><input type="number" value={item.LrdRate} onChange={e => handleItemChange(idx, 'LrdRate', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded" /></td>
+                    <td className="py-2 px-2"><input type="number" value={item.LrdDiscPer} onChange={e => handleItemChange(idx, 'LrdDiscPer', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded" /></td>
                     <td className="py-2 px-2 text-right font-medium text-gray-800">{item.LrdAmtAftDisc.toFixed(2)}</td>
                     <td className="py-2 px-2 text-center"><button type="button" onClick={() => removeItem(idx)} className="text-gray-400 hover:text-red-500"><Trash2 size={16} /></button></td>
                   </tr>
@@ -172,17 +172,17 @@ export function LabBilling() {
             </table>
           </div>
 
-          <div className="flex justify-end mt-6 border-t border-gray-200 pt-6">
+          <div className="flex justify-end mt-6 border-t border-medical-border pt-6">
             <div className="w-72 space-y-3">
               <div className="flex justify-between items-center text-sm text-gray-600">
                 <span>Overall Discount (%):</span>
-                <input type="number" value={header.LhdDiscPer} onChange={e => setHeader({...header, LhdDiscPer: Number(e.target.value)})} className="w-24 p-1 border border-gray-300 rounded text-right" />
+                <input type="number" value={header.LhdDiscPer} onChange={e => setHeader({...header, LhdDiscPer: Number(e.target.value)})} className="w-24 p-1 border border-medical-border rounded text-right" />
               </div>
               <div className="flex justify-between items-center text-sm text-gray-600">
                 <span>Advance Paid (₹):</span>
-                <input type="number" value={header.LhdAdvAmt} onChange={e => setHeader({...header, LhdAdvAmt: Number(e.target.value)})} className="w-24 p-1 border border-gray-300 rounded text-right text-green-600" />
+                <input type="number" value={header.LhdAdvAmt} onChange={e => setHeader({...header, LhdAdvAmt: Number(e.target.value)})} className="w-24 p-1 border border-medical-border rounded text-right text-green-600" />
               </div>
-              <div className="flex justify-between text-lg font-bold text-gray-800 border-t border-gray-200 pt-2">
+              <div className="flex justify-between text-lg font-bold text-gray-800 border-t border-medical-border pt-2">
                 <span>Final Amount Due:</span>
                 <span className="text-blue-600">₹{Math.max(0, header.LhdTotalAmt - header.LhdAdvAmt).toFixed(2)}</span>
               </div>
@@ -199,3 +199,4 @@ export function LabBilling() {
     </div>
   );
 }
+

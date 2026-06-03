@@ -39,8 +39,8 @@ export function LabReceipt() {
   return (
     <div className="flex h-full -m-6 print:m-0 print:block">
       {/* Sidebar - Hidden on Print */}
-      <div className="w-80 bg-white border-r border-gray-200 flex flex-col print:hidden">
-        <div className="p-4 border-b border-gray-200 bg-gray-50">
+      <div className="w-80 bg-white border-r border-medical-border flex flex-col print:hidden">
+        <div className="p-4 border-b border-medical-border bg-gray-50">
           <h2 className="text-lg font-bold text-gray-800">Lab Receipts</h2>
           <div className="mt-4">
             <div className="relative">
@@ -50,7 +50,7 @@ export function LabReceipt() {
                 placeholder="Search Patient or VchNo..." 
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-medical-mutedblue focus:ring-1 focus:ring-medical-mutedblue"
+                className="w-full pl-9 pr-3 py-2 border border-medical-border rounded-md text-sm focus:outline-none focus:border-medical-primary focus:ring-1 focus:ring-medical-primary"
               />
             </div>
           </div>
@@ -63,7 +63,7 @@ export function LabReceipt() {
               <li 
                 key={reg.LhdCode} 
                 onClick={() => setSelectedRecord(reg)}
-                className={`p-3 cursor-pointer hover:bg-gray-50 transition-colors ${selectedRecord?.LhdCode === reg.LhdCode ? 'bg-blue-50 border-l-4 border-medical-mutedblue' : 'border-l-4 border-transparent'}`}
+                className={`p-3 cursor-pointer hover:bg-gray-50 transition-colors ${selectedRecord?.LhdCode === reg.LhdCode ? 'bg-blue-50 border-l-4 border-medical-primary' : 'border-l-4 border-transparent'}`}
               >
                 <div className="flex justify-between items-start">
                   <div>
@@ -82,14 +82,14 @@ export function LabReceipt() {
       <div className="flex-1 bg-gray-50 flex flex-col print:bg-white print:w-full">
         {selectedRecord ? (
           <>
-            <div className="bg-white p-4 border-b border-gray-200 flex justify-end gap-3 print:hidden">
+            <div className="bg-white p-4 border-b border-medical-border flex justify-end gap-3 print:hidden">
               <button onClick={handlePrint} className="btn-primary flex items-center gap-2">
                 <Printer size={18} /> Print Receipt
               </button>
             </div>
 
             <div className="flex-1 p-8 overflow-y-auto print:p-0 print:overflow-visible">
-              <div className="max-w-2xl mx-auto bg-white border border-gray-200 p-8 shadow-sm print:border-none print:shadow-none print:max-w-none print:w-full">
+              <div className="max-w-2xl mx-auto bg-white border border-medical-border p-8 shadow-sm print:border-none print:shadow-none print:max-w-none print:w-full">
                 
                 <div className="text-center border-b-2 border-gray-800 pb-4 mb-6">
                   <h1 className="text-2xl font-bold uppercase text-gray-900 tracking-wide">{company?.CmpName || 'HOSPITAL NAME'}</h1>
@@ -100,7 +100,7 @@ export function LabReceipt() {
                   </div>
                 </div>
 
-                <div className="flex justify-between text-sm mb-6 border-b border-gray-200 pb-4">
+                <div className="flex justify-between text-sm mb-6 border-b border-medical-border pb-4">
                   <div className="space-y-1">
                     <p><span className="font-semibold text-gray-700">Patient Name:</span> <span className="font-bold text-gray-900">{getPatientName(selectedRecord.LhdPttCode)}</span></p>
                     <p><span className="font-semibold text-gray-700">Patient ID:</span> {selectedRecord.LhdPttCode}</p>
@@ -113,7 +113,7 @@ export function LabReceipt() {
 
                 <div className="mb-12">
                   <table className="w-full text-sm text-left">
-                    <thead className="border-b border-gray-300">
+                    <thead className="border-b border-medical-border">
                       <tr>
                         <th className="py-2 font-semibold text-gray-800">Description</th>
                         <th className="py-2 font-semibold text-gray-800 text-right">Amount (₹)</th>
@@ -134,14 +134,14 @@ export function LabReceipt() {
                       <span>Discount:</span>
                       <span>- ₹{selectedRecord.LhdDiscAmt.toFixed(2)}</span>
                     </div>
-                    <div className="flex justify-between font-bold text-lg pt-2 border-t border-gray-200">
+                    <div className="flex justify-between font-bold text-lg pt-2 border-t border-medical-border">
                       <span>Total Net Amount:</span>
                       <span>₹{selectedRecord.LhdNetAmt.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex justify-between text-sm mt-20 pt-8 border-t border-gray-200">
+                <div className="flex justify-between text-sm mt-20 pt-8 border-t border-medical-border">
                   <div className="text-center">
                     <p className="border-t border-gray-400 w-32 pt-1 font-medium text-gray-600">Patient's Signature</p>
                   </div>
@@ -168,3 +168,5 @@ export function LabReceipt() {
     </div>
   );
 }
+
+

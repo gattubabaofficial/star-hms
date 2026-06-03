@@ -95,10 +95,9 @@ export function StockInward() {
 
   const mutation = useMutation({
     mutationFn: async (data: any) => (await api.post('/pharmacy/purchases', data)).data,
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['pharmacy-purchases'] });
-      alert('Purchase recorded successfully!');
-      navigate('/pharmacy');
+      navigate('/pharmacy/receipt', { state: { autoSelectVchNo: data.IskVchNo, type: 'purchase' } });
     }
   });
 
@@ -125,7 +124,7 @@ export function StockInward() {
         <div className="card grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-            <input type="date" value={header.IskDate} onChange={e => setHeader({...header, IskDate: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-medical-mutedblue" required />
+            <input type="date" value={header.IskDate} onChange={e => setHeader({...header, IskDate: e.target.value})} className="w-full px-3 py-2 border border-medical-border rounded-md focus:ring-medical-primary" required />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Vendor / Party <span className="text-red-500">*</span></label>
@@ -146,7 +145,7 @@ export function StockInward() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-max">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
+                <tr className="bg-gray-50 border-b border-medical-border">
                   <th className="py-2 px-2 text-sm font-medium text-gray-600 w-1/4">Medicine / Item</th>
                   <th className="py-2 px-2 text-sm font-medium text-gray-600">Qty</th>
                   <th className="py-2 px-2 text-sm font-medium text-gray-600">Rate (₹)</th>
@@ -158,14 +157,14 @@ export function StockInward() {
               </thead>
               <tbody>
                 {items.map((item, idx) => (
-                  <tr key={idx} className="border-b border-gray-100 hover:bg-gray-50">
+                  <tr key={idx} className="border-b border-medical-border hover:bg-gray-50">
                     <td className="py-2 px-2">
                       <SearchableSelectWithCreate options={medicineOpts} value={item.IsdSimCode} onChange={(v) => handleItemChange(idx, 'IsdSimCode', v)} placeholder="Item..." />
                     </td>
-                    <td className="py-2 px-2"><input type="number" value={item.IsdQty} onChange={e => handleItemChange(idx, 'IsdQty', Number(e.target.value))} className="w-full p-1 border border-gray-300 rounded" /></td>
-                    <td className="py-2 px-2"><input type="number" value={item.IsdRate} onChange={e => handleItemChange(idx, 'IsdRate', Number(e.target.value))} className="w-full p-1 border border-gray-300 rounded" /></td>
-                    <td className="py-2 px-2"><input type="number" value={item.IsdDiscPer} onChange={e => handleItemChange(idx, 'IsdDiscPer', Number(e.target.value))} className="w-full p-1 border border-gray-300 rounded" /></td>
-                    <td className="py-2 px-2"><input type="number" value={item.IsdTaxPer} onChange={e => handleItemChange(idx, 'IsdTaxPer', Number(e.target.value))} className="w-full p-1 border border-gray-300 rounded" /></td>
+                    <td className="py-2 px-2"><input type="number" value={item.IsdQty} onChange={e => handleItemChange(idx, 'IsdQty', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded" /></td>
+                    <td className="py-2 px-2"><input type="number" value={item.IsdRate} onChange={e => handleItemChange(idx, 'IsdRate', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded" /></td>
+                    <td className="py-2 px-2"><input type="number" value={item.IsdDiscPer} onChange={e => handleItemChange(idx, 'IsdDiscPer', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded" /></td>
+                    <td className="py-2 px-2"><input type="number" value={item.IsdTaxPer} onChange={e => handleItemChange(idx, 'IsdTaxPer', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded" /></td>
                     <td className="py-2 px-2 text-right font-medium text-gray-800">{item.IsdAmt.toFixed(2)}</td>
                     <td className="py-2 px-2 text-center"><button type="button" onClick={() => removeItem(idx)} className="text-gray-400 hover:text-red-500"><Trash2 size={16} /></button></td>
                   </tr>
@@ -174,17 +173,17 @@ export function StockInward() {
             </table>
           </div>
 
-          <div className="flex justify-end mt-6 border-t border-gray-200 pt-6">
+          <div className="flex justify-end mt-6 border-t border-medical-border pt-6">
             <div className="w-72 space-y-3">
               <div className="flex justify-between items-center text-sm text-gray-600">
                 <span>Other Charges (₹):</span>
-                <input type="number" value={header.IskOtherChg} onChange={e => setHeader({...header, IskOtherChg: Number(e.target.value)})} className="w-24 p-1 border border-gray-300 rounded text-right" />
+                <input type="number" value={header.IskOtherChg} onChange={e => setHeader({...header, IskOtherChg: Number(e.target.value)})} className="w-24 p-1 border border-medical-border rounded text-right" />
               </div>
               <div className="flex justify-between text-sm text-gray-600">
                 <span>Total Tax Included:</span>
                 <span>₹{header.IskTax.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-lg font-bold text-gray-800 border-t border-gray-200 pt-2">
+              <div className="flex justify-between text-lg font-bold text-gray-800 border-t border-medical-border pt-2">
                 <span>Net Purchase Total:</span>
                 <span className="text-blue-600">₹{header.IskNetAmt.toFixed(2)}</span>
               </div>
@@ -201,3 +200,5 @@ export function StockInward() {
     </div>
   );
 }
+
+

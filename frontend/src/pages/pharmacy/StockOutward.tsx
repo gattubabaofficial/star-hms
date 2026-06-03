@@ -93,10 +93,9 @@ export function StockOutward() {
 
   const mutation = useMutation({
     mutationFn: async (data: any) => (await api.post('/pharmacy/sales', data)).data,
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['pharmacy-sales'] });
-      alert('Sale recorded successfully!');
-      navigate('/pharmacy');
+      navigate('/pharmacy/receipt', { state: { autoSelectVchNo: data.OskVchNo, type: 'sale' } });
     }
   });
 
@@ -123,7 +122,7 @@ export function StockOutward() {
         <div className="card grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Sale Date</label>
-            <input type="date" value={header.OskDate} onChange={e => setHeader({...header, OskDate: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500" required />
+            <input type="date" value={header.OskDate} onChange={e => setHeader({...header, OskDate: e.target.value})} className="w-full px-3 py-2 border border-medical-border rounded-md focus:ring-green-500" required />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Customer / Patient <span className="text-red-500">*</span></label>
@@ -140,7 +139,7 @@ export function StockOutward() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-max">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
+                <tr className="bg-gray-50 border-b border-medical-border">
                   <th className="py-2 px-2 text-sm font-medium text-gray-600 w-1/4">Medicine / Item</th>
                   <th className="py-2 px-2 text-sm font-medium text-gray-600">Qty</th>
                   <th className="py-2 px-2 text-sm font-medium text-gray-600">Rate (₹)</th>
@@ -152,14 +151,14 @@ export function StockOutward() {
               </thead>
               <tbody>
                 {items.map((item, idx) => (
-                  <tr key={idx} className="border-b border-gray-100 hover:bg-gray-50">
+                  <tr key={idx} className="border-b border-medical-border hover:bg-gray-50">
                     <td className="py-2 px-2">
                       <SearchableSelectWithCreate options={medicineOpts} value={item.OsdSimCode} onChange={(v) => handleItemChange(idx, 'OsdSimCode', v)} placeholder="Search medicine..." />
                     </td>
-                    <td className="py-2 px-2"><input type="number" value={item.OsdQty} onChange={e => handleItemChange(idx, 'OsdQty', Number(e.target.value))} className="w-full p-1 border border-gray-300 rounded focus:ring-green-500" /></td>
-                    <td className="py-2 px-2"><input type="number" value={item.OsdRate} onChange={e => handleItemChange(idx, 'OsdRate', Number(e.target.value))} className="w-full p-1 border border-gray-300 rounded focus:ring-green-500" /></td>
-                    <td className="py-2 px-2"><input type="number" value={item.OsdDiscPer} onChange={e => handleItemChange(idx, 'OsdDiscPer', Number(e.target.value))} className="w-full p-1 border border-gray-300 rounded focus:ring-green-500" /></td>
-                    <td className="py-2 px-2"><input type="number" value={item.OsdTaxPer} onChange={e => handleItemChange(idx, 'OsdTaxPer', Number(e.target.value))} className="w-full p-1 border border-gray-300 rounded focus:ring-green-500" /></td>
+                    <td className="py-2 px-2"><input type="number" value={item.OsdQty} onChange={e => handleItemChange(idx, 'OsdQty', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded focus:ring-green-500" /></td>
+                    <td className="py-2 px-2"><input type="number" value={item.OsdRate} onChange={e => handleItemChange(idx, 'OsdRate', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded focus:ring-green-500" /></td>
+                    <td className="py-2 px-2"><input type="number" value={item.OsdDiscPer} onChange={e => handleItemChange(idx, 'OsdDiscPer', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded focus:ring-green-500" /></td>
+                    <td className="py-2 px-2"><input type="number" value={item.OsdTaxPer} onChange={e => handleItemChange(idx, 'OsdTaxPer', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded focus:ring-green-500" /></td>
                     <td className="py-2 px-2 text-right font-medium text-gray-800">{item.OsdAmt.toFixed(2)}</td>
                     <td className="py-2 px-2 text-center"><button type="button" onClick={() => removeItem(idx)} className="text-gray-400 hover:text-red-500"><Trash2 size={16} /></button></td>
                   </tr>
@@ -168,17 +167,17 @@ export function StockOutward() {
             </table>
           </div>
 
-          <div className="flex justify-end mt-6 border-t border-gray-200 pt-6">
+          <div className="flex justify-end mt-6 border-t border-medical-border pt-6">
             <div className="w-72 space-y-3">
               <div className="flex justify-between items-center text-sm text-gray-600">
                 <span>Other Charges (₹):</span>
-                <input type="number" value={header.OskOtherChg} onChange={e => setHeader({...header, OskOtherChg: Number(e.target.value)})} className="w-24 p-1 border border-gray-300 rounded text-right focus:ring-green-500" />
+                <input type="number" value={header.OskOtherChg} onChange={e => setHeader({...header, OskOtherChg: Number(e.target.value)})} className="w-24 p-1 border border-medical-border rounded text-right focus:ring-green-500" />
               </div>
               <div className="flex justify-between text-sm text-gray-600">
                 <span>Total Tax Included:</span>
                 <span>₹{header.OskTax.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-lg font-bold text-gray-800 border-t border-gray-200 pt-2">
+              <div className="flex justify-between text-lg font-bold text-gray-800 border-t border-medical-border pt-2">
                 <span>Final Bill Amount:</span>
                 <span className="text-green-600">₹{header.OskNetAmt.toFixed(2)}</span>
               </div>
@@ -195,3 +194,4 @@ export function StockOutward() {
     </div>
   );
 }
+

@@ -51,10 +51,10 @@ export function OPDBilling() {
 
   const mutation = useMutation({
     mutationFn: async (data: any) => (await api.post('/opd/bills', data)).data,
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['opd-bills'] });
-      alert('Bill generated successfully!');
-      navigate('/opd');
+      // Navigate to receipt page and auto-select the new bill
+      navigate('/opd/receipt', { state: { autoSelectVchNo: data.OhdVchNo, type: 'bill' } });
     }
   });
 
@@ -136,13 +136,13 @@ export function OPDBilling() {
         <div className="card">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-semibold text-gray-800">Services</h3>
-            <button type="button" onClick={addItem} className="text-sm text-medical-mutedblue hover:text-medical-text font-medium flex items-center gap-1"><Plus size={16}/> Add Service</button>
+            <button type="button" onClick={addItem} className="text-sm text-medical-primary hover:text-medical-text font-medium flex items-center gap-1"><Plus size={16}/> Add Service</button>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
+                <tr className="bg-gray-50 border-b border-medical-border">
                   <th className="py-2 px-3 text-sm font-medium text-gray-600 w-1/3">Service Name</th>
                   <th className="py-2 px-3 text-sm font-medium text-gray-600">Unit</th>
                   <th className="py-2 px-3 text-sm font-medium text-gray-600">Rate (₹)</th>
@@ -153,13 +153,13 @@ export function OPDBilling() {
               </thead>
               <tbody>
                 {items.map((item, idx) => (
-                  <tr key={idx} className="border-b border-gray-100 hover:bg-gray-50">
+                  <tr key={idx} className="border-b border-medical-border hover:bg-gray-50">
                     <td className="py-2 px-3">
                       <SearchableSelectWithCreate options={serviceOpts} value={item.ObdSrvCode} onChange={(v) => handleItemChange(idx, 'ObdSrvCode', v)} placeholder="Type service..." />
                     </td>
-                    <td className="py-2 px-3"><input type="number" value={item.ObdUnit} onChange={e => handleItemChange(idx, 'ObdUnit', Number(e.target.value))} className="w-full p-1 border border-gray-300 rounded" /></td>
-                    <td className="py-2 px-3"><input type="number" value={item.ObdRate} onChange={e => handleItemChange(idx, 'ObdRate', Number(e.target.value))} className="w-full p-1 border border-gray-300 rounded" /></td>
-                    <td className="py-2 px-3"><input type="number" value={item.ObdDiscPer} onChange={e => handleItemChange(idx, 'ObdDiscPer', Number(e.target.value))} className="w-full p-1 border border-gray-300 rounded" /></td>
+                    <td className="py-2 px-3"><input type="number" value={item.ObdUnit} onChange={e => handleItemChange(idx, 'ObdUnit', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded" /></td>
+                    <td className="py-2 px-3"><input type="number" value={item.ObdRate} onChange={e => handleItemChange(idx, 'ObdRate', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded" /></td>
+                    <td className="py-2 px-3"><input type="number" value={item.ObdDiscPer} onChange={e => handleItemChange(idx, 'ObdDiscPer', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded" /></td>
                     <td className="py-2 px-3 text-right font-medium text-gray-800">{item.ObdAmtAftDisc.toFixed(2)}</td>
                     <td className="py-2 px-3 text-center">
                       <button type="button" onClick={() => removeItem(idx)} className="text-gray-400 hover:text-red-500"><Trash2 size={16} /></button>
@@ -170,7 +170,7 @@ export function OPDBilling() {
             </table>
           </div>
           
-          <div className="flex justify-end mt-6 border-t border-gray-200 pt-6">
+          <div className="flex justify-end mt-6 border-t border-medical-border pt-6">
             <div className="w-72 space-y-3">
               <div className="flex justify-between text-sm text-gray-600">
                 <span>Subtotal:</span>
@@ -178,13 +178,13 @@ export function OPDBilling() {
               </div>
               <div className="flex justify-between items-center text-sm text-gray-600">
                 <span>Overall Discount %:</span>
-                <input type="number" value={header.OhdDiscPer} onChange={e => setHeader({...header, OhdDiscPer: Number(e.target.value)})} className="w-20 p-1 border border-gray-300 rounded text-right" />
+                <input type="number" value={header.OhdDiscPer} onChange={e => setHeader({...header, OhdDiscPer: Number(e.target.value)})} className="w-20 p-1 border border-medical-border rounded text-right" />
               </div>
               <div className="flex justify-between text-sm text-gray-600">
                 <span>Deposit / Received:</span>
-                <input type="number" value={header.OhdDepAmt} onChange={e => setHeader({...header, OhdDepAmt: Number(e.target.value)})} className="w-24 p-1 border border-gray-300 rounded text-right bg-green-50" />
+                <input type="number" value={header.OhdDepAmt} onChange={e => setHeader({...header, OhdDepAmt: Number(e.target.value)})} className="w-24 p-1 border border-medical-border rounded text-right bg-green-50" />
               </div>
-              <div className="flex justify-between text-lg font-bold text-gray-800 border-t border-gray-200 pt-2">
+              <div className="flex justify-between text-lg font-bold text-gray-800 border-t border-medical-border pt-2">
                 <span>Balance Due:</span>
                 <span className={header.OhdBalAmt > 0 ? 'text-red-600' : 'text-green-600'}>₹{header.OhdBalAmt.toFixed(2)}</span>
               </div>
@@ -202,3 +202,5 @@ export function OPDBilling() {
     </div>
   );
 }
+
+

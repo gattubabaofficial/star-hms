@@ -21,8 +21,8 @@ export function SummaryDetailLayout({
       
       <div className="flex-1 flex gap-6 min-h-0">
         {/* Summary List Panel */}
-        <div className={`w-1/3 flex flex-col bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden ${isDetailActive ? 'hidden md:flex' : 'flex'}`}>
-          <div className="p-4 bg-medical-bg border-b border-gray-200">
+        <div className={`w-1/3 flex flex-col bg-white border border-medical-border rounded-lg shadow-sm overflow-hidden ${isDetailActive ? 'hidden md:flex' : 'flex'}`}>
+          <div className="p-4 bg-medical-bg border-b border-medical-border">
             <h2 className="font-medium text-gray-700">Records</h2>
           </div>
           <div className="flex-1 overflow-y-auto">
@@ -31,8 +31,8 @@ export function SummaryDetailLayout({
         </div>
 
         {/* Detail Form Panel */}
-        <div className={`flex-1 flex flex-col bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden ${!isDetailActive ? 'hidden md:flex' : 'flex'}`}>
-          <div className="p-4 bg-medical-bg border-b border-gray-200 flex justify-between items-center">
+        <div className={`flex-1 flex flex-col bg-white border border-medical-border rounded-lg shadow-sm overflow-hidden ${!isDetailActive ? 'hidden md:flex' : 'flex'}`}>
+          <div className="p-4 bg-medical-bg border-b border-medical-border flex justify-between items-center">
             <h2 className="font-medium text-gray-700">Details</h2>
           </div>
           <div className="flex-1 overflow-y-auto p-6">
@@ -43,3 +43,4 @@ export function SummaryDetailLayout({
     </div>
   );
 }
+

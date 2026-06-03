@@ -23,10 +23,10 @@ export function OPDRegistration() {
     OpgPttCode: null as number | null,
     OpgCDctCode: null as number | null,
     OpgPDigCode: null as number | null,
-    OpgRate: 500,
+    OpgRate: 0,
     OpgDiscPer: 0,
     OpgDiscAmt: 0,
-    OpgAmtAftDisc: 500,
+    OpgAmtAftDisc: 0,
     OpgRemark: ''
   });
 
@@ -45,17 +45,22 @@ export function OPDRegistration() {
 
 
 
+  const [fileCharge, setFileCharge] = useState(0);
+
   useEffect(() => {
-    const discAmt = (formData.OpgRate * formData.OpgDiscPer) / 100;
-    setFormData(prev => ({ ...prev, OpgDiscAmt: discAmt, OpgAmtAftDisc: prev.OpgRate - discAmt }));
-  }, [formData.OpgRate, formData.OpgDiscPer]);
+    const totalRate = formData.OpgRate + fileCharge;
+    const discAmt = (totalRate * formData.OpgDiscPer) / 100;
+    setFormData(prev => ({ ...prev, OpgDiscAmt: discAmt, OpgAmtAftDisc: totalRate - discAmt }));
+  }, [formData.OpgRate, fileCharge, formData.OpgDiscPer]);
 
   const mutation = useMutation({
-    mutationFn: async (data: typeof formData) => (await api.post('/opd/registrations', data)).data,
-    onSuccess: () => {
+    mutationFn: async (data: typeof formData) => {
+      const payload = { ...data, OpgRate: data.OpgRate + fileCharge };
+      return (await api.post('/opd/registrations', payload)).data;
+    },
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['opd-registrations'] });
-      alert('Registration successful!');
-      navigate('/opd');
+      navigate('/opd/receipt', { state: { autoSelectVchNo: data.OpgVchNo, type: 'reg' } });
     }
   });
 
@@ -100,7 +105,15 @@ export function OPDRegistration() {
               <SearchableSelectWithCreate
                 options={doctorOpts}
                 value={formData.OpgCDctCode}
-                onChange={(v) => setFormData({...formData, OpgCDctCode: v as number})}
+                onChange={(v) => {
+                  const dctCode = v as number;
+                  const doctor = doctors?.find(d => d.DctCode === dctCode);
+                  setFormData(prev => ({ 
+                    ...prev, 
+                    OpgCDctCode: dctCode,
+                    OpgRate: doctor?.DctOpdChg || 0
+                  }));
+                }}
                 placeholder="Select Doctor"
               />
             </div>
@@ -116,29 +129,33 @@ export function OPDRegistration() {
             </div>
           </div>
 
-          <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <div className="bg-gray-50 p-6 rounded-lg border border-medical-border">
             <h3 className="text-lg font-medium text-gray-800 mb-4">Charges & Payment</h3>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Consultation Fee (₹)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Consultation (₹)</label>
                 <input type="number" value={formData.OpgRate} onChange={e => setFormData({...formData, OpgRate: Number(e.target.value)})} className="input-field" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">File Charge (₹)</label>
+                <input type="number" value={fileCharge} onChange={e => setFileCharge(Number(e.target.value))} className="input-field" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Discount %</label>
                 <input type="number" value={formData.OpgDiscPer} onChange={e => setFormData({...formData, OpgDiscPer: Number(e.target.value)})} className="input-field" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Discount Amt (₹)</label>
-                <input type="number" readOnly value={formData.OpgDiscAmt.toFixed(2)} className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" />
+                <label className="block text-sm font-medium text-gray-700 mb-1">Discount Amt</label>
+                <input type="number" readOnly value={formData.OpgDiscAmt.toFixed(2)} className="w-full px-3 py-2 border border-medical-border rounded-md bg-gray-100" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Net Amount (₹)</label>
-                <input type="number" readOnly value={formData.OpgAmtAftDisc.toFixed(2)} className="w-full px-3 py-2 border border-gray-300 rounded-md bg-green-50 text-green-800 font-bold" />
+                <label className="block text-sm font-medium text-gray-700 mb-1">Net Amount</label>
+                <input type="number" readOnly value={formData.OpgAmtAftDisc.toFixed(2)} className="w-full px-3 py-2 border border-medical-border rounded-md bg-green-50 text-green-800 font-bold" />
               </div>
             </div>
           </div>
 
-          <div className="flex justify-end gap-4 border-t border-gray-100 pt-6">
+          <div className="flex justify-end gap-4 border-t border-medical-border pt-6">
             <button type="button" onClick={() => navigate('/opd')} className="btn-secondary px-6">Cancel</button>
             <button type="submit" disabled={mutation.isPending} className="btn-primary flex items-center gap-2 px-8">
               <Save size={18} /> Save Registration
@@ -159,3 +176,4 @@ export function OPDRegistration() {
     </div>
   );
 }
+

@@ -118,11 +118,11 @@ export function SystemDashboard() {
         <p className="text-gray-500 text-sm mt-1">Manage global settings, hospital profile, and user access.</p>
       </div>
 
-      <div className="flex gap-2 border-b border-gray-200">
-        <button onClick={() => setActiveTab('profile')} className={`px-4 py-2 flex items-center gap-2 font-medium text-sm transition-colors ${activeTab === 'profile' ? 'border-b-2 border-medical-mutedblue text-medical-mutedblue' : 'text-gray-500 hover:text-gray-700'}`}>
+      <div className="flex gap-2 border-b border-medical-border">
+        <button onClick={() => setActiveTab('profile')} className={`px-4 py-2 flex items-center gap-2 font-medium text-sm transition-colors ${activeTab === 'profile' ? 'border-b-2 border-medical-primary text-medical-primary' : 'text-gray-500 hover:text-gray-700'}`}>
           <Building2 size={16} /> Hospital Profile
         </button>
-        <button onClick={() => setActiveTab('users')} className={`px-4 py-2 flex items-center gap-2 font-medium text-sm transition-colors ${activeTab === 'users' ? 'border-b-2 border-medical-mutedblue text-medical-mutedblue' : 'text-gray-500 hover:text-gray-700'}`}>
+        <button onClick={() => setActiveTab('users')} className={`px-4 py-2 flex items-center gap-2 font-medium text-sm transition-colors ${activeTab === 'users' ? 'border-b-2 border-medical-primary text-medical-primary' : 'text-gray-500 hover:text-gray-700'}`}>
           <Users size={16} /> User Management
         </button>
       </div>
@@ -185,12 +185,12 @@ export function SystemDashboard() {
             <form ref={formRef} onSubmit={handleRoleSubmit} className="mb-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">New Role Name <span className="text-red-500">*</span></label>
-                <input type="text" placeholder="e.g. Receptionist" value={newRoleName} onChange={e => setNewRoleName(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" required />
+                <input type="text" placeholder="e.g. Receptionist" value={newRoleName} onChange={e => setNewRoleName(e.target.value)} className="w-full px-3 py-2 border border-medical-border rounded-md text-sm" required />
               </div>
 
-              <div className="border border-gray-200 rounded-md overflow-hidden">
+              <div className="border border-medical-border rounded-md overflow-hidden">
                 <table className="w-full text-left text-sm">
-                  <thead className="bg-gray-50 border-b border-gray-200">
+                  <thead className="bg-gray-50 border-b border-medical-border">
                     <tr>
                       <th className="p-2 font-medium text-gray-700">Module</th>
                       <th className="p-2 font-medium text-gray-700 text-center">View</th>
@@ -203,10 +203,10 @@ export function SystemDashboard() {
                     {roleRights.map((right, idx) => (
                       <tr key={right.UhtSecuOptName} className="hover:bg-gray-50">
                         <td className="p-2 font-medium text-gray-600">{right.UhtSecuOptName}</td>
-                        <td className="p-2 text-center"><input type="checkbox" checked={right.UhtCanView} onChange={() => toggleRight(idx, 'UhtCanView')} className="w-4 h-4 text-medical-mutedblue rounded" /></td>
-                        <td className="p-2 text-center"><input type="checkbox" checked={right.UhtCanAdd} onChange={() => toggleRight(idx, 'UhtCanAdd')} className="w-4 h-4 text-medical-mutedblue rounded" /></td>
-                        <td className="p-2 text-center"><input type="checkbox" checked={right.UhtCanEdit} onChange={() => toggleRight(idx, 'UhtCanEdit')} className="w-4 h-4 text-medical-mutedblue rounded" /></td>
-                        <td className="p-2 text-center"><input type="checkbox" checked={right.UhtCanDelete} onChange={() => toggleRight(idx, 'UhtCanDelete')} className="w-4 h-4 text-medical-mutedblue rounded" /></td>
+                        <td className="p-2 text-center"><input type="checkbox" checked={right.UhtCanView} onChange={() => toggleRight(idx, 'UhtCanView')} className="w-4 h-4 text-medical-primary rounded" /></td>
+                        <td className="p-2 text-center"><input type="checkbox" checked={right.UhtCanAdd} onChange={() => toggleRight(idx, 'UhtCanAdd')} className="w-4 h-4 text-medical-primary rounded" /></td>
+                        <td className="p-2 text-center"><input type="checkbox" checked={right.UhtCanEdit} onChange={() => toggleRight(idx, 'UhtCanEdit')} className="w-4 h-4 text-medical-primary rounded" /></td>
+                        <td className="p-2 text-center"><input type="checkbox" checked={right.UhtCanDelete} onChange={() => toggleRight(idx, 'UhtCanDelete')} className="w-4 h-4 text-medical-primary rounded" /></td>
                       </tr>
                     ))}
                   </tbody>
@@ -220,7 +220,7 @@ export function SystemDashboard() {
             </form>
 
             <h3 className="text-sm font-semibold text-gray-700 mb-2">Existing Roles</h3>
-            <div className="overflow-y-auto max-h-60 border border-gray-100 rounded">
+            <div className="overflow-y-auto max-h-60 border border-medical-border rounded">
               <table className="w-full text-left text-sm">
                 <thead className="bg-gray-50"><tr className="border-b"><th className="p-2 font-medium">Role Name</th><th className="p-2 w-10"></th></tr></thead>
                 <tbody>
@@ -245,18 +245,18 @@ export function SystemDashboard() {
             <form ref={formRef} onSubmit={e => { e.preventDefault(); if(newUser.UsrUrlCode && newUser.UsrName && newUser.UsrPwd) userMut.mutate(newUser); else alert('All fields required'); }} className="space-y-4 mb-6 border-b pb-6">
               <div>
                 <label className="block text-xs text-gray-600 mb-1">Username</label>
-                <input type="text" placeholder="Username" value={newUser.UsrName} onChange={e => setNewUser({...newUser, UsrName: e.target.value})} className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm" required />
+                <input type="text" placeholder="Username" value={newUser.UsrName} onChange={e => setNewUser({...newUser, UsrName: e.target.value})} className="w-full px-3 py-1.5 border border-medical-border rounded-md text-sm" required />
               </div>
               <div>
                 <label className="block text-xs text-gray-600 mb-1">Role</label>
-                <select value={newUser.UsrUrlCode} onChange={e => setNewUser({...newUser, UsrUrlCode: Number(e.target.value)})} className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm" required>
+                <select value={newUser.UsrUrlCode} onChange={e => setNewUser({...newUser, UsrUrlCode: Number(e.target.value)})} className="w-full px-3 py-1.5 border border-medical-border rounded-md text-sm" required>
                   <option value={0}>Select Role</option>
                   {roles?.map(r => <option key={r.UrlCode} value={r.UrlCode}>{r.UrlName}</option>)}
                 </select>
               </div>
               <div>
                 <label className="block text-xs text-gray-600 mb-1">Password</label>
-                <input type="password" placeholder="***" value={newUser.UsrPwd} onChange={e => setNewUser({...newUser, UsrPwd: e.target.value})} className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm" required />
+                <input type="password" placeholder="***" value={newUser.UsrPwd} onChange={e => setNewUser({...newUser, UsrPwd: e.target.value})} className="w-full px-3 py-1.5 border border-medical-border rounded-md text-sm" required />
               </div>
               <div>
                 <button type="submit" disabled={userMut.isPending} className="btn-primary py-1.5 px-4 text-sm w-full">Create User</button>
@@ -264,7 +264,7 @@ export function SystemDashboard() {
             </form>
 
             <h3 className="text-sm font-semibold text-gray-700 mb-2">Active Users</h3>
-            <div className="overflow-y-auto max-h-60 border border-gray-100 rounded">
+            <div className="overflow-y-auto max-h-60 border border-medical-border rounded">
               <table className="w-full text-left text-sm">
                 <thead className="bg-gray-50"><tr className="border-b"><th className="p-2 font-medium">Username</th><th className="p-2 font-medium">Role</th></tr></thead>
                 <tbody>
@@ -283,3 +283,5 @@ export function SystemDashboard() {
     </div>
   );
 }
+
+

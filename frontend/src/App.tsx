@@ -37,6 +37,7 @@ const IPDBedStatus = lazy(() => import('./pages/ipd/IPDBedStatus').then(m => ({ 
 const OpdReceipt = lazy(() => import('./pages/opd/OpdReceipt').then(m => ({ default: m.OpdReceipt })));
 const IpdReceipt = lazy(() => import('./pages/ipd/IpdReceipt').then(m => ({ default: m.IpdReceipt })));
 const LabReceipt = lazy(() => import('./pages/lab/LabReceipt').then(m => ({ default: m.LabReceipt })));
+const PharmacyReceipt = lazy(() => import('./pages/pharmacy/PharmacyReceipt').then(m => ({ default: m.PharmacyReceipt })));
 const SyncDashboard = lazy(() => import('./pages/system/SyncDashboard').then(m => ({ default: m.SyncDashboard })));
 const Dashboard = lazy(() => import('./pages/Dashboard').then(m => ({ default: m.Dashboard })));
 
@@ -57,7 +58,7 @@ function PlaceholderPage({ title }: { title: string }) {
 function PageLoader() {
   return (
     <div className="flex items-center justify-center h-screen bg-gray-50/50">
-      <div className="w-8 h-8 border-4 border-medical-mutedblue border-t-transparent rounded-full animate-spin"></div>
+      <div className="w-8 h-8 border-4 border-medical-primary border-t-transparent rounded-full animate-spin"></div>
     </div>
   );
 }
@@ -95,7 +96,7 @@ function App() {
               <Route path="/ipd/receipt" element={<IpdReceipt />} />
               
               {/* Masters */}
-              <Route path="/masters" element={<HospitalMasters />} />
+              <Route path="/masters/*" element={<HospitalMasters />} />
               
               {/* Pharmacy */}
               <Route path="pharmacy" element={<PharmacyDashboard />} />
@@ -103,6 +104,7 @@ function App() {
               <Route path="pharmacy/purchase" element={<StockInward />} />
               <Route path="pharmacy/sales" element={<StockOutward />} />
               <Route path="pharmacy/stock" element={<StockRegister />} />
+              <Route path="pharmacy/receipt" element={<PharmacyReceipt />} />
               
               {/* Reports */}
               <Route path="/reports" element={<ReportsHub />} />
@@ -132,3 +134,4 @@ function App() {
 }
 
 export default App;
+

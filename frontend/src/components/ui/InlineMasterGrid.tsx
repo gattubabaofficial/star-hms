@@ -72,8 +72,8 @@ export function InlineMasterGrid({ title, endpoint, queryKey, pkField, nameField
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-100 flex flex-col h-full overflow-hidden">
-      <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+    <div className="bg-white rounded-lg shadow-sm border border-medical-border flex flex-col h-full overflow-hidden">
+      <div className="p-4 border-b border-medical-border flex justify-between items-center bg-gray-50">
         <h2 className="text-lg font-semibold text-medical-text">{title}</h2>
         <button 
           onClick={() => { setEditingId('new'); setEditValue(''); }}
@@ -89,7 +89,7 @@ export function InlineMasterGrid({ title, endpoint, queryKey, pkField, nameField
         ) : (
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-gray-200">
+              <tr className="border-b border-medical-border">
                 <th className="py-2 px-3 font-semibold text-gray-600 w-16">ID</th>
                 <th className="py-2 px-3 font-semibold text-gray-600">Name (Click to edit)</th>
                 <th className="py-2 px-3 font-semibold text-gray-600 w-20 text-right">Actions</th>
@@ -97,7 +97,7 @@ export function InlineMasterGrid({ title, endpoint, queryKey, pkField, nameField
             </thead>
             <tbody>
               {items?.map((item, idx) => (
-                <tr key={item[pkField]} className="border-b border-gray-100 hover:bg-gray-50">
+                <tr key={item[pkField]} className="border-b border-medical-border hover:bg-gray-50">
                   <td className="py-2 px-3 text-sm text-gray-500">{item[pkField]}</td>
                   <td className="py-2 px-3 text-sm text-gray-800 cursor-pointer" onClick={() => { setEditingId(item[pkField]); setEditValue(item[nameField]); }}>
                     {editingId === item[pkField] ? (
@@ -108,7 +108,7 @@ export function InlineMasterGrid({ title, endpoint, queryKey, pkField, nameField
                         onChange={(e) => setEditValue(e.target.value)}
                         onKeyDown={(e) => handleKeyDown(e, item[pkField])}
                         onBlur={() => handleBlur(item[pkField])}
-                        className="w-full px-2 py-1 border border-medical-mutedblue rounded focus:outline-none"
+                        className="w-full px-2 py-1 border border-medical-primary rounded focus:outline-none"
                       />
                     ) : (
                       item[nameField]
@@ -125,7 +125,7 @@ export function InlineMasterGrid({ title, endpoint, queryKey, pkField, nameField
                 </tr>
               ))}
               {editingId === 'new' && (
-                <tr className="border-b border-gray-100 bg-blue-50">
+                <tr className="border-b border-medical-border bg-blue-50">
                   <td className="py-2 px-3 text-sm text-gray-500">*</td>
                   <td className="py-2 px-3">
                     <input
@@ -135,7 +135,7 @@ export function InlineMasterGrid({ title, endpoint, queryKey, pkField, nameField
                       onChange={(e) => setEditValue(e.target.value)}
                       onKeyDown={(e) => handleKeyDown(e, 'new')}
                       onBlur={() => handleBlur('new')}
-                      className="w-full px-2 py-1 border border-medical-mutedblue rounded focus:outline-none"
+                      className="w-full px-2 py-1 border border-medical-primary rounded focus:outline-none"
                       placeholder="Type name and press Enter..."
                     />
                   </td>
@@ -149,3 +149,5 @@ export function InlineMasterGrid({ title, endpoint, queryKey, pkField, nameField
     </div>
   );
 }
+
+

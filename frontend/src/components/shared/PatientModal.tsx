@@ -175,15 +175,15 @@ export const PatientModal: React.FC<PatientModalProps> = ({ isOpen, onClose, onS
           <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Patient Rules & Discounts</h4>
           <div className="grid grid-cols-3 gap-2">
             <label className="flex items-center gap-1.5 text-xs text-gray-700 select-none">
-              <input type="checkbox" checked={formData.PttInfAllowed} onChange={e => setFormData({...formData, PttInfAllowed: e.target.checked})} className="rounded border-gray-300 text-medical-mutedblue h-3.5 w-3.5" />
+              <input type="checkbox" checked={formData.PttInfAllowed} onChange={e => setFormData({...formData, PttInfAllowed: e.target.checked})} className="rounded border-medical-border text-medical-primary h-3.5 w-3.5" />
               Influenza Allowed
             </label>
             <label className="flex items-center gap-1.5 text-xs text-gray-700 select-none">
-              <input type="checkbox" checked={formData.PttDefAllowed} onChange={e => setFormData({...formData, PttDefAllowed: e.target.checked})} className="rounded border-gray-300 text-medical-mutedblue h-3.5 w-3.5" />
+              <input type="checkbox" checked={formData.PttDefAllowed} onChange={e => setFormData({...formData, PttDefAllowed: e.target.checked})} className="rounded border-medical-border text-medical-primary h-3.5 w-3.5" />
               Default Allowed
             </label>
             <label className="flex items-center gap-1.5 text-xs text-gray-700 select-none">
-              <input type="checkbox" checked={formData.PttDiscAllowed} onChange={e => setFormData({...formData, PttDiscAllowed: e.target.checked})} className="rounded border-gray-300 text-medical-mutedblue h-3.5 w-3.5" />
+              <input type="checkbox" checked={formData.PttDiscAllowed} onChange={e => setFormData({...formData, PttDiscAllowed: e.target.checked})} className="rounded border-medical-border text-medical-primary h-3.5 w-3.5" />
               Discount Allowed
             </label>
           </div>
@@ -196,12 +196,12 @@ export const PatientModal: React.FC<PatientModalProps> = ({ isOpen, onClose, onS
               disabled={!formData.PttDiscAllowed}
               value={formData.PttDiscPer}
               onChange={e => setFormData({...formData, PttDiscPer: parseFloat(e.target.value) || 0.0})}
-              className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-medical-mutedblue bg-white disabled:bg-gray-100 disabled:text-gray-400"
+              className="w-full px-2.5 py-1.5 text-sm border border-medical-border rounded-md focus:outline-none focus:ring-1 focus:ring-medical-primary bg-white disabled:bg-gray-100 disabled:text-gray-400"
             />
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
+        <div className="flex justify-end gap-3 pt-4 border-t border-medical-border">
           <button type="button" onClick={onClose} className="btn-secondary px-4">Cancel</button>
           <button type="submit" disabled={loading} className="btn-primary px-4">
             {loading ? 'Saving...' : 'Save Patient'}
@@ -211,3 +211,5 @@ export const PatientModal: React.FC<PatientModalProps> = ({ isOpen, onClose, onS
     </Modal>
   );
 };
+
+
