@@ -951,6 +951,7 @@ function ServiceMasterPage() {
   const [search, setSearch] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
+  const [matrixService, setMatrixService] = useState<any>(null);
   const [form, setForm] = useState<any>(defaultForm);
 
   const filtered = (services as any[]).filter((s: any) =>
@@ -999,10 +1000,17 @@ function ServiceMasterPage() {
                       <div className="flex gap-1 flex-wrap">
                         {s.SrvAutoInsIndr && <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded">Auto-IPD</span>}
                         {s.SrvDiscAllowed && <span className="text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded">Disc</span>}
+                        {s.SrvDctwseRateSys && <span className="text-[10px] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded">Dr-Rate</span>}
+                        {s.SrvPcgwseRateSys && <span className="text-[10px] bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded">Pat-Rate</span>}
                       </div>
                     </td>
                     <td className="py-3 px-2">
                       <div className="flex gap-1 opacity-0 group-hover:opacity-100 justify-end">
+                        {(s.SrvDctwseRateSys || s.SrvPcgwseRateSys || s.SrvExtShareSys) && (
+                          <button onClick={() => setMatrixService(s)} className="p-1.5 hover:bg-green-50 rounded-md text-green-600 mr-1" title="Manage Rates Matrix">
+                            <Settings size={14} />
+                          </button>
+                        )}
                         <button onClick={() => openEdit(s)} className="p-1.5 hover:bg-blue-50 rounded-md text-blue-600"><Pencil size={14} /></button>
                         <button onClick={() => { if (confirm('Delete?')) deleteMut.mutate(s.SrvCode); }} className="p-1.5 hover:bg-red-50 rounded-md text-red-500"><Trash2 size={14} /></button>
                       </div>
@@ -1066,6 +1074,21 @@ function ServiceMasterPage() {
                   </label>
                 ))}
               </div>
+              <div className="mt-4">
+                <label className="block text-sm font-bold text-gray-800 mb-2 border-b pb-1">Complex Charge Rules (Rate Matrix)</label>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    ['SrvDctwseRateSys', 'Doctor-wise Rate System'],
+                    ['SrvPcgwseRateSys', 'Patient Category-wise System'],
+                    ['SrvExtShareSys', 'Referrer-wise Share System'],
+                  ].map(([key, label]) => (
+                    <label key={key} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer p-2 rounded-lg border border-medical-border bg-purple-50 hover:bg-purple-100">
+                      <input type="checkbox" checked={!!form[key]} onChange={e => setForm({ ...form, [key]: e.target.checked })} className="rounded border-medical-border text-purple-600" />
+                      {label}
+                    </label>
+                  ))}
+                </div>
+              </div>
             </div>
             <div className="flex gap-3 justify-end px-6 py-4 border-t border-medical-border bg-gray-50 rounded-b-2xl shrink-0">
               <button onClick={() => setModalOpen(false)} className="btn-secondary px-5">Cancel</button>
@@ -1076,6 +1099,128 @@ function ServiceMasterPage() {
           </div>
         </div>
       )}
+
+      {matrixService && <ServiceRateMatrixModal service={matrixService} onClose={() => setMatrixService(null)} />}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────
+// Rate Matrix Modal
+// ─────────────────────────────────────────────────────────
+function ServiceRateMatrixModal({ service, onClose }: { service: any, onClose: () => void }) {
+  const qc = useQueryClient();
+  const [activeTab, setActiveTab] = useState<'doct' | 'pat' | 'ref'>(
+    service.SrvDctwseRateSys ? 'doct' : service.SrvPcgwseRateSys ? 'pat' : 'ref'
+  );
+
+  const { data: doctCategories = [] } = useQuery({ queryKey: ['doct-categories'], queryFn: async () => (await api.get<any[]>('/masters/doct-categories')).data });
+  const { data: patCategories = [] } = useQuery({ queryKey: ['pat-categories'], queryFn: async () => (await api.get<any[]>('/masters/pat-categories')).data });
+  const { data: refCategories = [] } = useQuery({ queryKey: ['ref-categories'], queryFn: async () => (await api.get<any[]>('/masters/ref-categories')).data });
+  const { data: rates = [], isLoading } = useQuery({ queryKey: ['service-rates', service.SrvCode], queryFn: async () => (await api.get<any[]>(`/masters/service-rates/${service.SrvCode}`)).data });
+
+  const [matrixState, setMatrixState] = useState<Record<string, any>>({});
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (rates.length > 0) {
+      const ms: any = {};
+      (rates as any[]).forEach(r => {
+        ms[`${r.SrmRateType}_${r.SrmRefCode}`] = r;
+      });
+      setMatrixState(ms);
+    }
+  }, [rates]);
+
+  const handleValChange = (type: string, refCode: number, field: string, value: string) => {
+    const key = `${type}_${refCode}`;
+    const v = Number(value) || 0;
+    setMatrixState(prev => ({
+      ...prev,
+      [key]: {
+        ...(prev[key] || { SrmSrvCode: service.SrvCode, SrmRateType: type, SrmRefCode: refCode, SrmRate: 0, SrmShare: 0, SrmDiscPer: 0 }),
+        [field]: v
+      }
+    }));
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      const promises = Object.values(matrixState).map(async (rateObj) => {
+        if (rateObj.SrmCode) {
+          return api.put(`/masters/service-rates/${rateObj.SrmCode}`, rateObj);
+        } else {
+          return api.post(`/masters/service-rates`, rateObj);
+        }
+      });
+      await Promise.all(promises);
+      qc.invalidateQueries({ queryKey: ['service-rates', service.SrvCode] });
+      onClose();
+    } catch (e) {
+      alert("Failed to save rates.");
+    }
+    setSaving(false);
+  };
+
+  const renderGrid = (categories: any[], type: string, pkField: string, nameField: string) => (
+    <table className="w-full text-left text-sm border">
+      <thead className="bg-gray-50 border-b">
+        <tr>
+          <th className="p-2 font-medium text-gray-600">{nameField.includes('Dcg') ? 'Doctor Category' : nameField.includes('Pcg') ? 'Patient Category' : 'Referrer Category'}</th>
+          <th className="p-2 font-medium text-gray-600 w-28">Rate (₹)</th>
+          <th className="p-2 font-medium text-gray-600 w-28">Share %</th>
+          <th className="p-2 font-medium text-gray-600 w-28">Discount %</th>
+        </tr>
+      </thead>
+      <tbody className="divide-y">
+        {categories.map((c: any) => {
+          const key = `${type}_${c[pkField]}`;
+          const r = matrixState[key] || { SrmRate: 0, SrmShare: 0, SrmDiscPer: 0 };
+          return (
+            <tr key={key} className="hover:bg-gray-50">
+              <td className="p-2 font-medium text-gray-800">{c[nameField]}</td>
+              <td className="p-1"><input type="number" min={0} className="w-full border rounded px-2 py-1" value={r.SrmRate} onChange={e => handleValChange(type, c[pkField], 'SrmRate', e.target.value)} /></td>
+              <td className="p-1"><input type="number" min={0} max={100} className="w-full border rounded px-2 py-1" value={r.SrmShare} onChange={e => handleValChange(type, c[pkField], 'SrmShare', e.target.value)} /></td>
+              <td className="p-1"><input type="number" min={0} max={100} className="w-full border rounded px-2 py-1" value={r.SrmDiscPer} onChange={e => handleValChange(type, c[pkField], 'SrmDiscPer', e.target.value)} /></td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
+
+  return (
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[60] p-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col">
+        <div className="flex justify-between items-center px-6 py-5 border-b border-medical-border shrink-0">
+          <div>
+            <h3 className="font-bold text-gray-900 text-lg">Charge Matrix: {service.SrvName}</h3>
+            <p className="text-xs text-gray-500">Define granular rates, discounts, and revenue sharing percentages.</p>
+          </div>
+          <button onClick={onClose} className="p-1.5 hover:bg-gray-100 rounded-lg"><X size={16} /></button>
+        </div>
+        <div className="flex px-6 pt-4 gap-2 border-b">
+          {service.SrvDctwseRateSys && <button onClick={() => setActiveTab('doct')} className={`pb-2 px-3 text-sm font-medium border-b-2 ${activeTab === 'doct' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500'}`}>Doctor-wise Matrix</button>}
+          {service.SrvPcgwseRateSys && <button onClick={() => setActiveTab('pat')} className={`pb-2 px-3 text-sm font-medium border-b-2 ${activeTab === 'pat' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500'}`}>Patient Category-wise</button>}
+          {service.SrvExtShareSys && <button onClick={() => setActiveTab('ref')} className={`pb-2 px-3 text-sm font-medium border-b-2 ${activeTab === 'ref' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500'}`}>Referrer-wise Matrix</button>}
+        </div>
+        <div className="overflow-y-auto p-6">
+          {isLoading ? <p>Loading existing matrix...</p> : (
+            <>
+              {activeTab === 'doct' && renderGrid(doctCategories, 'DoctCatg', 'DcgCode', 'DcgName')}
+              {activeTab === 'pat' && renderGrid(patCategories, 'PatCatg', 'PcgCode', 'PcgName')}
+              {activeTab === 'ref' && renderGrid(refCategories, 'RefCatg', 'RfgCode', 'RfgName')}
+            </>
+          )}
+        </div>
+        <div className="flex gap-3 justify-end px-6 py-4 border-t border-medical-border bg-gray-50 rounded-b-2xl shrink-0">
+          <button onClick={onClose} className="btn-secondary px-5">Cancel</button>
+          <button onClick={handleSave} disabled={saving} className="btn-primary px-6 flex items-center gap-2">
+            <Save size={15} /> {saving ? 'Saving...' : 'Save Matrix'}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

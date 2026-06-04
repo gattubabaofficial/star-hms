@@ -33,3 +33,20 @@ class UserProfile(BaseModel):
 
     class Config:
         from_attributes = True
+
+class UserRoleCreate(BaseModel):
+    UrlName: str
+    rights: Optional[List[dict]] = None
+
+class UserRoleUpdate(BaseModel):
+    UrlName: str
+    UrlRecState: Optional[int] = 1
+    rights: Optional[List[dict]] = None
+
+class UserRoleResponse(BaseModel):
+    UrlCode: int
+    UrlName: str
+    UrlRecState: int
+
+    class Config:
+        from_attributes = True

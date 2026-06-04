@@ -265,9 +265,21 @@ class ServGrpMstBase(BaseModel):
     SgpExtDiscSys: bool = False
     SgpDctwseDiscSys: bool = False
     SgpPcgwseDiscSys: bool = False
+    SgpRBywseDiscSys: bool = False
+    SgpRTowseDiscSys: bool = False
+    SgpTimewseDiscSys: bool = False
     SgpExtBargSys: bool = False
+    SgpDctwseBargSys: bool = False
+    SgpPcgwseBargSys: bool = False
+    SgpRBywseBargSys: bool = False
+    SgpRTowseBargSys: bool = False
+    SgpTimewseBargSys: bool = False
     SgpExtShareSys: bool = False
     SgpDctwseShareSys: bool = False
+    SgpPcgwseShareSys: bool = False
+    SgpRBywseShareSys: bool = False
+    SgpRTowseShareSys: bool = False
+    SgpTimewseShareSys: bool = False
     SgpShowInList: bool = True
     SgpRecState: int = 1
 
@@ -297,9 +309,29 @@ class ServMastBase(BaseModel):
     SrvDefAllowed: bool = False
     SrvDiscAllowed: bool = False
     SrvExtRateSys: bool = False
+    SrvDctwseRateSys: bool = False
+    SrvPcgwseRateSys: bool = False
+    SrvRBywseRateSys: bool = False
+    SrvRTowseRateSys: bool = False
+    SrvTimewseRateSys: bool = False
     SrvExtDiscSys: bool = False
-    SrvExtShareSys: bool = False
+    SrvDctwseDiscSys: bool = False
+    SrvPcgwseDiscSys: bool = False
+    SrvRBywseDiscSys: bool = False
+    SrvRTowseDiscSys: bool = False
+    SrvTimewseDiscSys: bool = False
     SrvExtBargSys: bool = False
+    SrvDctwseBargSys: bool = False
+    SrvPcgwseBargSys: bool = False
+    SrvRBywseBargSys: bool = False
+    SrvRTowseBargSys: bool = False
+    SrvTimewseBargSys: bool = False
+    SrvExtShareSys: bool = False
+    SrvDctwseShareSys: bool = False
+    SrvPcgwseShareSys: bool = False
+    SrvRBywseShareSys: bool = False
+    SrvRTowseShareSys: bool = False
+    SrvTimewseShareSys: bool = False
     SrvRecState: int = 1
 
 class ServMastCreate(ServMastBase): pass

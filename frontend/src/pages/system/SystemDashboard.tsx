@@ -47,9 +47,9 @@ export function SystemDashboard() {
   };
 
   // User Management State
-  const { data: roles } = useQuery({ queryKey: ['roles'], queryFn: async () => (await api.get<any[]>('/system/roles')).data,
+  const { data: roles } = useQuery({ queryKey: ['roles'], queryFn: async () => (await api.get<any[]>('/auth/roles')).data,
     refetchInterval: 30000 });
-  const { data: users } = useQuery({ queryKey: ['users'], queryFn: async () => (await api.get<any[]>('/system/users')).data,
+  const { data: users } = useQuery({ queryKey: ['users'], queryFn: async () => (await api.get<any[]>('/auth/users')).data,
     refetchInterval: 30000 });
 
   const [newUser, setNewUser] = useState({ UsrName: '', UsrUrlCode: 0, UsrPwd: '' });
@@ -71,7 +71,7 @@ export function SystemDashboard() {
   };
 
   const roleMut = useMutation({
-    mutationFn: async (data: any) => (await api.post('/system/roles', data)).data,
+    mutationFn: async (data: any) => (await api.post('/auth/roles', data)).data,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['roles'] });
       setNewRoleName('');
@@ -81,14 +81,14 @@ export function SystemDashboard() {
   });
 
   const deleteRoleMut = useMutation({
-    mutationFn: async (id: number) => (await api.delete(`/system/roles/${id}`)).data,
+    mutationFn: async (id: number) => (await api.delete(`/auth/roles/${id}`)).data,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['roles'] });
     }
   });
 
   const userMut = useMutation({
-    mutationFn: async (data: any) => (await api.post('/system/users', data)).data,
+    mutationFn: async (data: any) => (await api.post('/auth/users', data)).data,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
       setNewUser({ UsrName: '', UsrUrlCode: 0, UsrPwd: '' });
