@@ -57,7 +57,7 @@ def create_item(item_in: SubItmMastCreate, db: Session = Depends(get_db)):
 # -----------------------------------------------------
 @router.get("/party-groups", response_model=List[PartyGrpMstResponse])
 def get_party_groups(db: Session = Depends(get_db)):
-    return db.query(PartyGrpMst).filter(PartyGrpMst.PgpRecState == 1).order_by(PartyGrpMst.PgpName).all()
+    return db.query(PartyGrpMst).filter(PartyGrpMst.PgmRecState == 1).order_by(PartyGrpMst.PgmName).all()
 
 @router.post("/party-groups", response_model=PartyGrpMstResponse)
 def create_party_group(group_in: PartyGrpMstCreate, db: Session = Depends(get_db)):
@@ -72,7 +72,7 @@ def create_party_group(group_in: PartyGrpMstCreate, db: Session = Depends(get_db
 # -----------------------------------------------------
 @router.get("/parties", response_model=List[PartyMastResponse])
 def get_parties(db: Session = Depends(get_db)):
-    return db.query(PartyMast).filter(PartyMast.PtyRecState == 1).order_by(PartyMast.PtyName).all()
+    return db.query(PartyMast).filter(PartyMast.PrtRecState == 1).order_by(PartyMast.PrtName).all()
 
 @router.post("/parties", response_model=PartyMastResponse)
 def create_party(party_in: PartyMastCreate, db: Session = Depends(get_db)):
@@ -199,7 +199,7 @@ def get_stock(db: Session = Depends(get_db)):
         func.sum(OutdStkDtl.OsdQty).label("total_out")
     ).filter(OutdStkDtl.OsdRecState == 1).group_by(OutdStkDtl.OsdSimCode, OutdStkDtl.OsdBatchNo).subquery()
 
-    from backend.models.pharmacy import SubItmGrpMst
+    from backend.models.masters import SubItmGrpMst
     stock_data = db.query(
         SubItmMast.SimCode,
         SubItmMast.SimName,

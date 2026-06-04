@@ -1,6 +1,19 @@
 from pydantic import BaseModel
 from typing import Optional
 
+class CompanyFullSchema(BaseModel):
+    CmpName: Optional[str] = ""
+    CmpAddress: Optional[str] = ""
+    CmpCity: Optional[str] = ""
+    CmpState: Optional[str] = ""
+    CmpOPhone: Optional[str] = ""
+    CmpEmail: Optional[str] = ""
+    CmpWebsite: Optional[str] = ""
+    CmpReg1: Optional[str] = ""
+
+    class Config:
+        from_attributes = True
+
 class SysOptsSchema(BaseModel):
     SysId: int = 1
     

@@ -4,11 +4,44 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from backend.database import get_db, engine, Base
 from backend.models.system import SysOpts
-from backend.schemas.system import SysOptsSchema
+from backend.models.auth import Company
+from backend.schemas.system import SysOptsSchema, CompanyFullSchema
 from datetime import datetime, date
 import json
 
 router = APIRouter()
+
+@router.get("/dashboard-stats")
+def get_dashboard_stats(db: Session = Depends(get_db)):
+    # Placeholder stats until actual aggregation logic is built
+    return {
+        "opdPatients": 0,
+        "ipdAdmissions": 0,
+        "labReports": 0,
+        "pharmacySales": 0.0
+    }
+
+@router.get("/company", response_model=CompanyFullSchema)
+def get_company(db: Session = Depends(get_db)):
+    comp = db.query(Company).filter(Company.CmpRecState == 1).first()
+    if not comp:
+        return CompanyFullSchema()
+    return comp
+
+@router.post("/company", response_model=CompanyFullSchema)
+def update_company(comp_in: CompanyFullSchema, db: Session = Depends(get_db)):
+    comp = db.query(Company).filter(Company.CmpRecState == 1).first()
+    if not comp:
+        comp = Company(CmpRecState=1)
+        db.add(comp)
+    
+    for key, value in comp_in.model_dump().items():
+        if hasattr(comp, key):
+            setattr(comp, key, value)
+            
+    db.commit()
+    db.refresh(comp)
+    return comp
 
 @router.get("/config", response_model=SysOptsSchema)
 def get_system_config(db: Session = Depends(get_db)):

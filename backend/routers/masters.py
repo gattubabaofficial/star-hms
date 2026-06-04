@@ -154,6 +154,7 @@ _create_crud_routes(router, "/wards", WardMast, WardMastCreate, WardMastUpdate, 
 _create_crud_routes(router, "/beds", BedMast, BedMastCreate, BedMastUpdate, BedMastResponse, "BdmCode", BedMast.BdmCode)
 
 # Group 3 (Services & Investigations)
+_create_crud_routes(router, "/service-groups", ServGrpMst, ServGrpMstCreate, ServGrpMstUpdate, ServGrpMstResponse, "SgpCode", ServGrpMst.SgpCode)
 _create_crud_routes(router, "/diagnostics", DiagMast, DiagMastCreate, DiagMastUpdate, DiagMastResponse, "DigCode", DiagMast.DigCode)
 _create_crud_routes(router, "/service-rates", ServRateMst, ServRateMstCreate, ServRateMstUpdate, ServRateMstResponse, "SrmCode", ServRateMst.SrmCode)
 

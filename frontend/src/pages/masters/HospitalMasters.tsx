@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../../lib/api';
 import {
   MapPin, User, Stethoscope, Tag, Building2, Bed, FlaskConical,
-  Plus, Pencil, Trash2, X, Search, UserCheck, ChevronRight, Save
+  Plus, Pencil, Trash2, X, Search, UserCheck, ChevronRight, Save, Settings
 } from 'lucide-react';
 
 // ─────────────────────────────────────────────────────────
