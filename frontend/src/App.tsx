@@ -19,6 +19,7 @@ const PharmacyMasters = lazy(() => import('./pages/pharmacy/PharmacyMasters').th
 const StockInward = lazy(() => import('./pages/pharmacy/StockInward').then(m => ({ default: m.StockInward })));
 const StockOutward = lazy(() => import('./pages/pharmacy/StockOutward').then(m => ({ default: m.StockOutward })));
 const StockRegister = lazy(() => import('./pages/pharmacy/StockRegister').then(m => ({ default: m.StockRegister })));
+const StockTransactionView = lazy(() => import('./pages/pharmacy/StockTransactionView').then(m => ({ default: m.StockTransactionView })));
 const ReportsHub = lazy(() => import('./pages/reports/ReportsHub').then(m => ({ default: m.ReportsHub })));
 const CollectionReport = lazy(() => import('./pages/reports/CollectionReport').then(m => ({ default: m.CollectionReport })));
 const ServiceReport = lazy(() => import('./pages/reports/ServiceReport').then(m => ({ default: m.ServiceReport })));
@@ -105,6 +106,7 @@ function App() {
               <Route path="pharmacy/purchase" element={<StockInward />} />
               <Route path="pharmacy/sales" element={<StockOutward />} />
               <Route path="pharmacy/stock" element={<StockRegister />} />
+              <Route path="pharmacy/ledger" element={<StockTransactionView />} />
               <Route path="pharmacy/receipt" element={<PharmacyReceipt />} />
               
               {/* Reports */}

@@ -139,16 +139,18 @@ def create_sale(sale_in: OutdStkCreate, db: Session = Depends(get_db)):
     if abs(calculated_net - sale_in.OskNetAmt) > 0.1:
         raise HTTPException(status_code=400, detail=f"Net Amount mismatch. Expected approx {calculated_net}, got {sale_in.OskNetAmt}")
 
-    # 2. Stock Validation (Cannot dispense more than available)
+    # 2. Stock Validation (Strictly block negative stock per batch)
     for detail in sale_in.details:
-        if detail.OsdSimCode:
+        if detail.OsdSimCode and detail.OsdBatchNo:
             in_qty = db.query(func.sum(IndrStkDtl.IsdQty)).filter(
                 IndrStkDtl.IsdSimCode == detail.OsdSimCode, 
+                IndrStkDtl.IsdBatchNo == detail.OsdBatchNo,
                 IndrStkDtl.IsdRecState == 1
             ).scalar() or 0.0
             
             out_qty = db.query(func.sum(OutdStkDtl.OsdQty)).filter(
                 OutdStkDtl.OsdSimCode == detail.OsdSimCode,
+                OutdStkDtl.OsdBatchNo == detail.OsdBatchNo,
                 OutdStkDtl.OsdRecState == 1
             ).scalar() or 0.0
             
@@ -156,7 +158,7 @@ def create_sale(sale_in: OutdStkCreate, db: Session = Depends(get_db)):
             if detail.OsdQty > current_stock:
                 item = db.query(SubItmMast).filter(SubItmMast.SimCode == detail.OsdSimCode).first()
                 item_name = item.SimName if item else detail.OsdSimCode
-                raise HTTPException(status_code=400, detail=f"Insufficient stock for {item_name}. Available: {current_stock}, Requested: {detail.OsdQty}")
+                raise HTTPException(status_code=400, detail=f"Insufficient stock for {item_name} (Batch {detail.OsdBatchNo}). Available: {current_stock}, Requested: {detail.OsdQty}")
 
     max_vch = db.query(func.max(OutdStk.OskVchNo)).scalar() or 0
     new_vch = max_vch + 1
@@ -185,24 +187,31 @@ def create_sale(sale_in: OutdStkCreate, db: Session = Depends(get_db)):
 def get_stock(db: Session = Depends(get_db)):
     inwards = db.query(
         IndrStkDtl.IsdSimCode.label("SimCode"),
+        IndrStkDtl.IsdBatchNo.label("BatchNo"),
+        func.max(IndrStkDtl.IsdExpiryDate).label("ExpiryDate"),
+        func.max(IndrStkDtl.IsdMRP).label("MRP"),
         func.sum(IndrStkDtl.IsdQty).label("total_in")
-    ).filter(IndrStkDtl.IsdRecState == 1).group_by(IndrStkDtl.IsdSimCode).subquery()
+    ).filter(IndrStkDtl.IsdRecState == 1).group_by(IndrStkDtl.IsdSimCode, IndrStkDtl.IsdBatchNo).subquery()
 
     outwards = db.query(
         OutdStkDtl.OsdSimCode.label("SimCode"),
+        OutdStkDtl.OsdBatchNo.label("BatchNo"),
         func.sum(OutdStkDtl.OsdQty).label("total_out")
-    ).filter(OutdStkDtl.OsdRecState == 1).group_by(OutdStkDtl.OsdSimCode).subquery()
+    ).filter(OutdStkDtl.OsdRecState == 1).group_by(OutdStkDtl.OsdSimCode, OutdStkDtl.OsdBatchNo).subquery()
 
     from backend.models.pharmacy import SubItmGrpMst
     stock_data = db.query(
         SubItmMast.SimCode,
         SubItmMast.SimName,
         SubItmGrpMst.SigName,
+        inwards.c.BatchNo,
+        inwards.c.ExpiryDate,
+        inwards.c.MRP,
         func.coalesce(inwards.c.total_in, 0).label("inward_qty"),
         func.coalesce(outwards.c.total_out, 0).label("outward_qty")
     ).outerjoin(SubItmGrpMst, SubItmGrpMst.SigCode == SubItmMast.SimSigCode)\
      .outerjoin(inwards, inwards.c.SimCode == SubItmMast.SimCode)\
-     .outerjoin(outwards, outwards.c.SimCode == SubItmMast.SimCode)\
+     .outerjoin(outwards, (outwards.c.SimCode == SubItmMast.SimCode) & (outwards.c.BatchNo == inwards.c.BatchNo))\
      .filter(SubItmMast.SimRecState == 1).all()
 
     stock_list = []
@@ -211,9 +220,71 @@ def get_stock(db: Session = Depends(get_db)):
             SimCode=row.SimCode,
             ItemName=row.SimName,
             GroupName=row.SigName or "Uncategorized",
+            BatchNo=row.BatchNo,
+            ExpiryDate=row.ExpiryDate,
+            MRP=row.MRP or 0.0,
             InwardQty=row.inward_qty,
             OutwardQty=row.outward_qty,
             CurrentStock=row.inward_qty - row.outward_qty
         ))
 
     return stock_list
+
+# -----------------------------------------------------
+# Batches for POS dropdown
+# -----------------------------------------------------
+@router.get("/batches/{sim_code}")
+def get_available_batches(sim_code: int, db: Session = Depends(get_db)):
+    # Calculate available stock per batch for a specific item
+    stock_items = get_stock(db)
+    available_batches = [s for s in stock_items if s.SimCode == sim_code and s.CurrentStock > 0]
+    return available_batches
+
+# -----------------------------------------------------
+# Stock Transactions Ledger (StkTrnVw)
+# -----------------------------------------------------
+@router.get("/transactions/{sim_code}")
+def get_stock_transactions(sim_code: int, db: Session = Depends(get_db)):
+    transactions = []
+    
+    # Purchases (Inwards)
+    inwards = db.query(IndrStkDtl, IndrStk).join(IndrStk, IndrStk.IskCode == IndrStkDtl.IsdIskCode)\
+        .filter(IndrStkDtl.IsdSimCode == sim_code, IndrStkDtl.IsdRecState == 1).all()
+        
+    for dtl, hdr in inwards:
+        transactions.append({
+            "Date": hdr.IskDate,
+            "Type": "Purchase",
+            "VchNo": hdr.IskVchNo,
+            "BatchNo": dtl.IsdBatchNo,
+            "QtyIn": dtl.IsdQty,
+            "QtyOut": 0.0,
+            "Rate": dtl.IsdRate
+        })
+        
+    # Sales (Outwards)
+    outwards = db.query(OutdStkDtl, OutdStk).join(OutdStk, OutdStk.OskCode == OutdStkDtl.OsdOskCode)\
+        .filter(OutdStkDtl.OsdSimCode == sim_code, OutdStkDtl.OsdRecState == 1).all()
+        
+    for dtl, hdr in outwards:
+        transactions.append({
+            "Date": hdr.OskDate,
+            "Type": "Sale",
+            "VchNo": hdr.OskVchNo,
+            "BatchNo": dtl.OsdBatchNo,
+            "QtyIn": 0.0,
+            "QtyOut": dtl.OsdQty,
+            "Rate": dtl.OsdRate
+        })
+        
+    # Sort chronologically
+    transactions.sort(key=lambda x: x["Date"])
+    
+    # Calculate running balance
+    balance = 0.0
+    for t in transactions:
+        balance += (t["QtyIn"] - t["QtyOut"])
+        t["Balance"] = balance
+        
+    return transactions
+

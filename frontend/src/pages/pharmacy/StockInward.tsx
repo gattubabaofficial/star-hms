@@ -9,6 +9,9 @@ import { SearchableSelectWithCreate } from '../../components/ui/SearchableSelect
 
 interface PurchaseItem {
   IsdSimCode: number | null;
+  IsdBatchNo: string;
+  IsdExpiryDate: string;
+  IsdMRP: number;
   IsdQty: number;
   IsdRate: number;
   IsdDiscPer: number;
@@ -38,7 +41,7 @@ export function StockInward() {
   });
 
   const [items, setItems] = useState<PurchaseItem[]>([
-    { IsdSimCode: null, IsdQty: 1, IsdRate: 0, IsdDiscPer: 0, IsdDiscAmt: 0, IsdTaxPer: 0, IsdTaxAmt: 0, IsdAmt: 0 }
+    { IsdSimCode: null, IsdBatchNo: '', IsdExpiryDate: '', IsdMRP: 0, IsdQty: 1, IsdRate: 0, IsdDiscPer: 0, IsdDiscAmt: 0, IsdTaxPer: 0, IsdTaxAmt: 0, IsdAmt: 0 }
   ]);
 
   const { data: parties } = useQuery({ queryKey: ['parties'], queryFn: async () => (await api.get<any[]>('/pharmacy/parties')).data });
@@ -85,7 +88,7 @@ export function StockInward() {
   };
 
   const addItem = () => {
-    setItems([...items, { IsdSimCode: null, IsdQty: 1, IsdRate: 0, IsdDiscPer: 0, IsdDiscAmt: 0, IsdTaxPer: 0, IsdTaxAmt: 0, IsdAmt: 0 }]);
+    setItems([...items, { IsdSimCode: null, IsdBatchNo: '', IsdExpiryDate: '', IsdMRP: 0, IsdQty: 1, IsdRate: 0, IsdDiscPer: 0, IsdDiscAmt: 0, IsdTaxPer: 0, IsdTaxAmt: 0, IsdAmt: 0 }]);
   };
 
   const removeItem = (index: number) => {
@@ -146,7 +149,10 @@ export function StockInward() {
             <table className="w-full text-left border-collapse min-w-max">
               <thead>
                 <tr className="bg-gray-50 border-b border-medical-border">
-                  <th className="py-2 px-2 text-sm font-medium text-gray-600 w-1/4">Medicine / Item</th>
+                  <th className="py-2 px-2 text-sm font-medium text-gray-600 w-1/5">Medicine / Item</th>
+                  <th className="py-2 px-2 text-sm font-medium text-gray-600">Batch No</th>
+                  <th className="py-2 px-2 text-sm font-medium text-gray-600">Expiry</th>
+                  <th className="py-2 px-2 text-sm font-medium text-gray-600">MRP</th>
                   <th className="py-2 px-2 text-sm font-medium text-gray-600">Qty</th>
                   <th className="py-2 px-2 text-sm font-medium text-gray-600">Rate (₹)</th>
                   <th className="py-2 px-2 text-sm font-medium text-gray-600">Disc %</th>
@@ -161,11 +167,14 @@ export function StockInward() {
                     <td className="py-2 px-2">
                       <SearchableSelectWithCreate options={medicineOpts} value={item.IsdSimCode} onChange={(v) => handleItemChange(idx, 'IsdSimCode', v)} placeholder="Item..." />
                     </td>
-                    <td className="py-2 px-2"><input type="number" value={item.IsdQty} onChange={e => handleItemChange(idx, 'IsdQty', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded" /></td>
-                    <td className="py-2 px-2"><input type="number" value={item.IsdRate} onChange={e => handleItemChange(idx, 'IsdRate', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded" /></td>
-                    <td className="py-2 px-2"><input type="number" value={item.IsdDiscPer} onChange={e => handleItemChange(idx, 'IsdDiscPer', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded" /></td>
-                    <td className="py-2 px-2"><input type="number" value={item.IsdTaxPer} onChange={e => handleItemChange(idx, 'IsdTaxPer', Number(e.target.value))} className="w-full p-1 border border-medical-border rounded" /></td>
-                    <td className="py-2 px-2 text-right font-medium text-gray-800">{item.IsdAmt.toFixed(2)}</td>
+                    <td className="py-2 px-2"><input type="text" value={item.IsdBatchNo} onChange={e => handleItemChange(idx, 'IsdBatchNo', e.target.value)} className="w-full p-1 border border-medical-border rounded text-sm uppercase" required /></td>
+                    <td className="py-2 px-2"><input type="date" value={item.IsdExpiryDate} onChange={e => handleItemChange(idx, 'IsdExpiryDate', e.target.value)} className="w-full p-1 border border-medical-border rounded text-sm" required /></td>
+                    <td className="py-2 px-2"><input type="number" value={item.IsdMRP} onChange={e => handleItemChange(idx, 'IsdMRP', Number(e.target.value))} className="w-16 p-1 border border-medical-border rounded text-sm" /></td>
+                    <td className="py-2 px-2"><input type="number" value={item.IsdQty} onChange={e => handleItemChange(idx, 'IsdQty', Number(e.target.value))} className="w-16 p-1 border border-medical-border rounded text-sm" /></td>
+                    <td className="py-2 px-2"><input type="number" value={item.IsdRate} onChange={e => handleItemChange(idx, 'IsdRate', Number(e.target.value))} className="w-16 p-1 border border-medical-border rounded text-sm" /></td>
+                    <td className="py-2 px-2"><input type="number" value={item.IsdDiscPer} onChange={e => handleItemChange(idx, 'IsdDiscPer', Number(e.target.value))} className="w-12 p-1 border border-medical-border rounded text-sm" /></td>
+                    <td className="py-2 px-2"><input type="number" value={item.IsdTaxPer} onChange={e => handleItemChange(idx, 'IsdTaxPer', Number(e.target.value))} className="w-12 p-1 border border-medical-border rounded text-sm" /></td>
+                    <td className="py-2 px-2 text-right font-medium text-gray-800 text-sm">{item.IsdAmt.toFixed(2)}</td>
                     <td className="py-2 px-2 text-center"><button type="button" onClick={() => removeItem(idx)} className="text-gray-400 hover:text-red-500"><Trash2 size={16} /></button></td>
                   </tr>
                 ))}

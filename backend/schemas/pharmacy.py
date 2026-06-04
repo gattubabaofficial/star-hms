@@ -14,6 +14,9 @@ class Config: from_attributes = True
 # -----------------------------------
 class IndrStkDtlBase(BaseModel):
     IsdSimCode: Optional[int] = None
+    IsdBatchNo: Optional[str] = None
+    IsdExpiryDate: Optional[date] = None
+    IsdMRP: float = 0.0
     IsdQty: float = 0.0
     IsdRate: float = 0.0
     IsdDiscPer: float = 0.0
@@ -53,6 +56,7 @@ class IndrStkResponse(IndrStkBase):
 # -----------------------------------
 class OutdStkDtlBase(BaseModel):
     OsdSimCode: Optional[int] = None
+    OsdBatchNo: Optional[str] = None
     OsdQty: float = 0.0
     OsdRate: float = 0.0
     OsdDiscPer: float = 0.0
@@ -72,7 +76,13 @@ class OutdStkDtlResponse(OutdStkDtlBase):
 class OutdStkBase(BaseModel):
     OskDate: date
     OskPtyCode: Optional[int] = None
+    OskPatCode: Optional[int] = None
+    OskDocCode: Optional[int] = None
+    OskCustomerName: Optional[str] = None
+    OskCustomerPhone: Optional[str] = None
     OskRefNo: Optional[str] = None
+    OskPaymentMode: str = 'Cash'
+    OskPaidAmt: float = 0.0
     OskNetAmt: float = 0.0
     OskOtherChg: float = 0.0
     OskRoundOff: float = 0.0
@@ -94,6 +104,9 @@ class StockItem(BaseModel):
     SimCode: int
     ItemName: str
     GroupName: str
+    BatchNo: Optional[str] = None
+    ExpiryDate: Optional[date] = None
+    MRP: float = 0.0
     InwardQty: float
     OutwardQty: float
     CurrentStock: float

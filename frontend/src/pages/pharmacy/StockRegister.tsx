@@ -101,7 +101,9 @@ export function StockRegister() {
                   <tr>
                     <th>Item Code</th>
                     <th>Item Name</th>
-                    <th>Group</th>
+                    <th>Batch No</th>
+                    <th>Expiry</th>
+                    <th>MRP (₹)</th>
                     <th className="text-right">Total Inward</th>
                     <th className="text-right">Total Outward</th>
                     <th className="text-right">Current Stock</th>
@@ -116,12 +118,13 @@ export function StockRegister() {
                     filteredItems?.map((item, index) => (
                       <tr key={index}>
                         <td className="font-mono text-gray-500 text-sm">{item.SimCode}</td>
-                        <td className="font-medium text-gray-800">{item.ItemName}</td>
-                        <td>
-                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                            {item.GroupName}
-                          </span>
+                        <td className="font-medium text-gray-800">
+                          {item.ItemName}
+                          <div className="text-xs text-gray-500">{item.GroupName}</div>
                         </td>
+                        <td className="font-mono text-sm">{item.BatchNo || '-'}</td>
+                        <td className="text-sm">{item.ExpiryDate || '-'}</td>
+                        <td className="text-sm">{item.MRP?.toFixed(2) || '-'}</td>
                         <td className="text-right text-gray-600">{item.InwardQty}</td>
                         <td className="text-right text-gray-600">{item.OutwardQty}</td>
                         <td className={`text-right font-bold ${item.CurrentStock <= 0 ? 'text-red-600' : 'text-green-600'}`}>
@@ -137,17 +140,19 @@ export function StockRegister() {
             <div className="hidden print:block">
               <PrintTable 
                 columns={[
-                  { header: 'Item Code', accessor: 'code' },
+                  { header: 'Code', accessor: 'code' },
                   { header: 'Item Name', accessor: 'name' },
-                  { header: 'Group', accessor: 'group' },
+                  { header: 'Batch', accessor: 'batch' },
+                  { header: 'Expiry', accessor: 'expiry' },
                   { header: 'Inward', accessor: 'in', align: 'right' },
                   { header: 'Outward', accessor: 'out', align: 'right' },
-                  { header: 'Current Stock', accessor: 'stock', align: 'right' }
+                  { header: 'Stock', accessor: 'stock', align: 'right' }
                 ]}
                 data={(filteredItems || []).map(item => ({
                   code: item.SimCode,
                   name: item.ItemName,
-                  group: item.GroupName,
+                  batch: item.BatchNo || '-',
+                  expiry: item.ExpiryDate || '-',
                   in: item.InwardQty,
                   out: item.OutwardQty,
                   stock: item.CurrentStock
