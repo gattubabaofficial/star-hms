@@ -7,8 +7,10 @@ from backend.models.masters import (
     AreaMast, DoctCatgMst, DoctRoleMst, DoctMast, 
     RefCatgMst, RefByMast, RefToMast, PatCatgMst, PatMast,
     StsnMast, FloorMast, WardMast, BedMast,
-    ServGrpMst, ServMast, DiagMast, ServRateMst
+    ServGrpMst, ServMast, DiagMast, ServRateMst, DiagSrvMst, BedSrvMst, PartyGrpMst, PartyMast, SubItmGrpMst, SubItmMast
 )
+
+
 from backend.schemas.masters import (
     AreaMastCreate, AreaMastUpdate, AreaMastResponse,
     DoctCatgMstCreate, DoctCatgMstUpdate, DoctCatgMstResponse,
@@ -27,8 +29,16 @@ from backend.schemas.masters import (
     ServGrpMstCreate, ServGrpMstUpdate, ServGrpMstResponse,
     ServMastCreate, ServMastUpdate, ServMastResponse,
     DiagMastCreate, DiagMastUpdate, DiagMastResponse,
-    ServRateMstCreate, ServRateMstUpdate, ServRateMstResponse
+    ServRateMstCreate, ServRateMstUpdate, ServRateMstResponse,
+    DiagSrvMstCreate, DiagSrvMstUpdate, DiagSrvMstResponse,
+    BedSrvMstCreate, BedSrvMstUpdate, BedSrvMstResponse,
+    PartyGrpMstCreate, PartyGrpMstUpdate, PartyGrpMstResponse,
+    PartyMastCreate, PartyMastUpdate, PartyMastResponse,
+    SubItmGrpMstCreate, SubItmGrpMstUpdate, SubItmGrpMstResponse,
+    SubItmMastCreate, SubItmMastUpdate, SubItmMastResponse
 )
+
+
 from backend.core.dependencies import get_current_active_user, get_db as dep_get_db
 
 def _create_crud_routes(router, path, model, schema_create, schema_update, schema_response, pk_col_name, pk_col):
@@ -145,7 +155,14 @@ _create_crud_routes(router, "/beds", BedMast, BedMastCreate, BedMastUpdate, BedM
 
 # Group 3 (Services & Investigations)
 _create_crud_routes(router, "/diagnostics", DiagMast, DiagMastCreate, DiagMastUpdate, DiagMastResponse, "DigCode", DiagMast.DigCode)
-_create_crud_routes(router, "/service-groups", ServGrpMst, ServGrpMstCreate, ServGrpMstUpdate, ServGrpMstResponse, "SgpCode", ServGrpMst.SgpCode)
+_create_crud_routes(router, "/service-rates", ServRateMst, ServRateMstCreate, ServRateMstUpdate, ServRateMstResponse, "SrmCode", ServRateMst.SrmCode)
+
+# Phase 2 Masters
+_create_crud_routes(router, "/party-groups", PartyGrpMst, PartyGrpMstCreate, PartyGrpMstUpdate, PartyGrpMstResponse, "PgmCode", PartyGrpMst.PgmCode)
+_create_crud_routes(router, "/parties", PartyMast, PartyMastCreate, PartyMastUpdate, PartyMastResponse, "PrtCode", PartyMast.PrtCode)
+_create_crud_routes(router, "/subitem-groups", SubItmGrpMst, SubItmGrpMstCreate, SubItmGrpMstUpdate, SubItmGrpMstResponse, "SigCode", SubItmGrpMst.SigCode)
+_create_crud_routes(router, "/subitems", SubItmMast, SubItmMastCreate, SubItmMastUpdate, SubItmMastResponse, "SimCode", SubItmMast.SimCode)
+_create_crud_routes(router, "/bed-services", BedSrvMst, BedSrvMstCreate, BedSrvMstUpdate, BedSrvMstResponse, "BsmICode", BedSrvMst.BsmICode)
 _create_crud_routes(router, "/services", ServMast, ServMastCreate, ServMastUpdate, ServMastResponse, "SrvCode", ServMast.SrvCode)
 _create_crud_routes(router, "/serv-rates", ServRateMst, ServRateMstCreate, ServRateMstUpdate, ServRateMstResponse, "SrmCode", ServRateMst.SrmCode)
 
@@ -243,5 +260,40 @@ def delete_service_rate(
         raise HTTPException(status_code=404, detail="Service rate not found")
     
     db_rate.SrmRecState = 0
+    db.commit()
+    return {"ok": True}
+
+# Custom routes for Diagnostic Services
+@router.get("/diag-services/{dig_code}", response_model=List[DiagSrvMstResponse])
+def get_diag_services(
+    dig_code: int,
+    db: Session = Depends(dep_get_db),
+    current_user: UserMast = Depends(get_current_active_user)
+):
+    return db.query(DiagSrvMst).filter(DiagSrvMst.DsmDigCode == dig_code).all()
+
+@router.post("/diag-services", response_model=DiagSrvMstResponse)
+def create_diag_service(
+    srv: DiagSrvMstCreate,
+    db: Session = Depends(dep_get_db),
+    current_user: UserMast = Depends(get_current_active_user)
+):
+    db_srv = DiagSrvMst(**srv.model_dump())
+    db.add(db_srv)
+    db.commit()
+    db.refresh(db_srv)
+    return db_srv
+
+@router.delete("/diag-services/{dsm_code}")
+def delete_diag_service(
+    dsm_code: int,
+    db: Session = Depends(dep_get_db),
+    current_user: UserMast = Depends(get_current_active_user)
+):
+    db_srv = db.query(DiagSrvMst).filter(DiagSrvMst.DsmCode == dsm_code).first()
+    if not db_srv:
+        raise HTTPException(status_code=404, detail="Diagnostic service not found")
+    
+    db.delete(db_srv)
     db.commit()
     return {"ok": True}

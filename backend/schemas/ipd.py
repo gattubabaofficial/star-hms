@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional, List
-from datetime import date
+from datetime import date, datetime
 
 # -----------------------------------
 # Inpatient Admission (IndrHdr)
@@ -13,6 +13,7 @@ class IndrHdrBase(BaseModel):
     IhdWrdCode: Optional[int] = None
     IhdBedCode: Optional[int] = None
     IhdFlrCode: Optional[int] = None
+    IhdCmpCode: Optional[int] = None
     IhdAdvAmt: float = 0.0
     IhdPDigCode: Optional[int] = None
     IhdStatus: str = 'Admitted'
@@ -130,6 +131,20 @@ class BedStatusBed(BaseModel):
     patient_id: Optional[int] = None
     patient_name: Optional[str] = None
     admission_id: Optional[int] = None
+    patient_age: Optional[str] = None
+    patient_sex: Optional[str] = None
+    care_of: Optional[str] = None
+    attending_doctor: Optional[str] = None
+    expected_discharge_date: Optional[date] = None
+
+class BedHistoryResponse(BaseModel):
+    IbsCode: int
+    admission_id: Optional[int] = None
+    patient_name: Optional[str] = None
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
+    status: str
+
 
 class BedStatusWard(BaseModel):
     WrdCode: int
@@ -140,3 +155,100 @@ class BedStatusFloor(BaseModel):
     FlrCode: int
     FlrName: str
     wards: List[BedStatusWard]
+
+
+# -----------------------------------
+# IPD Doctor Shares & Payments
+# -----------------------------------
+class IndrBlDctDtlBase(BaseModel):
+    IddIbhCode: int
+    IddDctCode: Optional[int] = None
+    IddSharePer: float = 0.0
+    IddShareAmt: float = 0.0
+    IddRecState: int = 1
+
+class IndrBlPymtHdrBase(BaseModel):
+    IbphPttCode: Optional[int] = None
+    IbphDepoAmt: float = 0.0
+    IbphRemark: Optional[str] = None
+    IbphRecState: int = 1
+
+class IndrBlDpogDtlBase(BaseModel):
+    IpdIbhCode: Optional[int] = None
+    IpdAmt: float = 0.0
+    IpdDate: Optional[date] = None
+    IpdRecState: int = 1
+
+class IndrBlRefdHdrBase(BaseModel):
+    IbfhPttCode: Optional[int] = None
+    IbfhRefuAmt: float = 0.0
+    IbfhRemark: Optional[str] = None
+    IbfhRecState: int = 1
+
+class IndrBlRfugDtlBase(BaseModel):
+    IrdIbhCode: Optional[int] = None
+    IrdAmt: float = 0.0
+    IrdDate: Optional[date] = None
+    IrdRecState: int = 1
+
+# -----------------------------------
+# IPD Registration (Legacy Intermediate)
+# -----------------------------------
+class IndrRegBase(BaseModel):
+    IrgIhdCode: int
+    IrgDate: date
+    IrgAmt: float = 0.0
+    IrgType: Optional[str] = None
+    IrgRecState: int = 1
+
+
+
+# -----------------------------------
+# IPD Actions (Phase 5)
+# -----------------------------------
+class BedTransferRequest(BaseModel):
+    new_bed_code: int
+    transfer_date: date
+
+class IpdAdvanceRequest(BaseModel):
+    ihd_code: int
+    amount: float
+    date: date
+    type: Optional[str] = None
+
+class IndrRegBase(BaseModel):
+    IpgDate: date
+    IpgPttCode: int
+    IpgCDctCode: Optional[int] = None
+    IpgAdvAmt: float = 0.0
+    IpgRemark: Optional[str] = None
+    IpgRecState: int = 1
+
+class IndrRegCreate(IndrRegBase):
+    pass
+
+class IndrRegResponse(IndrRegBase):
+    IpgCode: int
+    IpgVchNo: int
+    class Config:
+        from_attributes = True
+
+class IndrRgPymtBase(BaseModel):
+    IgtIpgCode: Optional[int] = None
+    IgtDate: date
+    IgtDpogAmt: float = 0.0
+    IgtRecState: int = 1
+
+class IndrRgRefdBase(BaseModel):
+    IgfIpgCode: Optional[int] = None
+    IgfDate: date
+    IgfRfugAmt: float = 0.0
+    IgfRecState: int = 1
+
+class RoomRentPreview(BaseModel):
+    bed_code: int
+    admission_date: datetime
+    discharge_date: datetime
+    total_days: int
+    rate_per_day: float
+    total_rent: float

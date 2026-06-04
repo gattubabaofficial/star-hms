@@ -103,6 +103,17 @@ def calculate_service_rate(
     discount_amount = (resolved_rate * resolved_discount) / 100
     final_amount = resolved_rate - discount_amount
 
+    # Doctor Share Calculation (Net Amount based)
+    dct_share_amt = 0.0
+    hosp_share_amt = final_amount
+    
+    if doctor_id:
+        from backend.models.masters import DoctMast
+        doctor = db.query(DoctMast).filter(DoctMast.DctCode == doctor_id).first()
+        if doctor and doctor.DctShare:
+            dct_share_amt = (final_amount * doctor.DctShare) / 100.0
+            hosp_share_amt = final_amount - dct_share_amt
+
     return {
         "srv_code": srv_code,
         "base_rate": base_rate,
@@ -110,5 +121,7 @@ def calculate_service_rate(
         "resolved_discount_per": resolved_discount,
         "discount_amount": discount_amount,
         "final_amount": final_amount,
+        "doctor_share_amt": dct_share_amt,
+        "hospital_share_amt": hosp_share_amt,
         "applied_custom_rule": found_custom_rate
     }

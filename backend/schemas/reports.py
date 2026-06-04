@@ -33,6 +33,14 @@ class CollectionReportItem(BaseModel):
     TotalAmount: float
     TransactionCount: int
 
+class CollectionTransaction(BaseModel):
+    Date: date
+    ReceiptNo: str
+    PatientName: str
+    DoctorName: Optional[str] = None
+    Module: str
+    Amount: float
+
 class ServiceReportItem(BaseModel):
     ServiceName: str
     Module: str

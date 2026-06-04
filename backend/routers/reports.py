@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from typing import List
+from typing import List, Optional
 from datetime import date
 
 from backend.database import get_db
@@ -9,7 +9,7 @@ from backend.models.opd import OutdReg, OutdRcpt, OutdBlPymtHdr, OutdBill, OutdH
 from backend.models.ipd import IndrHdr, IndrRgPymt, IndrBlDpogDtl, IndrBill, IBedState, IndrBlHdr
 from backend.models.pharmacy import OutdStk, IndrStk
 from backend.models.lab import LabPymtHdr
-from backend.models.masters import PatMast, WardMast, BedMast, FloorMast, ServMast
+from backend.models.masters import PatMast, WardMast, BedMast, FloorMast, ServMast, DoctMast, RefByMast
 from backend.schemas.reports import (
     OpdReportItem, IpdReportItem, PharmacyReportItem,
     CollectionReportItem, ServiceReportItem, BedOccupancyItem
@@ -81,41 +81,97 @@ def get_pharmacy_report(start_date: date, end_date: date, db: Session = Depends(
     sorted_results = sorted(report_dict.values(), key=lambda x: x["Date"], reverse=True)
     return [PharmacyReportItem(**r) for r in sorted_results]
 
-@router.get("/collection", response_model=List[CollectionReportItem])
+from backend.models.ipd import IndrReg
+from backend.models.lab import LabHdr
+from backend.schemas.reports import CollectionTransaction
+
+@router.get("/collection", response_model=List[CollectionTransaction])
 def get_collection_report(start_date: date, end_date: date, db: Session = Depends(get_db)):
-    collections = []
+    transactions = []
     
-    opd_reg = db.query(func.count(OutdRcpt.OrcCode).label("count"), func.sum(OutdRcpt.OrcRecvdAmt).label("total")).filter(
-        OutdRcpt.OrcDate >= start_date, OutdRcpt.OrcDate <= end_date, OutdRcpt.OrcRecState == 1
-    ).first()
-    if opd_reg and opd_reg.count:
-        collections.append(CollectionReportItem(Date=start_date, Module="OPD Registration", TotalAmount=opd_reg.total or 0, TransactionCount=opd_reg.count))
+    # 1. OPD Registration
+    opd_rcpt = db.query(
+        OutdRcpt.OrcDate.label("Date"), OutdRcpt.OrcVchNo.label("VchNo"), 
+        PatMast.PttName.label("PatName"), DoctMast.DctName.label("DctName"), 
+        OutdRcpt.OrcRecvdAmt.label("Amount")
+    ).join(PatMast, PatMast.PttCode == OutdRcpt.OrcPttCode) \
+    .outerjoin(DoctMast, DoctMast.DctCode == OutdRcpt.OrcCDctCode) \
+    .filter(OutdRcpt.OrcDate >= start_date, OutdRcpt.OrcDate <= end_date, OutdRcpt.OrcRecState == 1).all()
+    
+    for r in opd_rcpt:
+        transactions.append(CollectionTransaction(
+            Date=r.Date, ReceiptNo=str(r.VchNo), PatientName=r.PatName, 
+            DoctorName=r.DctName, Module="OPD Registration", Amount=float(r.Amount or 0)
+        ))
 
-    opd_bill = db.query(func.count(OutdBlPymtHdr.ObpCode).label("count"), func.sum(OutdBlPymtHdr.ObpAmt).label("total")).filter(
-        OutdBlPymtHdr.ObpDate >= start_date, OutdBlPymtHdr.ObpDate <= end_date, OutdBlPymtHdr.ObpRecState == 1
-    ).first()
-    if opd_bill and opd_bill.count:
-        collections.append(CollectionReportItem(Date=start_date, Module="OPD Billing", TotalAmount=opd_bill.total or 0, TransactionCount=opd_bill.count))
-        
-    ipd_adv = db.query(func.count(IndrRgPymt.IgtCode).label("count"), func.sum(IndrRgPymt.IgtDpogAmt).label("total")).filter(
-        IndrRgPymt.IgtDate >= start_date, IndrRgPymt.IgtDate <= end_date, IndrRgPymt.IgtRecState == 1
-    ).first()
-    if ipd_adv and ipd_adv.count:
-        collections.append(CollectionReportItem(Date=start_date, Module="IPD Advance", TotalAmount=ipd_adv.total or 0, TransactionCount=ipd_adv.count))
+    # 2. OPD Billing
+    opd_bill = db.query(
+        OutdBlPymtHdr.ObpDate.label("Date"), OutdHdr.OhdVchNo.label("VchNo"), 
+        PatMast.PttName.label("PatName"), DoctMast.DctName.label("DctName"), 
+        OutdBlPymtHdr.ObpAmt.label("Amount")
+    ).join(OutdHdr, OutdHdr.OhdCode == OutdBlPymtHdr.ObpOhdCode) \
+    .join(PatMast, PatMast.PttCode == OutdHdr.OhdPttCode) \
+    .outerjoin(DoctMast, DoctMast.DctCode == OutdHdr.OhdCDctCode) \
+    .filter(OutdBlPymtHdr.ObpDate >= start_date, OutdBlPymtHdr.ObpDate <= end_date, OutdBlPymtHdr.ObpRecState == 1).all()
+    
+    for r in opd_bill:
+        transactions.append(CollectionTransaction(
+            Date=r.Date, ReceiptNo=f"OPB-{r.VchNo}", PatientName=r.PatName, 
+            DoctorName=r.DctName, Module="OPD Billing", Amount=float(r.Amount or 0)
+        ))
 
-    ipd_bill = db.query(func.count(IndrBlDpogDtl.IbpyICode).label("count"), func.sum(IndrBlDpogDtl.IbpyDepoAmt).label("total")).filter(
-        IndrBlDpogDtl.IbpyDate >= start_date, IndrBlDpogDtl.IbpyDate <= end_date, IndrBlDpogDtl.IbpyRecState == 1
-    ).first()
-    if ipd_bill and ipd_bill.count:
-        collections.append(CollectionReportItem(Date=start_date, Module="IPD Billing", TotalAmount=ipd_bill.total or 0, TransactionCount=ipd_bill.count))
+    # 3. IPD Advance
+    ipd_adv = db.query(
+        IndrRgPymt.IgtDate.label("Date"), IndrRgPymt.IgtVchNo.label("VchNo"), 
+        PatMast.PttName.label("PatName"), DoctMast.DctName.label("DctName"), 
+        IndrRgPymt.IgtDpogAmt.label("Amount")
+    ).join(PatMast, PatMast.PttCode == IndrRgPymt.IgtPttCode) \
+    .outerjoin(IndrReg, IndrReg.IpgCode == IndrRgPymt.IgtIpgCode) \
+    .outerjoin(DoctMast, DoctMast.DctCode == IndrReg.IpgCDctCode) \
+    .filter(IndrRgPymt.IgtDate >= start_date, IndrRgPymt.IgtDate <= end_date, IndrRgPymt.IgtRecState == 1).all()
 
-    lab_pymt = db.query(func.count(LabPymtHdr.LphCode).label("count"), func.sum(LabPymtHdr.LphAmt).label("total")).filter(
-        LabPymtHdr.LphDate >= start_date, LabPymtHdr.LphDate <= end_date, LabPymtHdr.LphRecState == 1
-    ).first()
-    if lab_pymt and lab_pymt.count:
-        collections.append(CollectionReportItem(Date=start_date, Module="Laboratory", TotalAmount=lab_pymt.total or 0, TransactionCount=lab_pymt.count))
+    for r in ipd_adv:
+        transactions.append(CollectionTransaction(
+            Date=r.Date, ReceiptNo=f"ADV-{r.VchNo}", PatientName=r.PatName, 
+            DoctorName=r.DctName, Module="IPD Advance", Amount=float(r.Amount or 0)
+        ))
 
-    return collections
+    # 4. IPD Billing (Deposit against Bill)
+    ipd_bill = db.query(
+        IndrBlDpogDtl.IbpyDate.label("Date"), IndrBlHdr.IbhVchNo.label("VchNo"), 
+        PatMast.PttName.label("PatName"), DoctMast.DctName.label("DctName"), 
+        IndrBlDpogDtl.IbpyDepoAmt.label("Amount")
+    ).join(IndrBlHdr, IndrBlHdr.IbhCode == IndrBlDpogDtl.IbpyIbhCode) \
+    .join(PatMast, PatMast.PttCode == IndrBlDpogDtl.IbpyPttCode) \
+    .outerjoin(IndrHdr, IndrHdr.IhdCode == IndrBlHdr.IbhIhdCode) \
+    .outerjoin(DoctMast, DoctMast.DctCode == IndrHdr.IhdCDctCode) \
+    .filter(IndrBlDpogDtl.IbpyDate >= start_date, IndrBlDpogDtl.IbpyDate <= end_date, IndrBlDpogDtl.IbpyRecState == 1).all()
+
+    for r in ipd_bill:
+        transactions.append(CollectionTransaction(
+            Date=r.Date, ReceiptNo=f"IPB-{r.VchNo}", PatientName=r.PatName, 
+            DoctorName=r.DctName, Module="IPD Billing", Amount=float(r.Amount or 0)
+        ))
+
+    # 5. Laboratory
+    lab_pymt = db.query(
+        LabPymtHdr.LphDate.label("Date"), LabHdr.LhdVchNo.label("VchNo"), 
+        PatMast.PttName.label("PatName"), DoctMast.DctName.label("DctName"), 
+        LabPymtHdr.LphAmt.label("Amount")
+    ).join(LabHdr, LabHdr.LhdCode == LabPymtHdr.LphLhdCode) \
+    .join(PatMast, PatMast.PttCode == LabHdr.LhdPttCode) \
+    .outerjoin(DoctMast, DoctMast.DctCode == LabHdr.LhdCDctCode) \
+    .filter(LabPymtHdr.LphDate >= start_date, LabPymtHdr.LphDate <= end_date, LabPymtHdr.LphRecState == 1).all()
+
+    for r in lab_pymt:
+        transactions.append(CollectionTransaction(
+            Date=r.Date, ReceiptNo=f"LAB-{r.VchNo}", PatientName=r.PatName, 
+            DoctorName=r.DctName, Module="Laboratory", Amount=float(r.Amount or 0)
+        ))
+
+    # Sort by Date descending
+    transactions.sort(key=lambda x: x.Date, reverse=True)
+    return transactions
 
 @router.get("/services", response_model=List[ServiceReportItem])
 def get_service_report(start_date: date, end_date: date, db: Session = Depends(get_db)):
@@ -200,3 +256,132 @@ def get_bed_occupancy_report(db: Session = Depends(get_db)):
             FloorName=row.FloorName
         ) for row in occupancy
     ]
+
+# -----------------------------------------------------
+# Doctor Analysis Report
+# – OPD visits, IPD admissions, and revenue share per doctor
+# -----------------------------------------------------
+@router.get("/doctor-analysis")
+def get_doctor_analysis(start_date: date, end_date: date, db: Session = Depends(get_db)):
+    # OPD patients seen by each doctor
+    opd_counts = db.query(
+        OutdReg.OpgCDctCode.label("DctCode"),
+        func.count(OutdReg.OpgCode).label("OpdPatients"),
+        func.sum(OutdReg.OpgAmtAftDisc).label("OpdRevenue")
+    ).filter(
+        OutdReg.OpgDate >= start_date,
+        OutdReg.OpgDate <= end_date,
+        OutdReg.OpgRecState == 1,
+        OutdReg.OpgCDctCode != None
+    ).group_by(OutdReg.OpgCDctCode).all()
+
+    # IPD admissions under each doctor
+    ipd_counts = db.query(
+        IndrHdr.IhdCDctCode.label("DctCode"),
+        func.count(IndrHdr.IhdCode).label("IpdAdmissions"),
+        func.sum(IndrHdr.IhdAdvAmt).label("IpdAdvance")
+    ).filter(
+        IndrHdr.IhdDate >= start_date,
+        IndrHdr.IhdDate <= end_date,
+        IndrHdr.IhdRecState == 1,
+        IndrHdr.IhdCDctCode != None
+    ).group_by(IndrHdr.IhdCDctCode).all()
+
+    # Fetch all doctors
+    doctors = db.query(DoctMast).filter(DoctMast.DctRecState == 1).all()
+    dct_map = {d.DctCode: d for d in doctors}
+
+    # Build combined result
+    result_dict: dict = {}
+    for row in opd_counts:
+        dc = row.DctCode
+        if dc not in result_dict:
+            result_dict[dc] = {"DctCode": dc, "OpdPatients": 0, "OpdRevenue": 0.0, "IpdAdmissions": 0, "IpdAdvance": 0.0}
+        result_dict[dc]["OpdPatients"] = row.OpdPatients
+        result_dict[dc]["OpdRevenue"] = float(row.OpdRevenue or 0)
+    for row in ipd_counts:
+        dc = row.DctCode
+        if dc not in result_dict:
+            result_dict[dc] = {"DctCode": dc, "OpdPatients": 0, "OpdRevenue": 0.0, "IpdAdmissions": 0, "IpdAdvance": 0.0}
+        result_dict[dc]["IpdAdmissions"] = row.IpdAdmissions
+        result_dict[dc]["IpdAdvance"] = float(row.IpdAdvance or 0)
+
+    output = []
+    for dc, stats in result_dict.items():
+        doc = dct_map.get(dc)
+        output.append({
+            "DctCode": dc,
+            "DoctorName": (doc.DctTitle + " " + doc.DctName) if doc else f"Dr. #{dc}",
+            "Specialty": doc.DctSpeci if doc else "",
+            "OpdPatients": stats["OpdPatients"],
+            "OpdRevenue": stats["OpdRevenue"],
+            "IpdAdmissions": stats["IpdAdmissions"],
+            "IpdAdvance": stats["IpdAdvance"],
+            "TotalPatients": stats["OpdPatients"] + stats["IpdAdmissions"],
+            "SharePercent": doc.DctShare if doc else 0.0
+        })
+    output.sort(key=lambda x: x["TotalPatients"], reverse=True)
+    return output
+
+
+# -----------------------------------------------------
+# Referral Analysis Report  
+# – How many patients each RefBy doctor referred in
+# -----------------------------------------------------
+@router.get("/referral-analysis")
+def get_referral_analysis(start_date: date, end_date: date, db: Session = Depends(get_db)):
+    # OPD referrals
+    opd_refs = db.query(
+        OutdReg.OpgRByCode.label("RByCode"),
+        func.count(OutdReg.OpgCode).label("OpdReferrals"),
+        func.sum(OutdReg.OpgAmtAftDisc).label("OpdRevenue")
+    ).filter(
+        OutdReg.OpgDate >= start_date,
+        OutdReg.OpgDate <= end_date,
+        OutdReg.OpgRecState == 1,
+        OutdReg.OpgRByCode != None
+    ).group_by(OutdReg.OpgRByCode).all()
+
+    # IPD referrals
+    ipd_refs = db.query(
+        IndrHdr.IhdRByCode.label("RByCode"),
+        func.count(IndrHdr.IhdCode).label("IpdReferrals")
+    ).filter(
+        IndrHdr.IhdDate >= start_date,
+        IndrHdr.IhdDate <= end_date,
+        IndrHdr.IhdRecState == 1,
+        IndrHdr.IhdRByCode != None
+    ).group_by(IndrHdr.IhdRByCode).all()
+
+    # Fetch all RefBy doctors
+    ref_bys = db.query(RefByMast).filter(RefByMast.RByRecState == 1).all()
+    rb_map = {r.RByCode: r for r in ref_bys}
+
+    result_dict: dict = {}
+    for row in opd_refs:
+        rb = row.RByCode
+        if rb not in result_dict:
+            result_dict[rb] = {"RByCode": rb, "OpdReferrals": 0, "OpdRevenue": 0.0, "IpdReferrals": 0}
+        result_dict[rb]["OpdReferrals"] = row.OpdReferrals
+        result_dict[rb]["OpdRevenue"] = float(row.OpdRevenue or 0)
+    for row in ipd_refs:
+        rb = row.RByCode
+        if rb not in result_dict:
+            result_dict[rb] = {"RByCode": rb, "OpdReferrals": 0, "OpdRevenue": 0.0, "IpdReferrals": 0}
+        result_dict[rb]["IpdReferrals"] = row.IpdReferrals
+
+    output = []
+    for rb, stats in result_dict.items():
+        doc = rb_map.get(rb)
+        output.append({
+            "RByCode": rb,
+            "ReferredByName": doc.RByName if doc else f"Ref #{rb}",
+            "Specialty": doc.RBySpeci if doc else "",
+            "OpdReferrals": stats["OpdReferrals"],
+            "IpdReferrals": stats["IpdReferrals"],
+            "TotalReferrals": stats["OpdReferrals"] + stats["IpdReferrals"],
+            "OpdRevenue": stats["OpdRevenue"],
+            "SharePercent": doc.RByShare if doc else 0.0
+        })
+    output.sort(key=lambda x: x["TotalReferrals"], reverse=True)
+    return output

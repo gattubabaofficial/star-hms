@@ -1,130 +1,215 @@
-import { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import api from '../../lib/api';
-import { Calendar, Download, FileText } from 'lucide-react';
-import { format } from 'date-fns';
+import { Calendar, Filter } from 'lucide-react';
+import { format, parseISO } from 'date-fns';
+import { ReportViewer } from '../../components/ReportViewer';
+
+type GroupByOption = 'Detailed' | 'Date-wise' | 'Month-wise' | 'Patient-wise' | 'Doctor-wise' | 'Module-wise';
+
+interface CollectionTransaction {
+  Date: string;
+  ReceiptNo: string;
+  PatientName: string;
+  DoctorName: string | null;
+  Module: string;
+  Amount: number;
+}
 
 export function CollectionReport() {
   const [dateRange, setDateRange] = useState({
     startDate: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
     endDate: new Date().toISOString().split('T')[0],
   });
+  
+  const [groupBy, setGroupBy] = useState<GroupByOption>('Detailed');
 
-  const { data: collections, isLoading } = useQuery({
+  const { data: transactions = [], isLoading } = useQuery({
     queryKey: ['report-collection', dateRange],
     queryFn: async () => {
-      const res = await api.get<any[]>('/reports/collection', { 
+      const res = await api.get<CollectionTransaction[]>('/reports/collection', { 
         params: { start_date: dateRange.startDate, end_date: dateRange.endDate } 
       });
       return res.data;
     }
   });
 
-  const printReport = () => {
-    window.print();
-  };
+  const totalAmount = transactions.reduce((sum, item) => sum + item.Amount, 0);
+  const totalTransactions = transactions.length;
 
-  const totalAmount = collections?.reduce((sum, item) => sum + item.TotalAmount, 0) || 0;
-  const totalTransactions = collections?.reduce((sum, item) => sum + item.TransactionCount, 0) || 0;
+  // Process data based on grouping
+  const groupedData = useMemo(() => {
+    if (groupBy === 'Detailed') return transactions;
+
+    const groups: Record<string, { label: string; count: number; total: number }> = {};
+
+    transactions.forEach(t => {
+      let key = '';
+      let label = '';
+
+      switch (groupBy) {
+        case 'Date-wise':
+          key = t.Date;
+          label = format(parseISO(t.Date), 'dd MMM yyyy');
+          break;
+        case 'Month-wise':
+          key = t.Date.substring(0, 7); // yyyy-mm
+          label = format(parseISO(t.Date), 'MMMM yyyy');
+          break;
+        case 'Patient-wise':
+          key = t.PatientName;
+          label = t.PatientName;
+          break;
+        case 'Doctor-wise':
+          key = t.DoctorName || 'No Doctor';
+          label = t.DoctorName || 'No Doctor';
+          break;
+        case 'Module-wise':
+          key = t.Module;
+          label = t.Module;
+          break;
+      }
+
+      if (!groups[key]) {
+        groups[key] = { label, count: 0, total: 0 };
+      }
+      groups[key].count += 1;
+      groups[key].total += t.Amount;
+    });
+
+    return Object.values(groups).sort((a, b) => b.total - a.total);
+  }, [transactions, groupBy]);
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
-      <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 print:hidden">
-        <div>
-          <h1 className="text-2xl font-bold text-medical-text">Collection Report</h1>
-          <p className="text-gray-500 text-sm mt-1">Summary of revenue across all departments</p>
+    <div className="h-full bg-gray-50 flex flex-col">
+      <div className="print:hidden p-4 bg-white border-b border-gray-200 flex flex-wrap gap-4 items-center justify-between shadow-sm">
+        <div className="flex gap-4 items-center">
+          <div className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded border border-gray-200">
+            <Calendar size={18} className="text-gray-500" />
+            <input 
+              type="date" 
+              value={dateRange.startDate} 
+              onChange={e => setDateRange({...dateRange, startDate: e.target.value})}
+              className="text-sm bg-transparent border-none focus:ring-0" 
+            />
+            <span className="text-gray-400">to</span>
+            <input 
+              type="date" 
+              value={dateRange.endDate} 
+              onChange={e => setDateRange({...dateRange, endDate: e.target.value})}
+              className="text-sm bg-transparent border-none focus:ring-0" 
+            />
+          </div>
+
+          <div className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded border border-gray-200">
+            <Filter size={18} className="text-gray-500" />
+            <select 
+              value={groupBy}
+              onChange={e => setGroupBy(e.target.value as GroupByOption)}
+              className="text-sm bg-transparent border-none focus:ring-0 font-medium"
+            >
+              <option value="Detailed">Detailed View</option>
+              <option value="Date-wise">Date-wise</option>
+              <option value="Month-wise">Month-wise</option>
+              <option value="Module-wise">Module-wise</option>
+              <option value="Patient-wise">Patient-wise</option>
+              <option value="Doctor-wise">Doctor-wise</option>
+            </select>
+          </div>
         </div>
         
-        <div className="flex gap-3">
-          <div className="flex items-center gap-4 bg-white p-2 rounded-lg shadow-sm border border-medical-border">
-            <div className="flex items-center gap-2">
-              <Calendar size={18} className="text-gray-400" />
-              <input 
-                type="date" 
-                value={dateRange.startDate} 
-                onChange={e => setDateRange({...dateRange, startDate: e.target.value})}
-                className="text-sm border-none bg-transparent focus:ring-0 text-gray-700" 
-              />
-            </div>
-            <span className="text-gray-300">to</span>
-            <div className="flex items-center gap-2">
-              <input 
-                type="date" 
-                value={dateRange.endDate} 
-                onChange={e => setDateRange({...dateRange, endDate: e.target.value})}
-                className="text-sm border-none bg-transparent focus:ring-0 text-gray-700" 
-              />
-            </div>
+        <div className="flex items-center gap-4 text-sm font-medium">
+          <div className="bg-blue-50 text-blue-800 px-4 py-2 rounded-lg border border-blue-100">
+            Total Revenue: ₹{totalAmount.toFixed(2)}
           </div>
-          <button onClick={printReport} className="btn-primary flex items-center gap-2">
-            <Download size={18} /> Print
-          </button>
+          <div className="bg-green-50 text-green-800 px-4 py-2 rounded-lg border border-green-100">
+            Total Txns: {totalTransactions}
+          </div>
         </div>
       </div>
 
-      <div className="card print:shadow-none print:border-none print:p-0">
-        <div className="hidden print:block mb-6 text-center border-b pb-4">
-          <h2 className="text-2xl font-bold text-gray-800">STAR HMS</h2>
-          <h3 className="text-xl font-semibold mt-1">Collection Report</h3>
-          <p className="text-sm text-gray-600 mt-2">
-            Period: {format(new Date(dateRange.startDate), 'dd MMM yyyy')} to {format(new Date(dateRange.endDate), 'dd MMM yyyy')}
-          </p>
-        </div>
-
-        {isLoading ? (
-          <div className="py-12 flex justify-center"><div className="w-8 h-8 border-4 border-medical-primary border-t-transparent rounded-full animate-spin"></div></div>
-        ) : (
-          <div>
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                <p className="text-sm text-blue-600 font-medium">Total Revenue</p>
-                <p className="text-2xl font-bold text-blue-900">₹{totalAmount.toFixed(2)}</p>
-              </div>
-              <div className="bg-green-50 p-4 rounded-lg border border-green-100">
-                <p className="text-sm text-green-600 font-medium">Total Transactions</p>
-                <p className="text-2xl font-bold text-green-900">{totalTransactions}</p>
-              </div>
-            </div>
-
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Module</th>
-                  <th className="text-right">Transactions</th>
-                  <th className="text-right">Total Amount (₹)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {collections?.length === 0 ? (
-                  <tr>
-                    <td colSpan={4} className="text-center py-8 text-gray-500">No collections found for this period.</td>
-                  </tr>
-                ) : (
-                  collections?.map((item, index) => (
-                    <tr key={index}>
-                      <td>{format(new Date(item.Date), 'dd MMM yyyy')}</td>
-                      <td>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          item.Module.includes('OPD') ? 'bg-blue-100 text-blue-700' :
-                          item.Module.includes('IPD') ? 'bg-indigo-100 text-indigo-700' :
-                          'bg-purple-100 text-purple-700'
-                        }`}>
-                          {item.Module}
-                        </span>
-                      </td>
-                      <td className="text-right">{item.TransactionCount}</td>
-                      <td className="text-right font-medium">₹{item.TotalAmount.toFixed(2)}</td>
+      <div className="flex-1 overflow-hidden">
+        <ReportViewer 
+          title="Collection Summary Report" 
+          subtitle={`Grouped by: ${groupBy}`}
+          dateRange={{ start: dateRange.startDate, end: dateRange.endDate }}
+        >
+          {isLoading ? (
+            <div className="py-20 flex justify-center"><div className="w-8 h-8 border-4 border-medical-primary border-t-transparent rounded-full animate-spin"></div></div>
+          ) : (
+            <div className="w-full">
+              {transactions.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">No collection records found for the selected period.</div>
+              ) : (
+                <table className="w-full text-left text-sm border-collapse">
+                  <thead>
+                    <tr className="border-b-2 border-gray-800 text-gray-800 font-bold">
+                      {groupBy === 'Detailed' ? (
+                        <>
+                          <th className="py-3 px-2">Date</th>
+                          <th className="py-3 px-2">Receipt No</th>
+                          <th className="py-3 px-2">Patient</th>
+                          <th className="py-3 px-2">Doctor</th>
+                          <th className="py-3 px-2">Module</th>
+                          <th className="py-3 px-2 text-right">Amount (₹)</th>
+                        </>
+                      ) : (
+                        <>
+                          <th className="py-3 px-2 w-1/2">{groupBy.split('-')[0]}</th>
+                          <th className="py-3 px-2 text-right">Transactions</th>
+                          <th className="py-3 px-2 text-right">Total Amount (₹)</th>
+                        </>
+                      )}
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {groupBy === 'Detailed' ? (
+                      (groupedData as CollectionTransaction[]).map((t, idx) => (
+                        <tr key={idx} className="hover:bg-gray-50 print:hover:bg-transparent">
+                          <td className="py-2 px-2 text-gray-700 whitespace-nowrap">{format(parseISO(t.Date), 'dd MMM yy')}</td>
+                          <td className="py-2 px-2 font-mono text-xs text-gray-500">{t.ReceiptNo}</td>
+                          <td className="py-2 px-2 font-medium text-gray-900">{t.PatientName}</td>
+                          <td className="py-2 px-2 text-gray-600">{t.DoctorName || '-'}</td>
+                          <td className="py-2 px-2">
+                            <span className="text-xs px-2 py-1 bg-gray-100 rounded-full font-medium text-gray-700 print:bg-transparent print:p-0">
+                              {t.Module}
+                            </span>
+                          </td>
+                          <td className="py-2 px-2 text-right font-semibold text-gray-900">{t.Amount.toFixed(2)}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      (groupedData as {label: string, count: number, total: number}[]).map((g, idx) => (
+                        <tr key={idx} className="hover:bg-gray-50 print:hover:bg-transparent">
+                          <td className="py-3 px-2 font-medium text-gray-900">{g.label}</td>
+                          <td className="py-3 px-2 text-right text-gray-600">{g.count}</td>
+                          <td className="py-3 px-2 text-right font-bold text-gray-900">{g.total.toFixed(2)}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                  <tfoot className="border-t-2 border-gray-800 bg-gray-50 print:bg-transparent font-bold">
+                    <tr>
+                      {groupBy === 'Detailed' ? (
+                        <>
+                          <td colSpan={5} className="py-3 px-2 text-right">Grand Total:</td>
+                          <td className="py-3 px-2 text-right text-lg">₹{totalAmount.toFixed(2)}</td>
+                        </>
+                      ) : (
+                        <>
+                          <td className="py-3 px-2 text-right">Grand Total:</td>
+                          <td className="py-3 px-2 text-right">{totalTransactions}</td>
+                          <td className="py-3 px-2 text-right text-lg">₹{totalAmount.toFixed(2)}</td>
+                        </>
+                      )}
+                    </tr>
+                  </tfoot>
+                </table>
+              )}
+            </div>
+          )}
+        </ReportViewer>
       </div>
     </div>
   );
 }
-
-

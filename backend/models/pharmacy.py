@@ -1,35 +1,7 @@
+from sqlalchemy import DateTime
+from sqlalchemy.sql import func
 from sqlalchemy import Column, Integer, String, Boolean, Double, SmallInteger, Date, ForeignKey
 from backend.database import Base
-
-class SubItmGrpMst(Base):
-    __tablename__ = "SubItmGrpMst"
-    SigCode = Column(Integer, primary_key=True, index=True)
-    SigName = Column(String(50), nullable=False)
-    SigRecState = Column(SmallInteger, nullable=False, default=1)
-
-class SubItmMast(Base):
-    __tablename__ = "SubItmMast"
-    SimCode = Column(Integer, primary_key=True, index=True)
-    SimName = Column(String(100), nullable=False)
-    SimSigCode = Column(Integer, ForeignKey("SubItmGrpMst.SigCode"))
-    SimRecState = Column(SmallInteger, nullable=False, default=1)
-
-class PartyGrpMst(Base):
-    __tablename__ = "PartyGrpMst"
-    PgpCode = Column(Integer, primary_key=True, index=True)
-    PgpName = Column(String(50), nullable=False)
-    PgpRecState = Column(SmallInteger, nullable=False, default=1)
-
-class PartyMast(Base):
-    __tablename__ = "PartyMast"
-    PtyCode = Column(Integer, primary_key=True, index=True)
-    PtyName = Column(String(100), nullable=False)
-    PtyAddr = Column(String(250))
-    PtyAraCode = Column(Integer, ForeignKey("AreaMast.AraCode"))
-    PtyTelNo = Column(String(50))
-    PtySMSNo = Column(String(50))
-    PtyPgpCode = Column(Integer, ForeignKey("PartyGrpMst.PgpCode"))
-    PtyRecState = Column(SmallInteger, nullable=False, default=1)
 
 class IndrStk(Base):
     __tablename__ = "IndrStk"
@@ -37,7 +9,7 @@ class IndrStk(Base):
     IskVtmCode = Column(Integer)
     IskVchNo = Column(Integer, nullable=False)
     IskDate = Column(Date, nullable=False)
-    IskPtyCode = Column(Integer, ForeignKey("PartyMast.PtyCode"))
+    IskPtyCode = Column(Integer, ForeignKey("PartyMast.PrtCode"))
     IskRefNo = Column(String(30))
     IskRefDate = Column(Date)
     IskNetAmt = Column(Double, default=0.0)
@@ -68,7 +40,7 @@ class OutdStk(Base):
     OskVtmCode = Column(Integer)
     OskVchNo = Column(Integer, nullable=False)
     OskDate = Column(Date, nullable=False)
-    OskPtyCode = Column(Integer, ForeignKey("PartyMast.PtyCode"))
+    OskPtyCode = Column(Integer, ForeignKey("PartyMast.PrtCode"))
     OskRefNo = Column(String(30))
     OskNetAmt = Column(Double, default=0.0)
     OskOtherChg = Column(Double, default=0.0)
@@ -91,3 +63,85 @@ class OutdStkDtl(Base):
     OsdTaxAmt = Column(Double, default=0.0)
     OsdAmt = Column(Double, default=0.0)
     OsdRecState = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class IndrStk_Log(Base):
+    __tablename__ = "IndrStk_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    IskCode = Column(Integer)
+    IskVtmCode = Column(Integer)
+    IskVchNo = Column(Integer, nullable=False)
+    IskDate = Column(Date, nullable=False)
+    IskPtyCode = Column(Integer)
+    IskRefNo = Column(String(30))
+    IskRefDate = Column(Date)
+    IskNetAmt = Column(Double, default=0.0)
+    IskOtherChg = Column(Double, default=0.0)
+    IskRoundOff = Column(Double, default=0.0)
+    IskTax = Column(Double, default=0.0)
+    IskRemark = Column(String(50))
+    IskRecState = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class IndrStkDtl_Log(Base):
+    __tablename__ = "IndrStkDtl_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    IsdCode = Column(Integer)
+    IsdIskCode = Column(Integer, nullable=False)
+    IsdSimCode = Column(Integer)
+    IsdSno = Column(SmallInteger)
+    IsdQty = Column(Double, default=0.0)
+    IsdRate = Column(Double, default=0.0)
+    IsdDiscPer = Column(Double, default=0.0)
+    IsdDiscAmt = Column(Double, default=0.0)
+    IsdTaxPer = Column(Double, default=0.0)
+    IsdTaxAmt = Column(Double, default=0.0)
+    IsdAmt = Column(Double, default=0.0)
+    IsdRecState = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class OutdStk_Log(Base):
+    __tablename__ = "OutdStk_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    OskCode = Column(Integer)
+    OskVtmCode = Column(Integer)
+    OskVchNo = Column(Integer, nullable=False)
+    OskDate = Column(Date, nullable=False)
+    OskPtyCode = Column(Integer)
+    OskRefNo = Column(String(30))
+    OskNetAmt = Column(Double, default=0.0)
+    OskOtherChg = Column(Double, default=0.0)
+    OskRoundOff = Column(Double, default=0.0)
+    OskTax = Column(Double, default=0.0)
+    OskRemark = Column(String(50))
+    OskRecState = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class OutdStkDtl_Log(Base):
+    __tablename__ = "OutdStkDtl_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    OsdCode = Column(Integer)
+    OsdOskCode = Column(Integer, nullable=False)
+    OsdSimCode = Column(Integer)
+    OsdSno = Column(SmallInteger)
+    OsdQty = Column(Double, default=0.0)
+    OsdRate = Column(Double, default=0.0)
+    OsdDiscPer = Column(Double, default=0.0)
+    OsdDiscAmt = Column(Double, default=0.0)
+    OsdTaxPer = Column(Double, default=0.0)
+    OsdTaxAmt = Column(Double, default=0.0)
+    OsdAmt = Column(Double, default=0.0)
+    OsdRecState = Column(SmallInteger, nullable=False, default=1)
+

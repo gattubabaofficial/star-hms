@@ -5,33 +5,9 @@ from datetime import date
 # -----------------------------------
 # Masters (Items & Parties)
 # -----------------------------------
-class SubItmMastBase(BaseModel):
-    SimName: str
-    SimSigCode: Optional[int] = None
-    SimRecState: int = 1
+class Config: from_attributes = True
 
-class SubItmMastCreate(SubItmMastBase):
-    pass
-
-class SubItmMastResponse(SubItmMastBase):
-    SimCode: int
-    class Config: from_attributes = True
-
-class PartyMastBase(BaseModel):
-    PtyName: str
-    PtyAddr: Optional[str] = None
-    PtyAraCode: Optional[int] = None
-    PtyTelNo: Optional[str] = None
-    PtySMSNo: Optional[str] = None
-    PtyPgpCode: Optional[int] = None
-    PtyRecState: int = 1
-
-class PartyMastCreate(PartyMastBase):
-    pass
-
-class PartyMastResponse(PartyMastBase):
-    PtyCode: int
-    class Config: from_attributes = True
+class Config: from_attributes = True
 
 # -----------------------------------
 # Stock Inward (Purchases)
@@ -121,4 +97,15 @@ class StockItem(BaseModel):
     InwardQty: float
     OutwardQty: float
     CurrentStock: float
+
+
+
+# -----------------------------------
+# Pharmacy Masters Extensions
+# -----------------------------------
+class Config:
+        from_attributes = True
+
+class Config:
+        from_attributes = True
 

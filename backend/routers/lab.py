@@ -57,13 +57,19 @@ from backend.models.lab import LabPymtHdr, LabRefdHdr
 @router.post("/payments")
 def create_lab_payment(payment: LabPaymentRequest, db: Session = Depends(get_db)):
     if payment.transaction_type == LabTransactionType.RECEIPT:
-        db_payment = LabPymtHdr(LphLhdCode=payment.ref_id, LphAmt=payment.amount, LphDate=payment.date)
-        db.add(db_payment)
         # Update lab header balance
         lab_hdr = db.query(LabHdr).filter(LabHdr.LhdCode == payment.ref_id).first()
-        if lab_hdr:
-            lab_hdr.LhdBalAmt -= payment.amount
-            lab_hdr.LhdRecvdAmt += payment.amount
+        if not lab_hdr:
+            raise HTTPException(status_code=404, detail="Lab registration not found")
+            
+        if lab_hdr.LhdBalAmt < payment.amount:
+            raise HTTPException(status_code=400, detail="Payment amount exceeds outstanding balance")
+            
+        db_payment = LabPymtHdr(LphLhdCode=payment.ref_id, LphAmt=payment.amount, LphDate=payment.date)
+        db.add(db_payment)
+        
+        lab_hdr.LhdBalAmt -= payment.amount
+        lab_hdr.LhdRecvdAmt += payment.amount
             
     else:
         raise HTTPException(status_code=400, detail="Invalid transaction type for Lab payment")
@@ -74,12 +80,18 @@ def create_lab_payment(payment: LabPaymentRequest, db: Session = Depends(get_db)
 @router.post("/refunds")
 def create_lab_refund(refund: LabRefundRequest, db: Session = Depends(get_db)):
     if refund.transaction_type == LabTransactionType.RECEIPT:
+        lab_hdr = db.query(LabHdr).filter(LabHdr.LhdCode == refund.ref_id).first()
+        if not lab_hdr:
+            raise HTTPException(status_code=404, detail="Lab registration not found")
+            
+        if refund.amount > (lab_hdr.LhdRecvdAmt - lab_hdr.LhdRfugAmt):
+            raise HTTPException(status_code=400, detail="Refund amount exceeds total paid amount")
+            
         db_refund = LabRefdHdr(LrhLhdCode=refund.ref_id, LrhAmt=refund.amount, LrhDate=refund.date)
         db.add(db_refund)
-        lab_hdr = db.query(LabHdr).filter(LabHdr.LhdCode == refund.ref_id).first()
-        if lab_hdr:
-            lab_hdr.LhdBalAmt += refund.amount
-            lab_hdr.LhdRfugAmt += refund.amount
+        
+        lab_hdr.LhdBalAmt += refund.amount
+        lab_hdr.LhdRfugAmt += refund.amount
             
     else:
         raise HTTPException(status_code=400, detail="Invalid transaction type for Lab refund")

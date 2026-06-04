@@ -5,17 +5,37 @@ from typing import List
 
 from backend.database import get_db
 from backend.models.pharmacy import (
-    SubItmMast, PartyMast, IndrStk, IndrStkDtl, OutdStk, OutdStkDtl
+    IndrStk, IndrStkDtl, OutdStk, OutdStkDtl
 )
+from backend.models.masters import SubItmGrpMst, SubItmMast, PartyGrpMst, PartyMast
 from backend.schemas.pharmacy import (
-    SubItmMastCreate, SubItmMastResponse,
-    PartyMastCreate, PartyMastResponse,
     IndrStkCreate, IndrStkResponse,
     OutdStkCreate, OutdStkResponse,
     StockItem
 )
+from backend.schemas.masters import (
+    SubItmGrpMstCreate, SubItmGrpMstResponse,
+    SubItmMastCreate, SubItmMastResponse,
+    PartyGrpMstCreate, PartyGrpMstResponse,
+    PartyMastCreate, PartyMastResponse
+)
 
 router = APIRouter()
+
+# -----------------------------------------------------
+# Item Groups (SubItmGrpMst)
+# -----------------------------------------------------
+@router.get("/item-groups", response_model=List[SubItmGrpMstResponse])
+def get_item_groups(db: Session = Depends(get_db)):
+    return db.query(SubItmGrpMst).filter(SubItmGrpMst.SigRecState == 1).order_by(SubItmGrpMst.SigName).all()
+
+@router.post("/item-groups", response_model=SubItmGrpMstResponse)
+def create_item_group(group_in: SubItmGrpMstCreate, db: Session = Depends(get_db)):
+    db_group = SubItmGrpMst(**group_in.model_dump())
+    db.add(db_group)
+    db.commit()
+    db.refresh(db_group)
+    return db_group
 
 # -----------------------------------------------------
 # Items / Medicines (SubItmMast)
@@ -31,6 +51,21 @@ def create_item(item_in: SubItmMastCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_item)
     return db_item
+
+# -----------------------------------------------------
+# Vendor Groups (PartyGrpMst)
+# -----------------------------------------------------
+@router.get("/party-groups", response_model=List[PartyGrpMstResponse])
+def get_party_groups(db: Session = Depends(get_db)):
+    return db.query(PartyGrpMst).filter(PartyGrpMst.PgpRecState == 1).order_by(PartyGrpMst.PgpName).all()
+
+@router.post("/party-groups", response_model=PartyGrpMstResponse)
+def create_party_group(group_in: PartyGrpMstCreate, db: Session = Depends(get_db)):
+    db_group = PartyGrpMst(**group_in.model_dump())
+    db.add(db_group)
+    db.commit()
+    db.refresh(db_group)
+    return db_group
 
 # -----------------------------------------------------
 # Vendors / Parties (PartyMast)
@@ -56,6 +91,16 @@ def get_purchases(db: Session = Depends(get_db)):
 
 @router.post("/purchases", response_model=IndrStkResponse)
 def create_purchase(purchase_in: IndrStkCreate, db: Session = Depends(get_db)):
+    # Mathematical Validation
+    calculated_total = sum(d.IsdQty * d.IsdRate for d in purchase_in.details)
+    calculated_disc = sum(d.IsdDiscAmt for d in purchase_in.details)
+    calculated_tax = sum(d.IsdTaxAmt for d in purchase_in.details)
+    calculated_net = calculated_total - calculated_disc + calculated_tax + purchase_in.IskOtherChg - purchase_in.IskRoundOff
+    
+    # We allow a very small float drift, e.g., 0.1 for currency rounding issues
+    if abs(calculated_net - purchase_in.IskNetAmt) > 0.1:
+        raise HTTPException(status_code=400, detail=f"Net Amount mismatch. Expected approx {calculated_net}, got {purchase_in.IskNetAmt}")
+
     max_vch = db.query(func.max(IndrStk.IskVchNo)).scalar() or 0
     new_vch = max_vch + 1
 
@@ -85,6 +130,34 @@ def get_sales(db: Session = Depends(get_db)):
 
 @router.post("/sales", response_model=OutdStkResponse)
 def create_sale(sale_in: OutdStkCreate, db: Session = Depends(get_db)):
+    # 1. Mathematical Validation
+    calculated_total = sum(d.OsdQty * d.OsdRate for d in sale_in.details)
+    calculated_disc = sum(d.OsdDiscAmt for d in sale_in.details)
+    calculated_tax = sum(d.OsdTaxAmt for d in sale_in.details)
+    calculated_net = calculated_total - calculated_disc + calculated_tax + sale_in.OskOtherChg - sale_in.OskRoundOff
+    
+    if abs(calculated_net - sale_in.OskNetAmt) > 0.1:
+        raise HTTPException(status_code=400, detail=f"Net Amount mismatch. Expected approx {calculated_net}, got {sale_in.OskNetAmt}")
+
+    # 2. Stock Validation (Cannot dispense more than available)
+    for detail in sale_in.details:
+        if detail.OsdSimCode:
+            in_qty = db.query(func.sum(IndrStkDtl.IsdQty)).filter(
+                IndrStkDtl.IsdSimCode == detail.OsdSimCode, 
+                IndrStkDtl.IsdRecState == 1
+            ).scalar() or 0.0
+            
+            out_qty = db.query(func.sum(OutdStkDtl.OsdQty)).filter(
+                OutdStkDtl.OsdSimCode == detail.OsdSimCode,
+                OutdStkDtl.OsdRecState == 1
+            ).scalar() or 0.0
+            
+            current_stock = in_qty - out_qty
+            if detail.OsdQty > current_stock:
+                item = db.query(SubItmMast).filter(SubItmMast.SimCode == detail.OsdSimCode).first()
+                item_name = item.SimName if item else detail.OsdSimCode
+                raise HTTPException(status_code=400, detail=f"Insufficient stock for {item_name}. Available: {current_stock}, Requested: {detail.OsdQty}")
+
     max_vch = db.query(func.max(OutdStk.OskVchNo)).scalar() or 0
     new_vch = max_vch + 1
 

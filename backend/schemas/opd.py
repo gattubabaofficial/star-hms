@@ -104,3 +104,79 @@ class OpdRefundRequest(BaseModel):
     ref_id: int
     amount: float
     date: date
+
+
+# -----------------------------------
+# OPD Receipt (OutdRcpt)
+# -----------------------------------
+class OutdRcptBase(BaseModel):
+    OrcDate: date
+    OrcPttCode: int
+    OrcCDctCode: Optional[int] = None
+    OrcRByCode: Optional[int] = None
+    OrcReceiptType: Optional[str] = None
+    OrcDiscPer: float = 0.0
+    OrcTotalAmt: float = 0.0
+    OrcRecvdAmt: float = 0.0
+    OrcRfugAmt: float = 0.0
+    OrcBalAmt: float = 0.0
+    OrcAdvAmt: float = 0.0
+    OrcRemark: Optional[str] = None
+    OrcVoidFlag: bool = False
+    OrcRecState: int = 1
+
+class OutdRcptCreate(OutdRcptBase):
+    pass
+
+class OutdRcptResponse(OutdRcptBase):
+    OrcCode: int
+    OrcVchNo: int
+    
+    class Config:
+        from_attributes = True
+
+# -----------------------------------
+# OPD Doctor Shares & Payments
+# -----------------------------------
+class OutdRcDctDtlBase(BaseModel):
+    OrdOrcCode: int
+    OrdDctCode: Optional[int] = None
+    OrdSharePer: float = 0.0
+    OrdRecState: int = 1
+
+class OutdBlDctDtlBase(BaseModel):
+    OddOhdCode: int
+    OddDctCode: Optional[int] = None
+    OddSharePer: float = 0.0
+    OddShareAmt: float = 0.0
+    OddRecState: int = 1
+
+class OutdPymtHdrBase(BaseModel):
+    OphOrcCode: Optional[int] = None
+    OphDate: date
+    OphAmt: float = 0.0
+    OphRecState: int = 1
+
+class OutdRefdHdrBase(BaseModel):
+    OrhOrcCode: Optional[int] = None
+    OrhDate: date
+    OrhAmt: float = 0.0
+    OrhRecState: int = 1
+
+class OutdBlPymtHdrBase(BaseModel):
+    ObpOhdCode: Optional[int] = None
+    ObpDate: date
+    ObpAmt: float = 0.0
+    ObpRecState: int = 1
+
+class OutdBlRefdHdrBase(BaseModel):
+    ObrOhdCode: Optional[int] = None
+    ObrDate: date
+    ObrAmt: float = 0.0
+    ObrRecState: int = 1
+
+class OutdRgRefdBase(BaseModel):
+    OrrOpgCode: Optional[int] = None
+    OrrDate: date
+    OrrAmt: float = 0.0
+    OrrRecState: int = 1

@@ -3,7 +3,8 @@ from backend.database import Base
 from backend.models.auth import Company, UserRoleMst, UserMast, UserRightMst
 from backend.models.masters import (
     PatCatgMst, DoctCatgMst, DoctRoleMst, RefCatgMst, AreaMast, StsnMast, DiagMast,
-    FloorMast, WardMast, ServGrpMst, ServMast, ServRateMst, DoctMast, RefByMast, RefToMast, PatMast, BedMast
+    FloorMast, WardMast, ServGrpMst, ServMast, ServRateMst, DoctMast, RefByMast, RefToMast, PatMast, BedMast,
+    SubItmGrpMst, SubItmMast, PartyGrpMst, PartyMast
 )
 from backend.models.opd import (
     OutdReg, OutdHdr, OutdBill, OutdBlDctDtl, OutdBlPymtHdr, OutdBlRefdHdr,
@@ -18,7 +19,6 @@ from backend.models.lab import (
     LabHdr, LabRcpt, LabRcDctDtl, LabPymtHdr, LabRefdHdr
 )
 from backend.models.pharmacy import (
-    SubItmGrpMst, SubItmMast, PartyGrpMst, PartyMast,
     IndrStk, IndrStkDtl, OutdStk, OutdStkDtl
 )
 from backend.models.sync import SyncLog, SyncConfig

@@ -4,6 +4,7 @@ from datetime import date
 
 class AreaMastBase(BaseModel):
     AraName: str
+    AraStnCode: Optional[int] = None
     AraRecState: int = 1
 
 class AreaMastCreate(AreaMastBase):
@@ -50,6 +51,7 @@ class DoctMastBase(BaseModel):
     DctTelNo: Optional[str] = None
     DctEmail: Optional[str] = None
     DctAhCode: Optional[int] = None
+    DctOpdChg: float = 0.0
     DctShare: float = 0.0
     DctRecState: int = 1
 
@@ -158,6 +160,7 @@ class PatMastResponse(PatMastBase):
 # StsnMast
 class StsnMastBase(BaseModel):
     StnName: str
+    StnShowInList: bool = True
     StnRecState: int = 1
 
 class StsnMastCreate(StsnMastBase): pass
@@ -181,6 +184,7 @@ class FloorMastResponse(FloorMastBase):
 # WardMast
 class WardMastBase(BaseModel):
     WrdName: str
+    WrdShowInList: bool = True
     WrdRecState: int = 1
 
 class WardMastCreate(WardMastBase): pass
@@ -227,6 +231,19 @@ class DiagMastCreate(DiagMastBase): pass
 class DiagMastUpdate(DiagMastBase): pass
 class DiagMastResponse(DiagMastBase):
     DigCode: int
+    class Config: from_attributes = True
+
+# DiagSrvMst
+class DiagSrvMstBase(BaseModel):
+    DsmDigCode: int
+    DsmSrvCode: int
+    DsmUnit: int = 1
+    DsmRate: float = 0.0
+
+class DiagSrvMstCreate(DiagSrvMstBase): pass
+class DiagSrvMstUpdate(DiagSrvMstBase): pass
+class DiagSrvMstResponse(DiagSrvMstBase):
+    DsmCode: int
     class Config: from_attributes = True
 
 # ServGrpMst
@@ -308,4 +325,79 @@ class ServRateMstCreate(ServRateMstBase): pass
 class ServRateMstUpdate(ServRateMstBase): pass
 class ServRateMstResponse(ServRateMstBase):
     SrmCode: int
+    class Config: from_attributes = True
+
+# BedSrvMst
+class BedSrvMstBase(BaseModel):
+    BsmCode: int
+    BsmSno: int
+    BsmSrvCode: int
+    BsmUnit: float = 1.0
+    BsmRate: float = 0.0
+    BsmRecState: int = 1
+
+class BedSrvMstCreate(BedSrvMstBase): pass
+class BedSrvMstUpdate(BedSrvMstBase): pass
+class BedSrvMstResponse(BedSrvMstBase):
+    BsmICode: int
+    class Config: from_attributes = True
+
+
+class PartyGrpMstBase(BaseModel):
+    PgmName: str
+    PgmDesc: Optional[str] = None
+    PgmRecState: int = 1
+
+class PartyGrpMstCreate(PartyGrpMstBase): pass
+class PartyGrpMstUpdate(PartyGrpMstBase): pass
+class PartyGrpMstResponse(PartyGrpMstBase):
+    PgmCode: int
+    class Config: from_attributes = True
+
+class PartyMastBase(BaseModel):
+    PrtTitle: Optional[str] = None
+    PrtName: str
+    PrtPgmCode: int
+    PrtAhCode: Optional[int] = None
+    PrtAddr: Optional[str] = None
+    PrtAraCode: Optional[int] = None
+    PrtStnCode: Optional[int] = None
+    PrtTelNo: Optional[str] = None
+    PrtSMSNo: Optional[str] = None
+    PrtEmail: Optional[str] = None
+    PrtShowInList: bool = True
+    PrtRemark: Optional[str] = None
+    PrtRecState: int = 1
+
+class PartyMastCreate(PartyMastBase): pass
+class PartyMastUpdate(PartyMastBase): pass
+class PartyMastResponse(PartyMastBase):
+    PrtCode: int
+    class Config: from_attributes = True
+
+class SubItmGrpMstBase(BaseModel):
+    SigName: str
+    SigDesc: Optional[str] = None
+    SigRecState: int = 1
+
+class SubItmGrpMstCreate(SubItmGrpMstBase): pass
+class SubItmGrpMstUpdate(SubItmGrpMstBase): pass
+class SubItmGrpMstResponse(SubItmGrpMstBase):
+    SigCode: int
+    class Config: from_attributes = True
+
+class SubItmMastBase(BaseModel):
+    SimName: str
+    SimDesc: Optional[str] = None
+    SimSigCode: int
+    SimPurchRate: float = 0.0
+    SimMRPRate: float = 0.0
+    SimSaleRate: float = 0.0
+    SimItmCode: int = 0
+    SimRecState: int = 1
+
+class SubItmMastCreate(SubItmMastBase): pass
+class SubItmMastUpdate(SubItmMastBase): pass
+class SubItmMastResponse(SubItmMastBase):
+    SimCode: int
     class Config: from_attributes = True

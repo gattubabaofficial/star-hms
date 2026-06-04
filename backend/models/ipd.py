@@ -1,3 +1,5 @@
+from sqlalchemy import DateTime
+from sqlalchemy.sql import func
 from sqlalchemy import Column, Integer, String, Boolean, Double, SmallInteger, Date, ForeignKey
 from backend.database import Base
 
@@ -20,6 +22,7 @@ class IndrHdr(Base):
     IhdDischTime = Column(Integer)
     IhdPDigCode = Column(Integer, ForeignKey("DiagMast.DigCode"))
     IhdFDigCode = Column(Integer, ForeignKey("DiagMast.DigCode"))
+    IhdCmpCode = Column(Integer, ForeignKey("Company.CmpCode"))
     IhdStatus = Column(String(20), default='Admitted')
     IhdRemark = Column(String(50))
     IhdVoidFlag = Column(Boolean, default=False)
@@ -225,3 +228,279 @@ class IndrRgRefd(Base):
     IgfRemark = Column(String(50))
     IgfRecState = Column(SmallInteger, nullable=False, default=1)
     IgfCmpCode = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class IndrHdr_Log(Base):
+    __tablename__ = "IndrHdr_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    IhdCode = Column(Integer)
+    IhdVtmCode = Column(Integer)
+    IhdPrefix = Column(String(10))
+    IhdVchNo = Column(Integer, nullable=False)
+    IhdDate = Column(Date, nullable=False)
+    IhdTime = Column(Integer)
+    IhdPttCode = Column(Integer, nullable=False)
+    IhdCDctCode = Column(Integer)
+    IhdRByCode = Column(Integer)
+    IhdWrdCode = Column(Integer)
+    IhdBedCode = Column(Integer)
+    IhdFlrCode = Column(Integer)
+    IhdAdvAmt = Column(Double, default=0.0)
+    IhdDischDate = Column(Date)
+    IhdDischTime = Column(Integer)
+    IhdPDigCode = Column(Integer)
+    IhdFDigCode = Column(Integer)
+    IhdCmpCode = Column(Integer)
+    IhdStatus = Column(String(20), default='Admitted')
+    IhdRemark = Column(String(50))
+    IhdVoidFlag = Column(Boolean, default=False)
+    IhdRecState = Column(SmallInteger, nullable=False, default=1)
+    IhdCmpCode = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class IBedState_Log(Base):
+    __tablename__ = "IBedState_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    IbsCode = Column(Integer, autoincrement=True)
+    IbsSno = Column(SmallInteger)
+    IbsVtmCode = Column(Integer)
+    IbsPrefix = Column(String(10))
+    IbsVchNo = Column(Integer)
+    IbsPostfix = Column(String(10))
+    IbsDate = Column(Date)
+    IbsTime = Column(Integer)
+    IbsIpgCode = Column(Integer)
+    IbsBdmCode = Column(Integer)
+    IbsDischDate = Column(Date)
+    IbsDischTime = Column(Integer)
+    IbsPttCode = Column(Integer)
+    IbsDischState = Column(SmallInteger)
+    IbsLIbsCode = Column(Integer)
+    IbsRemark = Column(String(50))
+    IbsRecState = Column(SmallInteger, nullable=False, default=1)
+    IbsCmpCode = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class IndrBlHdr_Log(Base):
+    __tablename__ = "IndrBlHdr_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    IbhCode = Column(Integer)
+    IbhVtmCode = Column(Integer)
+    IbhPrefix = Column(String(10))
+    IbhVchNo = Column(Integer, nullable=False)
+    IbhDate = Column(Date, nullable=False)
+    IbhIhdCode = Column(Integer, nullable=False)
+    IbhPttCode = Column(Integer, nullable=False)
+    IbhBillType = Column(String(20))
+    IbhDiscPer = Column(Double, default=0.0)
+    IbhTotalAmt = Column(Double, default=0.0)
+    IbhDepAmt = Column(Double, default=0.0)
+    IbhRfugAmt = Column(Double, default=0.0)
+    IbhBalAmt = Column(Double, default=0.0)
+    IbhStatus = Column(String(20))
+    IbhDischDate = Column(Date)
+    IbhRemark = Column(String(50))
+    IbhVoidFlag = Column(Boolean, default=False)
+    IbhRecState = Column(SmallInteger, nullable=False, default=1)
+    IbhCmpCode = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class IndrBill_Log(Base):
+    __tablename__ = "IndrBill_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    IbdCode = Column(Integer)
+    IbdIbhCode = Column(Integer, nullable=False)
+    IbdSrvCode = Column(Integer)
+    IbdSno = Column(SmallInteger)
+    IbdUnit = Column(Double, default=1.0)
+    IbdRate = Column(Double, default=0.0)
+    IbdAmtBefDisc = Column(Double, default=0.0)
+    IbdDiscPer = Column(Double, default=0.0)
+    IbdDiscAmt = Column(Double, default=0.0)
+    IbdAmtAftDisc = Column(Double, default=0.0)
+    IbdRecState = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class IndrBlDctDtl_Log(Base):
+    __tablename__ = "IndrBlDctDtl_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    IddCode = Column(Integer)
+    IddIbhCode = Column(Integer, nullable=False)
+    IddDctCode = Column(Integer)
+    IddSharePer = Column(Double, default=0.0)
+    IddShareAmt = Column(Double, default=0.0)
+    IddRecState = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class IndrBlPymtHdr_Log(Base):
+    __tablename__ = "IndrBlPymtHdr_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    IbphCode = Column(Integer, autoincrement=True)
+    IbphIpgCode = Column(Integer)
+    IbphVtmCode = Column(Integer)
+    IbphPrefix = Column(String(10))
+    IbphVchNo = Column(Integer)
+    IbphPostfix = Column(String(10))
+    IbphDate = Column(Date)
+    IbphTime = Column(Integer)
+    IbphOldIbphCode = Column(Integer)
+    IbphPttCode = Column(Integer)
+    IbphDepoAmt = Column(Double, default=0.0)
+    IbphRemark = Column(String(50))
+    IbphRecState = Column(SmallInteger, nullable=False, default=1)
+    IbphCmpCode = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class IndrBlDpogDtl_Log(Base):
+    __tablename__ = "IndrBlPymtDtl_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    IbpyICode = Column(Integer, autoincrement=True)
+    IbpyCode = Column(Integer)
+    IbpySno = Column(SmallInteger)
+    IbpyDate = Column(Date)
+    IbpyPttCode = Column(Integer)
+    IbpyIbhCode = Column(Integer)
+    IbpyDepoAmt = Column(Double, default=0.0)
+    IbpyRemark = Column(String(50))
+    IbpyRecState = Column(SmallInteger, nullable=False, default=1)
+    IbpyCmpCode = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class IndrBlRefdHdr_Log(Base):
+    __tablename__ = "IndrBlRefdHdr_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    IbfhCode = Column(Integer, autoincrement=True)
+    IbfhIpgCode = Column(Integer)
+    IbfhVtmCode = Column(Integer)
+    IbfhPrefix = Column(String(10))
+    IbfhVchNo = Column(Integer)
+    IbfhPostfix = Column(String(10))
+    IbfhDate = Column(Date)
+    IbfhTime = Column(Integer)
+    IbfhOldIbfhCode = Column(Integer)
+    IbfhPttCode = Column(Integer)
+    IbfhRefuAmt = Column(Double, default=0.0)
+    IbfhRemark = Column(String(50))
+    IbfhRecState = Column(SmallInteger, nullable=False, default=1)
+    IbfhCmpCode = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class IndrBlRfugDtl_Log(Base):
+    __tablename__ = "IndrBlRefdDtl_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    IbfdICode = Column(Integer, autoincrement=True)
+    IbfdCode = Column(Integer)
+    IbfdSno = Column(SmallInteger)
+    IbfdDate = Column(Date)
+    IbfdPttCode = Column(Integer)
+    IbfdIbhCode = Column(Integer)
+    IbfdRefuAmt = Column(Double, default=0.0)
+    IbfdRemark = Column(String(50))
+    IbfdRecState = Column(SmallInteger, nullable=False, default=1)
+    IbfdCmpCode = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class IndrReg_Log(Base):
+    __tablename__ = "IndrReg_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    IpgCode = Column(Integer, autoincrement=True)
+    IpgVtmCode = Column(Integer)
+    IpgPrefix = Column(String(10))
+    IpgVchNo = Column(Integer)
+    IpgPostfix = Column(String(10))
+    IpgDate = Column(Date)
+    IpgTime = Column(Integer)
+    IpgOldIpgCode = Column(Integer)
+    IpgCDctCode = Column(Integer)
+    IpgRByCode = Column(Integer)
+    IpgRToCode = Column(Integer)
+    IpgPttCode = Column(Integer)
+    IpgPDigCode = Column(Integer)
+    IpgFDigCode = Column(Integer)
+    IpgBdmCode = Column(Integer)
+    IpgIbsCode = Column(Integer)
+    IpgDischDate = Column(Date)
+    IpgDischTime = Column(Integer)
+    IpgAdvAmt = Column(Double, default=0.0)
+    IpgRemark = Column(String(50))
+    IpgRecState = Column(SmallInteger, nullable=False, default=1)
+    IpgCmpCode = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class IndrRgPymt_Log(Base):
+    __tablename__ = "IndrRgPymt_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    IgtCode = Column(Integer, autoincrement=True)
+    IgtIpgCode = Column(Integer)
+    IgtVtmCode = Column(Integer)
+    IgtPrefix = Column(String(10))
+    IgtVchNo = Column(Integer)
+    IgtPostfix = Column(String(10))
+    IgtDate = Column(Date)
+    IgtTime = Column(Integer)
+    IgtOldIgtCode = Column(Integer)
+    IgtPttCode = Column(Integer)
+    IgtDpogAmt = Column(Double, default=0.0)
+    IgtAdjAmt = Column(Double, default=0.0)
+    IgtBalAmt = Column(Double, default=0.0)
+    IgtRemark = Column(String(50))
+    IgtCmpCode = Column(SmallInteger, nullable=False, default=1)
+    IgtRecState = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class IndrRgRefd_Log(Base):
+    __tablename__ = "IndrRgRefd_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    IgfCode = Column(Integer, autoincrement=True)
+    IgfIpgCode = Column(Integer)
+    IgfVtmCode = Column(Integer)
+    IgfPrefix = Column(String(10))
+    IgfVchNo = Column(Integer)
+    IgfPostfix = Column(String(10))
+    IgfDate = Column(Date)
+    IgfTime = Column(Integer)
+    IgfOldIgfCode = Column(Integer)
+    IgfPttCode = Column(Integer)
+    IgfRfugAmt = Column(Double, default=0.0)
+    IgfAdjAmt = Column(Double, default=0.0)
+    IgfBalAmt = Column(Double, default=0.0)
+    IgfRemark = Column(String(50))
+    IgfRecState = Column(SmallInteger, nullable=False, default=1)
+    IgfCmpCode = Column(SmallInteger, nullable=False, default=1)
+

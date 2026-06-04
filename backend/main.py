@@ -1,9 +1,20 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.routers import auth, masters, opd, ipd, pharmacy, reports, system, lab, setup, pricing, sync
+from backend.routers import auth, masters, opd, ipd, pharmacy, reports, system, lab, setup, pricing, sync, export
 from backend.database import engine, Base
 import backend.models.auth
 import backend.models.masters
+import backend.models.opd
+import backend.models.ipd
+import backend.models.pharmacy
+import backend.models.lab
+import backend.models.sync
+import backend.models.system
+
+from backend.core.history_listener import setup_history_listeners
+
+# Setup audit tracking for all _Log counterpart tables
+setup_history_listeners(Base)
 
 # Create tables if they don't exist
 Base.metadata.create_all(bind=engine)
@@ -34,6 +45,7 @@ app.include_router(system.router, prefix="/api/system", tags=["system"])
 app.include_router(lab.router, prefix="/api/lab", tags=["lab"])
 app.include_router(pricing.router, prefix="/api/pricing", tags=["pricing"])
 app.include_router(sync.router, prefix="/api/sync", tags=["sync"])
+app.include_router(export.router, prefix="/api/export", tags=["export"])
 
 @app.get("/")
 def read_root():

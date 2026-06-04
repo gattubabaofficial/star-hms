@@ -39,6 +39,7 @@ const IpdReceipt = lazy(() => import('./pages/ipd/IpdReceipt').then(m => ({ defa
 const LabReceipt = lazy(() => import('./pages/lab/LabReceipt').then(m => ({ default: m.LabReceipt })));
 const PharmacyReceipt = lazy(() => import('./pages/pharmacy/PharmacyReceipt').then(m => ({ default: m.PharmacyReceipt })));
 const SyncDashboard = lazy(() => import('./pages/system/SyncDashboard').then(m => ({ default: m.SyncDashboard })));
+const Settings = lazy(() => import('./pages/system/Settings').then(m => ({ default: m.Settings })));
 const Dashboard = lazy(() => import('./pages/Dashboard').then(m => ({ default: m.Dashboard })));
 
 const queryClient = new QueryClient();
@@ -121,6 +122,7 @@ function App() {
               
               {/* System */}
               <Route path="system" element={<SystemDashboard />} />
+              <Route path="system/settings" element={<Settings />} />
               <Route path="system/backup" element={<BackupUtil />} />
               <Route path="/system/sync-dashboard" element={<SyncDashboard />} />
             </Route>

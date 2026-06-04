@@ -1,3 +1,5 @@
+from sqlalchemy import DateTime
+from sqlalchemy.sql import func
 from sqlalchemy import Column, Integer, String, Boolean, Double, SmallInteger, Date, ForeignKey
 from backend.database import Base
 
@@ -61,3 +63,90 @@ class LabRefdHdr(Base):
     LrhDate = Column(Date, nullable=False)
     LrhAmt = Column(Double, default=0.0)
     LrhRecState = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class LabHdr_Log(Base):
+    __tablename__ = "LabHdr_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    LhdCode = Column(Integer)
+    LhdVtmCode = Column(Integer)
+    LhdPrefix = Column(String(10))
+    LhdVchNo = Column(Integer, nullable=False)
+    LhdDate = Column(Date, nullable=False)
+    LhdTime = Column(Integer)
+    LhdPttCode = Column(Integer, nullable=False)
+    LhdCDctCode = Column(Integer)
+    LhdRByCode = Column(Integer)
+    LhdReceiptType = Column(String(20))
+    LhdDiscPer = Column(Double, default=0.0)
+    LhdTotalAmt = Column(Double, default=0.0)
+    LhdRecvdAmt = Column(Double, default=0.0)
+    LhdRfugAmt = Column(Double, default=0.0)
+    LhdBalAmt = Column(Double, default=0.0)
+    LhdAdvAmt = Column(Double, default=0.0)
+    LhdRemark = Column(String(50))
+    LhdVoidFlag = Column(Boolean, default=False)
+    LhdRecState = Column(SmallInteger, nullable=False, default=1)
+    LhdCmpCode = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class LabRcpt_Log(Base):
+    __tablename__ = "LabRcpt_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    LrdCode = Column(Integer)
+    LrdLhdCode = Column(Integer, nullable=False)
+    LrdSrvCode = Column(Integer)
+    LrdSno = Column(SmallInteger)
+    LrdUnit = Column(Double, default=1.0)
+    LrdRate = Column(Double, default=0.0)
+    LrdAmtBefDisc = Column(Double, default=0.0)
+    LrdDiscPer = Column(Double, default=0.0)
+    LrdDiscAmt = Column(Double, default=0.0)
+    LrdAmtAftDisc = Column(Double, default=0.0)
+    LrdRecState = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class LabRcDctDtl_Log(Base):
+    __tablename__ = "LabRcDctDtl_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    LddCode = Column(Integer)
+    LddLhdCode = Column(Integer, nullable=False)
+    LddDctCode = Column(Integer)
+    LddSharePer = Column(Double, default=0.0)
+    LddRecState = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class LabPymtHdr_Log(Base):
+    __tablename__ = "LabPymtHdr_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    LphCode = Column(Integer)
+    LphLhdCode = Column(Integer)
+    LphDate = Column(Date, nullable=False)
+    LphAmt = Column(Double, default=0.0)
+    LphRecState = Column(SmallInteger, nullable=False, default=1)
+
+
+
+class LabRefdHdr_Log(Base):
+    __tablename__ = "LabRefdHdr_Log"
+    LogId = Column(Integer, primary_key=True, autoincrement=True)
+    LogAction = Column(String(10), nullable=False)
+    LogDate = Column(DateTime, default=func.now())
+    LrhCode = Column(Integer)
+    LrhLhdCode = Column(Integer)
+    LrhDate = Column(Date, nullable=False)
+    LrhAmt = Column(Double, default=0.0)
+    LrhRecState = Column(SmallInteger, nullable=False, default=1)
+
