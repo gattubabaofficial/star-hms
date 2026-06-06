@@ -6,7 +6,6 @@ import { Save, ArrowLeft } from 'lucide-react';
 import { SearchableSelectWithCreate } from '../../components/ui/SearchableSelectWithCreate';
 import { useFormKeyboard } from '../../lib/useFormKeyboard';
 import { useFormValidation } from '../../lib/useFormValidation';
-import { PatientModal } from '../../components/shared/PatientModal';
 
 export function OPDRegistration() {
   const queryClient = useQueryClient();
@@ -14,9 +13,6 @@ export function OPDRegistration() {
   const formRef = useRef<HTMLFormElement>(null);
   useFormKeyboard(formRef);
   useFormValidation(formRef);
-  
-  const [showPatientModal, setShowPatientModal] = useState(false);
-  const [patientSearchTerm, setPatientSearchTerm] = useState('');
 
   const [formData, setFormData] = useState({
     OpgDate: new Date().toISOString().split('T')[0],
@@ -30,20 +26,76 @@ export function OPDRegistration() {
     OpgRemark: ''
   });
 
+  // Patient form fields
+  const [isExistingPatient, setIsExistingPatient] = useState(false);
+  const [patientForm, setPatientForm] = useState({
+    PttName: '',
+    PttSex: 'Male',
+    PttDob: '',
+    PttTelNo: '',
+    PttAddr: '',
+    PttAraCode: null as number | null,
+    PttStnCode: null as number | null,
+    PttPcgCode: null as number | null,
+    PttInfAllowed: false,
+    PttDefAllowed: false,
+    PttDiscAllowed: false,
+    PttDiscPer: 0.0,
+  });
+
   const { data: patients } = useQuery({ queryKey: ['patients'], queryFn: async () => (await api.get<any[]>('/masters/patients')).data });
   const { data: doctors } = useQuery({ queryKey: ['doctors'], queryFn: async () => (await api.get<any[]>('/masters/doctors')).data });
   const { data: diagnostics } = useQuery({ queryKey: ['diagnostics'], queryFn: async () => (await api.get<any[]>('/masters/diagnostics')).data });
+  const { data: areas } = useQuery({ queryKey: ['areas'], queryFn: async () => (await api.get<any[]>('/masters/areas')).data });
+  const { data: stations } = useQuery({ queryKey: ['stations'], queryFn: async () => (await api.get<any[]>('/masters/stations')).data });
+  const { data: categories } = useQuery({ queryKey: ['pat-categories'], queryFn: async () => (await api.get<any[]>('/masters/pat-categories')).data });
 
   const patientOpts = patients?.map(p => ({ value: p.PttCode, label: `${p.PttName}${p.PttTelNo ? ` (${p.PttTelNo})` : ''}` })) || [];
   const doctorOpts = doctors?.map(d => ({ value: d.DctCode, label: d.DctName })) || [];
   const diagOpts = diagnostics?.map(d => ({ value: d.DigCode, label: d.DigName })) || [];
 
-  const createPatient = async (name: string) => {
-    setPatientSearchTerm(name);
-    setShowPatientModal(true);
+  // When existing patient selected, fill form from their data
+  useEffect(() => {
+    if (formData.OpgPttCode && patients) {
+      const patient = patients.find(p => p.PttCode === formData.OpgPttCode);
+      if (patient) {
+        setIsExistingPatient(true);
+        setPatientForm({
+          PttName: patient.PttName || '',
+          PttSex: patient.PttSex || 'Male',
+          PttDob: patient.PttDob ? patient.PttDob.split('T')[0] : '',
+          PttTelNo: patient.PttTelNo || '',
+          PttAddr: patient.PttAddr || '',
+          PttAraCode: patient.PttAraCode || null,
+          PttStnCode: patient.PttStnCode || null,
+          PttPcgCode: patient.PttPcgCode || null,
+          PttInfAllowed: patient.PttInfAllowed || false,
+          PttDefAllowed: patient.PttDefAllowed || false,
+          PttDiscAllowed: patient.PttDiscAllowed || false,
+          PttDiscPer: patient.PttDiscPer || 0.0,
+        });
+      }
+    }
+  }, [formData.OpgPttCode, patients]);
+
+  const handleCreateNewPatient = (searchTerm: string) => {
+    setIsExistingPatient(false);
+    setFormData(prev => ({ ...prev, OpgPttCode: null }));
+    setPatientForm({
+      PttName: searchTerm,
+      PttSex: 'Male',
+      PttDob: '',
+      PttTelNo: '',
+      PttAddr: '',
+      PttAraCode: null,
+      PttStnCode: null,
+      PttPcgCode: null,
+      PttInfAllowed: false,
+      PttDefAllowed: false,
+      PttDiscAllowed: false,
+      PttDiscPer: 0.0,
+    });
   };
-
-
 
   const [fileCharge, setFileCharge] = useState(0);
 
@@ -55,18 +107,31 @@ export function OPDRegistration() {
 
   const mutation = useMutation({
     mutationFn: async (data: typeof formData) => {
-      const payload = { ...data, OpgRate: data.OpgRate + fileCharge };
+      // If new patient, create first
+      let patientCode = data.OpgPttCode;
+      if (!isExistingPatient || !patientCode) {
+        const patientPayload = { ...patientForm, PttDob: patientForm.PttDob || null };
+        const patientRes = await api.post('/masters/patients', patientPayload);
+        patientCode = patientRes.data.PttCode;
+      } else {
+        // Update existing patient editable fields
+        const patientPayload = { ...patientForm, PttDob: patientForm.PttDob || null };
+        await api.put(`/masters/patients/${patientCode}`, patientPayload);
+      }
+
+      const payload = { ...data, OpgPttCode: patientCode, OpgRate: data.OpgRate + fileCharge };
       return (await api.post('/opd/registrations', payload)).data;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['opd-registrations'] });
+      queryClient.invalidateQueries({ queryKey: ['patients'] });
       navigate('/opd/receipt', { state: { autoSelectVchNo: data.OpgVchNo, type: 'reg' } });
     }
   });
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.OpgPttCode) return alert('Select Patient');
+    if (!formData.OpgPttCode && !patientForm.PttName.trim()) return alert('Patient name is required');
     mutation.mutate(formData);
   };
 
@@ -82,24 +147,162 @@ export function OPDRegistration() {
 
       <div className="card">
         <form ref={formRef} onSubmit={handleSave} className="space-y-8">
+          {/* Date */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
               <input type="date" value={formData.OpgDate} onChange={e => setFormData({...formData, OpgDate: e.target.value})} className="input-field" required />
             </div>
+          </div>
+
+          {/* Patient Details Section - always visible */}
+          <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
+            <h3 className="text-lg font-medium text-medical-text mb-4">Patient Details</h3>
             
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Patient <span className="text-red-500">*</span></label>
+            {/* Patient Search Dropdown */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Search Existing Patient</label>
               <SearchableSelectWithCreate
                 options={patientOpts}
                 value={formData.OpgPttCode}
                 onChange={(v) => setFormData({...formData, OpgPttCode: v as number})}
-                onCreateNew={createPatient}
-                placeholder="Select or Create Patient"
+                onCreateNew={handleCreateNewPatient}
+                placeholder="Search patient by name or mobile..."
                 createLabel="Patient"
               />
+              {isExistingPatient && formData.OpgPttCode && (
+                <p className="text-xs text-green-600 mt-1">✓ Existing patient selected — Name & Mobile are locked</p>
+              )}
             </div>
 
+            {/* Patient Form Fields - always shown */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Name <span className="text-red-500">*</span></label>
+                <input
+                  type="text"
+                  className={`input-field ${isExistingPatient ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                  value={patientForm.PttName}
+                  onChange={e => setPatientForm({...patientForm, PttName: e.target.value})}
+                  readOnly={isExistingPatient}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Sex <span className="text-red-500">*</span></label>
+                <select
+                  className="input-field"
+                  value={patientForm.PttSex}
+                  onChange={e => setPatientForm({...patientForm, PttSex: e.target.value})}
+                  required
+                >
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">DOB</label>
+                <input
+                  type="date"
+                  className="input-field"
+                  value={patientForm.PttDob}
+                  onChange={e => setPatientForm({...patientForm, PttDob: e.target.value})}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Mobile</label>
+                <input
+                  type="text"
+                  className={`input-field ${isExistingPatient ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                  value={patientForm.PttTelNo}
+                  onChange={e => setPatientForm({...patientForm, PttTelNo: e.target.value})}
+                  readOnly={isExistingPatient}
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                <textarea
+                  className="input-field"
+                  value={patientForm.PttAddr}
+                  onChange={e => setPatientForm({...patientForm, PttAddr: e.target.value})}
+                  rows={2}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                <select
+                  className="input-field"
+                  value={patientForm.PttPcgCode || ''}
+                  onChange={e => setPatientForm({...patientForm, PttPcgCode: e.target.value ? Number(e.target.value) : null})}
+                >
+                  <option value="">Select Category</option>
+                  {categories?.map(c => (
+                    <option key={c.PcgCode} value={c.PcgCode}>{c.PcgName}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Area</label>
+                <select
+                  className="input-field"
+                  value={patientForm.PttAraCode || ''}
+                  onChange={e => setPatientForm({...patientForm, PttAraCode: e.target.value ? Number(e.target.value) : null})}
+                >
+                  <option value="">Select Area</option>
+                  {areas?.map(a => (
+                    <option key={a.AraCode} value={a.AraCode}>{a.AraName}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Station</label>
+                <select
+                  className="input-field"
+                  value={patientForm.PttStnCode || ''}
+                  onChange={e => setPatientForm({...patientForm, PttStnCode: e.target.value ? Number(e.target.value) : null})}
+                >
+                  <option value="">Select Station</option>
+                  {stations?.map(s => (
+                    <option key={s.StnCode} value={s.StnCode}>{s.StnName}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Patient Rules & Discounts */}
+            <div className="bg-white p-4 rounded-md border border-gray-150 space-y-3 mt-4">
+              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Patient Rules & Discounts</h4>
+              <div className="grid grid-cols-3 gap-2">
+                <label className="flex items-center gap-1.5 text-xs text-gray-700 select-none">
+                  <input type="checkbox" checked={patientForm.PttInfAllowed} onChange={e => setPatientForm({...patientForm, PttInfAllowed: e.target.checked})} className="rounded border-medical-border text-medical-primary h-3.5 w-3.5" />
+                  Influenza Allowed
+                </label>
+                <label className="flex items-center gap-1.5 text-xs text-gray-700 select-none">
+                  <input type="checkbox" checked={patientForm.PttDefAllowed} onChange={e => setPatientForm({...patientForm, PttDefAllowed: e.target.checked})} className="rounded border-medical-border text-medical-primary h-3.5 w-3.5" />
+                  Default Allowed
+                </label>
+                <label className="flex items-center gap-1.5 text-xs text-gray-700 select-none">
+                  <input type="checkbox" checked={patientForm.PttDiscAllowed} onChange={e => setPatientForm({...patientForm, PttDiscAllowed: e.target.checked})} className="rounded border-medical-border text-medical-primary h-3.5 w-3.5" />
+                  Discount Allowed
+                </label>
+              </div>
+              <div className="pt-1">
+                <label className="block text-xs font-medium text-gray-700 mb-1">Discount %</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  disabled={!patientForm.PttDiscAllowed}
+                  value={patientForm.PttDiscPer}
+                  onChange={e => setPatientForm({...patientForm, PttDiscPer: parseFloat(e.target.value) || 0.0})}
+                  className="w-full px-2.5 py-1.5 text-sm border border-medical-border rounded-md focus:outline-none focus:ring-1 focus:ring-medical-primary bg-white disabled:bg-gray-100 disabled:text-gray-400"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Doctor & Diagnosis */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Consulting Doctor</label>
               <SearchableSelectWithCreate
@@ -129,6 +332,7 @@ export function OPDRegistration() {
             </div>
           </div>
 
+          {/* Charges */}
           <div className="bg-gray-50 p-6 rounded-lg border border-medical-border">
             <h3 className="text-lg font-medium text-gray-800 mb-4">Charges & Payment</h3>
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -163,17 +367,6 @@ export function OPDRegistration() {
           </div>
         </form>
       </div>
-      <PatientModal
-        isOpen={showPatientModal}
-        onClose={() => setShowPatientModal(false)}
-        initialName={patientSearchTerm}
-        defaultType="Outdoor"
-        onSave={(id) => {
-          queryClient.invalidateQueries({ queryKey: ['patients'] });
-          setFormData(prev => ({ ...prev, OpgPttCode: id }));
-        }}
-      />
     </div>
   );
 }
-
