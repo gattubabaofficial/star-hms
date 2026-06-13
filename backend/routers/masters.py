@@ -1,300 +1,168 @@
-from typing import List
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from typing import List, Optional
 from backend.database import get_db
-from backend.models.auth import UserMast
-from backend.models.masters import (
-    AreaMast, DoctCatgMst, DoctRoleMst, DoctMast, 
-    RefCatgMst, RefByMast, RefToMast, PatCatgMst, PatMast,
-    StsnMast, FloorMast, WardMast, BedMast,
-    ServGrpMst, ServMast, DiagMast, ServRateMst, DiagSrvMst, BedSrvMst, PartyGrpMst, PartyMast, SubItmGrpMst, SubItmMast
+from backend.models import (
+    PatientCategory, Patient, DoctorCategory, DoctorRole, Doctor,
+    Floor, Ward, Bed, ServiceGroup, Service
 )
-
-
-from backend.schemas.masters import (
-    AreaMastCreate, AreaMastUpdate, AreaMastResponse,
-    DoctCatgMstCreate, DoctCatgMstUpdate, DoctCatgMstResponse,
-    DoctRoleMstCreate, DoctRoleMstUpdate, DoctRoleMstResponse,
-    DoctMastCreate, DoctMastUpdate, DoctMastResponse,
-    RefCatgMstCreate, RefCatgMstUpdate, RefCatgMstResponse,
-    RefByMastCreate, RefByMastUpdate, RefByMastResponse,
-    RefToMastCreate, RefToMastUpdate, RefToMastResponse,
-    PatCatgMstCreate, PatCatgMstUpdate, PatCatgMstResponse,
-    PatMastCreate, PatMastUpdate, PatMastResponse,
-    StsnMastCreate, StsnMastUpdate, StsnMastResponse,
-    FloorMastCreate, FloorMastUpdate, FloorMastResponse,
-    WardMastCreate, WardMastUpdate, WardMastResponse,
-    BedMastCreate, BedMastUpdate, BedMastResponse,
-    RoomLayoutCreate,
-    ServGrpMstCreate, ServGrpMstUpdate, ServGrpMstResponse,
-    ServMastCreate, ServMastUpdate, ServMastResponse,
-    DiagMastCreate, DiagMastUpdate, DiagMastResponse,
-    ServRateMstCreate, ServRateMstUpdate, ServRateMstResponse,
-    DiagSrvMstCreate, DiagSrvMstUpdate, DiagSrvMstResponse,
-    BedSrvMstCreate, BedSrvMstUpdate, BedSrvMstResponse,
-    PartyGrpMstCreate, PartyGrpMstUpdate, PartyGrpMstResponse,
-    PartyMastCreate, PartyMastUpdate, PartyMastResponse,
-    SubItmGrpMstCreate, SubItmGrpMstUpdate, SubItmGrpMstResponse,
-    SubItmMastCreate, SubItmMastUpdate, SubItmMastResponse
+from backend.schemas import (
+    PatientCategoryCreate, PatientCategoryResponse,
+    PatientCreate, PatientResponse,
+    DoctorCategoryCreate, DoctorCategoryResponse,
+    DoctorRoleCreate, DoctorRoleResponse,
+    DoctorCreate, DoctorResponse,
+    FloorCreate, FloorResponse,
+    WardCreate, WardResponse,
+    BedCreate, BedResponse,
+    ServiceGroupCreate, ServiceGroupResponse,
+    ServiceCreate, ServiceResponse
 )
-
-
-from backend.core.dependencies import get_current_active_user, get_db as dep_get_db
-
-def _create_crud_routes(router, path, model, schema_create, schema_update, schema_response, pk_col_name, pk_col):
-    @router.get(path, response_model=List[schema_response])
-    def get_all(skip: int = 0, limit: int = 100, db: Session = Depends(dep_get_db), current_user: UserMast = Depends(get_current_active_user)):
-        rec_state_col = getattr(model, pk_col_name.replace("Code", "RecState").replace("Ara", "Ara").replace("Dcg", "Dcg").replace("Drl", "Drl").replace("Dct", "Dct").replace("Rfg", "Rfg").replace("RBy", "RBy").replace("RTo", "RTo").replace("Pcg", "Pcg").replace("Ptt", "Ptt"))
-        return db.query(model).filter(rec_state_col == 1).offset(skip).limit(limit).all()
-
-    @router.post(path, response_model=schema_response)
-    def create(item: schema_create, db: Session = Depends(dep_get_db), current_user: UserMast = Depends(get_current_active_user)):
-        db_item = model(**item.model_dump())
-        db.add(db_item)
-        db.commit()
-        db.refresh(db_item)
-        return db_item
-
-    @router.put(f"{path}/{{pk_val}}", response_model=schema_response)
-    def update(pk_val: int, item: schema_update, db: Session = Depends(dep_get_db), current_user: UserMast = Depends(get_current_active_user)):
-        db_item = db.query(model).filter(pk_col == pk_val).first()
-        if not db_item:
-            raise HTTPException(status_code=404, detail="Not found")
-        for key, value in item.model_dump().items():
-            setattr(db_item, key, value)
-        db.commit()
-        db.refresh(db_item)
-        return db_item
-
-    @router.delete(f"{path}/{{pk_val}}")
-    def delete(pk_val: int, db: Session = Depends(dep_get_db), current_user: UserMast = Depends(get_current_active_user)):
-        db_item = db.query(model).filter(pk_col == pk_val).first()
-        if not db_item:
-            raise HTTPException(status_code=404, detail="Not found")
-        rec_state_col_name = pk_col_name.replace("Code", "RecState").replace("Ara", "Ara").replace("Dcg", "Dcg").replace("Drl", "Drl").replace("Dct", "Dct").replace("Rfg", "Rfg").replace("RBy", "RBy").replace("RTo", "RTo").replace("Pcg", "Pcg").replace("Ptt", "Ptt")
-        setattr(db_item, rec_state_col_name, 0)
-        db.commit()
-        return {"ok": True}
+from backend.core.dependencies import get_current_active_user
 
 router = APIRouter()
 
-# ---------------------------------------------------------
-# AREA MASTER CRUD
-# ---------------------------------------------------------
-
-@router.get("/areas", response_model=List[AreaMastResponse])
-def get_areas(
-    skip: int = 0, limit: int = 100, 
-    db: Session = Depends(dep_get_db),
-    current_user: UserMast = Depends(get_current_active_user)
-):
-    areas = db.query(AreaMast).filter(AreaMast.AraRecState == 1).offset(skip).limit(limit).all()
-    return areas
-
-@router.post("/areas", response_model=AreaMastResponse)
-def create_area(
-    area: AreaMastCreate, 
-    db: Session = Depends(dep_get_db),
-    current_user: UserMast = Depends(get_current_active_user)
-):
-    # Depending on RBAC, check if user has 'can_add' for AreaMast
-    db_area = AreaMast(**area.model_dump())
-    db.add(db_area)
+# Patient Categories
+@router.post("/patient-categories", response_model=PatientCategoryResponse)
+def create_patient_category(schema: PatientCategoryCreate, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    db_cat = PatientCategory(**schema.model_dump())
+    db.add(db_cat)
     db.commit()
-    db.refresh(db_area)
-    return db_area
+    db.refresh(db_cat)
+    return db_cat
 
-@router.put("/areas/{ara_code}", response_model=AreaMastResponse)
-def update_area(
-    ara_code: int, 
-    area: AreaMastUpdate, 
-    db: Session = Depends(dep_get_db),
-    current_user: UserMast = Depends(get_current_active_user)
-):
-    db_area = db.query(AreaMast).filter(AreaMast.AraCode == ara_code).first()
-    if not db_area:
-        raise HTTPException(status_code=404, detail="Area not found")
-    
-    for key, value in area.model_dump().items():
-        setattr(db_area, key, value)
-    
+@router.get("/patient-categories", response_model=List[PatientCategoryResponse])
+def get_patient_categories(db: Session = Depends(get_db)):
+    return db.query(PatientCategory).filter(PatientCategory.pcg_rec_state != 0).all()
+
+# Patients
+@router.post("/patients", response_model=PatientResponse)
+def create_patient(schema: PatientCreate, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    # Calculate reg number if not provided
+    if not schema.ptt_reg_no:
+        max_reg = db.query(Patient.ptt_reg_no).order_by(Patient.ptt_reg_no.desc()).first()
+        schema.ptt_reg_no = (max_reg[0] + 1) if max_reg and max_reg[0] else 10001
+        
+    db_patient = Patient(**schema.model_dump())
+    db.add(db_patient)
     db.commit()
-    db.refresh(db_area)
-    return db_area
+    db.refresh(db_patient)
+    return db_patient
 
-@router.delete("/areas/{ara_code}")
-def delete_area(
-    ara_code: int, 
-    db: Session = Depends(dep_get_db),
-    current_user: UserMast = Depends(get_current_active_user)
-):
-    db_area = db.query(AreaMast).filter(AreaMast.AraCode == ara_code).first()
-    if not db_area:
-        raise HTTPException(status_code=404, detail="Area not found")
-    
-    # Soft delete
-    db_area.AraRecState = 0
+@router.get("/patients", response_model=List[PatientResponse])
+def get_patients(db: Session = Depends(get_db)):
+    return db.query(Patient).filter(Patient.ptt_rec_state != 0).all()
+
+@router.get("/patients/{ptt_code}", response_model=PatientResponse)
+def get_patient(ptt_code: int, db: Session = Depends(get_db)):
+    patient = db.query(Patient).filter(Patient.ptt_code == ptt_code, Patient.ptt_rec_state != 0).first()
+    if not patient:
+        raise HTTPException(status_code=404, detail="Patient not found")
+    return patient
+
+# Doctor Categories
+@router.post("/doctor-categories", response_model=DoctorCategoryResponse)
+def create_doctor_category(schema: DoctorCategoryCreate, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    db_cat = DoctorCategory(**schema.model_dump())
+    db.add(db_cat)
     db.commit()
-    return {"ok": True}
+    db.refresh(db_cat)
+    return db_cat
 
-# Generate routes for Group 1 models
-_create_crud_routes(router, "/doct-categories", DoctCatgMst, DoctCatgMstCreate, DoctCatgMstUpdate, DoctCatgMstResponse, "DcgCode", DoctCatgMst.DcgCode)
-_create_crud_routes(router, "/doct-roles", DoctRoleMst, DoctRoleMstCreate, DoctRoleMstUpdate, DoctRoleMstResponse, "DrlCode", DoctRoleMst.DrlCode)
-_create_crud_routes(router, "/doctors", DoctMast, DoctMastCreate, DoctMastUpdate, DoctMastResponse, "DctCode", DoctMast.DctCode)
-_create_crud_routes(router, "/ref-categories", RefCatgMst, RefCatgMstCreate, RefCatgMstUpdate, RefCatgMstResponse, "RfgCode", RefCatgMst.RfgCode)
-_create_crud_routes(router, "/ref-bys", RefByMast, RefByMastCreate, RefByMastUpdate, RefByMastResponse, "RByCode", RefByMast.RByCode)
-_create_crud_routes(router, "/ref-tos", RefToMast, RefToMastCreate, RefToMastUpdate, RefToMastResponse, "RToCode", RefToMast.RToCode)
-_create_crud_routes(router, "/pat-categories", PatCatgMst, PatCatgMstCreate, PatCatgMstUpdate, PatCatgMstResponse, "PcgCode", PatCatgMst.PcgCode)
-_create_crud_routes(router, "/patients", PatMast, PatMastCreate, PatMastUpdate, PatMastResponse, "PttCode", PatMast.PttCode)
+@router.get("/doctor-categories", response_model=List[DoctorCategoryResponse])
+def get_doctor_categories(db: Session = Depends(get_db)):
+    return db.query(DoctorCategory).filter(DoctorCategory.dcg_rec_state != 0).all()
 
-# Group 2 (Locations & Facilities)
-_create_crud_routes(router, "/stations", StsnMast, StsnMastCreate, StsnMastUpdate, StsnMastResponse, "StnCode", StsnMast.StnCode)
-_create_crud_routes(router, "/floors", FloorMast, FloorMastCreate, FloorMastUpdate, FloorMastResponse, "FlrCode", FloorMast.FlrCode)
-_create_crud_routes(router, "/wards", WardMast, WardMastCreate, WardMastUpdate, WardMastResponse, "WrdCode", WardMast.WrdCode)
-_create_crud_routes(router, "/beds", BedMast, BedMastCreate, BedMastUpdate, BedMastResponse, "BdmCode", BedMast.BdmCode)
-
-# Group 3 (Services & Investigations)
-_create_crud_routes(router, "/service-groups", ServGrpMst, ServGrpMstCreate, ServGrpMstUpdate, ServGrpMstResponse, "SgpCode", ServGrpMst.SgpCode)
-_create_crud_routes(router, "/diagnostics", DiagMast, DiagMastCreate, DiagMastUpdate, DiagMastResponse, "DigCode", DiagMast.DigCode)
-_create_crud_routes(router, "/service-rates", ServRateMst, ServRateMstCreate, ServRateMstUpdate, ServRateMstResponse, "SrmCode", ServRateMst.SrmCode)
-
-# Phase 2 Masters
-_create_crud_routes(router, "/party-groups", PartyGrpMst, PartyGrpMstCreate, PartyGrpMstUpdate, PartyGrpMstResponse, "PgmCode", PartyGrpMst.PgmCode)
-_create_crud_routes(router, "/parties", PartyMast, PartyMastCreate, PartyMastUpdate, PartyMastResponse, "PrtCode", PartyMast.PrtCode)
-_create_crud_routes(router, "/subitem-groups", SubItmGrpMst, SubItmGrpMstCreate, SubItmGrpMstUpdate, SubItmGrpMstResponse, "SigCode", SubItmGrpMst.SigCode)
-_create_crud_routes(router, "/subitems", SubItmMast, SubItmMastCreate, SubItmMastUpdate, SubItmMastResponse, "SimCode", SubItmMast.SimCode)
-_create_crud_routes(router, "/bed-services", BedSrvMst, BedSrvMstCreate, BedSrvMstUpdate, BedSrvMstResponse, "BsmICode", BedSrvMst.BsmICode)
-_create_crud_routes(router, "/services", ServMast, ServMastCreate, ServMastUpdate, ServMastResponse, "SrvCode", ServMast.SrvCode)
-_create_crud_routes(router, "/serv-rates", ServRateMst, ServRateMstCreate, ServRateMstUpdate, ServRateMstResponse, "SrmCode", ServRateMst.SrmCode)
-
-@router.post("/room-layout")
-def create_room_layout(layout: RoomLayoutCreate, db: Session = Depends(get_db)):
-    # Find or create Floor
-    floor = db.query(FloorMast).filter(FloorMast.FlrName.ilike(layout.floor_name)).first()
-    if not floor:
-        floor = FloorMast(FlrName=layout.floor_name, FlrRecState=1)
-        db.add(floor)
-        db.flush()
-
-    # Find or create Ward
-    ward = db.query(WardMast).filter(WardMast.WrdName.ilike(layout.ward_name)).first()
-    if not ward:
-        ward = WardMast(WrdName=layout.ward_name, WrdRecState=1)
-        db.add(ward)
-        db.flush()
-
-    # Find the current max index for beds in this ward to continue numbering
-    existing_beds = db.query(BedMast).filter(
-        BedMast.BdmFlrCode == floor.FlrCode,
-        BedMast.BdmWrdCode == ward.WrdCode
-    ).count()
-
-    # Create beds
-    new_beds = []
-    for i in range(1, layout.num_beds + 1):
-        bed_name = f"Bed-{existing_beds + i:02d}"
-        new_bed = BedMast(
-            BdmName=bed_name,
-            BdmFlrCode=floor.FlrCode,
-            BdmWrdCode=ward.WrdCode,
-            BdmCharges=500.0,
-            BdmRecState=1,
-            BdmIndex=existing_beds + i
-        )
-        db.add(new_bed)
-        new_beds.append(new_bed)
-
+# Doctor Roles
+@router.post("/doctor-roles", response_model=DoctorRoleResponse)
+def create_doctor_role(schema: DoctorRoleCreate, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    db_role = DoctorRole(**schema.model_dump())
+    db.add(db_role)
     db.commit()
-    return {"message": f"Successfully created {layout.num_beds} beds in {layout.floor_name} - {layout.ward_name}"}
+    db.refresh(db_role)
+    return db_role
 
-# Custom routes for Service Rates
-@router.get("/service-rates/{srv_code}", response_model=List[ServRateMstResponse])
-def get_service_rates(
-    srv_code: int,
-    db: Session = Depends(dep_get_db),
-    current_user: UserMast = Depends(get_current_active_user)
-):
-    rates = db.query(ServRateMst).filter(
-        ServRateMst.SrmSrvCode == srv_code,
-        ServRateMst.SrmRecState == 1
-    ).all()
-    return rates
+@router.get("/doctor-roles", response_model=List[DoctorRoleResponse])
+def get_doctor_roles(db: Session = Depends(get_db)):
+    return db.query(DoctorRole).filter(DoctorRole.drl_rec_state != 0).all()
 
-@router.post("/service-rates", response_model=ServRateMstResponse)
-def create_service_rate(
-    rate: ServRateMstCreate,
-    db: Session = Depends(dep_get_db),
-    current_user: UserMast = Depends(get_current_active_user)
-):
-    db_rate = ServRateMst(**rate.model_dump())
-    db.add(db_rate)
+# Doctors
+@router.post("/doctors", response_model=DoctorResponse)
+def create_doctor(schema: DoctorCreate, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    db_dct = Doctor(**schema.model_dump())
+    db.add(db_dct)
     db.commit()
-    db.refresh(db_rate)
-    return db_rate
+    db.refresh(db_dct)
+    return db_dct
 
-@router.put("/service-rates/{srm_code}", response_model=ServRateMstResponse)
-def update_service_rate(
-    srm_code: int,
-    rate: ServRateMstUpdate,
-    db: Session = Depends(dep_get_db),
-    current_user: UserMast = Depends(get_current_active_user)
-):
-    db_rate = db.query(ServRateMst).filter(ServRateMst.SrmCode == srm_code).first()
-    if not db_rate:
-        raise HTTPException(status_code=404, detail="Service rate not found")
-    
-    for key, value in rate.model_dump().items():
-        setattr(db_rate, key, value)
-    
+@router.get("/doctors", response_model=List[DoctorResponse])
+def get_doctors(db: Session = Depends(get_db)):
+    return db.query(Doctor).filter(Doctor.dct_rec_state != 0).all()
+
+# Floors
+@router.post("/floors", response_model=FloorResponse)
+def create_floor(schema: FloorCreate, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    db_flr = Floor(**schema.model_dump())
+    db.add(db_flr)
     db.commit()
-    db.refresh(db_rate)
-    return db_rate
+    db.refresh(db_flr)
+    return db_flr
 
-@router.delete("/service-rates/{srm_code}")
-def delete_service_rate(
-    srm_code: int,
-    db: Session = Depends(dep_get_db),
-    current_user: UserMast = Depends(get_current_active_user)
-):
-    db_rate = db.query(ServRateMst).filter(ServRateMst.SrmCode == srm_code).first()
-    if not db_rate:
-        raise HTTPException(status_code=404, detail="Service rate not found")
-    
-    db_rate.SrmRecState = 0
+@router.get("/floors", response_model=List[FloorResponse])
+def get_floors(db: Session = Depends(get_db)):
+    return db.query(Floor).filter(Floor.flr_rec_state != 0).all()
+
+# Wards
+@router.post("/wards", response_model=WardResponse)
+def create_ward(schema: WardCreate, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    db_wrd = Ward(**schema.model_dump())
+    db.add(db_wrd)
     db.commit()
-    return {"ok": True}
+    db.refresh(db_wrd)
+    return db_wrd
 
-# Custom routes for Diagnostic Services
-@router.get("/diag-services/{dig_code}", response_model=List[DiagSrvMstResponse])
-def get_diag_services(
-    dig_code: int,
-    db: Session = Depends(dep_get_db),
-    current_user: UserMast = Depends(get_current_active_user)
-):
-    return db.query(DiagSrvMst).filter(DiagSrvMst.DsmDigCode == dig_code).all()
+@router.get("/wards", response_model=List[WardResponse])
+def get_wards(db: Session = Depends(get_db)):
+    return db.query(Ward).filter(Ward.wrd_rec_state != 0).all()
 
-@router.post("/diag-services", response_model=DiagSrvMstResponse)
-def create_diag_service(
-    srv: DiagSrvMstCreate,
-    db: Session = Depends(dep_get_db),
-    current_user: UserMast = Depends(get_current_active_user)
-):
-    db_srv = DiagSrvMst(**srv.model_dump())
+# Beds
+@router.post("/beds", response_model=BedResponse)
+def create_bed(schema: BedCreate, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    db_bed = Bed(**schema.model_dump())
+    db.add(db_bed)
+    db.commit()
+    db.refresh(db_bed)
+    return db_bed
+
+@router.get("/beds", response_model=List[BedResponse])
+def get_beds(db: Session = Depends(get_db), is_occupied: Optional[bool] = None):
+    query = db.query(Bed).filter(Bed.bdm_rec_state != 0)
+    if is_occupied is not None:
+        query = query.filter(Bed.is_occupied == is_occupied)
+    return query.all()
+
+# Service Groups
+@router.post("/service-groups", response_model=ServiceGroupResponse)
+def create_service_group(schema: ServiceGroupCreate, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    db_grp = ServiceGroup(**schema.model_dump())
+    db.add(db_grp)
+    db.commit()
+    db.refresh(db_grp)
+    return db_grp
+
+@router.get("/service-groups", response_model=List[ServiceGroupResponse])
+def get_service_groups(db: Session = Depends(get_db)):
+    return db.query(ServiceGroup).filter(ServiceGroup.sgp_rec_state != 0).all()
+
+# Services
+@router.post("/services", response_model=ServiceResponse)
+def create_service(schema: ServiceCreate, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    db_srv = Service(**schema.model_dump())
     db.add(db_srv)
     db.commit()
     db.refresh(db_srv)
     return db_srv
 
-@router.delete("/diag-services/{dsm_code}")
-def delete_diag_service(
-    dsm_code: int,
-    db: Session = Depends(dep_get_db),
-    current_user: UserMast = Depends(get_current_active_user)
-):
-    db_srv = db.query(DiagSrvMst).filter(DiagSrvMst.DsmCode == dsm_code).first()
-    if not db_srv:
-        raise HTTPException(status_code=404, detail="Diagnostic service not found")
-    
-    db.delete(db_srv)
-    db.commit()
-    return {"ok": True}
+@router.get("/services", response_model=List[ServiceResponse])
+def get_services(db: Session = Depends(get_db)):
+    return db.query(Service).filter(Service.srv_rec_state != 0).all()

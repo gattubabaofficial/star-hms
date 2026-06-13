@@ -4,8 +4,8 @@ from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 from backend.database import SessionLocal
 from backend.core.security import SECRET_KEY, ALGORITHM
-from backend.schemas.auth import TokenData
-from backend.models.auth import UserMast
+from backend.schemas import TokenData
+from backend.models import User
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
 
@@ -16,7 +16,7 @@ def get_db():
     finally:
         db.close()
 
-def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)) -> UserMast:
+def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)) -> User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -31,12 +31,12 @@ def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_
     except JWTError:
         raise credentials_exception
         
-    user = db.query(UserMast).filter(UserMast.UsrName == token_data.username).first()
+    user = db.query(User).filter(User.username == token_data.username).first()
     if user is None:
         raise credentials_exception
     return user
 
-def get_current_active_user(current_user: UserMast = Depends(get_current_user)) -> UserMast:
-    if current_user.UsrRecState == 0:
+def get_current_active_user(current_user: User = Depends(get_current_user)) -> User:
+    if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user

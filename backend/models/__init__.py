@@ -1,5 +1,6 @@
 from backend.database import Base
 
+# Submodule model imports (for `from backend.models.xxx import ...` style)
 from backend.models.auth import Company, UserRoleMst, UserMast, UserRightMst
 from backend.models.masters import (
     PatCatgMst, DoctCatgMst, DoctRoleMst, RefCatgMst, AreaMast, StsnMast, DiagMast,
@@ -23,18 +24,48 @@ from backend.models.pharmacy import (
 )
 from backend.models.sync import SyncLog, SyncConfig
 
+# Legacy flat-model imports for backward compatibility
+# (routers that do `from backend.models import User, Patient, ...`)
+from backend.models_flat import (
+    User,
+    PatientCategory, Patient,
+    DoctorCategory, DoctorRole, Doctor,
+    Floor, Ward, Bed,
+    ServiceGroup, Service,
+    OPDRegistration, OPDBill,
+    IPDAdmission, IPDBill,
+    AuditLog,
+)
+
 __all__ = [
     "Base",
+    # Auth / Company
     "Company", "UserRoleMst", "UserMast", "UserRightMst",
+    # Masters (legacy submodule)
     "PatCatgMst", "DoctCatgMst", "DoctRoleMst", "RefCatgMst", "AreaMast", "StsnMast", "DiagMast",
     "FloorMast", "WardMast", "ServGrpMst", "ServMast", "ServRateMst", "DoctMast", "RefByMast", "RefToMast", "PatMast", "BedMast",
+    "SubItmGrpMst", "SubItmMast", "PartyGrpMst", "PartyMast",
+    # OPD
     "OutdReg", "OutdHdr", "OutdBill", "OutdBlDctDtl", "OutdBlPymtHdr", "OutdBlRefdHdr",
     "OutdRcpt", "OutdRcDctDtl", "OutdPymtHdr", "OutdRefdHdr", "OutdRgRefd",
+    # IPD
     "IndrHdr", "IBedState", "IndrBlHdr", "IndrBill", "IndrBlDctDtl",
     "IndrBlPymtHdr", "IndrBlDpogDtl", "IndrBlRefdHdr", "IndrBlRfugDtl",
     "IndrReg", "IndrRgPymt", "IndrRgRefd",
+    # Lab
     "LabHdr", "LabRcpt", "LabRcDctDtl", "LabPymtHdr", "LabRefdHdr",
-    "SubItmGrpMst", "SubItmMast", "PartyGrpMst", "PartyMast",
+    # Pharmacy
     "IndrStk", "IndrStkDtl", "OutdStk", "OutdStkDtl",
-    "SyncLog", "SyncConfig"
+    # Sync
+    "SyncLog", "SyncConfig",
+    # Legacy flat models
+    "User",
+    "PatientCategory", "Patient",
+    "DoctorCategory", "DoctorRole", "Doctor",
+    "Floor", "Ward", "Bed",
+    "ServiceGroup", "Service",
+    "OPDRegistration", "OPDBill",
+    "IPDAdmission", "IPDBill",
+    "AuditLog",
 ]
+

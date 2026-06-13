@@ -1,103 +1,69 @@
-from fastapi import APIRouter, Depends
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy import text
-from backend.database import get_db, engine, Base
-from backend.models.system import SysOpts
-from backend.models.auth import Company
-from backend.schemas.system import SysOptsSchema, CompanyFullSchema
-from datetime import datetime, date
-import json
+from sqlalchemy import func
+import datetime
+from backend.database import get_db, Base, engine
+from backend.models import Patient, Doctor, Bed, OPDRegistration, IPDAdmission, OPDBill, IPDBill
+from backend.schemas import DashboardStats
+from backend.core.dependencies import get_current_active_user
 
 router = APIRouter()
 
-@router.get("/dashboard-stats")
+@router.get("/dashboard-stats", response_model=DashboardStats)
 def get_dashboard_stats(db: Session = Depends(get_db)):
-    # Placeholder stats until actual aggregation logic is built
-    return {
-        "opdPatients": 0,
-        "ipdAdmissions": 0,
-        "labReports": 0,
-        "pharmacySales": 0.0
-    }
-
-@router.get("/company", response_model=CompanyFullSchema)
-def get_company(db: Session = Depends(get_db)):
-    comp = db.query(Company).filter(Company.CmpRecState == 1).first()
-    if not comp:
-        return CompanyFullSchema()
-    return comp
-
-@router.post("/company", response_model=CompanyFullSchema)
-def update_company(comp_in: CompanyFullSchema, db: Session = Depends(get_db)):
-    comp = db.query(Company).filter(Company.CmpRecState == 1).first()
-    if not comp:
-        comp = Company(CmpRecState=1)
-        db.add(comp)
+    total_patients = db.query(Patient).filter(Patient.ptt_rec_state != 0).count()
+    total_doctors = db.query(Doctor).filter(Doctor.dct_rec_state != 0).count()
+    total_beds = db.query(Bed).filter(Bed.bdm_rec_state != 0).count()
+    occupied_beds = db.query(Bed).filter(Bed.bdm_rec_state != 0, Bed.is_occupied == True).count()
     
-    for key, value in comp_in.model_dump().items():
-        if hasattr(comp, key):
-            setattr(comp, key, value)
-            
-    db.commit()
-    db.refresh(comp)
-    return comp
-
-@router.get("/config", response_model=SysOptsSchema)
-def get_system_config(db: Session = Depends(get_db)):
-    config = db.query(SysOpts).filter(SysOpts.SysId == 1).first()
-    if not config:
-        # Create default if not exists
-        config = SysOpts(SysId=1)
-        db.add(config)
-        db.commit()
-        db.refresh(config)
-    return config
-
-@router.put("/config", response_model=SysOptsSchema)
-def update_system_config(config_in: SysOptsSchema, db: Session = Depends(get_db)):
-    config = db.query(SysOpts).filter(SysOpts.SysId == 1).first()
-    if not config:
-        config = SysOpts(SysId=1)
-        db.add(config)
+    today_start = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
+    today_end = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
     
-    # Update all fields from schema
-    for key, value in config_in.model_dump().items():
-        if key != 'SysId' and hasattr(config, key):
-            setattr(config, key, value)
-            
-    db.commit()
-    db.refresh(config)
-    return config
-
-# Helper for datetime/date serialization
-def _json_serial(obj):
-    if isinstance(obj, (datetime, date)):
-        return obj.isoformat()
-    raise TypeError("Type %s not serializable" % type(obj))
-
-@router.get("/backup")
-def take_database_backup(db: Session = Depends(get_db)):
-    # Reflect all tables and dump their data
-    backup_data = {}
+    opd_today = db.query(OPDRegistration).filter(
+        OPDRegistration.opg_rec_state != 0,
+        OPDRegistration.opg_visit_date >= today_start,
+        OPDRegistration.opg_visit_date <= today_end
+    ).count()
     
-    # Base.metadata.sorted_tables gives us tables in dependency order
-    for table in Base.metadata.sorted_tables:
-        table_name = table.name
-        
-        # We execute a direct select to get all rows
-        result = db.execute(text(f'SELECT * FROM "{table_name}"')).mappings().all()
-        
-        # Convert each row (mapping) to a dict
-        backup_data[table_name] = [dict(row) for row in result]
-        
-    # We return it directly, but since we have datetime objects, we should 
-    # encode it manually to handle dates properly and return a Response.
-    json_str = json.dumps(backup_data, default=_json_serial)
+    ipd_today = db.query(IPDAdmission).filter(
+        IPDAdmission.ipd_rec_state != 0,
+        IPDAdmission.ipd_admission_date >= today_start,
+        IPDAdmission.ipd_admission_date <= today_end
+    ).count()
     
-    filename = f"star-hms-backup-{datetime.now().strftime('%Y%m%d%H%M')}.json"
+    # Calculate revenue today
+    opd_rev = db.query(func.sum(OPDBill.paid_amount)).filter(
+        OPDBill.created_at >= today_start,
+        OPDBill.created_at <= today_end
+    ).scalar() or 0.0
     
-    return JSONResponse(
-        content=json.loads(json_str), 
-        headers={"Content-Disposition": f'attachment; filename="{filename}"'}
+    ipd_rev = db.query(func.sum(IPDBill.paid_amount)).filter(
+        IPDBill.created_at >= today_start,
+        IPDBill.created_at <= today_end
+    ).scalar() or 0.0
+    
+    # Also count admissions initial deposit paid today
+    dep_rev = db.query(func.sum(IPDAdmission.ipd_deposit)).filter(
+        IPDAdmission.ipd_admission_date >= today_start,
+        IPDAdmission.ipd_admission_date <= today_end
+    ).scalar() or 0.0
+    
+    total_revenue_today = float(opd_rev + ipd_rev + dep_rev)
+    
+    return DashboardStats(
+        total_patients=total_patients,
+        total_doctors=total_doctors,
+        total_beds=total_beds,
+        occupied_beds=occupied_beds,
+        opd_today_count=opd_today,
+        ipd_today_count=ipd_today,
+        total_revenue_today=total_revenue_today
     )
+
+@router.post("/reset-db")
+def reset_database(db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    # Drop all tables and recreate them to start completely fresh
+    # Warning: Admin credentials will need to be setup again by calling /setup-admin
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+    return {"message": "Database has been reset successfully. Please run /setup-admin to re-create the admin account."}

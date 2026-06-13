@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* 60% Dominant: Background elements */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-card: #ffffff;
+  
+  /* 30% Secondary: Typography, borders, subtle UI components */
+  --text-primary: #0f172a;    /* Charcoal/Black */
+  --text-secondary: #475569;  /* Slate/Gray */
+  --text-muted: #94a3b8;
+  --border-light: #e2e8f0;    /* Light Slate border */
+  --border-focus: #94a3b8;
+  --bg-sidebar: #ffffff;
+  --bg-hover: #f1f5f9;
+  
+  /* 10% Accent: Premium action elements, badges, indicators */
+  --accent-color: #2563eb;    /* Royal Blue */
+  --accent-hover: #1d4ed8;    /* Darker Blue */
+  --accent-light: #eff6ff;    /* Light blue highlight */
+  
+  /* Status indicators */
+  --status-success: #10b981;
+  --status-success-light: #ecfdf5;
+  --status-warning: #f59e0b;
+  --status-warning-light: #fefbeb;
+  --status-danger: #ef4444;
+  --status-danger-light: #fef2f2;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html, body {
+  height: 100%;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Base button resets and classes */
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
