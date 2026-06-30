@@ -5,11 +5,11 @@ import styles from '../../../dashboard.module.css';
 import ActionBar from '../components/ActionBar';
 import { Search, AlertCircle, Check } from 'lucide-react';
 
-interface Floor {
-  flr_code: number;
-  flr_name: string;
-  flr_show_in_list: boolean;
-  flr_rec_state: number;
+interface ProductGroup {
+  sig_code: number;
+  sig_name: string;
+  sig_desc?: string;
+  sig_rec_state: number;
 }
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -17,19 +17,19 @@ const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('tok
 const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
 
 const blankForm = {
-  flr_name: '',
-  flr_show_in_list: true
+  sig_name: '',
+  sig_desc: ''
 };
 
-export default function FloorMasterPage() {
+export default function ProductGroupPage() {
   const router = useRouter();
 
   // State variables
-  const [items, setItems] = useState<Floor[]>([]);
+  const [items, setItems] = useState<ProductGroup[]>([]);
   const [search, setSearch] = useState('');
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [entryMode, setEntryMode] = useState(false); // false = Summary, true = Detail
-  const [editing, setEditing] = useState<Floor | null>(null);
+  const [entryMode, setEntryMode] = useState(false); // false = Summary view, true = Detail view
+  const [editing, setEditing] = useState<ProductGroup | null>(null);
 
   const [form, setForm] = useState(blankForm);
   const [loading, setLoading] = useState(false);
@@ -40,29 +40,29 @@ export default function FloorMasterPage() {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Load floors
-  const loadData = async () => {
+  // Load product groups
+  const load = async () => {
     try {
-      const r = await fetch(`${API}/api/masters/floors`);
+      const r = await fetch(`${API}/api/masters/product-groups`);
       if (r.ok) {
         const data = await r.json();
         setItems(data);
         if (data.length > 0) {
           setSelectedId(prev => {
-            const exists = data.some((item: Floor) => item.flr_code === prev);
-            return exists ? prev : data[0].flr_code;
+            const exists = data.some((item: ProductGroup) => item.sig_code === prev);
+            return exists ? prev : data[0].sig_code;
           });
         } else {
           setSelectedId(null);
         }
       }
     } catch (e) {
-      console.error('Error loading floors:', e);
+      console.error('Error loading product groups:', e);
     }
   };
 
   useEffect(() => {
-    loadData();
+    load();
   }, []);
 
   // Set focus automatically when entering detail mode
@@ -80,20 +80,20 @@ export default function FloorMasterPage() {
       if (entryMode || items.length === 0) return;
 
       const filtered = items.filter(i =>
-        i.flr_name.toLowerCase().includes(search.toLowerCase())
+        i.sig_name.toLowerCase().includes(search.toLowerCase())
       );
       if (filtered.length === 0) return;
 
-      const currentIndex = filtered.findIndex(i => i.flr_code === selectedId);
+      const currentIndex = filtered.findIndex(i => i.sig_code === selectedId);
 
       if (e.key === 'ArrowDown') {
         e.preventDefault();
         const nextIndex = (currentIndex + 1) % filtered.length;
-        setSelectedId(filtered[nextIndex].flr_code);
+        setSelectedId(filtered[nextIndex].sig_code);
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         const prevIndex = (currentIndex - 1 + filtered.length) % filtered.length;
-        setSelectedId(filtered[prevIndex].flr_code);
+        setSelectedId(filtered[prevIndex].sig_code);
       }
     };
 
@@ -111,13 +111,13 @@ export default function FloorMasterPage() {
   };
 
   const handleEdit = () => {
-    const item = items.find(i => i.flr_code === selectedId);
+    const item = items.find(i => i.sig_code === selectedId);
     if (!item) return;
 
     setEditing(item);
     setForm({
-      flr_name: item.flr_name,
-      flr_show_in_list: item.flr_show_in_list
+      sig_name: item.sig_name,
+      sig_desc: item.sig_desc || '',
     });
     setError('');
     setSuccess('');
@@ -126,25 +126,25 @@ export default function FloorMasterPage() {
 
   const handleDelete = async () => {
     if (!selectedId) return;
-    const item = items.find(i => i.flr_code === selectedId);
+    const item = items.find(i => i.sig_code === selectedId);
     if (!item) return;
 
-    if (!confirm(`Delete floor "${item.flr_name}"?`)) return;
+    if (!confirm(`Delete product group "${item.sig_name}"?`)) return;
 
     try {
-      const r = await fetch(`${API}/api/masters/floors/${selectedId}`, {
+      const r = await fetch(`${API}/api/masters/product-groups/${selectedId}`, {
         method: 'DELETE',
         headers: authHdr()
       });
       if (!r.ok) throw new Error('Failed to delete');
-      loadData();
+      load();
     } catch (e: any) {
       alert(e.message);
     }
   };
 
   const handleRefresh = () => {
-    loadData();
+    load();
   };
 
   const handleExit = () => {
@@ -160,16 +160,16 @@ export default function FloorMasterPage() {
     if (e) e.preventDefault();
 
     // Validations
-    if (!form.flr_name.trim()) {
-      setError('Invalid Floor Name !!!');
+    if (!form.sig_name.trim()) {
+      setError('Invalid Group Name !!!');
       nameInputRef.current?.focus();
       return;
     }
 
     // Duplicate Check
     const isDuplicate = items.some(item =>
-      item.flr_name.toLowerCase() === form.flr_name.trim().toLowerCase() &&
-      item.flr_code !== editing?.flr_code
+      item.sig_name.toLowerCase() === form.sig_name.trim().toLowerCase() &&
+      item.sig_code !== editing?.sig_code
     );
     if (isDuplicate) {
       setError('Duplicate Input !!!');
@@ -183,14 +183,14 @@ export default function FloorMasterPage() {
 
     try {
       const body = {
-        flr_name: form.flr_name.trim(),
-        flr_show_in_list: form.flr_show_in_list,
-        flr_rec_state: 1
+        sig_name: form.sig_name.trim(),
+        sig_desc: form.sig_desc.trim() || null,
+        sig_rec_state: 1
       };
 
       const url = editing
-        ? `${API}/api/masters/floors/${editing.flr_code}`
-        : `${API}/api/masters/floors`;
+        ? `${API}/api/masters/product-groups/${editing.sig_code}`
+        : `${API}/api/masters/product-groups`;
       const method = editing ? 'PUT' : 'POST';
 
       const r = await fetch(url, {
@@ -201,7 +201,7 @@ export default function FloorMasterPage() {
       if (!r.ok) throw new Error(await r.text());
 
       setSuccess(editing ? 'Updated successfully' : 'Created successfully');
-      loadData();
+      load();
       setTimeout(() => {
         setEntryMode(false);
         setEditing(null);
@@ -227,7 +227,7 @@ export default function FloorMasterPage() {
   }, [entryMode, form, editing, items]);
 
   const filtered = items.filter(i =>
-    i.flr_name.toLowerCase().includes(search.toLowerCase())
+    i.sig_name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -247,10 +247,10 @@ export default function FloorMasterPage() {
           marginBottom: '24px',
           borderRadius: '4px'
         }}>
-          Bed Floor Master [frmFloorMast]
+          Product Group Master [frmSubItGMs]
         </div>
 
-        {/* SUMMARY MODE */}
+        {/* SUMMARY MODE (frFormSmry) */}
         {!entryMode && (
           <div className={styles.sectionBox}>
             <div className={styles.sectionHeader}>
@@ -266,54 +266,50 @@ export default function FloorMasterPage() {
                   value={search}
                   onChange={e => {
                     setSearch(e.target.value);
-                    const matching = items.filter(i => i.flr_name.toLowerCase().includes(e.target.value.toLowerCase()));
-                    if (matching.length > 0 && !matching.some(m => m.flr_code === selectedId)) {
-                      setSelectedId(matching[0].flr_code);
+                    const matching = items.filter(i => i.sig_name.toLowerCase().includes(e.target.value.toLowerCase()));
+                    if (matching.length > 0 && !matching.some(m => m.sig_code === selectedId)) {
+                      setSelectedId(matching[0].sig_code);
                     }
                   }}
-                  placeholder="Search floors (txtSearch1Text)..."
+                  placeholder="Search groups (txtSearch)..."
                 />
               </div>
             </div>
 
             {/* Table Grid (Mfgrd1) */}
-            <div className={styles.tableContainer}>
+            <div className={styles.tableContainer} style={{ maxWidth: '800px' }}>
               <table className={styles.table}>
                 <thead>
                   <tr>
                     <th style={{ width: '80px' }}>Code</th>
-                    <th>Floor Name</th>
-                    <th>Show List</th>
+                    <th>Group Name</th>
+                    <th>Description</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.length === 0 && (
                     <tr>
                       <td colSpan={3} style={{ textAlign: 'center', padding: '40px', color: 'var(--text-secondary)' }}>
-                        No floors found
+                        No product groups found
                       </td>
                     </tr>
                   )}
                   {filtered.map((item) => (
                     <tr
-                      key={item.flr_code}
-                      onClick={() => setSelectedId(item.flr_code)}
+                      key={item.sig_code}
+                      onClick={() => setSelectedId(item.sig_code)}
                       onDoubleClick={handleEdit}
                       style={{
                         cursor: 'pointer',
-                        backgroundColor: selectedId === item.flr_code ? 'var(--accent-light)' : 'transparent',
-                        fontWeight: selectedId === item.flr_code ? 600 : 400
+                        backgroundColor: selectedId === item.sig_code ? 'var(--accent-light)' : 'transparent',
+                        fontWeight: selectedId === item.sig_code ? 600 : 400
                       }}
                     >
-                      <td style={{ color: selectedId === item.flr_code ? 'var(--accent-color)' : 'var(--text-secondary)' }}>
-                        #{item.flr_code}
+                      <td style={{ color: selectedId === item.sig_code ? 'var(--accent-color)' : 'var(--text-secondary)' }}>
+                        #{item.sig_code}
                       </td>
-                      <td>{item.flr_name}</td>
-                      <td>
-                        <span className={`${styles.badge} ${item.flr_show_in_list ? styles.badgeAccent : styles.badgeDanger}`}>
-                          {item.flr_show_in_list ? 'Yes' : 'No'}
-                        </span>
-                      </td>
+                      <td>{item.sig_name}</td>
+                      <td>{item.sig_desc || '—'}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -322,9 +318,9 @@ export default function FloorMasterPage() {
           </div>
         )}
 
-        {/* DETAIL MODE */}
+        {/* DETAIL MODE (frFormDtl) */}
         {entryMode && (
-          <div className={styles.sectionBox}>
+          <div className={styles.sectionBox} style={{ maxWidth: '600px' }}>
             <div className={styles.sectionHeader}>
               <h3 className={styles.sectionTitle}>Detail [Mode: {editing ? 'Edit' : 'Add'}]</h3>
             </div>
@@ -341,43 +337,41 @@ export default function FloorMasterPage() {
                 </div>
               )}
 
-              <div className={styles.formGrid}>
-                {/* Code (mskFormBoundField) */}
-                <div className={styles.formGroup}>
-                  <label>Code (mskFormBoundField)</label>
-                  <input
-                    className={styles.formControl}
-                    value={editing ? editing.flr_code : '-1'}
-                    disabled
-                    style={{ backgroundColor: 'var(--bg-secondary)', fontWeight: 700 }}
-                  />
-                </div>
-
-                {/* Floor Name (txtFlrName) */}
-                <div className={styles.formGroup} style={{ flex: 2 }}>
-                  <label>Floor Name (txtFlrName) *</label>
-                  <input
-                    ref={nameInputRef}
-                    className={styles.formControl}
-                    value={form.flr_name}
-                    onChange={e => setForm(f => ({ ...f, flr_name: e.target.value }))}
-                    maxLength={50}
-                    required
-                    placeholder="Enter Floor Name"
-                  />
-                </div>
+              {/* Code (mskFormBoundField) - read-only */}
+              <div className={styles.formGroup} style={{ maxWidth: '200px' }}>
+                <label>Code (mskFormBoundField)</label>
+                <input
+                  className={styles.formControl}
+                  value={editing ? editing.sig_code : '-1'}
+                  disabled
+                  style={{ backgroundColor: 'var(--bg-secondary)', fontWeight: 700 }}
+                />
               </div>
 
-              {/* Show in List checkbox */}
-              <div className={styles.formGroup} style={{ marginTop: '16px', marginBottom: '24px' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: 600 }}>
-                  <input
-                    type="checkbox"
-                    checked={form.flr_show_in_list}
-                    onChange={e => setForm(f => ({ ...f, flr_show_in_list: e.target.checked }))}
-                  />
-                  Show in List (chkFlrShowInList)
-                </label>
+              {/* Group Name (txtSigName) */}
+              <div className={styles.formGroup}>
+                <label>Group Name (txtSigName) *</label>
+                <input
+                  ref={nameInputRef}
+                  className={styles.formControl}
+                  value={form.sig_name}
+                  onChange={e => setForm(f => ({ ...f, sig_name: e.target.value }))}
+                  maxLength={50}
+                  required
+                  placeholder="Enter Product Group Name"
+                />
+              </div>
+
+              {/* Description (txtSigDesc) */}
+              <div className={styles.formGroup}>
+                <label>Description (txtSigDesc)</label>
+                <input
+                  className={styles.formControl}
+                  value={form.sig_desc}
+                  onChange={e => setForm(f => ({ ...f, sig_desc: e.target.value }))}
+                  maxLength={100}
+                  placeholder="Enter Description"
+                />
               </div>
 
               <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '20px', fontStyle: 'italic' }}>

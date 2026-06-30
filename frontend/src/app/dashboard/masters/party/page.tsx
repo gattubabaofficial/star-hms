@@ -5,18 +5,20 @@ import styles from '../../../dashboard.module.css';
 import ActionBar from '../components/ActionBar';
 import { Search, AlertCircle, Check } from 'lucide-react';
 
-interface ServiceGroup {
-  sgp_code: number;
-  sgp_name: string;
-  sgp_index: number;
-  sgp_expanded: boolean;
-  sgp_editable: boolean;
-  sgp_inf_allowed: boolean;
-  sgp_def_allowed: boolean;
-  sgp_disc_allowed: boolean;
-  sgp_disc_per: number;
-  sgp_show_in_list: boolean;
-  sgp_rec_state: number;
+interface PartyGroup { pgm_code: number; pgm_name: string; }
+interface Party {
+  prt_code: number;
+  prt_title?: string;
+  prt_name: string;
+  prt_pgm_code: number;
+  prt_addr?: string;
+  prt_tel_no?: string;
+  prt_sms_no?: string;
+  prt_email?: string;
+  prt_show_in_list: boolean;
+  prt_remark?: string;
+  prt_rec_state: number;
+  group?: PartyGroup | null;
 }
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -24,26 +26,27 @@ const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('tok
 const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
 
 const blankForm = {
-  sgp_name: '',
-  sgp_index: '0',
-  sgp_expanded: false,
-  sgp_editable: false,
-  sgp_inf_allowed: false,
-  sgp_def_allowed: false,
-  sgp_disc_allowed: false,
-  sgp_disc_per: '0',
-  sgp_show_in_list: true,
+  prt_title: 'Mr.',
+  prt_name: '',
+  prt_pgm_code: '',
+  prt_addr: '',
+  prt_tel_no: '',
+  prt_sms_no: '',
+  prt_email: '',
+  prt_show_in_list: true,
+  prt_remark: '',
 };
 
-export default function ServiceGroupPage() {
+export default function PartyMasterPage() {
   const router = useRouter();
 
   // State variables
-  const [items, setItems] = useState<ServiceGroup[]>([]);
+  const [items, setItems] = useState<Party[]>([]);
+  const [groups, setGroups] = useState<PartyGroup[]>([]);
   const [search, setSearch] = useState('');
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [entryMode, setEntryMode] = useState(false); // false = Summary view, true = Detail view
-  const [editing, setEditing] = useState<ServiceGroup | null>(null);
+  const [editing, setEditing] = useState<Party | null>(null);
 
   const [form, setForm] = useState(blankForm);
   const [loading, setLoading] = useState(false);
@@ -54,29 +57,35 @@ export default function ServiceGroupPage() {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Load service groups
-  const load = async () => {
+  // Load data
+  const loadData = async () => {
     try {
-      const r = await fetch(`${API}/api/masters/service-groups`);
-      if (r.ok) {
-        const data = await r.json();
+      const [ptRes, pgRes] = await Promise.all([
+        fetch(`${API}/api/masters/parties`),
+        fetch(`${API}/api/masters/party-groups`)
+      ]);
+
+      if (pgRes.ok) setGroups(await pgRes.json());
+
+      if (ptRes.ok) {
+        const data = await ptRes.json();
         setItems(data);
         if (data.length > 0) {
           setSelectedId(prev => {
-            const exists = data.some((item: ServiceGroup) => item.sgp_code === prev);
-            return exists ? prev : data[0].sgp_code;
+            const exists = data.some((item: Party) => item.prt_code === prev);
+            return exists ? prev : data[0].prt_code;
           });
         } else {
           setSelectedId(null);
         }
       }
     } catch (e) {
-      console.error('Error loading service groups:', e);
+      console.error('Error loading party data:', e);
     }
   };
 
   useEffect(() => {
-    load();
+    loadData();
   }, []);
 
   // Set focus automatically when entering detail mode
@@ -94,20 +103,21 @@ export default function ServiceGroupPage() {
       if (entryMode || items.length === 0) return;
 
       const filtered = items.filter(i =>
-        i.sgp_name.toLowerCase().includes(search.toLowerCase())
+        i.prt_name.toLowerCase().includes(search.toLowerCase()) ||
+        (i.group?.pgm_name ?? '').toLowerCase().includes(search.toLowerCase())
       );
       if (filtered.length === 0) return;
 
-      const currentIndex = filtered.findIndex(i => i.sgp_code === selectedId);
+      const currentIndex = filtered.findIndex(i => i.prt_code === selectedId);
 
       if (e.key === 'ArrowDown') {
         e.preventDefault();
         const nextIndex = (currentIndex + 1) % filtered.length;
-        setSelectedId(filtered[nextIndex].sgp_code);
+        setSelectedId(filtered[nextIndex].prt_code);
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         const prevIndex = (currentIndex - 1 + filtered.length) % filtered.length;
-        setSelectedId(filtered[prevIndex].sgp_code);
+        setSelectedId(filtered[prevIndex].prt_code);
       }
     };
 
@@ -118,27 +128,30 @@ export default function ServiceGroupPage() {
   // Actions
   const handleAdd = () => {
     setEditing(null);
-    setForm(blankForm);
+    setForm({
+      ...blankForm,
+      prt_pgm_code: groups[0]?.pgm_code?.toString() ?? '',
+    });
     setError('');
     setSuccess('');
     setEntryMode(true);
   };
 
   const handleEdit = () => {
-    const item = items.find(i => i.sgp_code === selectedId);
+    const item = items.find(i => i.prt_code === selectedId);
     if (!item) return;
 
     setEditing(item);
     setForm({
-      sgp_name: item.sgp_name,
-      sgp_index: item.sgp_index.toString(),
-      sgp_expanded: item.sgp_expanded,
-      sgp_editable: item.sgp_editable,
-      sgp_inf_allowed: item.sgp_inf_allowed,
-      sgp_def_allowed: item.sgp_def_allowed,
-      sgp_disc_allowed: item.sgp_disc_allowed,
-      sgp_disc_per: item.sgp_disc_per.toString(),
-      sgp_show_in_list: item.sgp_show_in_list,
+      prt_title: item.prt_title || 'Mr.',
+      prt_name: item.prt_name,
+      prt_pgm_code: item.prt_pgm_code.toString(),
+      prt_addr: item.prt_addr || '',
+      prt_tel_no: item.prt_tel_no || '',
+      prt_sms_no: item.prt_sms_no || '',
+      prt_email: item.prt_email || '',
+      prt_show_in_list: item.prt_show_in_list,
+      prt_remark: item.prt_remark || '',
     });
     setError('');
     setSuccess('');
@@ -147,25 +160,25 @@ export default function ServiceGroupPage() {
 
   const handleDelete = async () => {
     if (!selectedId) return;
-    const item = items.find(i => i.sgp_code === selectedId);
+    const item = items.find(i => i.prt_code === selectedId);
     if (!item) return;
 
-    if (!confirm(`Delete service group "${item.sgp_name}"?`)) return;
+    if (!confirm(`Delete supplier "${item.prt_name}"?`)) return;
 
     try {
-      const r = await fetch(`${API}/api/masters/service-groups/${selectedId}`, {
+      const r = await fetch(`${API}/api/masters/parties/${selectedId}`, {
         method: 'DELETE',
         headers: authHdr()
       });
       if (!r.ok) throw new Error('Failed to delete');
-      load();
+      loadData();
     } catch (e: any) {
       alert(e.message);
     }
   };
 
   const handleRefresh = () => {
-    load();
+    loadData();
   };
 
   const handleExit = () => {
@@ -181,32 +194,14 @@ export default function ServiceGroupPage() {
     if (e) e.preventDefault();
 
     // Validations
-    if (!form.sgp_name.trim()) {
-      setError('Invalid Group Name !!!');
+    if (!form.prt_name.trim()) {
+      setError('Invalid Supplier Name !!!');
       nameInputRef.current?.focus();
       return;
     }
 
-    // Duplicate Check
-    const isDuplicate = items.some(item =>
-      item.sgp_name.toLowerCase() === form.sgp_name.trim().toLowerCase() &&
-      item.sgp_code !== editing?.sgp_code
-    );
-    if (isDuplicate) {
-      setError('Duplicate Input !!!');
-      nameInputRef.current?.focus();
-      return;
-    }
-
-    const indexVal = parseInt(form.sgp_index);
-    if (isNaN(indexVal) || indexVal < 0) {
-      setError('Invalid Index Value !!!');
-      return;
-    }
-
-    const discPer = parseFloat(form.sgp_disc_per);
-    if (isNaN(discPer) || discPer < 0) {
-      setError('Invalid Discount Percentage !!!');
+    if (!form.prt_pgm_code) {
+      setError('Supplier Group is required !!!');
       return;
     }
 
@@ -216,21 +211,21 @@ export default function ServiceGroupPage() {
 
     try {
       const body = {
-        sgp_name: form.sgp_name.trim(),
-        sgp_index: indexVal,
-        sgp_expanded: form.sgp_expanded,
-        sgp_editable: form.sgp_editable,
-        sgp_inf_allowed: form.sgp_inf_allowed,
-        sgp_def_allowed: form.sgp_def_allowed,
-        sgp_disc_allowed: form.sgp_disc_allowed,
-        sgp_disc_per: discPer,
-        sgp_show_in_list: form.sgp_show_in_list,
-        sgp_rec_state: 1
+        prt_title: form.prt_title,
+        prt_name: form.prt_name.trim(),
+        prt_pgm_code: parseInt(form.prt_pgm_code),
+        prt_addr: form.prt_addr.trim() || null,
+        prt_tel_no: form.prt_tel_no.trim() || null,
+        prt_sms_no: form.prt_sms_no.trim() || null,
+        prt_email: form.prt_email.trim() || null,
+        prt_show_in_list: form.prt_show_in_list,
+        prt_remark: form.prt_remark.trim() || null,
+        prt_rec_state: 1,
       };
 
       const url = editing
-        ? `${API}/api/masters/service-groups/${editing.sgp_code}`
-        : `${API}/api/masters/service-groups`;
+        ? `${API}/api/masters/parties/${editing.prt_code}`
+        : `${API}/api/masters/parties`;
       const method = editing ? 'PUT' : 'POST';
 
       const r = await fetch(url, {
@@ -241,7 +236,7 @@ export default function ServiceGroupPage() {
       if (!r.ok) throw new Error(await r.text());
 
       setSuccess(editing ? 'Updated successfully' : 'Created successfully');
-      load();
+      loadData();
       setTimeout(() => {
         setEntryMode(false);
         setEditing(null);
@@ -267,7 +262,8 @@ export default function ServiceGroupPage() {
   }, [entryMode, form, editing, items]);
 
   const filtered = items.filter(i =>
-    i.sgp_name.toLowerCase().includes(search.toLowerCase())
+    i.prt_name.toLowerCase().includes(search.toLowerCase()) ||
+    (i.group?.pgm_name ?? '').toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -287,7 +283,7 @@ export default function ServiceGroupPage() {
           marginBottom: '24px',
           borderRadius: '4px'
         }}>
-          Service Group Master
+          Supplier / Party Master [frmPartyMst]
         </div>
 
         {/* SUMMARY MODE (frFormSmry) */}
@@ -306,12 +302,15 @@ export default function ServiceGroupPage() {
                   value={search}
                   onChange={e => {
                     setSearch(e.target.value);
-                    const matching = items.filter(i => i.sgp_name.toLowerCase().includes(e.target.value.toLowerCase()));
-                    if (matching.length > 0 && !matching.some(m => m.sgp_code === selectedId)) {
-                      setSelectedId(matching[0].sgp_code);
+                    const matching = items.filter(i =>
+                      i.prt_name.toLowerCase().includes(e.target.value.toLowerCase()) ||
+                      (i.group?.pgm_name ?? '').toLowerCase().includes(e.target.value.toLowerCase())
+                    );
+                    if (matching.length > 0 && !matching.some(m => m.prt_code === selectedId)) {
+                      setSelectedId(matching[0].prt_code);
                     }
                   }}
-                  placeholder="Search groups (txtSearch1Text)..."
+                  placeholder="Search suppliers (txtSearch)..."
                 />
               </div>
             </div>
@@ -322,38 +321,45 @@ export default function ServiceGroupPage() {
                 <thead>
                   <tr>
                     <th style={{ width: '80px' }}>Code</th>
-                    <th>Group Name</th>
-                    <th>Index</th>
-                    <th>Show List</th>
+                    <th>Supplier Name</th>
+                    <th>Group</th>
+                    <th>Contact No</th>
+                    <th>Email</th>
+                    <th>Show In List</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.length === 0 && (
                     <tr>
-                      <td colSpan={4} style={{ textAlign: 'center', padding: '40px', color: 'var(--text-secondary)' }}>
-                        No service groups found
+                      <td colSpan={6} style={{ textAlign: 'center', padding: '40px', color: 'var(--text-secondary)' }}>
+                        No suppliers found
                       </td>
                     </tr>
                   )}
                   {filtered.map((item) => (
                     <tr
-                      key={item.sgp_code}
-                      onClick={() => setSelectedId(item.sgp_code)}
+                      key={item.prt_code}
+                      onClick={() => setSelectedId(item.prt_code)}
                       onDoubleClick={handleEdit}
                       style={{
                         cursor: 'pointer',
-                        backgroundColor: selectedId === item.sgp_code ? 'var(--accent-light)' : 'transparent',
-                        fontWeight: selectedId === item.sgp_code ? 600 : 400
+                        backgroundColor: selectedId === item.prt_code ? 'var(--accent-light)' : 'transparent',
+                        fontWeight: selectedId === item.prt_code ? 600 : 400
                       }}
                     >
-                      <td style={{ color: selectedId === item.sgp_code ? 'var(--accent-color)' : 'var(--text-secondary)' }}>
-                        #{item.sgp_code}
+                      <td style={{ color: selectedId === item.prt_code ? 'var(--accent-color)' : 'var(--text-secondary)' }}>
+                        #{item.prt_code}
                       </td>
-                      <td>{item.sgp_name}</td>
-                      <td>{item.sgp_index}</td>
                       <td>
-                        <span className={`${styles.badge} ${item.sgp_show_in_list ? styles.badgeAccent : styles.badgeDanger}`}>
-                          {item.sgp_show_in_list ? 'Yes' : 'No'}
+                        <span style={{ color: 'var(--text-secondary)', marginRight: '4px' }}>{item.prt_title}</span>
+                        {item.prt_name}
+                      </td>
+                      <td>{item.group?.pgm_name || '—'}</td>
+                      <td>{item.prt_tel_no || '—'}</td>
+                      <td>{item.prt_email || '—'}</td>
+                      <td>
+                        <span className={`${styles.badge} ${item.prt_show_in_list ? styles.badgeSuccess : styles.badgeDanger}`}>
+                          {item.prt_show_in_list ? 'Yes' : 'No'}
                         </span>
                       </td>
                     </tr>
@@ -385,134 +391,148 @@ export default function ServiceGroupPage() {
 
               <div className={styles.formGrid}>
                 {/* Code (mskFormBoundField) - read-only */}
-                <div className={styles.formGroup}>
+                <div className={styles.formGroup} style={{ maxWidth: '200px' }}>
                   <label>Code (mskFormBoundField)</label>
                   <input
                     className={styles.formControl}
-                    value={editing ? editing.sgp_code : '-1'}
+                    value={editing ? editing.prt_code : '-1'}
                     disabled
                     style={{ backgroundColor: 'var(--bg-secondary)', fontWeight: 700 }}
                   />
                 </div>
 
-                {/* Index (mskSgpIndex) */}
-                <div className={styles.formGroup}>
-                  <label>Index (mskSgpIndex) *</label>
-                  <input
-                    type="number"
-                    min="0"
+                {/* Title */}
+                <div className={styles.formGroup} style={{ maxWidth: '150px' }}>
+                  <label htmlFor="prt_title">Title (cmbPrtTitle)</label>
+                  <select
+                    id="prt_title"
                     className={styles.formControl}
-                    value={form.sgp_index}
-                    onChange={e => setForm(f => ({ ...f, sgp_index: e.target.value }))}
+                    value={form.prt_title}
+                    onChange={e => setForm(f => ({ ...f, prt_title: e.target.value }))}
+                  >
+                    <option value="Mr.">Mr.</option>
+                    <option value="Mrs.">Mrs.</option>
+                    <option value="Ms.">Ms.</option>
+                    <option value="Dr.">Dr.</option>
+                    <option value="M/s.">M/s.</option>
+                  </select>
+                </div>
+
+                {/* Supplier Name */}
+                <div className={styles.formGroup} style={{ flex: 2 }}>
+                  <label htmlFor="prt_name">Supplier Name (txtPrtName) *</label>
+                  <input
+                    id="prt_name"
+                    ref={nameInputRef}
+                    className={styles.formControl}
+                    value={form.prt_name}
+                    onChange={e => setForm(f => ({ ...f, prt_name: e.target.value }))}
+                    maxLength={50}
                     required
+                    placeholder="Enter Supplier Name"
                   />
                 </div>
-              </div>
-
-              {/* Group Name (txtSgpName) */}
-              <div className={styles.formGroup}>
-                <label>Group Name (txtSgpName) *</label>
-                <input
-                  ref={nameInputRef}
-                  className={styles.formControl}
-                  value={form.sgp_name}
-                  onChange={e => setForm(f => ({ ...f, sgp_name: e.target.value }))}
-                  maxLength={50}
-                  required
-                  placeholder="Enter Group Name"
-                />
               </div>
 
               <div className={styles.formGrid}>
-                {/* Discount % (mskSgpDiscPer) */}
+                {/* Supplier Group */}
                 <div className={styles.formGroup}>
-                  <label>Discount % (mskSgpDiscPer)</label>
-                  <input
-                    type="number"
-                    min="0"
-                    max="100"
-                    step="0.01"
+                  <label htmlFor="prt_pgm_code">Supplier Group (txtPgmName) *</label>
+                  <select
+                    id="prt_pgm_code"
                     className={styles.formControl}
-                    value={form.sgp_disc_per}
-                    onChange={e => setForm(f => ({ ...f, sgp_disc_per: e.target.value }))}
-                  />
+                    value={form.prt_pgm_code}
+                    onChange={e => setForm(f => ({ ...f, prt_pgm_code: e.target.value }))}
+                    required
+                  >
+                    <option value="">— Select Group —</option>
+                    {groups.map(g => (
+                      <option key={g.pgm_code} value={g.pgm_code}>{g.pgm_name}</option>
+                    ))}
+                  </select>
                 </div>
 
-                {/* Discount Allowed (chkSgpDiscAllowed) */}
+                {/* Show in List Checkbox */}
                 <div className={styles.formGroup} style={{ justifyContent: 'flex-end', paddingBottom: '10px' }}>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: 600 }}>
                     <input
                       type="checkbox"
-                      checked={form.sgp_disc_allowed}
-                      onChange={e => setForm(f => ({ ...f, sgp_disc_allowed: e.target.checked }))}
+                      checked={form.prt_show_in_list}
+                      onChange={e => setForm(f => ({ ...f, prt_show_in_list: e.target.checked }))}
                     />
-                    Discount Allowed (chkSgpDiscAllowed)
+                    Show In List (chkPrtShowInList)
                   </label>
                 </div>
               </div>
 
-              <div className={styles.formGrid} style={{ marginTop: '10px' }}>
-                {/* Inflation Allowed (chkSgpInfAllowed) */}
+              {/* Address */}
+              <div className={styles.formGroup}>
+                <label htmlFor="prt_addr">Address (txtPrtAddr)</label>
+                <input
+                  id="prt_addr"
+                  className={styles.formControl}
+                  value={form.prt_addr}
+                  onChange={e => setForm(f => ({ ...f, prt_addr: e.target.value }))}
+                  maxLength={250}
+                  placeholder="Enter Address"
+                />
+              </div>
+
+              <div className={styles.formGrid}>
+                {/* Telephone No. */}
                 <div className={styles.formGroup}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: 600 }}>
-                    <input
-                      type="checkbox"
-                      checked={form.sgp_inf_allowed}
-                      onChange={e => setForm(f => ({ ...f, sgp_inf_allowed: e.target.checked }))}
-                    />
-                    Inflation Allowed (chkSgpInfAllowed)
-                  </label>
+                  <label htmlFor="prt_tel_no">Telephone No. (txtPrtTelNo)</label>
+                  <input
+                    id="prt_tel_no"
+                    className={styles.formControl}
+                    value={form.prt_tel_no}
+                    onChange={e => setForm(f => ({ ...f, prt_tel_no: e.target.value }))}
+                    maxLength={50}
+                    placeholder="Enter phone/tel number"
+                  />
                 </div>
 
-                {/* Deflation Allowed (chkSgpDefAllowed) */}
+                {/* SMS Number */}
                 <div className={styles.formGroup}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: 600 }}>
-                    <input
-                      type="checkbox"
-                      checked={form.sgp_def_allowed}
-                      onChange={e => setForm(f => ({ ...f, sgp_def_allowed: e.target.checked }))}
-                    />
-                    Deflation Allowed (chkSgpDefAllowed)
-                  </label>
+                  <label htmlFor="prt_sms_no">SMS Number (txtPrtSMSNo)</label>
+                  <input
+                    id="prt_sms_no"
+                    className={styles.formControl}
+                    value={form.prt_sms_no}
+                    onChange={e => setForm(f => ({ ...f, prt_sms_no: e.target.value }))}
+                    maxLength={50}
+                    placeholder="Enter SMS mobile number"
+                  />
                 </div>
               </div>
 
               <div className={styles.formGrid}>
-                {/* Expanded (chkSgpExpanded) */}
+                {/* Email */}
                 <div className={styles.formGroup}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: 600 }}>
-                    <input
-                      type="checkbox"
-                      checked={form.sgp_expanded}
-                      onChange={e => setForm(f => ({ ...f, sgp_expanded: e.target.checked }))}
-                    />
-                    Expanded Print (chkSgpExpanded)
-                  </label>
-                </div>
-
-                {/* Editable (chkSgpEditable) */}
-                <div className={styles.formGroup}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: 600 }}>
-                    <input
-                      type="checkbox"
-                      checked={form.sgp_editable}
-                      onChange={e => setForm(f => ({ ...f, sgp_editable: e.target.checked }))}
-                    />
-                    Editable (chkSgpEditable)
-                  </label>
-                </div>
-              </div>
-
-              {/* Show in List (chkSgpShowInList) */}
-              <div className={styles.formGroup}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: 600 }}>
+                  <label htmlFor="prt_email">Email (txtPrtEmail)</label>
                   <input
-                    type="checkbox"
-                    checked={form.sgp_show_in_list}
-                    onChange={e => setForm(f => ({ ...f, sgp_show_in_list: e.target.checked }))}
+                    id="prt_email"
+                    type="email"
+                    className={styles.formControl}
+                    value={form.prt_email}
+                    onChange={e => setForm(f => ({ ...f, prt_email: e.target.value }))}
+                    maxLength={50}
+                    placeholder="Enter email address"
                   />
-                  Show in List (chkSgpShowInList)
-                </label>
+                </div>
+
+                {/* Remarks */}
+                <div className={styles.formGroup}>
+                  <label htmlFor="prt_remark">Remarks (txtPrtRemark)</label>
+                  <input
+                    id="prt_remark"
+                    className={styles.formControl}
+                    value={form.prt_remark}
+                    onChange={e => setForm(f => ({ ...f, prt_remark: e.target.value }))}
+                    maxLength={50}
+                    placeholder="Enter remarks"
+                  />
+                </div>
               </div>
 
               <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '20px', fontStyle: 'italic' }}>

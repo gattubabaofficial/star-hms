@@ -99,6 +99,7 @@ export default function LoginPage() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               disabled={loading}
+              suppressHydrationWarning
             />
           </div>
 
@@ -112,6 +113,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={loading}
+              suppressHydrationWarning
             />
           </div>
 

@@ -5,29 +5,22 @@ import styles from '../../../dashboard.module.css';
 import ActionBar from '../components/ActionBar';
 import { Search, AlertCircle, Check } from 'lucide-react';
 
-interface DoctorCategory {
-  dcg_code: number;
-  dcg_name: string;
+interface RefCatg {
+  rfg_code: number;
+  rfg_name: string;
 }
 
-interface DoctorRole {
-  drl_code: number;
-  drl_name: string;
-}
-
-interface Doctor {
-  dct_code: number;
-  dct_title?: string;
-  dct_name: string;
-  dct_specialty?: string;
-  dct_dcg_code?: number;
-  dct_drl_code?: number;
-  dct_address?: string;
-  dct_telephone?: string;
-  dct_email?: string;
-  dct_share_percent: number;
-  category?: DoctorCategory | null;
-  role?: DoctorRole | null;
+interface RefBy {
+  rby_code: number;
+  rby_name: string;
+  rby_speci?: string;
+  rby_rfg_code?: number;
+  rby_addr?: string;
+  rby_tel_no?: string;
+  rby_email?: string;
+  rby_share: number;
+  rby_rec_state: number;
+  category?: RefCatg | null;
 }
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -35,28 +28,25 @@ const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('tok
 const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
 
 const blankForm = {
-  dct_title: 'Dr.',
-  dct_name: '',
-  dct_specialty: '',
-  dct_dcg_code: '',
-  dct_drl_code: '',
-  dct_address: '',
-  dct_telephone: '',
-  dct_email: '',
-  dct_share_percent: '0.00',
+  rby_name: '',
+  rby_speci: '',
+  rby_rfg_code: '',
+  rby_addr: '',
+  rby_tel_no: '',
+  rby_email: '',
+  rby_share: '0.00',
 };
 
-export default function DoctorMasterPage() {
+export default function ReferralByPage() {
   const router = useRouter();
 
   // State
-  const [items, setItems] = useState<Doctor[]>([]);
-  const [categories, setCategories] = useState<DoctorCategory[]>([]);
-  const [roles, setRoles] = useState<DoctorRole[]>([]);
+  const [items, setItems] = useState<RefBy[]>([]);
+  const [categories, setCategories] = useState<RefCatg[]>([]);
   const [search, setSearch] = useState('');
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [entryMode, setEntryMode] = useState(false);
-  const [editing, setEditing] = useState<Doctor | null>(null);
+  const [editing, setEditing] = useState<RefBy | null>(null);
 
   const [form, setForm] = useState(blankForm);
   const [loading, setLoading] = useState(false);
@@ -70,25 +60,23 @@ export default function DoctorMasterPage() {
   // Load data
   const load = async () => {
     try {
-      const [docRes, catRes, roleRes] = await Promise.all([
-        fetch(`${API}/api/masters/doctors`).then(r => r.json()),
-        fetch(`${API}/api/masters/doctor-categories`).then(r => r.json()),
-        fetch(`${API}/api/masters/doctor-roles`).then(r => r.json()),
+      const [refRes, catRes] = await Promise.all([
+        fetch(`${API}/api/masters/referred-by`).then(r => r.json()),
+        fetch(`${API}/api/masters/referred-categories`).then(r => r.json()),
       ]);
-      setItems(docRes);
+      setItems(refRes);
       setCategories(catRes);
-      setRoles(roleRes);
 
-      if (docRes.length > 0) {
+      if (refRes.length > 0) {
         setSelectedId(prev => {
-          const exists = docRes.some((item: Doctor) => item.dct_code === prev);
-          return exists ? prev : docRes[0].dct_code;
+          const exists = refRes.some((item: RefBy) => item.rby_code === prev);
+          return exists ? prev : refRes[0].rby_code;
         });
       } else {
         setSelectedId(null);
       }
     } catch (e) {
-      console.error('Error loading doctor master data:', e);
+      console.error('Error loading referred-by data:', e);
     }
   };
 
@@ -111,21 +99,21 @@ export default function DoctorMasterPage() {
       if (entryMode || items.length === 0) return;
 
       const filtered = items.filter(i =>
-        i.dct_name.toLowerCase().includes(search.toLowerCase()) ||
-        (i.dct_specialty ?? '').toLowerCase().includes(search.toLowerCase())
+        i.rby_name.toLowerCase().includes(search.toLowerCase()) ||
+        (i.rby_speci ?? '').toLowerCase().includes(search.toLowerCase())
       );
       if (filtered.length === 0) return;
 
-      const currentIndex = filtered.findIndex(i => i.dct_code === selectedId);
+      const currentIndex = filtered.findIndex(i => i.rby_code === selectedId);
 
       if (e.key === 'ArrowDown') {
         e.preventDefault();
         const nextIndex = (currentIndex + 1) % filtered.length;
-        setSelectedId(filtered[nextIndex].dct_code);
+        setSelectedId(filtered[nextIndex].rby_code);
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         const prevIndex = (currentIndex - 1 + filtered.length) % filtered.length;
-        setSelectedId(filtered[prevIndex].dct_code);
+        setSelectedId(filtered[prevIndex].rby_code);
       }
     };
 
@@ -138,8 +126,7 @@ export default function DoctorMasterPage() {
     setEditing(null);
     setForm({
       ...blankForm,
-      dct_dcg_code: categories[0]?.dcg_code?.toString() ?? '',
-      dct_drl_code: roles[0]?.drl_code?.toString() ?? '',
+      rby_rfg_code: categories[0]?.rfg_code?.toString() ?? '',
     });
     setError('');
     setSuccess('');
@@ -147,20 +134,18 @@ export default function DoctorMasterPage() {
   };
 
   const handleEdit = () => {
-    const item = items.find(i => i.dct_code === selectedId);
+    const item = items.find(i => i.rby_code === selectedId);
     if (!item) return;
 
     setEditing(item);
     setForm({
-      dct_title: item.dct_title || 'Dr.',
-      dct_name: item.dct_name,
-      dct_specialty: item.dct_specialty || '',
-      dct_dcg_code: item.dct_dcg_code?.toString() ?? '',
-      dct_drl_code: item.dct_drl_code?.toString() ?? '',
-      dct_address: item.dct_address || '',
-      dct_telephone: item.dct_telephone || '',
-      dct_email: item.dct_email || '',
-      dct_share_percent: item.dct_share_percent.toString(),
+      rby_name: item.rby_name,
+      rby_speci: item.rby_speci || '',
+      rby_rfg_code: item.rby_rfg_code?.toString() ?? '',
+      rby_addr: item.rby_addr || '',
+      rby_tel_no: item.rby_tel_no || '',
+      rby_email: item.rby_email || '',
+      rby_share: item.rby_share.toString(),
     });
     setError('');
     setSuccess('');
@@ -169,13 +154,13 @@ export default function DoctorMasterPage() {
 
   const handleDelete = async () => {
     if (!selectedId) return;
-    const item = items.find(i => i.dct_code === selectedId);
+    const item = items.find(i => i.rby_code === selectedId);
     if (!item) return;
 
-    if (!confirm(`Delete doctor record "${item.dct_name}"?`)) return;
+    if (!confirm(`Delete referred-by record "${item.rby_name}"?`)) return;
 
     try {
-      const r = await fetch(`${API}/api/masters/doctors/${selectedId}`, {
+      const r = await fetch(`${API}/api/masters/referred-by/${selectedId}`, {
         method: 'DELETE',
         headers: authHdr()
       });
@@ -203,16 +188,16 @@ export default function DoctorMasterPage() {
     if (e) e.preventDefault();
 
     // Validation
-    if (!form.dct_name.trim()) {
-      setError('Invalid Doctor Name !!!');
+    if (!form.rby_name.trim()) {
+      setError('Invalid Referred By Name !!!');
       nameInputRef.current?.focus();
       return;
     }
 
     // Duplicate Check
     const isDuplicate = items.some(item =>
-      item.dct_name.toLowerCase() === form.dct_name.trim().toLowerCase() &&
-      item.dct_code !== editing?.dct_code
+      item.rby_name.toLowerCase() === form.rby_name.trim().toLowerCase() &&
+      item.rby_code !== editing?.rby_code
     );
     if (isDuplicate) {
       setError('Duplicate Input !!!');
@@ -220,7 +205,7 @@ export default function DoctorMasterPage() {
       return;
     }
 
-    const sharePercent = parseFloat(form.dct_share_percent);
+    const sharePercent = parseFloat(form.rby_share);
     if (isNaN(sharePercent) || sharePercent < 0 || sharePercent > 100) {
       setError('Invalid Share Percentage !!!');
       return;
@@ -232,21 +217,19 @@ export default function DoctorMasterPage() {
 
     try {
       const body = {
-        dct_title: form.dct_title,
-        dct_name: form.dct_name.trim(),
-        dct_specialty: form.dct_specialty.trim() || null,
-        dct_dcg_code: form.dct_dcg_code ? parseInt(form.dct_dcg_code) : null,
-        dct_drl_code: form.dct_drl_code ? parseInt(form.dct_drl_code) : null,
-        dct_address: form.dct_address.trim() || null,
-        dct_telephone: form.dct_telephone.trim() || null,
-        dct_email: form.dct_email.trim() || null,
-        dct_share_percent: sharePercent,
-        dct_rec_state: 1
+        rby_name: form.rby_name.trim(),
+        rby_speci: form.rby_speci.trim() || null,
+        rby_rfg_code: form.rby_rfg_code ? parseInt(form.rby_rfg_code) : null,
+        rby_addr: form.rby_addr.trim() || null,
+        rby_tel_no: form.rby_tel_no.trim() || null,
+        rby_email: form.rby_email.trim() || null,
+        rby_share: sharePercent,
+        rby_rec_state: 1
       };
 
       const url = editing
-        ? `${API}/api/masters/doctors/${editing.dct_code}`
-        : `${API}/api/masters/doctors`;
+        ? `${API}/api/masters/referred-by/${editing.rby_code}`
+        : `${API}/api/masters/referred-by`;
       const method = editing ? 'PUT' : 'POST';
 
       const r = await fetch(url, {
@@ -283,8 +266,8 @@ export default function DoctorMasterPage() {
   }, [entryMode, form, editing, items]);
 
   const filtered = items.filter(i =>
-    i.dct_name.toLowerCase().includes(search.toLowerCase()) ||
-    (i.dct_specialty ?? '').toLowerCase().includes(search.toLowerCase())
+    i.rby_name.toLowerCase().includes(search.toLowerCase()) ||
+    (i.rby_speci ?? '').toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -304,7 +287,7 @@ export default function DoctorMasterPage() {
           marginBottom: '24px',
           borderRadius: '4px'
         }}>
-          Doctor Master
+          Referred By Master
         </div>
 
         {/* SUMMARY MODE (frFormSmry) */}
@@ -324,14 +307,14 @@ export default function DoctorMasterPage() {
                   onChange={e => {
                     setSearch(e.target.value);
                     const matching = items.filter(i =>
-                      i.dct_name.toLowerCase().includes(e.target.value.toLowerCase()) ||
-                      (i.dct_specialty ?? '').toLowerCase().includes(e.target.value.toLowerCase())
+                      i.rby_name.toLowerCase().includes(e.target.value.toLowerCase()) ||
+                      (i.rby_speci ?? '').toLowerCase().includes(e.target.value.toLowerCase())
                     );
-                    if (matching.length > 0 && !matching.some(m => m.dct_code === selectedId)) {
-                      setSelectedId(matching[0].dct_code);
+                    if (matching.length > 0 && !matching.some(m => m.rby_code === selectedId)) {
+                      setSelectedId(matching[0].rby_code);
                     }
                   }}
-                  placeholder="Search doctors (txtSearch1Text)..."
+                  placeholder="Search referrers (txtSearch1Text)..."
                 />
               </div>
             </div>
@@ -342,9 +325,9 @@ export default function DoctorMasterPage() {
                 <thead>
                   <tr>
                     <th style={{ width: '80px' }}>Code</th>
-                    <th>Doctor Name</th>
+                    <th>Referred By Name</th>
                     <th>Category</th>
-                    <th>Role</th>
+                    <th>Contact No</th>
                     <th>Share %</th>
                     <th>Op.Balance</th>
                     <th>Op.Dr.Bal</th>
@@ -359,33 +342,28 @@ export default function DoctorMasterPage() {
                   {filtered.length === 0 && (
                     <tr>
                       <td colSpan={12} style={{ textAlign: 'center', padding: '40px', color: 'var(--text-secondary)' }}>
-                        No doctors found
+                        No referrers found
                       </td>
                     </tr>
                   )}
                   {filtered.map((item) => (
                     <tr
-                      key={item.dct_code}
-                      onClick={() => setSelectedId(item.dct_code)}
+                      key={item.rby_code}
+                      onClick={() => setSelectedId(item.rby_code)}
                       onDoubleClick={handleEdit}
                       style={{
                         cursor: 'pointer',
-                        backgroundColor: selectedId === item.dct_code ? 'var(--accent-light)' : 'transparent',
-                        fontWeight: selectedId === item.dct_code ? 600 : 400
+                        backgroundColor: selectedId === item.rby_code ? 'var(--accent-light)' : 'transparent',
+                        fontWeight: selectedId === item.rby_code ? 600 : 400
                       }}
                     >
-                      <td style={{ color: selectedId === item.dct_code ? 'var(--accent-color)' : 'var(--text-secondary)' }}>
-                        #{item.dct_code}
+                      <td style={{ color: selectedId === item.rby_code ? 'var(--accent-color)' : 'var(--text-secondary)' }}>
+                        #{item.rby_code}
                       </td>
-                      <td>
-                        <span style={{ color: 'var(--text-secondary)', fontWeight: 500, marginRight: '4px' }}>
-                          {item.dct_title || 'Dr.'}
-                        </span>
-                        {item.dct_name}
-                      </td>
-                      <td>{item.category?.dcg_name || '—'}</td>
-                      <td>{item.role?.drl_name || '—'}</td>
-                      <td style={{ fontWeight: 700 }}>{item.dct_share_percent}%</td>
+                      <td>{item.rby_name}</td>
+                      <td>{item.category?.rfg_name || '—'}</td>
+                      <td>{item.rby_tel_no || '—'}</td>
+                      <td style={{ fontWeight: 700 }}>{item.rby_share}%</td>
                       <td>0.00</td>
                       <td>0.00</td>
                       <td>0.00</td>
@@ -426,118 +404,88 @@ export default function DoctorMasterPage() {
                   <label>Code (mskFormBoundField)</label>
                   <input
                     className={styles.formControl}
-                    value={editing ? editing.dct_code : '-1'}
+                    value={editing ? editing.rby_code : '-1'}
                     disabled
                     style={{ backgroundColor: 'var(--bg-secondary)', fontWeight: 700 }}
                   />
                 </div>
 
-                {/* Title (txtDctTitle) */}
+                {/* Referred By Name (txtRByName) */}
                 <div className={styles.formGroup}>
-                  <label>Title (txtDctTitle) *</label>
-                  <select
-                    className={styles.formControl}
-                    value={form.dct_title}
-                    onChange={e => setForm(f => ({ ...f, dct_title: e.target.value }))}
-                  >
-                    <option value="Dr.">Dr.</option>
-                    <option value="Prof.">Prof.</option>
-                    <option value="Mr.">Mr.</option>
-                    <option value="Mrs.">Mrs.</option>
-                    <option value="Ms.">Ms.</option>
-                  </select>
-                </div>
-
-                {/* Doctor Name (txtDctName) */}
-                <div className={styles.formGroup}>
-                  <label>Doctor Name (txtDctName) *</label>
+                  <label>Referred By Name (txtRByName) *</label>
                   <input
                     ref={nameInputRef}
                     className={styles.formControl}
-                    value={form.dct_name}
-                    onChange={e => setForm(f => ({ ...f, dct_name: e.target.value }))}
+                    value={form.rby_name}
+                    onChange={e => setForm(f => ({ ...f, rby_name: e.target.value }))}
                     maxLength={50}
                     required
-                    placeholder="Enter doctor full name"
+                    placeholder="Enter name"
                   />
                 </div>
 
-                {/* Specialty (txtDctSpeci) */}
+                {/* Specialty (txtRBySpeci) */}
                 <div className={styles.formGroup}>
-                  <label>Speciality (txtDctSpeci)</label>
+                  <label>Specialty (txtRBySpeci)</label>
                   <input
                     className={styles.formControl}
-                    value={form.dct_specialty}
-                    onChange={e => setForm(f => ({ ...f, dct_specialty: e.target.value }))}
+                    value={form.rby_speci}
+                    onChange={e => setForm(f => ({ ...f, rby_speci: e.target.value }))}
                     maxLength={50}
-                    placeholder="e.g. Cardiology"
+                    placeholder="e.g. Pediatrics"
                   />
                 </div>
 
-                {/* Category (txtDcgName) */}
+                {/* Category (txtRfgName) */}
                 <div className={styles.formGroup}>
-                  <label>Doctor Category (txtDcgName) *</label>
+                  <label>Referred Category (txtRfgName) *</label>
                   <select
                     className={styles.formControl}
-                    value={form.dct_dcg_code}
-                    onChange={e => setForm(f => ({ ...f, dct_dcg_code: e.target.value }))}
+                    value={form.rby_rfg_code}
+                    onChange={e => setForm(f => ({ ...f, rby_rfg_code: e.target.value }))}
                     required
                   >
                     <option value="">— Select Category —</option>
-                    {categories.map(c => <option key={c.dcg_code} value={c.dcg_code}>{c.dcg_name}</option>)}
+                    {categories.map(c => <option key={c.rfg_code} value={c.rfg_code}>{c.rfg_name}</option>)}
                   </select>
                 </div>
 
-                {/* Role (txtDrlName) */}
+                {/* Share % (mskRByShare) */}
                 <div className={styles.formGroup}>
-                  <label>Doctor Role (txtDrlName) *</label>
-                  <select
-                    className={styles.formControl}
-                    value={form.dct_drl_code}
-                    onChange={e => setForm(f => ({ ...f, dct_drl_code: e.target.value }))}
-                    required
-                  >
-                    <option value="">— Select Role —</option>
-                    {roles.map(r => <option key={r.drl_code} value={r.drl_code}>{r.drl_name}</option>)}
-                  </select>
-                </div>
-
-                {/* Share % (mskDctShare) */}
-                <div className={styles.formGroup}>
-                  <label>Share % (mskDctShare)</label>
+                  <label>Share % (mskRByShare)</label>
                   <input
                     type="number"
                     min="0"
                     max="100"
                     step="0.01"
                     className={styles.formControl}
-                    value={form.dct_share_percent}
-                    onChange={e => setForm(f => ({ ...f, dct_share_percent: e.target.value }))}
+                    value={form.rby_share}
+                    onChange={e => setForm(f => ({ ...f, rby_share: e.target.value }))}
                   />
                 </div>
 
-                {/* Telephone (txtDctTelNo) */}
+                {/* Telephone (txtRByTelNo) */}
                 <div className={styles.formGroup}>
-                  <label>Telephone (txtDctTelNo)</label>
+                  <label>Telephone (txtRByTelNo)</label>
                   <input
                     className={styles.formControl}
-                    value={form.dct_telephone}
-                    onChange={e => setForm(f => ({ ...f, dct_telephone: e.target.value }))}
+                    value={form.rby_tel_no}
+                    onChange={e => setForm(f => ({ ...f, rby_tel_no: e.target.value }))}
                     maxLength={50}
                     placeholder="Contact number"
                   />
                 </div>
 
-                {/* Email (txtDctEmail) */}
+                {/* Email (txtRByEmail) */}
                 <div className={styles.formGroup}>
-                  <label>Email (txtDctEmail)</label>
+                  <label>Email (txtRByEmail)</label>
                   <input
                     type="email"
                     className={styles.formControl}
-                    value={form.dct_email}
-                    onChange={e => setForm(f => ({ ...f, dct_email: e.target.value }))}
+                    value={form.rby_email}
+                    onChange={e => setForm(f => ({ ...f, rby_email: e.target.value }))}
                     maxLength={50}
-                    placeholder="email@hospital.com"
+                    placeholder="email@referrer.com"
                   />
                 </div>
 
@@ -574,17 +522,17 @@ export default function DoctorMasterPage() {
                   />
                 </div>
 
-                {/* Address (txtDctAddr) */}
+                {/* Address (txtRByAddr) */}
                 <div className={styles.formGroup} style={{ gridColumn: 'span 2' }}>
-                  <label>Residential Address (txtDctAddr)</label>
+                  <label>Address (txtRByAddr)</label>
                   <textarea
                     className={styles.formControl}
                     style={{ resize: 'none' }}
-                    value={form.dct_address}
-                    onChange={e => setForm(f => ({ ...f, dct_address: e.target.value }))}
+                    value={form.rby_addr}
+                    onChange={e => setForm(f => ({ ...f, rby_addr: e.target.value }))}
                     maxLength={250}
                     rows={2}
-                    placeholder="Enter residential address"
+                    placeholder="Enter address"
                   />
                 </div>
               </div>
