@@ -51,7 +51,8 @@ def migrate():
                 pcg_disc_allowed=bool(data['PcgDiscAllowed']),
                 pcg_disc_per=float(data['PcgDiscPer'] or 0.0),
                 pcg_show_in_list=bool(data['PcgShowInList']),
-                pcg_rec_state=data['PcgRecState']
+                pcg_rec_state=data['PcgRecState'],
+                pcg_type=data.get('PcgType')
             )
             db.add(new_cat)
     db.commit()

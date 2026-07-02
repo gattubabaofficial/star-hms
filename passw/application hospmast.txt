@@ -1,0 +1,6 @@
+application hospmast
+diagnostic diagmast
+clinical clinical mast
+medical store drug mast
+standard accounts
+payroll not in use

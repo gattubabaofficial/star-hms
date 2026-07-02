@@ -26,6 +26,7 @@ class PatientCategory(Base):
     pcg_disc_per = Column(Double, default=0.0)
     pcg_show_in_list = Column(Boolean, default=True)
     pcg_rec_state = Column(SmallInteger, default=1) # 1 = Active, 0 = Inactive
+    pcg_type = Column(String(50), nullable=True)
 
     patients = relationship("Patient", back_populates="category")
 
@@ -94,6 +95,7 @@ class Floor(Base):
     flr_code = Column(Integer, primary_key=True, index=True, autoincrement=True)
     flr_name = Column(String(50), nullable=False)
     flr_rec_state = Column(SmallInteger, default=1)
+    flr_show_in_list = Column(Boolean, default=True)
 
     wards = relationship("Ward", back_populates="floor")
 
@@ -104,6 +106,7 @@ class Ward(Base):
     wrd_name = Column(String(50), nullable=False)
     wrd_flr_code = Column(Integer, ForeignKey("floors.flr_code"), nullable=True)
     wrd_rec_state = Column(SmallInteger, default=1)
+    wrd_show_in_list = Column(Boolean, default=True)
 
     floor = relationship("Floor", back_populates="wards")
     beds = relationship("Bed", back_populates="ward")
@@ -116,6 +119,17 @@ class Bed(Base):
     bdm_wrd_code = Column(Integer, ForeignKey("wards.wrd_code"), nullable=False)
     bdm_rec_state = Column(SmallInteger, default=1)
     is_occupied = Column(Boolean, default=False)
+    bdm_flr_code = Column(Integer, ForeignKey("floors.flr_code"), nullable=True)
+    bdm_srv_code = Column(Integer, ForeignKey("services.srv_code"), nullable=True)
+    bdm_index = Column(SmallInteger, default=0)
+    bdm_charges = Column(Double, default=0.0)
+    bdm_disc_allowed = Column(Boolean, default=False)
+    bdm_disc_per = Column(Double, default=0.0)
+    bdm_chk_out_time_basis = Column(String(100), nullable=True)
+    bdm_chk_time = Column(String(50), nullable=True)
+    bdm_free_allot = Column(Boolean, default=False)
+    bdm_remark = Column(String(250), nullable=True)
+    bdm_show_in_list = Column(Boolean, default=True)
 
     ward = relationship("Ward", back_populates="beds")
     ipd_admissions = relationship("IPDAdmission", back_populates="bed")
@@ -126,6 +140,14 @@ class ServiceGroup(Base):
     sgp_code = Column(Integer, primary_key=True, index=True, autoincrement=True)
     sgp_name = Column(String(50), nullable=False)
     sgp_rec_state = Column(SmallInteger, default=1)
+    sgp_index = Column(SmallInteger, default=0)
+    sgp_expanded = Column(Boolean, default=False)
+    sgp_editable = Column(Boolean, default=False)
+    sgp_inf_allowed = Column(Boolean, default=False)
+    sgp_def_allowed = Column(Boolean, default=False)
+    sgp_disc_allowed = Column(Boolean, default=False)
+    sgp_disc_per = Column(Double, default=0.0)
+    sgp_show_in_list = Column(Boolean, default=True)
 
     services = relationship("Service", back_populates="group")
 
@@ -137,6 +159,19 @@ class Service(Base):
     srv_sgp_code = Column(Integer, ForeignKey("service_groups.sgp_code"), nullable=True)
     srv_rate = Column(Double, default=0.0)
     srv_rec_state = Column(SmallInteger, default=1)
+    srv_index = Column(SmallInteger, default=0)
+    srv_rate_editable = Column(Boolean, default=False)
+    srv_amt_editable = Column(Boolean, default=False)
+    srv_unit_editable = Column(Boolean, default=False)
+    srv_multi_dct = Column(Boolean, default=False)
+    srv_show_in_list = Column(Boolean, default=True)
+    srv_auto_ins_indr = Column(Boolean, default=False)
+    srv_auto_ins_once_indr = Column(Boolean, default=False)
+    srv_auto_calc_indr = Column(Boolean, default=False)
+    srv_inf_allowed = Column(Boolean, default=False)
+    srv_def_allowed = Column(Boolean, default=False)
+    srv_disc_allowed = Column(Boolean, default=False)
+    srv_disc_per = Column(Double, default=0.0)
 
     group = relationship("ServiceGroup", back_populates="services")
 

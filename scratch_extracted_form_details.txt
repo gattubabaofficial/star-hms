@@ -1,0 +1,1412 @@
+=== File: PatCgMst.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - chkPcgShowInList : VB.CheckBox (Caption: Show in List:)
+  - chkPcgInfAllowed : VB.CheckBox (Caption: Increament Allowed:)
+  - chkPcgDefAllowed : VB.CheckBox (Caption: Decreament Allowed:)
+  - chkPcgDiscAllowed : VB.CheckBox (Caption: Discount Allowed:)
+  - mskPcgDiscPer : VB.TextBox
+  - cmdSaveForm : VB.CommandButton (Caption:       &Save)
+  - txtPcgName : VB.TextBox
+  - mskFormBoundField : VB.TextBox
+  - txtVoid : VB.TextBox
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+  - txtList1Col : VB.TextBox
+  - txtSearch1Text : VB.TextBox
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+Grid Columns (from AddFields):
+  - PcgCode
+  - PcgName (Category Name)
+SQL Select Tables: ['PatCatgMst']
+Save mapping snippet:
+  629: 
+  630: End If
+  631: 
+  632: End Sub
+  633: 
+  634: Private Sub cmdSaveForm_Click()
+  635: Call Data_SaveEvent
+  636: 
+  637: Call SmryList
+  638: txtSearch1Text_InterActiveChange txtPcgName.Text
+  639: 
+  640: ''datRecset.Find "PcgName='" & txtPcgName.Text & "'", Start:=1
+  641: ''ShowRecActiveFlexRow datRecset, Mfgrd1
+  642: 
+  643: Call ShowEntryMode(False)
+  644: Mfgrd1.SetFocus
+  645: 
+  646: End Sub
+  647: 
+  648: Private Sub cmdSaveForm_GotFocus()
+  649: txtVoid.SetFocus
+  650: cmdSaveForm.Enabled = False
+  651: If Data_Verify() = True Then
+  652: If CanAccept() = True Then
+  653: Call cmdSaveForm_Click
+  654: If mRemoteAccess = True Then
+  655: Me.Hide
+  656: Exit Sub
+  657: End If
+  658: Else
+  659: txtPcgName.SetFocus
+  660: End If
+  661: End If
+  662: cmdSaveForm.Enabled = True
+  663: 
+
+==================================================
+
+=== File: DctCgMst.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - txtVoid : VB.TextBox
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+  - txtList1Col : VB.TextBox
+  - txtSearch1Text : VB.TextBox
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+  - cmdSaveForm : VB.CommandButton (Caption:       &Save)
+  - txtDcgName : VB.TextBox
+  - mskFormBoundField : VB.TextBox
+Grid Columns (from AddFields):
+  - DcgCode
+  - DcgName (Category Name)
+SQL Select Tables: ['DoctCatgMst']
+Save mapping snippet:
+  462: 
+  463: End If
+  464: 
+  465: End Sub
+  466: 
+  467: Private Sub cmdSaveForm_Click()
+  468: Call Data_SaveEvent
+  469: 
+  470: Call SmryList
+  471: txtSearch1Text_InterActiveChange txtDcgName.Text
+  472: 
+  473: ''datRecset.Find "DcgName='" & txtDcgName.Text & "'", Start:=1
+  474: ''ShowRecActiveFlexRow datRecset, Mfgrd1
+  475: 
+  476: Call ShowEntryMode(False)
+  477: Mfgrd1.SetFocus
+  478: 
+  479: End Sub
+  480: 
+  481: Private Sub cmdSaveForm_GotFocus()
+  482: txtVoid.SetFocus
+  483: cmdSaveForm.Enabled = False
+  484: If Data_Verify() = True Then
+  485: If CanAccept() = True Then
+  486: Call cmdSaveForm_Click
+  487: If mRemoteAccess = True Then
+  488: Me.Hide
+  489: Exit Sub
+  490: End If
+  491: Else
+  492: txtDcgName.SetFocus
+  493: End If
+  494: End If
+  495: cmdSaveForm.Enabled = True
+  496: 
+
+==================================================
+
+=== File: RefCgMst.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - cmdSaveForm : VB.CommandButton (Caption:       &Save)
+  - txtRfgName : VB.TextBox
+  - mskFormBoundField : VB.TextBox
+  - txtList1Col : VB.TextBox
+  - txtSearch1Text : VB.TextBox
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+  - txtVoid : VB.TextBox
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+Grid Columns (from AddFields):
+  - RfgCode
+  - RfgName (Category Name)
+SQL Select Tables: ['RefCatgMst']
+Save mapping snippet:
+  462: 
+  463: End If
+  464: 
+  465: End Sub
+  466: 
+  467: Private Sub cmdSaveForm_Click()
+  468: Call Data_SaveEvent
+  469: 
+  470: Call SmryList
+  471: txtSearch1Text_InterActiveChange txtRfgName.Text
+  472: 
+  473: ''datRecset.Find "RfgName='" & txtRfgName.Text & "'", Start:=1
+  474: ''ShowRecActiveFlexRow datRecset, Mfgrd1
+  475: 
+  476: Call ShowEntryMode(False)
+  477: Mfgrd1.SetFocus
+  478: 
+  479: End Sub
+  480: 
+  481: Private Sub cmdSaveForm_GotFocus()
+  482: txtVoid.SetFocus
+  483: cmdSaveForm.Enabled = False
+  484: If Data_Verify() = True Then
+  485: If CanAccept() = True Then
+  486: Call cmdSaveForm_Click
+  487: If mRemoteAccess = True Then
+  488: Me.Hide
+  489: Exit Sub
+  490: End If
+  491: Else
+  492: txtRfgName.SetFocus
+  493: End If
+  494: End If
+  495: cmdSaveForm.Enabled = True
+  496: 
+
+==================================================
+
+=== File: DctRolMs.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - txtVoid : VB.TextBox
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+  - cmdSaveForm : VB.CommandButton (Caption:       &Save)
+  - txtDrlName : VB.TextBox
+  - mskFormBoundField : VB.TextBox
+  - txtList1Col : VB.TextBox
+  - txtSearch1Text : VB.TextBox
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+Grid Columns (from AddFields):
+  - DrlCode
+  - DrlName (Role Name)
+SQL Select Tables: ['DoctRoleMst']
+Save mapping snippet:
+  462: 
+  463: End If
+  464: 
+  465: End Sub
+  466: 
+  467: Private Sub cmdSaveForm_Click()
+  468: Call Data_SaveEvent
+  469: 
+  470: Call SmryList
+  471: txtSearch1Text_InterActiveChange txtDrlName.Text
+  472: 
+  473: ''datRecset.Find "DrlName='" & txtDrlName.Text & "'", Start:=1
+  474: ''ShowRecActiveFlexRow datRecset, Mfgrd1
+  475: 
+  476: Call ShowEntryMode(False)
+  477: Mfgrd1.SetFocus
+  478: 
+  479: End Sub
+  480: 
+  481: Private Sub cmdSaveForm_GotFocus()
+  482: txtVoid.SetFocus
+  483: cmdSaveForm.Enabled = False
+  484: If Data_Verify() = True Then
+  485: If CanAccept() = True Then
+  486: Call cmdSaveForm_Click
+  487: If mRemoteAccess = True Then
+  488: Me.Hide
+  489: Exit Sub
+  490: End If
+  491: Else
+  492: txtDrlName.SetFocus
+  493: End If
+  494: End If
+  495: cmdSaveForm.Enabled = True
+  496: 
+
+==================================================
+
+=== File: DoctMast.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - txtVoid : VB.TextBox
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+  - txtDrlName : VB.TextBox
+  - txtDctTitle : VB.TextBox
+  - txtDctEmail : VB.TextBox
+  - txtDctTelNo : VB.TextBox
+  - txtDctAddr : VB.TextBox
+  - txtAhName : VB.TextBox
+  - mskDctShare : VB.TextBox
+  - txtDcgName : VB.TextBox
+  - txtDctSpeci : VB.TextBox
+  - txtDrCrFlag : VB.TextBox
+  - mskAhOpBal : VB.TextBox
+  - cmdSaveForm : VB.CommandButton
+  - txtDctName : VB.TextBox
+  - mskFormBoundField : VB.TextBox
+  - txtList1Col : VB.TextBox
+  - txtSearch1Text : VB.TextBox
+  - chkCombinedCurBal : VB.CheckBox (Caption: Combined Current Balance)
+  - chkCombinedOpBal : VB.CheckBox (Caption: Combined Opening Balance)
+  - chkOpBal : VB.CheckBox (Caption: Opening Balance)
+  - chkCurBal : VB.CheckBox (Caption: Current Balance)
+  - cmdConfigure : VB.CommandButton (Caption: &OK)
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+Grid Columns (from AddFields):
+  - DctCode
+  - DctName (Doctor Name)
+  - AhOpBal (Op.Balance)
+  - AhOpDrBal (Op.Dr.Bal)
+  - AhOpCrBal (Op.Cr.Bal)
+  - AhCurBal (Cur.Balance)
+  - AhCurDrBal (Cur.Dr.Bal)
+  - AhCurCrBal (Cur.Cr.Bal)
+  - DcgName (Category)
+  - AhName (Account Name)
+SQL Select Tables: ['DoctMast']
+Save mapping snippet:
+  1499: End If
+  1500: End If
+  1501: 
+  1502: End Sub
+  1503: 
+  1504: Private Sub cmdSaveForm_Click()
+  1505: Call Data_SaveEvent
+  1506: 
+  1507: Call SmryList
+  1508: txtSearch1Text_InterActiveChange txtDctName.Text
+  1509: 
+  1510: ''datRecset.Find "DctName='" & txtDctName.Text & "'", Start:=1
+  1511: ''ShowRecActiveFlexRow datRecset, Mfgrd1
+  1512: 
+  1513: Call ShowEntryMode(False)
+  1514: Mfgrd1.SetFocus
+  1515: Call CalcDrCrAmtTot
+  1516: 
+  1517: End Sub
+  1518: 
+  1519: Private Sub cmdSaveForm_GotFocus()
+  1520: txtVoid.SetFocus
+  1521: cmdSaveForm.Enabled = False
+  1522: If Data_Verify() = True Then
+  1523: If CanAccept() = True Then
+  1524: Call cmdSaveForm_Click
+  1525: If mRemoteAccess = True Then
+  1526: ''Unload Me
+  1527: Me.Hide
+  1528: Exit Sub
+  1529: End If
+  1530: Else
+  1531: txtDctName.SetFocus
+  1532: End If
+  1533: End If
+
+==================================================
+
+=== File: RefByMst.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - txtVoid : VB.TextBox
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+  - txtRByEmail : VB.TextBox
+  - txtRByTelNo : VB.TextBox
+  - txtRByAddr : VB.TextBox
+  - txtAhName : VB.TextBox
+  - mskRByShare : VB.TextBox
+  - txtRfgName : VB.TextBox
+  - txtRBySpeci : VB.TextBox
+  - txtDrCrFlag : VB.TextBox
+  - mskAhOpBal : VB.TextBox
+  - cmdSaveForm : VB.CommandButton
+  - txtRByName : VB.TextBox
+  - mskFormBoundField : VB.TextBox
+  - txtList1Col : VB.TextBox
+  - txtSearch1Text : VB.TextBox
+  - chkCombinedCurBal : VB.CheckBox (Caption: Combined Current Balance)
+  - chkCombinedOpBal : VB.CheckBox (Caption: Combined Opening Balance)
+  - chkOpBal : VB.CheckBox (Caption: Opening Balance)
+  - chkCurBal : VB.CheckBox (Caption: Current Balance)
+  - cmdConfigure : VB.CommandButton (Caption: &OK)
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+Grid Columns (from AddFields):
+  - RByCode
+  - RByName (Referred By Name)
+  - AhOpBal (Op.Balance)
+  - AhOpDrBal (Op.Dr.Bal)
+  - AhOpCrBal (Op.Cr.Bal)
+  - AhCurBal (Cur.Balance)
+  - AhCurDrBal (Cur.Dr.Bal)
+  - AhCurCrBal (Cur.Cr.Bal)
+  - RfgName (Category)
+  - AhName (Account Name)
+SQL Select Tables: ['RefByMast']
+Save mapping snippet:
+  1421: End If
+  1422: End If
+  1423: 
+  1424: End Sub
+  1425: 
+  1426: Private Sub cmdSaveForm_Click()
+  1427: Call Data_SaveEvent
+  1428: 
+  1429: Call SmryList
+  1430: txtSearch1Text_InterActiveChange txtRByName.Text
+  1431: 
+  1432: ''datRecset.Find "RByName='" & txtRByName.Text & "'", Start:=1
+  1433: ''ShowRecActiveFlexRow datRecset, Mfgrd1
+  1434: 
+  1435: Call ShowEntryMode(False)
+  1436: Mfgrd1.SetFocus
+  1437: Call CalcDrCrAmtTot
+  1438: 
+  1439: End Sub
+  1440: 
+  1441: Private Sub cmdSaveForm_GotFocus()
+  1442: txtVoid.SetFocus
+  1443: cmdSaveForm.Enabled = False
+  1444: If Data_Verify() = True Then
+  1445: If CanAccept() = True Then
+  1446: Call cmdSaveForm_Click
+  1447: If mRemoteAccess = True Then
+  1448: ''Unload Me
+  1449: Me.Hide
+  1450: Exit Sub
+  1451: End If
+  1452: Else
+  1453: txtRByName.SetFocus
+  1454: End If
+  1455: End If
+
+==================================================
+
+=== File: RefToMst.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - txtRToEmail : VB.TextBox
+  - txtRToTelNo : VB.TextBox
+  - txtRToAddr : VB.TextBox
+  - txtAhName : VB.TextBox
+  - mskRToShare : VB.TextBox
+  - txtRfgName : VB.TextBox
+  - txtRToSpeci : VB.TextBox
+  - txtDrCrFlag : VB.TextBox
+  - mskAhOpBal : VB.TextBox
+  - cmdSaveForm : VB.CommandButton
+  - txtRToName : VB.TextBox
+  - mskFormBoundField : VB.TextBox
+  - txtVoid : VB.TextBox
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+  - txtList1Col : VB.TextBox
+  - txtSearch1Text : VB.TextBox
+  - chkCombinedCurBal : VB.CheckBox (Caption: Combined Current Balance)
+  - chkCombinedOpBal : VB.CheckBox (Caption: Combined Opening Balance)
+  - chkOpBal : VB.CheckBox (Caption: Opening Balance)
+  - chkCurBal : VB.CheckBox (Caption: Current Balance)
+  - cmdConfigure : VB.CommandButton (Caption: &OK)
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+Grid Columns (from AddFields):
+  - RToCode
+  - RToName (Referred To Name)
+  - AhOpBal (Op.Balance)
+  - AhOpDrBal (Op.Dr.Bal)
+  - AhOpCrBal (Op.Cr.Bal)
+  - AhCurBal (Cur.Balance)
+  - AhCurDrBal (Cur.Dr.Bal)
+  - AhCurCrBal (Cur.Cr.Bal)
+  - RfgName (Category)
+  - AhName (Account Name)
+SQL Select Tables: ['RefToMast']
+Save mapping snippet:
+  1421: End If
+  1422: End If
+  1423: 
+  1424: End Sub
+  1425: 
+  1426: Private Sub cmdSaveForm_Click()
+  1427: Call Data_SaveEvent
+  1428: 
+  1429: Call SmryList
+  1430: txtSearch1Text_InterActiveChange txtRToName.Text
+  1431: 
+  1432: ''datRecset.Find "RToName='" & txtRToName.Text & "'", Start:=1
+  1433: ''ShowRecActiveFlexRow datRecset, Mfgrd1
+  1434: 
+  1435: Call ShowEntryMode(False)
+  1436: Mfgrd1.SetFocus
+  1437: Call CalcDrCrAmtTot
+  1438: 
+  1439: End Sub
+  1440: 
+  1441: Private Sub cmdSaveForm_GotFocus()
+  1442: txtVoid.SetFocus
+  1443: cmdSaveForm.Enabled = False
+  1444: If Data_Verify() = True Then
+  1445: If CanAccept() = True Then
+  1446: Call cmdSaveForm_Click
+  1447: If mRemoteAccess = True Then
+  1448: ''Unload Me
+  1449: Me.Hide
+  1450: Exit Sub
+  1451: End If
+  1452: Else
+  1453: txtRToName.SetFocus
+  1454: End If
+  1455: End If
+
+==================================================
+
+=== File: SrvGrpMs.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - txtVoid : VB.TextBox
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+  - mskSgpDiscPer : VB.TextBox
+  - chkSgpDiscAllowed : VB.CheckBox (Caption: Discount Allowed:)
+  - chkSgpDefAllowed : VB.CheckBox (Caption: Decreament Allowed:)
+  - chkSgpInfAllowed : VB.CheckBox (Caption: Increament Allowed:)
+  - cmdExtRateSys : VB.CommandButton (Caption: Extended Charges && Share System)
+  - mskFormBoundField : VB.TextBox
+  - txtSgpName : VB.TextBox
+  - chkSgpExpanded : VB.CheckBox (Caption: Expanded Print:)
+  - chkSgpEditable : VB.CheckBox (Caption: Editable:)
+  - mskSgpIndex : VB.TextBox
+  - chkSgpShowInList : VB.CheckBox (Caption: Show in List:)
+  - cmdSaveForm : VB.CommandButton (Caption:       &Save)
+  - chkSgpExtShareSys : VB.CheckBox (Caption:                  Extended Share System)
+  - chkSgpExtBargSys : VB.CheckBox (Caption:                  Extended Bargain System)
+  - chkSgpExtDiscSys : VB.CheckBox (Caption:                     Extended Discount System)
+  - chkSgpExtRateSys : VB.CheckBox (Caption:                       Extended Rate System)
+  - chkSgpTimewseShareSys : VB.CheckBox (Caption: Time-wise Service Share System)
+  - chkSgpRTowseShareSys : VB.CheckBox (Caption: Ref.To-wise Service Share System)
+  - chkSgpRBywseShareSys : VB.CheckBox (Caption: Ref.By-wise Service Share System)
+  - chkSgpPcgwseShareSys : VB.CheckBox (Caption: Patient Category-wise Service Share System)
+  - chkSgpDctwseShareSys : VB.CheckBox (Caption: Doctor-wise Service Share System)
+  - chkSgpTimewseBargSys : VB.CheckBox (Caption: Time-wise Service Bargain System)
+  - chkSgpRTowseBargSys : VB.CheckBox (Caption: Ref.To-wise Service Bargain System)
+  - chkSgpRBywseBargSys : VB.CheckBox (Caption: Ref.By-wise Service Bargain System)
+  - chkSgpPcgwseBargSys : VB.CheckBox (Caption: Patient Category-wise Service Bargain System)
+  - chkSgpDctwseBargSys : VB.CheckBox (Caption: Doctor-wise Service Bargain System)
+  - chkSgpTimewseDiscSys : VB.CheckBox (Caption: Time-wise Service Discount System)
+  - chkSgpTimewseRateSys : VB.CheckBox (Caption: Time-wise Service Rate System)
+  - chkSgpRTowseDiscSys : VB.CheckBox (Caption: Ref.To-wise Service Discount System)
+  - chkSgpRBywseDiscSys : VB.CheckBox (Caption: Ref.By-wise Service Discount System)
+  - chkSgpPcgwseDiscSys : VB.CheckBox (Caption: Patient Category-wise Service Discount System)
+  - chkSgpDctwseDiscSys : VB.CheckBox (Caption: Doctor-wise Service Discount System)
+  - chkSgpRTowseRateSys : VB.CheckBox (Caption: Ref.To-wise Service Rate System)
+  - chkSgpRBywseRateSys : VB.CheckBox (Caption: Ref.By-wise Service Rate System)
+  - chkSgpPcgwseRateSys : VB.CheckBox (Caption: Patient Category-wise Service Rate System)
+  - chkSgpDctwseRateSys : VB.CheckBox (Caption: Doctor-wise Service Rate System)
+  - cmdExtRateSysDone : VB.CommandButton (Caption: &Done)
+  - txtList1Col : VB.TextBox
+  - txtSearch1Text : VB.TextBox
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+Grid Columns (from AddFields):
+  - SgpCode
+  - SgpName (Group Name)
+  - SgpIndex (Index)
+  - SgpShowInList (Show List)
+SQL Select Tables: ['ServGrpMst']
+Save mapping snippet:
+  1541: 
+  1542: End If
+  1543: 
+  1544: End Sub
+  1545: 
+  1546: Private Sub cmdSaveForm_Click()
+  1547: Call Data_SaveEvent
+  1548: 
+  1549: Call SmryList
+  1550: txtSearch1Text_InterActiveChange txtSgpName.Text
+  1551: 
+  1552: ''datRecset.Find "SgpName='" & txtSgpName.Text & "'", Start:=1
+  1553: ''ShowRecActiveFlexRow datRecset, Mfgrd1
+  1554: 
+  1555: Call ShowEntryMode(False)
+  1556: Mfgrd1.SetFocus
+  1557: 
+  1558: End Sub
+  1559: 
+  1560: Private Sub cmdSaveForm_GotFocus()
+  1561: txtVoid.SetFocus
+  1562: cmdSaveForm.Enabled = False
+  1563: If Data_Verify() = True Then
+  1564: If CanAccept() = True Then
+  1565: Call cmdSaveForm_Click
+  1566: If mRemoteAccess = True Then
+  1567: Me.Hide
+  1568: Exit Sub
+  1569: End If
+  1570: Else
+  1571: txtSgpName.SetFocus
+  1572: End If
+  1573: End If
+  1574: cmdSaveForm.Enabled = True
+  1575: 
+
+==================================================
+
+=== File: ServMast.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+  - mskSrvRate : VB.TextBox
+  - chkSrvAutoInsOnceIpdBill : VB.CheckBox (Caption: Auto Insert Once in Indoor Bill:)
+  - chkSrvMultiDctIncl : VB.CheckBox (Caption: Multiple Doctors Involved:)
+  - chkSrvAutoCalcIpdBill : VB.CheckBox (Caption: Auto Calculate in Indoor Bill:)
+  - chkSrvAutoInsIpdBill : VB.CheckBox (Caption: Auto Insert in Indoor Bill:)
+  - cmdExtRateSys : VB.CommandButton (Caption: Extended Charges && Share System)
+  - mskFormBoundField : VB.TextBox
+  - txtSrvName : VB.TextBox
+  - chkSrvUnitEditable : VB.CheckBox (Caption: Unit Editable:)
+  - mskSrvIndex : VB.TextBox
+  - chkSrvShowInList : VB.CheckBox (Caption: Show in List:)
+  - txtSgpName : VB.TextBox
+  - txtAhName : VB.TextBox
+  - mskSrvOpdGenChg : VB.TextBox
+  - mskSrvOpdEmgChg : VB.TextBox
+  - mskSrvIpdGenChg : VB.TextBox
+  - mskSrvIpdEmgChg : VB.TextBox
+  - mskSrvLabGenChg : VB.TextBox
+  - mskSrvLabEmgChg : VB.TextBox
+  - chkSrvRateEditable : VB.CheckBox (Caption: Rate Editable:)
+  - chkSrvAmtEditable : VB.CheckBox (Caption: Amount Editable:)
+  - chkSrvInfAllowed : VB.CheckBox (Caption: Increament Allowed:)
+  - chkSrvDefAllowed : VB.CheckBox (Caption: Decreament Allowed:)
+  - chkSrvDiscAllowed : VB.CheckBox (Caption: Discount Allowed:)
+  - mskSrvDiscPer : VB.TextBox
+  - mskSrmDiscPer : VB.TextBox
+  - dtpSrmWefDate : VB.TextBox
+  - mskSrmShareAmt : VB.TextBox
+  - mskSrmSharePer : VB.TextBox
+  - txtRToName : VB.TextBox
+  - txtRByName : VB.TextBox
+  - cmdOK : VB.CommandButton (Caption: &OK)
+  - mskSrmSno : VB.TextBox
+  - txtDctName : VB.TextBox
+  - mskSrmInfByPer : VB.TextBox
+  - mskSrmDefByPer : VB.TextBox
+  - txtPcgName : VB.TextBox
+  - txtSrmStartTime : VB.TextBox
+  - txtSrmEndTime : VB.TextBox
+  - mskSrmRate : VB.TextBox
+  - Mfgrd2 : MSFlexGridLib.MSFlexGrid
+  - cmdSaveForm : VB.CommandButton (Caption:       &Save)
+  - cmdExtRateSysDone : VB.CommandButton (Caption: &Done)
+  - chkSrvDctwseRateSys : VB.CheckBox (Caption: Doctor-wise Service Rate System)
+  - chkSrvPcgwseRateSys : VB.CheckBox (Caption: Patient Category-wise Service Rate System)
+  - chkSrvRBywseRateSys : VB.CheckBox (Caption: Ref.By-wise Service Rate System)
+  - chkSrvRTowseRateSys : VB.CheckBox (Caption: Ref.To-wise Service Rate System)
+  - chkSrvDctwseDiscSys : VB.CheckBox (Caption: Doctor-wise Service Discount System)
+  - chkSrvPcgwseDiscSys : VB.CheckBox (Caption: Patient Category-wise Service Discount System)
+  - chkSrvRBywseDiscSys : VB.CheckBox (Caption: Ref.By-wise Service Discount System)
+  - chkSrvRTowseDiscSys : VB.CheckBox (Caption: Ref.To-wise Service Discount System)
+  - chkSrvTimewseRateSys : VB.CheckBox (Caption: Time-wise Service Rate System)
+  - chkSrvTimewseDiscSys : VB.CheckBox (Caption: Time-wise Service Discount System)
+  - chkSrvDctwseBargSys : VB.CheckBox (Caption: Doctor-wise Service Bargain System)
+  - chkSrvPcgwseBargSys : VB.CheckBox (Caption: Patient Category-wise Service Bargain System)
+  - chkSrvRBywseBargSys : VB.CheckBox (Caption: Ref.By-wise Service Bargain System)
+  - chkSrvRTowseBargSys : VB.CheckBox (Caption: Ref.To-wise Service Bargain System)
+  - chkSrvTimewseBargSys : VB.CheckBox (Caption: Time-wise Service Bargain System)
+  - chkSrvDctwseShareSys : VB.CheckBox (Caption: Doctor-wise Service Share System)
+  - chkSrvPcgwseShareSys : VB.CheckBox (Caption: Patient Category-wise Service Share System)
+  - chkSrvRBywseShareSys : VB.CheckBox (Caption: Ref.By-wise Service Share System)
+  - chkSrvRTowseShareSys : VB.CheckBox (Caption: Ref.To-wise Service Share System)
+  - chkSrvTimewseShareSys : VB.CheckBox (Caption: Time-wise Service Share System)
+  - txtList1Col : VB.TextBox
+  - txtSearch1Text : VB.TextBox
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+  - txtVoid : VB.TextBox
+Grid Columns (from AddFields):
+  - SrvCode
+  - SrvName (Service Name)
+  - SrvSgpName (Group Name)
+  - SrvAhName (Account Name)
+  - SrvRate (Charges)
+  - SrvIndex (Index)
+  - SrvShowInList (Show List)
+SQL Select Tables: ['ServRateMst', 'ServMast']
+Save mapping snippet:
+  2864: txtVoid.SetFocus
+  2865: Mfgrd2.SetFocus
+  2866: 
+  2867: End Sub
+  2868: 
+  2869: Private Sub cmdSaveForm_Click()
+  2870: Call Data_SaveEvent
+  2871: 
+  2872: Call SmryList
+  2873: txtSearch1Text_InterActiveChange txtSrvName.Text
+  2874: 
+  2875: ''datRecset.Find "SrvName='" & txtSrvName.Text & "'", Start:=1
+  2876: ''ShowRecActiveFlexRow datRecset, Mfgrd1
+  2877: 
+  2878: Call ShowEntryMode(False)
+  2879: Mfgrd1.SetFocus
+  2880: 
+  2881: End Sub
+  2882: 
+  2883: Private Sub cmdSaveForm_GotFocus()
+  2884: txtVoid.SetFocus
+  2885: cmdSaveForm.Enabled = False
+  2886: If Data_Verify() = True Then
+  2887: If CanAccept() = True Then
+  2888: Call cmdSaveForm_Click
+  2889: If mRemoteAccess = True Then
+  2890: Me.Hide
+  2891: Exit Sub
+  2892: End If
+  2893: Else
+  2894: txtSrvName.SetFocus
+  2895: End If
+  2896: End If
+  2897: cmdSaveForm.Enabled = True
+  2898: 
+
+==================================================
+
+=== File: PatMast.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+  - txtVoid : VB.TextBox
+  - cmbPttSex : VB.ComboBox
+  - dtpPttAgeAsOnDt : VB.TextBox
+  - dtpPttDob : VB.TextBox
+  - mskPttAgeDy : VB.TextBox
+  - mskPttAgeMn : VB.TextBox
+  - mskPttAgeYr : VB.TextBox
+  - txtPttRemark : VB.TextBox
+  - chkPttShowInList : VB.CheckBox (Caption: Show in List:)
+  - chkPttInfAllowed : VB.CheckBox (Caption: Increament Allowed:)
+  - chkPttDefAllowed : VB.CheckBox (Caption: Decreament Allowed:)
+  - chkPttDiscAllowed : VB.CheckBox (Caption: Discount Allowed:)
+  - mskPttDiscPer : VB.TextBox
+  - txtPttEmail : VB.TextBox
+  - txtPttSMSNo : VB.TextBox
+  - txtPttTelNo : VB.TextBox
+  - txtStnName : VB.TextBox
+  - txtAraName : VB.TextBox
+  - txtPttAddr : VB.TextBox
+  - cmbPttRefRela : VB.ComboBox
+  - txtPttRefName : VB.TextBox
+  - mskPttRegNo : VB.TextBox
+  - txtAhName : VB.TextBox
+  - dtpPttRegDate : VB.TextBox
+  - txtPcgName : VB.TextBox
+  - txtDrCrFlag : VB.TextBox
+  - mskAhOpBal : VB.TextBox
+  - cmdSaveForm : VB.CommandButton
+  - txtPttName : VB.TextBox
+  - mskFormBoundField : VB.TextBox
+  - txtSearchPttContNo : VB.TextBox
+  - txtList1Col : VB.TextBox
+  - txtSearch1Text : VB.TextBox
+  - chkCombinedCurBal : VB.CheckBox (Caption: Combined Current Balance)
+  - chkCombinedOpBal : VB.CheckBox (Caption: Combined Opening Balance)
+  - chkOpBal : VB.CheckBox (Caption: Opening Balance)
+  - chkCurBal : VB.CheckBox (Caption: Current Balance)
+  - cmdConfigure : VB.CommandButton (Caption: &OK)
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+Grid Columns (from AddFields):
+  - PttCode
+  - PttName (Patient Name)
+  - PttRegNo (Reg.No)
+  - PttRegDate (Reg.Date)
+  - PttRefName (Care of)
+  - PttContNo (Contact No.)
+  - PttAddr (Address)
+  - PatAraName (Area)
+  - PatStnName (Station)
+  - AhOpBal (Op.Balance)
+  - AhOpDrBal (Op.Dr.Bal)
+  - AhOpCrBal (Op.Cr.Bal)
+  - AhCurBal (Cur.Balance)
+  - AhCurDrBal (Cur.Dr.Bal)
+  - AhCurCrBal (Cur.Cr.Bal)
+  - PatPcgName (Category)
+  - PatAhName (Account Name)
+SQL Select Tables: Not Found
+Save mapping snippet:
+  2149: End If
+  2150: End If
+  2151: 
+  2152: End Sub
+  2153: 
+  2154: Private Sub cmdSaveForm_Click()
+  2155: Call Data_SaveEvent
+  2156: 
+  2157: txtVoid.SetFocus
+  2158: Call SmryList
+  2159: txtSearch1Text_InterActiveChange txtPttName.Text
+  2160: 
+  2161: ''datRecset.Find "PttName='" & txtPttName.Text & "'", Start:=1
+  2162: ''ShowRecActiveFlexRow datRecset, Mfgrd1
+  2163: 
+  2164: Call ShowEntryMode(False)
+  2165: Mfgrd1.SetFocus
+  2166: Call CalcDrCrAmtTot
+  2167: 
+  2168: End Sub
+  2169: 
+  2170: Private Sub cmdSaveForm_GotFocus()
+  2171: Dim mPatAcsPermNo As Integer, mRetryCount As Integer
+  2172: 
+  2173: txtVoid.SetFocus
+  2174: cmdSaveForm.Enabled = False
+  2175: If Data_Verify() = True Then
+  2176: If CanAccept() = True Then
+  2177: If GetAccessPerm(mPatAcsPermNo, mRetryCount, mFormPatAcsPermFileName) = True And mRetryCount = 0 Then
+  2178: If Data_NetwAuth() = True Then
+  2179: Call cmdSaveForm_Click
+  2180: Close #mPatAcsPermNo
+  2181: If mRemoteAccess = True Then
+  2182: ''Unload Me
+  2183: Me.Hide
+
+==================================================
+
+=== File: DiagMast.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - txtVoid : VB.TextBox
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+  - txtSrvName : VB.TextBox
+  - mskDsmUnit : VB.TextBox
+  - mskDsmSno : VB.TextBox
+  - cmdOK : VB.CommandButton (Caption: &OK)
+  - mskDsmRate : VB.TextBox
+  - mskFormBoundField : VB.TextBox
+  - txtDigName : VB.TextBox
+  - cmdSaveForm : VB.CommandButton (Caption:       &Save)
+  - Mfgrd2 : MSFlexGridLib.MSFlexGrid
+  - txtList1Col : VB.TextBox
+  - txtSearch1Text : VB.TextBox
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+Grid Columns (from AddFields):
+  - DigCode
+  - DigName (Diagnosis Name)
+SQL Select Tables: ['DiagSrvMst', 'DiagMast']
+Save mapping snippet:
+  684: CloseTable tRecset, mCheckOpen:=True
+  685: End If
+  686: 
+  687: End Sub
+  688: 
+  689: Private Sub cmdSaveForm_Click()
+  690: Call Data_SaveEvent
+  691: 
+  692: Call SmryList
+  693: txtSearch1Text_InterActiveChange txtDigName.Text
+  694: 
+  695: ''datRecset.Find "DigName='" & txtDigName.Text & "'", Start:=1
+  696: ''ShowRecActiveFlexRow datRecset, Mfgrd1
+  697: 
+  698: Call ShowEntryMode(False)
+  699: Mfgrd1.SetFocus
+  700: 
+  701: End Sub
+  702: 
+  703: Private Sub cmdSaveForm_GotFocus()
+  704: txtVoid.SetFocus
+  705: cmdSaveForm.Enabled = False
+  706: If Data_Verify() = True Then
+  707: If CanAccept() = True Then
+  708: Call cmdSaveForm_Click
+  709: If mRemoteAccess = True Then
+  710: Me.Hide
+  711: Exit Sub
+  712: End If
+  713: Else
+  714: txtDigName.SetFocus
+  715: End If
+  716: End If
+  717: cmdSaveForm.Enabled = True
+  718: 
+
+==================================================
+
+=== File: FloorMst.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - txtList1Col : VB.TextBox
+  - txtSearch1Text : VB.TextBox
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+  - chkFlrShowInList : VB.CheckBox (Caption: Show in List:)
+  - cmdSaveForm : VB.CommandButton (Caption:       &Save)
+  - txtFlrName : VB.TextBox
+  - mskFormBoundField : VB.TextBox
+  - txtVoid : VB.TextBox
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+Grid Columns (from AddFields):
+  - FlrCode
+  - FlrName (Floor Name)
+  - FlrShowInList (Show List)
+SQL Select Tables: ['FloorMast']
+Save mapping snippet:
+  492: 
+  493: End If
+  494: 
+  495: End Sub
+  496: 
+  497: Private Sub cmdSaveForm_Click()
+  498: Call Data_SaveEvent
+  499: 
+  500: Call SmryList
+  501: txtSearch1Text_InterActiveChange txtFlrName.Text
+  502: 
+  503: Call ShowEntryMode(False)
+  504: Mfgrd1.SetFocus
+  505: 
+  506: End Sub
+  507: 
+  508: Private Sub cmdSaveForm_GotFocus()
+  509: txtVoid.SetFocus
+  510: cmdSaveForm.Enabled = False
+  511: If Data_Verify() = True Then
+  512: If CanAccept() = True Then
+  513: Call cmdSaveForm_Click
+  514: If mRemoteAccess = True Then
+  515: Me.Hide
+  516: Exit Sub
+  517: End If
+  518: Else
+  519: txtFlrName.SetFocus
+  520: End If
+  521: End If
+  522: cmdSaveForm.Enabled = True
+  523: 
+  524: End Sub
+  525: 
+  526: Private Sub Form_Activate()
+
+==================================================
+
+=== File: FlorMast.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - mskSrvDiscPer : VB.TextBox
+  - chkSrvDiscAllowed : VB.CheckBox (Caption: Discount Allowed:)
+  - chkSrvDefAllowed : VB.CheckBox (Caption: Decreament Allowed:)
+  - chkSrvInfAllowed : VB.CheckBox (Caption: Increament Allowed:)
+  - chkSrvAmtEditable : VB.CheckBox (Caption: Amount Editable:)
+  - chkSrvRateEditable : VB.CheckBox (Caption: Rate Editable:)
+  - mskSrvLabEmgChg : VB.TextBox
+  - mskSrvLabGenChg : VB.TextBox
+  - mskSrvIpdEmgChg : VB.TextBox
+  - mskSrvIpdGenChg : VB.TextBox
+  - mskSrvOpdEmgChg : VB.TextBox
+  - mskSrvOpdGenChg : VB.TextBox
+  - txtAhName : VB.TextBox
+  - txtSgpName : VB.TextBox
+  - chkSrvShowInList : VB.CheckBox (Caption: Show in List:)
+  - mskSrvIndex : VB.TextBox
+  - chkSrvUnitEditable : VB.CheckBox (Caption: Unit Editable:)
+  - cmdSaveForm : VB.CommandButton (Caption:       &Save)
+  - txtSrvName : VB.TextBox
+  - mskFormBoundField : VB.TextBox
+  - txtList1Col : VB.TextBox
+  - txtSearch1Text : VB.TextBox
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+  - txtVoid : VB.TextBox
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+Grid Columns (from AddFields):
+  - SrvCode
+  - SrvName (Service Name)
+  - SrvSgpName (Group Name)
+  - SrvAhName (Account Name)
+  - SrvOpdGenChg (Opd.Chg)
+  - SrvIpdGenChg (Ipd.Chg)
+  - SrvIndex (Index)
+  - SrvShowInList (Show List)
+SQL Select Tables: ['ServMast']
+Save mapping snippet:
+  822: 
+  823: End If
+  824: 
+  825: End Sub
+  826: 
+  827: Private Sub cmdSaveForm_Click()
+  828: Call Data_SaveEvent
+  829: 
+  830: Call SmryList
+  831: txtSearch1Text_InterActiveChange txtSrvName.Text
+  832: 
+  833: ''datRecset.Find "SrvName='" & txtSrvName.Text & "'", Start:=1
+  834: ''ShowRecActiveFlexRow datRecset, Mfgrd1
+  835: 
+  836: Call ShowEntryMode(False)
+  837: Mfgrd1.SetFocus
+  838: 
+  839: End Sub
+  840: 
+  841: Private Sub cmdSaveForm_GotFocus()
+  842: txtVoid.SetFocus
+  843: cmdSaveForm.Enabled = False
+  844: If Data_Verify() = True Then
+  845: If CanAccept() = True Then
+  846: Call cmdSaveForm_Click
+  847: If mRemoteAccess = True Then
+  848: Me.Hide
+  849: Exit Sub
+  850: End If
+  851: Else
+  852: txtSrvName.SetFocus
+  853: End If
+  854: End If
+  855: cmdSaveForm.Enabled = True
+  856: 
+
+==================================================
+
+=== File: WardMast.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - txtVoid : VB.TextBox
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+  - chkWrdShowInList : VB.CheckBox (Caption: Show in List:)
+  - cmdSaveForm : VB.CommandButton (Caption:       &Save)
+  - txtWrdName : VB.TextBox
+  - mskFormBoundField : VB.TextBox
+  - txtList1Col : VB.TextBox
+  - txtSearch1Text : VB.TextBox
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+Grid Columns (from AddFields):
+  - WrdCode
+  - WrdName (Ward Name)
+  - WrdShowInList (Show List)
+SQL Select Tables: ['WardMast']
+Save mapping snippet:
+  492: 
+  493: End If
+  494: 
+  495: End Sub
+  496: 
+  497: Private Sub cmdSaveForm_Click()
+  498: Call Data_SaveEvent
+  499: 
+  500: Call SmryList
+  501: txtSearch1Text_InterActiveChange txtWrdName.Text
+  502: 
+  503: Call ShowEntryMode(False)
+  504: Mfgrd1.SetFocus
+  505: 
+  506: End Sub
+  507: 
+  508: Private Sub cmdSaveForm_GotFocus()
+  509: txtVoid.SetFocus
+  510: cmdSaveForm.Enabled = False
+  511: If Data_Verify() = True Then
+  512: If CanAccept() = True Then
+  513: Call cmdSaveForm_Click
+  514: If mRemoteAccess = True Then
+  515: Me.Hide
+  516: Exit Sub
+  517: End If
+  518: Else
+  519: txtWrdName.SetFocus
+  520: End If
+  521: End If
+  522: cmdSaveForm.Enabled = True
+  523: 
+  524: End Sub
+  525: 
+  526: Private Sub Form_Activate()
+
+==================================================
+
+=== File: BedMast.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+  - mskBsmRate : VB.TextBox
+  - cmdOK : VB.CommandButton (Caption: &OK)
+  - mskBsmSno : VB.TextBox
+  - mskBsmUnit : VB.TextBox
+  - txtBsmSrvName : VB.TextBox
+  - mskFormBoundField : VB.TextBox
+  - txtBdmName : VB.TextBox
+  - mskBdmIndex : VB.TextBox
+  - chkBdmShowInList : VB.CheckBox (Caption: Show in List:)
+  - txtFlrName : VB.TextBox
+  - txtWrdName : VB.TextBox
+  - mskBdmCharges : VB.TextBox
+  - txtBdmRemark : VB.TextBox
+  - txtBdmChkTime_str : VB.TextBox
+  - txtSrvName : VB.TextBox
+  - cmbBdmChkOutTimeBasis : VB.ComboBox
+  - chkBdmFreeAllot : VB.CheckBox (Caption: Free Allotement:)
+  - chkBdmDiscAllowed : VB.CheckBox (Caption: Discount Allowed:)
+  - mskBdmDiscPer : VB.TextBox
+  - cmdSaveForm : VB.CommandButton (Caption:       &Save)
+  - Mfgrd2 : MSFlexGridLib.MSFlexGrid
+  - txtList1Col : VB.TextBox
+  - txtSearch1Text : VB.TextBox
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+  - txtVoid : VB.TextBox
+Grid Columns (from AddFields):
+  - BdmCode
+  - BdmName (Bed Name)
+  - BdmFlrName (Floor Name)
+  - BdmWrdName (Ward Name)
+  - BdmSrvName (Service Name)
+  - BdmCharges (Charges)
+  - BdmChkOutTimeBasis (Chk.Out.Time Basis)
+  - BdmChkTime (Chk.Time)
+  - BdmIndex (Index)
+  - BdmShowInList (Show List)
+SQL Select Tables: ['BedSrvMst', 'BedMast']
+Save mapping snippet:
+  1222: End If
+  1223: fcmbSrvName.Text = txtSrvName.Text: txtSrvName.Text = fcmbSrvName.Text
+  1224: 
+  1225: End Sub
+  1226: 
+  1227: Private Sub cmdSaveForm_Click()
+  1228: Call Data_SaveEvent
+  1229: 
+  1230: Call SmryList
+  1231: txtSearch1Text_InterActiveChange txtBdmName.Text
+  1232: 
+  1233: Call ShowEntryMode(False)
+  1234: Mfgrd1.SetFocus
+  1235: 
+  1236: End Sub
+  1237: 
+  1238: Private Sub cmdSaveForm_GotFocus()
+  1239: txtVoid.SetFocus
+  1240: cmdSaveForm.Enabled = False
+  1241: If Data_Verify() = True Then
+  1242: If CanAccept() = True Then
+  1243: Call cmdSaveForm_Click
+  1244: If mRemoteAccess = True Then
+  1245: Me.Hide
+  1246: Exit Sub
+  1247: End If
+  1248: Else
+  1249: txtBdmName.SetFocus
+  1250: End If
+  1251: End If
+  1252: cmdSaveForm.Enabled = True
+  1253: 
+  1254: End Sub
+  1255: 
+  1256: Private Sub Form_Activate()
+
+==================================================
+
+=== File: PartyMst.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - txtVoid : VB.TextBox
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+  - txtPgmName : VB.TextBox
+  - txtPrtTitle : VB.TextBox
+  - txtPrtRemark : VB.TextBox
+  - chkPrtShowInList : VB.CheckBox (Caption: Show in List:)
+  - txtPrtEmail : VB.TextBox
+  - txtPrtSMSNo : VB.TextBox
+  - txtPrtTelNo : VB.TextBox
+  - txtStnName : VB.TextBox
+  - txtAraName : VB.TextBox
+  - txtPrtAddr : VB.TextBox
+  - txtAhName : VB.TextBox
+  - txtDrCrFlag : VB.TextBox
+  - mskAhOpBal : VB.TextBox
+  - cmdSaveForm : VB.CommandButton
+  - txtPrtName : VB.TextBox
+  - mskFormBoundField : VB.TextBox
+  - txtList1Col : VB.TextBox
+  - txtSearch1Text : VB.TextBox
+  - chkCombinedCurBal : VB.CheckBox (Caption: Combined Current Balance)
+  - chkCombinedOpBal : VB.CheckBox (Caption: Combined Opening Balance)
+  - chkOpBal : VB.CheckBox (Caption: Opening Balance)
+  - chkCurBal : VB.CheckBox (Caption: Current Balance)
+  - cmdConfigure : VB.CommandButton (Caption: &OK)
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+Grid Columns (from AddFields):
+  - PrtCode
+  - PrtName (Party Name)
+  - PgmName (Group)
+  - PrtAddr (Address)
+  - PrtAraName (Area)
+  - PrtStnName (Station)
+  - AhOpBal (Op.Balance)
+  - AhOpDrBal (Op.Dr.Bal)
+  - AhOpCrBal (Op.Cr.Bal)
+  - AhCurBal (Cur.Balance)
+  - AhCurDrBal (Cur.Dr.Bal)
+  - AhCurCrBal (Cur.Cr.Bal)
+  - PrtAhName (Account Name)
+SQL Select Tables: Not Found
+Save mapping snippet:
+  1580: End If
+  1581: End If
+  1582: 
+  1583: End Sub
+  1584: 
+  1585: Private Sub cmdSaveForm_Click()
+  1586: Call Data_SaveEvent
+  1587: 
+  1588: Call SmryList
+  1589: txtSearch1Text_InterActiveChange txtPrtName.Text
+  1590: 
+  1591: ''datRecset.Find "PrtName='" & txtPrtName.Text & "'", Start:=1
+  1592: ''ShowRecActiveFlexRow datRecset, Mfgrd1
+  1593: 
+  1594: Call ShowEntryMode(False)
+  1595: Mfgrd1.SetFocus
+  1596: Call CalcDrCrAmtTot
+  1597: 
+  1598: End Sub
+  1599: 
+  1600: Private Sub cmdSaveForm_GotFocus()
+  1601: Dim mPrtAcsPermNo As Integer, mRetryCount As Integer
+  1602: 
+  1603: txtVoid.SetFocus
+  1604: cmdSaveForm.Enabled = False
+  1605: If Data_Verify() = True Then
+  1606: If CanAccept() = True Then
+  1607: If GetAccessPerm(mPrtAcsPermNo, mRetryCount, mFormPrtAcsPermFileName) = True And mRetryCount = 0 Then
+  1608: If Data_NetwAuth() = True Then
+  1609: Call cmdSaveForm_Click
+  1610: Close #mPrtAcsPermNo
+  1611: If mRemoteAccess = True Then
+  1612: ''Unload Me
+  1613: Me.Hide
+  1614: Exit Sub
+
+==================================================
+
+=== File: PrtGrpMs.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - txtPgmDesc : VB.TextBox
+  - cmdSaveForm : VB.CommandButton (Caption:       &Save)
+  - txtPgmName : VB.TextBox
+  - mskFormBoundField : VB.TextBox
+  - txtVoid : VB.TextBox
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+  - txtSearch1Text : VB.TextBox
+  - txtList1Col : VB.TextBox
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+Grid Columns (from AddFields):
+  - PgmCode
+  - PgmName (Group Name)
+SQL Select Tables: ['PartyGrpMst']
+Save mapping snippet:
+  510: End If
+  511: End If
+  512: 
+  513: End Sub
+  514: 
+  515: Private Sub cmdSaveForm_Click()
+  516: Call Data_SaveEvent
+  517: 
+  518: Call SmryList
+  519: txtSearch1Text_InterActiveChange txtPgmName.Text
+  520: 
+  521: ''If txtSearch1Text.Text <> txtPgmName.Text Then
+  522: ''    txtSearch1Text.Text = txtPgmName.Text
+  523: ''Else
+  524: ''    Call txtSearch1Text_Change
+  525: ''End If
+  526: ''datRecset.Find "PgmName='" & txtPgmName.Text & "'", Start:=1
+  527: ''ShowRecActiveFlexRow datRecset, Mfgrd1
+  528: 
+  529: ShowEntryMode False
+  530: Mfgrd1.SetFocus
+  531: 
+  532: End Sub
+  533: 
+  534: Private Sub cmdSaveForm_GotFocus()
+  535: txtVoid.SetFocus
+  536: cmdSaveForm.Enabled = False
+  537: If Data_Verify() = True Then
+  538: If CanAccept() = True Then
+  539: Call cmdSaveForm_Click
+  540: If mRemoteAccess = True Then
+  541: Me.Hide
+  542: Exit Sub
+  543: End If
+  544: Else
+
+==================================================
+
+=== File: SubItGMs.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - txtSigDesc : VB.TextBox
+  - cmdSaveForm : VB.CommandButton (Caption:       &Save)
+  - txtSigName : VB.TextBox
+  - mskFormBoundField : VB.TextBox
+  - txtVoid : VB.TextBox
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+  - txtSearch1Text : VB.TextBox
+  - txtList1Col : VB.TextBox
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+Grid Columns (from AddFields):
+  - SigCode
+  - SigName (Group Name)
+SQL Select Tables: ['SubItmGrpMst']
+Save mapping snippet:
+  510: End If
+  511: End If
+  512: 
+  513: End Sub
+  514: 
+  515: Private Sub cmdSaveForm_Click()
+  516: Call Data_SaveEvent
+  517: 
+  518: Call SmryList
+  519: txtSearch1Text_InterActiveChange txtSigName.Text
+  520: 
+  521: ''If txtSearch1Text.Text <> txtSigName.Text Then
+  522: ''    txtSearch1Text.Text = txtSigName.Text
+  523: ''Else
+  524: ''    Call txtSearch1Text_Change
+  525: ''End If
+  526: ''datRecset.Find "SigName='" & txtSigName.Text & "'", Start:=1
+  527: ''ShowRecActiveFlexRow datRecset, Mfgrd1
+  528: 
+  529: ShowEntryMode False
+  530: Mfgrd1.SetFocus
+  531: 
+  532: End Sub
+  533: 
+  534: Private Sub cmdSaveForm_GotFocus()
+  535: txtVoid.SetFocus
+  536: cmdSaveForm.Enabled = False
+  537: If Data_Verify() = True Then
+  538: If CanAccept() = True Then
+  539: Call cmdSaveForm_Click
+  540: If mRemoteAccess = True Then
+  541: Me.Hide
+  542: Exit Sub
+  543: End If
+  544: Else
+
+==================================================
+
+=== File: SubItMst.frm ===
+Form Heading: UNKNOWN
+Controls found:
+  - mskSimMRPRate : VB.TextBox
+  - mskSimSaleRate : VB.TextBox
+  - mskSimPurchRate : VB.TextBox
+  - txtSigName : VB.TextBox
+  - txtSimDesc : VB.TextBox
+  - mskSimItmCode : VB.TextBox
+  - mskSimOpValue : VB.TextBox
+  - mskSimOpRate : VB.TextBox
+  - mskSimOpQty : VB.TextBox
+  - cmdSaveForm : VB.CommandButton (Caption:       &Save)
+  - txtSimName : VB.TextBox
+  - mskFormBoundField : VB.TextBox
+  - txtVoid : VB.TextBox
+  - cmdFormEnter : VB.CommandButton
+  - cmdFormEscape : VB.CommandButton (Caption: X)
+  - cmbFormEntryMode : VB.ComboBox
+  - cmdConfigure : VB.CommandButton (Caption: &OK)
+  - chkCurBal : VB.CheckBox (Caption: Current Balance)
+  - chkOpBal : VB.CheckBox (Caption: Opening Balance)
+  - chkCombinedOpBal : VB.CheckBox (Caption: Combined Opening Balance)
+  - chkCombinedCurBal : VB.CheckBox (Caption: Combined Current Balance)
+  - txtSearch1Text : VB.TextBox
+  - txtList1Col : VB.TextBox
+  - Mfgrd1 : MSFlexGridLib.MSFlexGrid
+Grid Columns (from AddFields):
+  - SimCode
+  - SimItmCode
+  - SimName (Product Name)
+  - SigName (Group Name)
+  - SimPurchRate (Purch.Rate)
+  - SimMRPRate (MRP)
+  - SimSaleRate (Sale Rate)
+  - 0.00
+  - 0.00
+  - 0.00
+  - 0.00
+  - 0.00
+  - 0.00
+  - 0.00
+  - 0.00
+  - 0.00
+  - 0.00
+  - 0.00
+  - 0.00
+  - 0.00
+  - 0.00
+  - 0.00
+  - 0.00
+  - 0.00
+  - 0.00
+SQL Select Tables: ['SubItmMast']
+Save mapping snippet:
+  1268: End If
+  1269: End If
+  1270: 
+  1271: End Sub
+  1272: 
+  1273: Private Sub cmdSaveForm_Click()
+  1274: Call Data_SaveEvent
+  1275: 
+  1276: Call SmryList
+  1277: txtSearch1Text_InterActiveChange txtSimName.Text
+  1278: 
+  1279: ''If txtSearch1Text.Text <> txtSimName.Text Then
+  1280: ''    txtSearch1Text.Text = txtSimName.Text
+  1281: ''Else
+  1282: ''    Call txtSearch1Text_Change
+  1283: ''End If
+  1284: ''datRecset.Find "SimName='" & txtSimName.Text & "'", Start:=1
+  1285: ''ShowRecActiveFlexRow datRecset, Mfgrd1
+  1286: 
+  1287: ShowEntryMode False
+  1288: Mfgrd1.SetFocus
+  1289: 
+  1290: End Sub
+  1291: 
+  1292: Private Sub cmdSaveForm_GotFocus()
+  1293: txtVoid.SetFocus
+  1294: cmdSaveForm.Enabled = False
+  1295: If Data_Verify() = True Then
+  1296: If CanAccept() = True Then
+  1297: Call cmdSaveForm_Click
+  1298: If mRemoteAccess = True Then
+  1299: Me.Hide
+  1300: Exit Sub
+  1301: End If
+  1302: Else
+
+==================================================
+

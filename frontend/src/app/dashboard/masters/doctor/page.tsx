@@ -1,8 +1,9 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
-import styles from "../../../dashboard.module.css";
-import { Plus, UserRound, Search, AlertCircle, Check } from "lucide-react";
+'use client';
+import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import styles from '../../../dashboard.module.css';
+import ActionBar from '../components/ActionBar';
+import { Search, AlertCircle, Check } from 'lucide-react';
 
 interface DoctorCategory {
   dcg_code: number;
@@ -25,351 +26,597 @@ interface Doctor {
   dct_telephone?: string;
   dct_email?: string;
   dct_share_percent: number;
-  category?: DoctorCategory;
-  role?: DoctorRole;
+  category?: DoctorCategory | null;
+  role?: DoctorRole | null;
 }
 
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
+
+const blankForm = {
+  dct_title: 'Dr.',
+  dct_name: '',
+  dct_specialty: '',
+  dct_dcg_code: '',
+  dct_drl_code: '',
+  dct_address: '',
+  dct_telephone: '',
+  dct_email: '',
+  dct_share_percent: '0.00',
+};
+
 export default function DoctorMasterPage() {
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const router = useRouter();
+
+  // State
+  const [items, setItems] = useState<Doctor[]>([]);
   const [categories, setCategories] = useState<DoctorCategory[]>([]);
   const [roles, setRoles] = useState<DoctorRole[]>([]);
-  
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
-  
-  // Form state
-  const [formData, setFormData] = useState({
-    dct_title: "Dr.",
-    dct_name: "",
-    dct_specialty: "",
-    dct_dcg_code: "",
-    dct_drl_code: "",
-    dct_address: "",
-    dct_telephone: "",
-    dct_email: "",
-    dct_share_percent: "0"
-  });
+  const [search, setSearch] = useState('');
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [entryMode, setEntryMode] = useState(false);
+  const [editing, setEditing] = useState<Doctor | null>(null);
 
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [form, setForm] = useState(blankForm);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const fetchData = async () => {
+  // Refs
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Load data
+  const load = async () => {
     try {
-      const docRes = await fetch("http://127.0.0.1:8000/api/masters/doctors");
-      const catRes = await fetch("http://127.0.0.1:8000/api/masters/doctor-categories");
-      const roleRes = await fetch("http://127.0.0.1:8000/api/masters/doctor-roles");
-      
-      if (docRes.ok) setDoctors(await docRes.json());
-      if (catRes.ok) {
-        const catData = await catRes.json();
-        setCategories(catData);
-        if (catData.length > 0) {
-          setFormData(prev => ({ ...prev, dct_dcg_code: String(catData[0].dcg_code) }));
-        }
-      }
-      if (roleRes.ok) {
-        const roleData = await roleRes.json();
-        setRoles(roleData);
-        if (roleData.length > 0) {
-          setFormData(prev => ({ ...prev, dct_drl_code: String(roleData[0].drl_code) }));
-        }
+      const [docRes, catRes, roleRes] = await Promise.all([
+        fetch(`${API}/api/masters/doctors`).then(r => r.json()),
+        fetch(`${API}/api/masters/doctor-categories`).then(r => r.json()),
+        fetch(`${API}/api/masters/doctor-roles`).then(r => r.json()),
+      ]);
+      setItems(docRes);
+      setCategories(catRes);
+      setRoles(roleRes);
+
+      if (docRes.length > 0) {
+        setSelectedId(prev => {
+          const exists = docRes.some((item: Doctor) => item.dct_code === prev);
+          return exists ? prev : docRes[0].dct_code;
+        });
+      } else {
+        setSelectedId(null);
       }
     } catch (e) {
-      console.log("Error loading doctor master data:", e);
+      console.error('Error loading doctor master data:', e);
+    }
+  };
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  // Autofocus
+  useEffect(() => {
+    if (entryMode && nameInputRef.current) {
+      nameInputRef.current.focus();
+    } else if (!entryMode && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [entryMode]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleTableKeys = (e: KeyboardEvent) => {
+      if (entryMode || items.length === 0) return;
+
+      const filtered = items.filter(i =>
+        i.dct_name.toLowerCase().includes(search.toLowerCase()) ||
+        (i.dct_specialty ?? '').toLowerCase().includes(search.toLowerCase())
+      );
+      if (filtered.length === 0) return;
+
+      const currentIndex = filtered.findIndex(i => i.dct_code === selectedId);
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const nextIndex = (currentIndex + 1) % filtered.length;
+        setSelectedId(filtered[nextIndex].dct_code);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        const prevIndex = (currentIndex - 1 + filtered.length) % filtered.length;
+        setSelectedId(filtered[prevIndex].dct_code);
+      }
+    };
+
+    window.addEventListener('keydown', handleTableKeys);
+    return () => window.removeEventListener('keydown', handleTableKeys);
+  }, [entryMode, items, selectedId, search]);
+
+  // Actions
+  const handleAdd = () => {
+    setEditing(null);
+    setForm({
+      ...blankForm,
+      dct_dcg_code: categories[0]?.dcg_code?.toString() ?? '',
+      dct_drl_code: roles[0]?.drl_code?.toString() ?? '',
+    });
+    setError('');
+    setSuccess('');
+    setEntryMode(true);
+  };
+
+  const handleEdit = () => {
+    const item = items.find(i => i.dct_code === selectedId);
+    if (!item) return;
+
+    setEditing(item);
+    setForm({
+      dct_title: item.dct_title || 'Dr.',
+      dct_name: item.dct_name,
+      dct_specialty: item.dct_specialty || '',
+      dct_dcg_code: item.dct_dcg_code?.toString() ?? '',
+      dct_drl_code: item.dct_drl_code?.toString() ?? '',
+      dct_address: item.dct_address || '',
+      dct_telephone: item.dct_telephone || '',
+      dct_email: item.dct_email || '',
+      dct_share_percent: item.dct_share_percent.toString(),
+    });
+    setError('');
+    setSuccess('');
+    setEntryMode(true);
+  };
+
+  const handleDelete = async () => {
+    if (!selectedId) return;
+    const item = items.find(i => i.dct_code === selectedId);
+    if (!item) return;
+
+    if (!confirm(`Delete doctor record "${item.dct_name}"?`)) return;
+
+    try {
+      const r = await fetch(`${API}/api/masters/doctors/${selectedId}`, {
+        method: 'DELETE',
+        headers: authHdr()
+      });
+      if (!r.ok) throw new Error('Failed to delete');
+      load();
+    } catch (e: any) {
+      alert(e.message);
+    }
+  };
+
+  const handleRefresh = () => {
+    load();
+  };
+
+  const handleExit = () => {
+    if (entryMode) {
+      setEntryMode(false);
+      setEditing(null);
+    } else {
+      router.push('/dashboard/masters');
+    }
+  };
+
+  const handleSave = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+
+    // Validation
+    if (!form.dct_name.trim()) {
+      setError('Invalid Doctor Name !!!');
+      nameInputRef.current?.focus();
+      return;
+    }
+
+    // Duplicate Check
+    const isDuplicate = items.some(item =>
+      item.dct_name.toLowerCase() === form.dct_name.trim().toLowerCase() &&
+      item.dct_code !== editing?.dct_code
+    );
+    if (isDuplicate) {
+      setError('Duplicate Input !!!');
+      nameInputRef.current?.focus();
+      return;
+    }
+
+    const sharePercent = parseFloat(form.dct_share_percent);
+    if (isNaN(sharePercent) || sharePercent < 0 || sharePercent > 100) {
+      setError('Invalid Share Percentage !!!');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      const body = {
+        dct_title: form.dct_title,
+        dct_name: form.dct_name.trim(),
+        dct_specialty: form.dct_specialty.trim() || null,
+        dct_dcg_code: form.dct_dcg_code ? parseInt(form.dct_dcg_code) : null,
+        dct_drl_code: form.dct_drl_code ? parseInt(form.dct_drl_code) : null,
+        dct_address: form.dct_address.trim() || null,
+        dct_telephone: form.dct_telephone.trim() || null,
+        dct_email: form.dct_email.trim() || null,
+        dct_share_percent: sharePercent,
+        dct_rec_state: 1
+      };
+
+      const url = editing
+        ? `${API}/api/masters/doctors/${editing.dct_code}`
+        : `${API}/api/masters/doctors`;
+      const method = editing ? 'PUT' : 'POST';
+
+      const r = await fetch(url, {
+        method,
+        headers: authHdr(),
+        body: JSON.stringify(body)
+      });
+      if (!r.ok) throw new Error(await r.text());
+
+      setSuccess(editing ? 'Updated successfully' : 'Created successfully');
+      load();
+      setTimeout(() => {
+        setEntryMode(false);
+        setEditing(null);
+      }, 800);
+    } catch (e: any) {
+      setError(e.message || 'Error occurred during save');
     } finally {
       setLoading(false);
     }
   };
 
+  // PageDown hotkey to save
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleAddDoctor = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setSuccess("");
-
-    if (!formData.dct_name.trim()) {
-      setError("Doctor name is required");
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("http://127.0.0.1:8000/api/masters/doctors", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          dct_title: formData.dct_title,
-          dct_name: formData.dct_name,
-          dct_specialty: formData.dct_specialty || null,
-          dct_dcg_code: formData.dct_dcg_code ? Number(formData.dct_dcg_code) : null,
-          dct_drl_code: formData.dct_drl_code ? Number(formData.dct_drl_code) : null,
-          dct_address: formData.dct_address || null,
-          dct_telephone: formData.dct_telephone || null,
-          dct_email: formData.dct_email || null,
-          dct_share_percent: Number(formData.dct_share_percent || 0)
-        })
-      });
-
-      if (response.ok) {
-        setSuccess("Doctor details saved successfully!");
-        setFormData({
-          dct_title: "Dr.",
-          dct_name: "",
-          dct_specialty: "",
-          dct_dcg_code: categories[0]?.dcg_code ? String(categories[0].dcg_code) : "",
-          dct_drl_code: roles[0]?.drl_code ? String(roles[0].drl_code) : "",
-          dct_address: "",
-          dct_telephone: "",
-          dct_email: "",
-          dct_share_percent: "0"
-        });
-        await fetchData();
-        setTimeout(() => {
-          setModalOpen(false);
-          setSuccess("");
-        }, 1200);
-      } else {
-        const errData = await response.json();
-        setError(errData.detail || "Failed to add doctor record");
+    const handleFormKeys = (e: KeyboardEvent) => {
+      if (!entryMode) return;
+      if (e.key === 'PageDown') {
+        e.preventDefault();
+        handleSave();
       }
-    } catch (err) {
-      setError("Network error occurred");
-    }
-  };
+    };
+    window.addEventListener('keydown', handleFormKeys);
+    return () => window.removeEventListener('keydown', handleFormKeys);
+  }, [entryMode, form, editing, items]);
 
-  const filteredDoctors = doctors.filter(doc => 
-    doc.dct_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (doc.dct_specialty && doc.dct_specialty.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filtered = items.filter(i =>
+    i.dct_name.toLowerCase().includes(search.toLowerCase()) ||
+    (i.dct_specialty ?? '').toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div>
-      <div className={styles.toolbar}>
-        <div className={styles.searchBar}>
-          <Search size={18} style={{ color: "var(--text-muted)" }} />
-          <input
-            type="text"
-            placeholder="Search doctors by name or specialty..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 140px)', justifyContent: 'space-between' }}>
+      
+      <div>
+        {/* Legacy Form Title Label */}
+        <div style={{
+          backgroundColor: '#e0e0e0',
+          padding: '10px',
+          border: '1px solid #94a3b8',
+          textAlign: 'center',
+          fontWeight: 700,
+          fontSize: '15px',
+          fontFamily: 'Outfit, sans-serif',
+          color: '#0f172a',
+          marginBottom: '24px',
+          borderRadius: '4px'
+        }}>
+          Doctor Master
         </div>
-        <button className={styles.primaryBtn} onClick={() => setModalOpen(true)}>
-          <Plus size={18} />
-          <span>Add Doctor</span>
-        </button>
-      </div>
 
-      {loading ? (
-        <p style={{ color: "var(--text-secondary)", fontSize: "14px" }}>Loading doctor directory...</p>
-      ) : filteredDoctors.length === 0 ? (
-        <div style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border-light)", borderRadius: "16px", padding: "80px", textAlign: "center" }}>
-          <UserRound size={48} style={{ color: "var(--text-muted)", marginBottom: "16px" }} />
-          <h3 style={{ fontSize: "18px", marginBottom: "8px" }}>No Doctor Records</h3>
-          <p style={{ color: "var(--text-secondary)", fontSize: "14px", marginBottom: "20px" }}>No doctors found matching the query.</p>
-          <button className={styles.primaryBtn} style={{ margin: "0 auto" }} onClick={() => setModalOpen(true)}>Add Doctor Record</button>
-        </div>
-      ) : (
-        <div className={styles.tableContainer}>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Title & Name</th>
-                <th>Specialty</th>
-                <th>Category</th>
-                <th>Role</th>
-                <th>Telephone</th>
-                <th>Share %</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredDoctors.map((doc) => (
-                <tr key={doc.dct_code}>
-                  <td style={{ fontWeight: 600 }}>
-                    <span style={{ color: "var(--accent-color)" }}>{doc.dct_title || "Dr."}</span> {doc.dct_name}
-                  </td>
-                  <td>{doc.dct_specialty || "General Medicine"}</td>
-                  <td>{doc.category ? doc.category.dcg_name : "-"}</td>
-                  <td>{doc.role ? doc.role.drl_name : "-"}</td>
-                  <td>{doc.dct_telephone || "-"}</td>
-                  <td style={{ fontWeight: 600 }}>{doc.dct_share_percent}%</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {modalOpen && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent} style={{ maxWidth: "600px" }}>
-            <div className={styles.modalHeader}>
-              <h3 style={{ fontSize: "18px", fontWeight: 600 }}>Register New Doctor</h3>
-              <button className={styles.closeBtn} onClick={() => setModalOpen(false)}>×</button>
+        {/* SUMMARY MODE (frFormSmry) */}
+        {!entryMode && (
+          <div className={styles.sectionBox}>
+            <div className={styles.sectionHeader}>
+              <h3 className={styles.sectionTitle}>Summary</h3>
             </div>
-            <form onSubmit={handleAddDoctor}>
-              <div className={styles.modalBody}>
-                {error && (
-                  <div style={{ color: "var(--status-danger)", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", marginBottom: "16px" }}>
-                    <AlertCircle size={16} /> {error}
-                  </div>
-                )}
-                {success && (
-                  <div style={{ color: "var(--status-success)", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", marginBottom: "16px" }}>
-                    <Check size={16} /> {success}
-                  </div>
-                )}
 
-                <div className={styles.formGrid}>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="dct_title">Title *</label>
-                    <select
-                      id="dct_title"
-                      name="dct_title"
-                      className={styles.formControl}
-                      value={formData.dct_title}
-                      onChange={handleInputChange}
+            {/* Search Frame */}
+            <div className={styles.toolbar} style={{ marginBottom: '16px' }}>
+              <div className={styles.searchBar}>
+                <Search size={18} style={{ color: 'var(--text-muted)' }} />
+                <input
+                  ref={searchInputRef}
+                  value={search}
+                  onChange={e => {
+                    setSearch(e.target.value);
+                    const matching = items.filter(i =>
+                      i.dct_name.toLowerCase().includes(e.target.value.toLowerCase()) ||
+                      (i.dct_specialty ?? '').toLowerCase().includes(e.target.value.toLowerCase())
+                    );
+                    if (matching.length > 0 && !matching.some(m => m.dct_code === selectedId)) {
+                      setSelectedId(matching[0].dct_code);
+                    }
+                  }}
+                  placeholder="Search doctors (txtSearch1Text)..."
+                />
+              </div>
+            </div>
+
+            {/* Table Grid (Mfgrd1) */}
+            <div className={styles.tableContainer}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th style={{ width: '80px' }}>Code</th>
+                    <th>Doctor Name</th>
+                    <th>Category</th>
+                    <th>Role</th>
+                    <th>Share %</th>
+                    <th>Op.Balance</th>
+                    <th>Op.Dr.Bal</th>
+                    <th>Op.Cr.Bal</th>
+                    <th>Cur.Balance</th>
+                    <th>Cur.Dr.Bal</th>
+                    <th>Cur.Cr.Bal</th>
+                    <th>Account Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filtered.length === 0 && (
+                    <tr>
+                      <td colSpan={12} style={{ textAlign: 'center', padding: '40px', color: 'var(--text-secondary)' }}>
+                        No doctors found
+                      </td>
+                    </tr>
+                  )}
+                  {filtered.map((item) => (
+                    <tr
+                      key={item.dct_code}
+                      onClick={() => setSelectedId(item.dct_code)}
+                      onDoubleClick={handleEdit}
+                      style={{
+                        cursor: 'pointer',
+                        backgroundColor: selectedId === item.dct_code ? 'var(--accent-light)' : 'transparent',
+                        fontWeight: selectedId === item.dct_code ? 600 : 400
+                      }}
                     >
-                      <option value="Dr.">Dr.</option>
-                      <option value="Prof.">Prof.</option>
-                      <option value="Mr.">Mr.</option>
-                      <option value="Mrs.">Mrs.</option>
-                      <option value="Ms.">Ms.</option>
-                    </select>
-                  </div>
+                      <td style={{ color: selectedId === item.dct_code ? 'var(--accent-color)' : 'var(--text-secondary)' }}>
+                        #{item.dct_code}
+                      </td>
+                      <td>
+                        <span style={{ color: 'var(--text-secondary)', fontWeight: 500, marginRight: '4px' }}>
+                          {item.dct_title || 'Dr.'}
+                        </span>
+                        {item.dct_name}
+                      </td>
+                      <td>{item.category?.dcg_name || '—'}</td>
+                      <td>{item.role?.drl_name || '—'}</td>
+                      <td style={{ fontWeight: 700 }}>{item.dct_share_percent}%</td>
+                      <td>0.00</td>
+                      <td>0.00</td>
+                      <td>0.00</td>
+                      <td>0.00</td>
+                      <td>0.00</td>
+                      <td>0.00</td>
+                      <td>—</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
 
-                  <div className={styles.formGroup}>
-                    <label htmlFor="dct_name">Doctor Name *</label>
-                    <input
-                      id="dct_name"
-                      name="dct_name"
-                      type="text"
-                      className={styles.formControl}
-                      value={formData.dct_name}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
+        {/* DETAIL MODE (frFormDtl) */}
+        {entryMode && (
+          <div className={styles.sectionBox}>
+            <div className={styles.sectionHeader}>
+              <h3 className={styles.sectionTitle}>Detail [Mode: {editing ? 'Edit' : 'Add'}]</h3>
+            </div>
+
+            <form onSubmit={handleSave}>
+              {error && (
+                <div style={{ color: 'var(--status-danger)', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', marginBottom: '16px' }}>
+                  <AlertCircle size={16} /> {error}
                 </div>
-
-                <div className={styles.formGrid}>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="dct_specialty">Specialty / Dept</label>
-                    <input
-                      id="dct_specialty"
-                      name="dct_specialty"
-                      type="text"
-                      className={styles.formControl}
-                      value={formData.dct_specialty}
-                      onChange={handleInputChange}
-                      placeholder="e.g. Cardiology, Orthopedics"
-                    />
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label htmlFor="dct_share_percent">Hospital Share %</label>
-                    <input
-                      id="dct_share_percent"
-                      name="dct_share_percent"
-                      type="number"
-                      className={styles.formControl}
-                      value={formData.dct_share_percent}
-                      onChange={handleInputChange}
-                    />
-                  </div>
+              )}
+              {success && (
+                <div style={{ color: 'var(--status-success)', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', marginBottom: '16px' }}>
+                  <Check size={16} /> {success}
                 </div>
+              )}
 
-                <div className={styles.formGrid}>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="dct_dcg_code">Doctor Category *</label>
-                    <select
-                      id="dct_dcg_code"
-                      name="dct_dcg_code"
-                      className={styles.formControl}
-                      value={formData.dct_dcg_code}
-                      onChange={handleInputChange}
-                    >
-                      {categories.map(c => (
-                        <option key={c.dcg_code} value={c.dcg_code}>{c.dcg_name}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label htmlFor="dct_drl_code">Doctor Role *</label>
-                    <select
-                      id="dct_drl_code"
-                      name="dct_drl_code"
-                      className={styles.formControl}
-                      value={formData.dct_drl_code}
-                      onChange={handleInputChange}
-                    >
-                      {roles.map(r => (
-                        <option key={r.drl_code} value={r.drl_code}>{r.drl_name}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className={styles.formGrid}>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="dct_telephone">Telephone</label>
-                    <input
-                      id="dct_telephone"
-                      name="dct_telephone"
-                      type="text"
-                      className={styles.formControl}
-                      value={formData.dct_telephone}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label htmlFor="dct_email">Email Address</label>
-                    <input
-                      id="dct_email"
-                      name="dct_email"
-                      type="email"
-                      className={styles.formControl}
-                      value={formData.dct_email}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
-
+              <div className={styles.formGrid}>
+                {/* Code (mskFormBoundField) - read-only */}
                 <div className={styles.formGroup}>
-                  <label htmlFor="dct_address">Residential Address</label>
-                  <textarea
-                    id="dct_address"
-                    name="dct_address"
-                    rows={2}
+                  <label>Code (mskFormBoundField)</label>
+                  <input
                     className={styles.formControl}
-                    value={formData.dct_address}
-                    onChange={handleInputChange}
-                    style={{ resize: "vertical" }}
+                    value={editing ? editing.dct_code : '-1'}
+                    disabled
+                    style={{ backgroundColor: 'var(--bg-secondary)', fontWeight: 700 }}
+                  />
+                </div>
+
+                {/* Title (txtDctTitle) */}
+                <div className={styles.formGroup}>
+                  <label>Title (txtDctTitle) *</label>
+                  <select
+                    className={styles.formControl}
+                    value={form.dct_title}
+                    onChange={e => setForm(f => ({ ...f, dct_title: e.target.value }))}
+                  >
+                    <option value="Dr.">Dr.</option>
+                    <option value="Prof.">Prof.</option>
+                    <option value="Mr.">Mr.</option>
+                    <option value="Mrs.">Mrs.</option>
+                    <option value="Ms.">Ms.</option>
+                  </select>
+                </div>
+
+                {/* Doctor Name (txtDctName) */}
+                <div className={styles.formGroup}>
+                  <label>Doctor Name (txtDctName) *</label>
+                  <input
+                    ref={nameInputRef}
+                    className={styles.formControl}
+                    value={form.dct_name}
+                    onChange={e => setForm(f => ({ ...f, dct_name: e.target.value }))}
+                    maxLength={50}
+                    required
+                    placeholder="Enter doctor full name"
+                  />
+                </div>
+
+                {/* Specialty (txtDctSpeci) */}
+                <div className={styles.formGroup}>
+                  <label>Speciality (txtDctSpeci)</label>
+                  <input
+                    className={styles.formControl}
+                    value={form.dct_specialty}
+                    onChange={e => setForm(f => ({ ...f, dct_specialty: e.target.value }))}
+                    maxLength={50}
+                    placeholder="e.g. Cardiology"
+                  />
+                </div>
+
+                {/* Category (txtDcgName) */}
+                <div className={styles.formGroup}>
+                  <label>Doctor Category (txtDcgName) *</label>
+                  <select
+                    className={styles.formControl}
+                    value={form.dct_dcg_code}
+                    onChange={e => setForm(f => ({ ...f, dct_dcg_code: e.target.value }))}
+                    required
+                  >
+                    <option value="">— Select Category —</option>
+                    {categories.map(c => <option key={c.dcg_code} value={c.dcg_code}>{c.dcg_name}</option>)}
+                  </select>
+                </div>
+
+                {/* Role (txtDrlName) */}
+                <div className={styles.formGroup}>
+                  <label>Doctor Role (txtDrlName) *</label>
+                  <select
+                    className={styles.formControl}
+                    value={form.dct_drl_code}
+                    onChange={e => setForm(f => ({ ...f, dct_drl_code: e.target.value }))}
+                    required
+                  >
+                    <option value="">— Select Role —</option>
+                    {roles.map(r => <option key={r.drl_code} value={r.drl_code}>{r.drl_name}</option>)}
+                  </select>
+                </div>
+
+                {/* Share % (mskDctShare) */}
+                <div className={styles.formGroup}>
+                  <label>Share % (mskDctShare)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    step="0.01"
+                    className={styles.formControl}
+                    value={form.dct_share_percent}
+                    onChange={e => setForm(f => ({ ...f, dct_share_percent: e.target.value }))}
+                  />
+                </div>
+
+                {/* Telephone (txtDctTelNo) */}
+                <div className={styles.formGroup}>
+                  <label>Telephone (txtDctTelNo)</label>
+                  <input
+                    className={styles.formControl}
+                    value={form.dct_telephone}
+                    onChange={e => setForm(f => ({ ...f, dct_telephone: e.target.value }))}
+                    maxLength={50}
+                    placeholder="Contact number"
+                  />
+                </div>
+
+                {/* Email (txtDctEmail) */}
+                <div className={styles.formGroup}>
+                  <label>Email (txtDctEmail)</label>
+                  <input
+                    type="email"
+                    className={styles.formControl}
+                    value={form.dct_email}
+                    onChange={e => setForm(f => ({ ...f, dct_email: e.target.value }))}
+                    maxLength={50}
+                    placeholder="email@hospital.com"
+                  />
+                </div>
+
+                {/* Account Head (txtAhName) - Mocked */}
+                <div className={styles.formGroup}>
+                  <label>Account Head Name (txtAhName)</label>
+                  <input
+                    className={styles.formControl}
+                    value="— Not Configured —"
+                    disabled
+                    style={{ backgroundColor: 'var(--bg-secondary)', fontStyle: 'italic' }}
+                  />
+                </div>
+
+                {/* Opening Balance (mskAhOpBal) - Mocked */}
+                <div className={styles.formGroup}>
+                  <label>Opening Balance (mskAhOpBal)</label>
+                  <input
+                    className={styles.formControl}
+                    value="0.00"
+                    disabled
+                    style={{ backgroundColor: 'var(--bg-secondary)' }}
+                  />
+                </div>
+
+                {/* DrCrFlag (txtDrCrFlag) - Mocked */}
+                <div className={styles.formGroup}>
+                  <label>Dr/Cr Flag (txtDrCrFlag)</label>
+                  <input
+                    className={styles.formControl}
+                    value="Dr"
+                    disabled
+                    style={{ backgroundColor: 'var(--bg-secondary)', fontWeight: 700 }}
+                  />
+                </div>
+
+                {/* Address (txtDctAddr) */}
+                <div className={styles.formGroup} style={{ gridColumn: 'span 2' }}>
+                  <label>Residential Address (txtDctAddr)</label>
+                  <textarea
+                    className={styles.formControl}
+                    style={{ resize: 'none' }}
+                    value={form.dct_address}
+                    onChange={e => setForm(f => ({ ...f, dct_address: e.target.value }))}
+                    maxLength={250}
+                    rows={2}
+                    placeholder="Enter residential address"
                   />
                 </div>
               </div>
-              <div className={styles.modalFooter}>
-                <button type="button" className={styles.secondaryBtn} onClick={() => setModalOpen(false)}>Cancel</button>
-                <button type="submit" className={styles.primaryBtn}>Save Doctor</button>
+
+              <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '20px', fontStyle: 'italic' }}>
+                Tip: Press <strong>PageDown</strong> on your keyboard to Save
+              </div>
+
+              {/* Form Buttons */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px' }}>
+                <button type="button" className={styles.secondaryBtn} onClick={handleExit}>Cancel</button>
+                <button type="submit" className={styles.primaryBtn} disabled={loading}>
+                  {loading ? 'Saving…' : 'Save'}
+                </button>
               </div>
             </form>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+
+      {/* Action Button Bar */}
+      <ActionBar
+        onAdd={handleAdd}
+        onEdit={handleEdit}
+        onRefresh={handleRefresh}
+        onDelete={handleDelete}
+        onExit={handleExit}
+        isEditing={entryMode}
+        hasSelected={selectedId !== null}
+        disabledActions={['print-voucher', 'print-report', 'export-excel', 'configure']}
+      />
+
     </div>
   );
 }

@@ -2,62 +2,75 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "../../../dashboard.module.css";
-import { LogOut, AlertCircle, Check } from "lucide-react";
+import {
+  LogOut, AlertCircle, CheckCircle, RefreshCw,
+  Search, Calendar, Clock, User, ArrowLeft, Info
+} from "lucide-react";
 
-interface Bed {
-  bdm_code: number;
-  bdm_name: string;
+const API = "http://127.0.0.1:8000/api/ipd";
+
+interface ActiveAdmission {
+  IhdCode:  number;
+  IhdVchNo: number;
+  PttCode:  number;
+  PttName:  string;
+  PttRegNo: number | null;
 }
 
-interface Patient {
-  ptt_name: string;
+interface PatientDetails {
+  IhdCode:  number;
+  IhdVchNo: number;
+  PttCode:  number | null;
+  PttName:  string;
+  PttRegNo: number | null;
+  PttSex:   string;
+  Age:      string;
+  DctName:  string;
+  WrdName:  string;
+  BedName:  string;
+  PcgName:  string;
+  Scheme:   string;
 }
 
-interface IPDAdmission {
-  ipd_code: number;
-  ipd_ptt_code: number;
-  ipd_dct_code: number;
-  ipd_bdm_code: number;
-  ipd_admission_date: string;
-  ipd_deposit: number;
-  ipd_status: string;
-  patient?: Patient;
-  bed?: Bed;
-}
+const EMPTY_PAT: PatientDetails = {
+  IhdCode: 0, IhdVchNo: 0, PttCode: null, PttName: "", PttRegNo: null,
+  PttSex: "", Age: "", DctName: "", WrdName: "", BedName: "", PcgName: "", Scheme: "",
+};
 
 export default function IPDDischargePage() {
-  const [admissions, setAdmissions] = useState<IPDAdmission[]>([]);
+  const [admissions, setAdmissions] = useState<ActiveAdmission[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedPat, setSelectedPat] = useState<ActiveAdmission | null>(null);
+
+  // Loaded Details
+  const [patDetails, setPatDetails] = useState<PatientDetails>(EMPTY_PAT);
+  const [detailsLoading, setDetailsLoading] = useState(false);
+  const [balanceDue, setBalanceDue] = useState<number | null>(null);
+
+  // Inputs
+  const today = new Date().toISOString().slice(0, 10);
+  const [dischDate, setDischDate] = useState(today);
+  const [dischTime, setDischTime] = useState("12:00");
+  const [dischRemark, setDischRemark] = useState("");
   
-  const [selectedAdmId, setSelectedAdmId] = useState("");
-  const [selectedAdmission, setSelectedAdmission] = useState<IPDAdmission | null>(null);
-
-  const [formData, setFormData] = useState({
-    room_charges: "3000",
-    service_charges: "1500",
-    discount_amount: "0",
-    paid_amount: "4500"
-  });
-
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  // Actions
+  const [submitting, setSubmitting] = useState(false);
+  const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
 
   const loadAdmissions = async () => {
+    setLoading(true);
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/ipd/admissions");
-      if (response.ok) {
-        const data: IPDAdmission[] = await response.json();
-        const active = data.filter(a => a.ipd_status === "admitted");
-        setAdmissions(active);
-        if (active.length > 0) {
-          setSelectedAdmId(String(active[0].ipd_code));
-        } else {
-          setSelectedAdmId("");
-          setSelectedAdmission(null);
+      const res = await fetch(`${API}/admissions/active`);
+      if (res.ok) {
+        const list = await res.json();
+        setAdmissions(list);
+        if (list.length > 0 && !selectedPat) {
+          setSelectedPat(list[0]);
         }
       }
     } catch (e) {
-      console.log("Error loading active admissions:", e);
+      console.error(e);
     } finally {
       setLoading(false);
     }
@@ -67,206 +80,274 @@ export default function IPDDischargePage() {
     loadAdmissions();
   }, []);
 
-  // Update selection details
-  useEffect(() => {
-    if (!selectedAdmId) return;
-    const adm = admissions.find(a => a.ipd_code === Number(selectedAdmId));
-    if (adm) {
-      setSelectedAdmission(adm);
-      
-      // Calculate days stayed
-      const days = Math.max(1, Math.ceil((Date.now() - new Date(adm.ipd_admission_date).getTime()) / (1000 * 60 * 60 * 24)));
-      const calculatedRoom = days * 1500; // ₹1500 per day
-      const service = 1500; // Base service charges
-      const net = calculatedRoom + service - Number(adm.ipd_deposit || 0);
+  const loadPatientFinancials = async (ihdCode: number) => {
+    setDetailsLoading(true);
+    try {
+      // 1. Demographics info
+      const infoRes = await fetch(`${API}/charges/patient-info/${ihdCode}`);
+      if (infoRes.ok) setPatDetails(await infoRes.json());
 
-      setFormData({
-        room_charges: String(calculatedRoom),
-        service_charges: String(service),
-        discount_amount: "0",
-        paid_amount: String(Math.max(0, net))
-      });
+      // 2. Ledger financial summary
+      const ledgerRes = await fetch(`${API}/registrations/${ihdCode}/linked-trans`);
+      if (ledgerRes.ok) {
+        const ledger = await ledgerRes.json();
+        const billsTotal = ledger.bills?.reduce((s: number, b: any) => s + (b.total || 0), 0) || 0;
+        const totalAdv = ledger.advances?.reduce((s: number, a: any) => s + (a.amount || 0), 0) || 0;
+        const totalRef = ledger.refunds?.reduce((s: number, r: any) => s + (r.amount || 0), 0) || 0;
+        
+        const outstanding = billsTotal - totalAdv + totalRef;
+        setBalanceDue(outstanding);
+      }
+    } catch {
+      setPatDetails(EMPTY_PAT);
+      setBalanceDue(null);
+    } finally {
+      setDetailsLoading(false);
     }
-  }, [selectedAdmId, admissions]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleDischarge = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setSuccess("");
+  useEffect(() => {
+    if (selectedPat) {
+      loadPatientFinancials(selectedPat.IhdCode);
+    }
+  }, [selectedPat]);
 
-    if (!selectedAdmission) return;
+  const showToast = (msg: string, ok = true) => {
+    setToast({ msg, ok });
+    setTimeout(() => setToast(null), 4000);
+  };
 
-    const room = Number(formData.room_charges || 0);
-    const service = Number(formData.service_charges || 0);
-    const disc = Number(formData.discount_amount || 0);
-    const paid = Number(formData.paid_amount || 0);
-    const total = room + service;
-    const net = total - disc;
+  const handleDischarge = async () => {
+    if (!selectedPat) return;
+    
+    // Check if they have outstanding final bills unpaid
+    if (balanceDue !== null && balanceDue > 0) {
+      showToast(`Warning: Patient has ₹${balanceDue.toFixed(2)} outstanding balance. Complete billing settlement first.`, false);
+      return;
+    }
 
+    setSubmitting(true);
     try {
-      const token = localStorage.getItem("token");
-      
-      // 1. Send discharge request
-      const disRes = await fetch(`http://127.0.0.1:8000/api/ipd/discharge/${selectedAdmission.ipd_code}`, {
-        method: "POST",
-        headers: { "Authorization": `Bearer ${token}` }
-      });
+      const token = localStorage.getItem("hms_token");
+      const [hour, minute] = dischTime.split(":");
+      const minutes = parseInt(hour || "0") * 60 + parseInt(minute || "0");
 
-      if (!disRes.ok) {
-        const err = await disRes.json();
-        throw new Error(err.detail || "Failed to discharge patient");
-      }
-
-      // 2. Generate final bill
-      const billRes = await fetch("http://127.0.0.1:8000/api/ipd/bills", {
+      const res = await fetch(`${API}/registrations/${selectedPat.IhdCode}/discharge`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-          ipd_code: selectedAdmission.ipd_code,
-          room_charges: room,
-          service_charges: service,
-          total_amount: total,
-          discount_amount: disc,
-          net_amount: net,
-          paid_amount: paid,
-          status: paid >= net ? "paid" : paid > 0 ? "partial" : "unpaid"
-        })
+          disch_date: dischDate,
+          disch_time: minutes,
+        }),
       });
 
-      if (!billRes.ok) {
-        throw new Error("Discharged successfully, but invoice failed to save.");
-      }
-
-      setSuccess("Discharge processed & invoice registered! Bed is now liberated.");
-      await loadAdmissions();
-    } catch (err: any) {
-      setError(err.message || "Network error occurred");
+      if (!res.ok) throw new Error("Discharge request failed");
+      showToast("Patient discharged and bed stay released successfully!");
+      setSelectedPat(null);
+      setPatDetails(EMPTY_PAT);
+      setBalanceDue(null);
+      loadAdmissions();
+    } catch {
+      showToast("Discharge transaction failed. Check stay bounds.", false);
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  if (loading) {
-    return <p style={{ color: "var(--text-secondary)", fontSize: "14px" }}>Loading discharge console...</p>;
-  }
+  const filteredAdmissions = admissions.filter(a =>
+    a.PttName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    String(a.IhdVchNo).includes(searchTerm)
+  );
 
   return (
-    <div style={{ maxWidth: "680px" }}>
-      <div className={styles.sectionBox}>
-        <div className={styles.sectionHeader}>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <LogOut size={22} style={{ color: "var(--status-danger)" }} />
-            <h3 className={styles.sectionTitle}>In-Patient Discharge Wizard</h3>
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      {/* Toast Alert */}
+      {toast && (
+        <div style={{
+          position: "fixed", top: 24, right: 24, zIndex: 9999,
+          background: toast.ok ? "#10b981" : "#ef4444",
+          color: "#fff", padding: "14px 22px", borderRadius: 12,
+          boxShadow: "0 8px 24px rgba(0,0,0,.18)",
+          display: "flex", alignItems: "center", gap: 10,
+          fontWeight: 600, fontSize: 14,
+        }}>
+          {toast.ok ? <CheckCircle size={18} /> : <AlertCircle size={18} />}
+          {toast.msg}
+        </div>
+      )}
+
+      {/* Title */}
+      <div>
+        <h2 style={{ fontSize: 20, fontWeight: 700, margin: 0 }}>IPD Patient Discharge Console</h2>
+        <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>
+          Release allotted bed wards and record stay checkout timestamps.
+        </p>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "300px 1fr", gap: 20, alignItems: "start" }}>
+        
+        {/* Left Side: Active stay list */}
+        <div className={styles.sectionBox} style={{ padding: 0 }}>
+          <div style={{ padding: 12, borderBottom: "1px solid var(--border-light)" }}>
+            <div className={styles.searchBar}>
+              <Search size={16} />
+              <input
+                type="text"
+                placeholder="Search admitted..."
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
+          <div style={{ maxHeight: 440, overflowY: "auto" }}>
+            {loading ? (
+              <div style={{ padding: 20, textAlign: "center" }}>
+                <RefreshCw size={18} className="animate-spin" style={{ color: "var(--text-muted)" }} />
+              </div>
+            ) : filteredAdmissions.length === 0 ? (
+              <p style={{ padding: 20, textAlign: "center", color: "var(--text-secondary)" }}>
+                No active patient stays.
+              </p>
+            ) : (
+              filteredAdmissions.map(a => {
+                const active = selectedPat?.IhdCode === a.IhdCode;
+                return (
+                  <div
+                    key={a.IhdCode}
+                    onClick={() => setSelectedPat(a)}
+                    style={{
+                      padding: "10px 16px", borderBottom: "1px solid var(--border-light)",
+                      cursor: "pointer", background: active ? "var(--accent-light)" : "transparent",
+                      borderLeft: active ? "3px solid var(--accent-color)" : "none",
+                      transition: "background .15s",
+                    }}
+                  >
+                    <div style={{ fontWeight: 600, color: "var(--text-primary)" }}>{a.PttName}</div>
+                    <div style={{ fontSize: 11, color: "var(--text-secondary)", marginTop: 3 }}>
+                      IPD No: #{a.IhdVchNo}
+                    </div>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
 
-        {admissions.length === 0 ? (
-          <p style={{ color: "var(--text-secondary)", fontSize: "14px", padding: "16px 0" }}>No patients are actively admitted to the hospital.</p>
-        ) : (
-          <form onSubmit={handleDischarge}>
-            {error && (
-              <div style={{ color: "var(--status-danger)", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", marginBottom: "16px" }}>
-                <AlertCircle size={16} /> {error}
-              </div>
-            )}
-            {success && (
-              <div style={{ color: "var(--status-success)", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", marginBottom: "16px" }}>
-                <Check size={16} /> {success}
-              </div>
-            )}
+        {/* Right Side: Details and checkout triggers */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          {selectedPat ? (
+            <div className={styles.sectionBox} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+              <h3 style={{ fontSize: 15, fontWeight: 700, margin: 0, borderBottom: "1px solid var(--border-light)", paddingBottom: 10 }}>
+                Selected Patient: {patDetails.PttName || "Loading Details..."}
+              </h3>
 
-            <div className={styles.formGroup}>
-              <label htmlFor="selectedAdmId">Select Active Admission *</label>
-              <select
-                className={styles.formControl}
-                id="selectedAdmId"
-                value={selectedAdmId}
-                onChange={(e) => setSelectedAdmId(e.target.value)}
-              >
-                {admissions.map(a => (
-                  <option key={a.ipd_code} value={a.ipd_code}>
-                    {a.patient?.ptt_name} (Bed: {a.bed?.bdm_name || "-"} | Adm #{a.ipd_code})
-                  </option>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
+                {[
+                  { label: "IPD No", value: detailsLoading ? "..." : patDetails.IhdVchNo || "—" },
+                  { label: "UHID", value: detailsLoading ? "..." : patDetails.PttRegNo || "—" },
+                  { label: "Sex / Age", value: detailsLoading ? "..." : patDetails.PttSex ? `${patDetails.PttSex} / ${patDetails.Age}` : "—" },
+                  { label: "Allotted Bed", value: detailsLoading ? "..." : patDetails.BedName ? `${patDetails.WrdName} / ${patDetails.BedName}` : "—" },
+                  { label: "Doctor", value: detailsLoading ? "..." : patDetails.DctName || "—" },
+                  { label: "Outstanding Dues", value: detailsLoading ? "..." : balanceDue !== null ? `₹${balanceDue.toFixed(2)}` : "—" },
+                ].map((item, idx) => (
+                  <div key={idx}>
+                    <span style={{ fontSize: 11, color: "var(--text-secondary)", display: "block" }}>{item.label}</span>
+                    <strong style={{ fontSize: 13, color: "var(--text-primary)", marginTop: 2, display: "block" }}>{item.value}</strong>
+                  </div>
                 ))}
-              </select>
+              </div>
+
+              {balanceDue !== null && balanceDue > 0 && (
+                <div style={{
+                  background: "#fef2f2", border: "1px solid #fee2e2", borderRadius: 8,
+                  padding: "10px 14px", display: "flex", gap: 8, alignItems: "center",
+                  color: "#991b1b", fontSize: 13, fontWeight: 500,
+                }}>
+                  <AlertCircle size={16} />
+                  <span>Cannot discharge patient: there are unpaid outstanding dues of ₹{balanceDue.toFixed(2)}.</span>
+                </div>
+              )}
+
+              <div style={{ borderTop: "1px solid var(--border-light)", paddingTop: 16, display: "flex", flexDirection: "column", gap: 14 }}>
+                <h4 style={{ fontSize: 13, fontWeight: 700, margin: 0 }}>Discharge Parameters</h4>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                  <div>
+                    <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", marginBottom: 6 }}>
+                      Discharge Date
+                    </label>
+                    <input
+                      type="date"
+                      value={dischDate}
+                      onChange={e => setDischDate(e.target.value)}
+                      style={{
+                        border: "1px solid var(--border-light)", borderRadius: 8,
+                        padding: "8px 12px", width: "100%", outline: "none", fontSize: 13,
+                        background: "var(--bg-card)", color: "var(--text-primary)",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", marginBottom: 6 }}>
+                      Discharge Time
+                    </label>
+                    <input
+                      type="text"
+                      value={dischTime}
+                      onChange={e => setDischTime(e.target.value)}
+                      placeholder="HH:MM"
+                      style={{
+                        border: "1px solid var(--border-light)", borderRadius: 8,
+                        padding: "8px 12px", width: "100%", outline: "none", fontSize: 13,
+                        background: "var(--bg-card)", color: "var(--text-primary)",
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", marginBottom: 6 }}>
+                    Remarks
+                  </label>
+                  <textarea
+                    value={dischRemark}
+                    onChange={e => setDischRemark(e.target.value)}
+                    placeholder="Discharge notes..."
+                    style={{
+                      border: "1px solid var(--border-light)", borderRadius: 8,
+                      padding: "8px 12px", width: "100%", outline: "none", fontSize: 13,
+                      background: "var(--bg-card)", color: "var(--text-primary)", resize: "none", height: 60,
+                    }}
+                  />
+                </div>
+
+                <button
+                  className={styles.primaryBtn}
+                  onClick={handleDischarge}
+                  disabled={submitting || (balanceDue !== null && balanceDue > 0)}
+                  style={{
+                    gap: 8, height: 42, background: (balanceDue !== null && balanceDue > 0) ? "var(--text-muted)" : "var(--status-danger)",
+                    borderColor: (balanceDue !== null && balanceDue > 0) ? "var(--text-muted)" : "var(--status-danger)",
+                    display: "flex", justifyContent: "center", fontWeight: 700, width: "240px", alignSelf: "flex-end",
+                  }}
+                >
+                  {submitting ? <RefreshCw size={16} className="animate-spin" /> : <LogOut size={16} />}
+                  Complete Bed Discharge
+                </button>
+              </div>
+
             </div>
-
-            {selectedAdmission && (
-              <div style={{ backgroundColor: "var(--bg-secondary)", padding: "16px", borderRadius: "10px", display: "flex", flexDirection: "column", gap: "6px", marginBottom: "20px", fontSize: "13px" }}>
-                <div>Patient Name: <strong>{selectedAdmission.patient?.ptt_name}</strong></div>
-                <div>Allotted Bed: <strong>{selectedAdmission.bed?.bdm_name || "-"}</strong></div>
-                <div>Admission Date: <strong>{new Date(selectedAdmission.ipd_admission_date).toLocaleString()}</strong></div>
-                <div>Advance Deposit Paid: <strong style={{ color: "var(--status-success)" }}>₹{selectedAdmission.ipd_deposit}</strong></div>
-              </div>
-            )}
-
-            <div className={styles.formGrid}>
-              <div className={styles.formGroup}>
-                <label htmlFor="room_charges">Calculated Stay Charges (₹)</label>
-                <input
-                  className={styles.formControl}
-                  id="room_charges"
-                  name="room_charges"
-                  type="number"
-                  required
-                  value={formData.room_charges}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label htmlFor="service_charges">Clinical/Service Charges (₹)</label>
-                <input
-                  className={styles.formControl}
-                  id="service_charges"
-                  name="service_charges"
-                  type="number"
-                  required
-                  value={formData.service_charges}
-                  onChange={handleInputChange}
-                />
-              </div>
+          ) : (
+            <div className={styles.sectionBox} style={{ padding: 40, textAlign: "center", color: "var(--text-muted)" }}>
+              <Info size={32} style={{ margin: "0 auto 12px" }} />
+              Select an admitted stay from the left list to proceed.
             </div>
+          )}
+        </div>
 
-            <div className={styles.formGrid}>
-              <div className={styles.formGroup}>
-                <label htmlFor="discount_amount">Applied Discount (₹)</label>
-                <input
-                  className={styles.formControl}
-                  id="discount_amount"
-                  name="discount_amount"
-                  type="number"
-                  value={formData.discount_amount}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label htmlFor="paid_amount">Net Settlement Amount (₹)</label>
-                <input
-                  className={styles.formControl}
-                  id="paid_amount"
-                  name="paid_amount"
-                  type="number"
-                  value={formData.paid_amount}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-
-            <div style={{ marginTop: "24px" }}>
-              <button type="submit" className={styles.primaryBtn} style={{ width: "100%", justifyContent: "center", backgroundColor: "var(--status-danger)" }}>
-                Process Final Discharge & Invoice
-              </button>
-            </div>
-          </form>
-        )}
       </div>
     </div>
   );

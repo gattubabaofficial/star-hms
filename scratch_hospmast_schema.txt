@@ -1,0 +1,128 @@
+Schema of HospMast.Mdb
+==================================================
+Table: BedMast
+Columns: BdmCode, BdmName, BdmFlrCode, BdmWrdCode, BdmSrvCode, BdmIndex, BdmCharges, BdmDiscAllowed, BdmDiscPer, BdmChkOutTimeBasis, BdmChkTime, BdmFreeAllot, BdmRemark, BdmShowInList, BdmRecState, BdmAlloted
+--------------------------------------------------
+Table: BedMast_Log
+Columns: BdmCode, BdmName, BdmFlrCode, BdmWrdCode, BdmSrvCode, BdmIndex, BdmCharges, BdmDiscAllowed, BdmDiscPer, BdmChkOutTimeBasis, BdmChkTime, BdmFreeAllot, BdmRemark, BdmShowInList, BdmRecState, BdmAlloted
+--------------------------------------------------
+Table: BedSrvMst
+Columns: BsmCode, BsmICode, BsmSno, BsmSrvCode, BsmUnit, BsmRate, BsmRecState
+--------------------------------------------------
+Table: BedSrvMst_Log
+Columns: BsmCode, BsmICode, BsmSno, BsmSrvCode, BsmUnit, BsmRate, BsmRecState
+--------------------------------------------------
+Table: DiagMast
+Columns: DigCode, DigName, DigRecState
+--------------------------------------------------
+Table: DiagMast_Log
+Columns: DigCode, DigName, DigRecState
+--------------------------------------------------
+Table: DiagSrvMst
+Columns: DsmCode, DsmICode, DsmSno, DsmSrvCode, DsmUnit, DsmRate, DsmRecState
+--------------------------------------------------
+Table: DiagSrvMst_Log
+Columns: DsmCode, DsmICode, DsmSno, DsmSrvCode, DsmUnit, DsmRate, DsmRecState
+--------------------------------------------------
+Table: DoctCatgMst
+Columns: DcgCode, DcgName, DcgRecState
+--------------------------------------------------
+Table: DoctCatgMst_Log
+Columns: DcgCode, DcgName, DcgRecState
+--------------------------------------------------
+Table: DoctMast
+Columns: DctCode, DctTitle, DctName, DctSpeci, DctDcgCode, DctDrlCode, DctAddr, DctTelNo, DctEmail, DctAhCode, DctShare, DctRecState, DctPresNote, DctRegValidDays, DctReg1No
+--------------------------------------------------
+Table: DoctMast_Log
+Columns: DctCode, DctTitle, DctName, DctSpeci, DctDcgCode, DctDrlCode, DctAddr, DctTelNo, DctEmail, DctAhCode, DctShare, DctRecState, DctPresNote, DctRegValidDays, DctReg1No
+--------------------------------------------------
+Table: DoctRoleMst
+Columns: DrlCode, DrlName, DrlRecState
+--------------------------------------------------
+Table: DoctRoleMst_Log
+Columns: DrlCode, DrlName, DrlRecState
+--------------------------------------------------
+Table: FloorMast
+Columns: FlrCode, FlrName, FlrShowInList, FlrRecState
+--------------------------------------------------
+Table: FloorMast_Log
+Columns: FlrCode, FlrName, FlrShowInList, FlrRecState
+--------------------------------------------------
+Table: PackgMast
+Columns: PkgCode, PkgName, PkgRemark, PkgRecState
+--------------------------------------------------
+Table: PackgMast_Log
+Columns: PkgCode, PkgName, PkgRemark, PkgRecState
+--------------------------------------------------
+Table: PackgSrvMst
+Columns: PksCode, PksICode, PksSno, PksSrvCode, PksUnit, PksRate, PksRecState
+--------------------------------------------------
+Table: PackgSrvMst_Log
+Columns: PksCode, PksICode, PksSno, PksSrvCode, PksUnit, PksRate, PksRecState
+--------------------------------------------------
+Table: PatCatgMst
+Columns: PcgCode, PcgName, PcgInfAllowed, PcgDefAllowed, PcgDiscAllowed, PcgDiscPer, PcgShowInList, PcgRecState, PcgType
+--------------------------------------------------
+Table: PatCatgMst_Log
+Columns: PcgCode, PcgName, PcgInfAllowed, PcgDefAllowed, PcgDiscAllowed, PcgDiscPer, PcgShowInList, PcgRecState, PcgType
+--------------------------------------------------
+Table: PatMast
+Columns: PttCode, PttSalute, PttName, PttRegNo, PttRegDate, PttAhCode, PttPcgCode, PttPrfCode, PttSex, PttAgeAsOnDt, PttDob, PttRefRela, PttRefName, PttAddr, PttAraCode, PttStnCode, PttTelNo, PttSMSNo, PttEmail, PttAadharNo, PttEchsRegNo, PttEchsServNo, PttEchsRankNo, PttInspRegNo, PttInspDocNo, PttInfAllowed, PttDefAllowed, PttDiscAllowed, PttDiscPer, PttShowInList, PttOpgCount, PttIpgCount, PttDpgCount, PttLpgCount, PttDlbCount, PttClnCount, PttRemark, PttRecState
+--------------------------------------------------
+Table: PatMast_Log
+Columns: PttCode, PttSalute, PttName, PttRegNo, PttRegDate, PttAhCode, PttPcgCode, PttPrfCode, PttSex, PttAgeAsOnDt, PttDob, PttRefRela, PttRefName, PttAddr, PttAraCode, PttStnCode, PttTelNo, PttSMSNo, PttEmail, PttAadharNo, PttEchsRegNo, PttEchsServNo, PttEchsRankNo, PttInspRegNo, PttInspDocNo, PttInfAllowed, PttDefAllowed, PttDiscAllowed, PttDiscPer, PttShowInList, PttOpgCount, PttIpgCount, PttDpgCount, PttLpgCount, PttDlbCount, PttClnCount, PttRemark, PttRecState
+--------------------------------------------------
+Table: PatRefMst
+Columns: PrfCode, PrfName, PrfRegNo, PrfRegDate, PrfAhCode, PrfPcgCode, PrfSex, PrfAgeAsOnDt, PrfDob, PrfRefRela, PrfRefName, PrfAddr, PrfAraCode, PrfStnCode, PrfTelNo, PrfSMSNo, PrfEmail, PrfRef1No, PrfRef2No, PrfRef3No, PrfInspRegNo, PrfInspDocNo, PrfInfAllowed, PrfDefAllowed, PrfDiscAllowed, PrfDiscPer, PrfShowInList, PrfRemark, PrfRecState
+--------------------------------------------------
+Table: PatRefMst_Log
+Columns: PrfCode, PrfName, PrfRegNo, PrfRegDate, PrfAhCode, PrfPcgCode, PrfSex, PrfAgeAsOnDt, PrfDob, PrfRefRela, PrfRefName, PrfAddr, PrfAraCode, PrfStnCode, PrfTelNo, PrfSMSNo, PrfEmail, PrfRef1No, PrfRef2No, PrfRef3No, PrfInspRegNo, PrfInspDocNo, PrfInfAllowed, PrfDefAllowed, PrfDiscAllowed, PrfDiscPer, PrfShowInList, PrfRemark, PrfRecState
+--------------------------------------------------
+Table: ProcMast
+Columns: PrcCode, PrcName, PrcRefCode, PrcDesc, PrcRecState
+--------------------------------------------------
+Table: ProcMast_Log
+Columns: PrcCode, PrcName, PrcRefCode, PrcDesc, PrcRecState
+--------------------------------------------------
+Table: RefByMast
+Columns: RByCode, RByName, RBySpeci, RByRfgCode, RByAddr, RByTelNo, RByEmail, RByAhCode, RByShare, RByRecState
+--------------------------------------------------
+Table: RefByMast_Log
+Columns: RByCode, RByName, RBySpeci, RByRfgCode, RByAddr, RByTelNo, RByEmail, RByAhCode, RByShare, RByRecState
+--------------------------------------------------
+Table: RefCatgMst
+Columns: RfgCode, RfgName, RfgRecState
+--------------------------------------------------
+Table: RefCatgMst_Log
+Columns: RfgCode, RfgName, RfgRecState
+--------------------------------------------------
+Table: RefToMast
+Columns: RToCode, RToName, RToSpeci, RToRfgCode, RToAddr, RToTelNo, RToEmail, RToAhCode, RToShare, RToRecState
+--------------------------------------------------
+Table: RefToMast_Log
+Columns: RToCode, RToName, RToSpeci, RToRfgCode, RToAddr, RToTelNo, RToEmail, RToAhCode, RToShare, RToRecState
+--------------------------------------------------
+Table: ServGrpMst
+Columns: SgpCode, SgpName, SgpIndex, SgpExpanded, SgpEditable, SgpInfAllowed, SgpDefAllowed, SgpDiscAllowed, SgpDiscPer, SgpExtRateSys, SgpDctwseRateSys, SgpPcgwseRateSys, SgpRBywseRateSys, SgpRTowseRateSys, SgpTimewseRateSys, SgpExtDiscSys, SgpDctwseDiscSys, SgpPcgwseDiscSys, SgpRBywseDiscSys, SgpRTowseDiscSys, SgpTimewseDiscSys, SgpExtBargSys, SgpDctwseBargSys, SgpPcgwseBargSys, SgpRBywseBargSys, SgpRTowseBargSys, SgpTimewseBargSys, SgpExtShareSys, SgpDctwseShareSys, SgpPcgwseShareSys, SgpRBywseShareSys, SgpRTowseShareSys, SgpTimewseShareSys, SgpShowInList, SgpRecState, SgpPrntName, SgpShared
+--------------------------------------------------
+Table: ServGrpMst_Log
+Columns: SgpCode, SgpName, SgpIndex, SgpExpanded, SgpEditable, SgpInfAllowed, SgpDefAllowed, SgpDiscAllowed, SgpDiscPer, SgpExtRateSys, SgpDctwseRateSys, SgpPcgwseRateSys, SgpRBywseRateSys, SgpRTowseRateSys, SgpTimewseRateSys, SgpExtDiscSys, SgpDctwseDiscSys, SgpPcgwseDiscSys, SgpRBywseDiscSys, SgpRTowseDiscSys, SgpTimewseDiscSys, SgpExtBargSys, SgpDctwseBargSys, SgpPcgwseBargSys, SgpRBywseBargSys, SgpRTowseBargSys, SgpTimewseBargSys, SgpExtShareSys, SgpDctwseShareSys, SgpPcgwseShareSys, SgpRBywseShareSys, SgpRTowseShareSys, SgpTimewseShareSys, SgpShowInList, SgpRecState, SgpPrntName, SgpShared
+--------------------------------------------------
+Table: ServMast
+Columns: SrvCode, SrvName, SrvDesc, SrvRefNo, SrvSgpCode, SrvAhCode, SrvIndex, SrvRate, SrvOpdGenChg, SrvOpdEmgChg, SrvIpdGenChg, SrvIpdEmgChg, SrvLabGenChg, SrvLabEmgChg, SrvMultiDctIncl, SrvAutoInsIpdBill, SrvAutoCalcIpdBill, SrvAutoInsOnceIpdBill, SrvUnitEditable, SrvRateEditable, SrvAmtEditable, SrvInfAllowed, SrvDefAllowed, SrvDiscAllowed, SrvDiscPer, SrvDctwseRateSys, SrvPcgwseRateSys, SrvRBywseRateSys, SrvRTowseRateSys, SrvTimewseRateSys, SrvDctwseDiscSys, SrvPcgwseDiscSys, SrvRBywseDiscSys, SrvRTowseDiscSys, SrvTimewseDiscSys, SrvDctwseBargSys, SrvPcgwseBargSys, SrvRBywseBargSys, SrvRTowseBargSys, SrvTimewseBargSys, SrvDctwseShareSys, SrvPcgwseShareSys, SrvRBywseShareSys, SrvRTowseShareSys, SrvTimewseShareSys, SrvShowInList, SrvRecState, SrvIndsRate, SrvTfmCode, SrvShared, SrvVtsCode, SrvRemarkOpt
+--------------------------------------------------
+Table: ServMast_Log
+Columns: SrvCode, SrvName, SrvDesc, SrvRefNo, SrvSgpCode, SrvAhCode, SrvIndex, SrvRate, SrvOpdGenChg, SrvOpdEmgChg, SrvIpdGenChg, SrvIpdEmgChg, SrvLabGenChg, SrvLabEmgChg, SrvMultiDctIncl, SrvAutoInsIpdBill, SrvAutoCalcIpdBill, SrvAutoInsOnceIpdBill, SrvUnitEditable, SrvRateEditable, SrvAmtEditable, SrvInfAllowed, SrvDefAllowed, SrvDiscAllowed, SrvDiscPer, SrvDctwseRateSys, SrvPcgwseRateSys, SrvRBywseRateSys, SrvRTowseRateSys, SrvTimewseRateSys, SrvDctwseDiscSys, SrvPcgwseDiscSys, SrvRBywseDiscSys, SrvRTowseDiscSys, SrvTimewseDiscSys, SrvDctwseBargSys, SrvPcgwseBargSys, SrvRBywseBargSys, SrvRTowseBargSys, SrvTimewseBargSys, SrvDctwseShareSys, SrvPcgwseShareSys, SrvRBywseShareSys, SrvRTowseShareSys, SrvTimewseShareSys, SrvShowInList, SrvRecState, SrvIndsRate, SrvTfmCode, SrvShared, SrvVtsCode, SrvRemarkOpt
+--------------------------------------------------
+Table: ServRateMst
+Columns: SrmCode, SrmICode, SrmSno, SrmWefDate, SrmPcgCode, SrmDctCode, SrmRByCode, SrmRToCode, SrmStartTime, SrmEndTime, SrmRate, SrmDiscPer, SrmInfByPer, SrmDefByPer, SrmSharePer, SrmShareAmt, SrmRemark, SrmRecState
+--------------------------------------------------
+Table: ServRateMst_Log
+Columns: SrmCode, SrmICode, SrmSno, SrmWefDate, SrmPcgCode, SrmDctCode, SrmRByCode, SrmRToCode, SrmStartTime, SrmEndTime, SrmRate, SrmDiscPer, SrmInfByPer, SrmDefByPer, SrmSharePer, SrmShareAmt, SrmRemark, SrmRecState
+--------------------------------------------------
+Table: WardMast
+Columns: WrdCode, WrdName, WrdShowInList, WrdRecState
+--------------------------------------------------
+Table: WardMast_Log
+Columns: WrdCode, WrdName, WrdShowInList, WrdRecState
+--------------------------------------------------

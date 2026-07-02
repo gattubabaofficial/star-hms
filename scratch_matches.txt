@@ -1,0 +1,120 @@
+scratch_search_all.py:3 | Match 'token': search_terms = ["token", "repeat", "pymt. mode", "pymt_mode", "payment_mode", "payment mode", "role/department", "department/role"]
+scratch_search_all.py:3 | Match 'repeat': search_terms = ["token", "repeat", "pymt. mode", "pymt_mode", "payment_mode", "payment mode", "role/department", "department/role"]
+scratch_search_all.py:3 | Match 'pymt. mode': search_terms = ["token", "repeat", "pymt. mode", "pymt_mode", "payment_mode", "payment mode", "role/department", "department/role"]
+scratch_search_all.py:3 | Match 'pymt_mode': search_terms = ["token", "repeat", "pymt. mode", "pymt_mode", "payment_mode", "payment mode", "role/department", "department/role"]
+scratch_search_all.py:3 | Match 'payment_mode': search_terms = ["token", "repeat", "pymt. mode", "pymt_mode", "payment_mode", "payment mode", "role/department", "department/role"]
+scratch_search_all.py:3 | Match 'payment mode': search_terms = ["token", "repeat", "pymt. mode", "pymt_mode", "payment_mode", "payment mode", "role/department", "department/role"]
+scratch_search_all.py:3 | Match 'role/department': search_terms = ["token", "repeat", "pymt. mode", "pymt_mode", "payment_mode", "payment mode", "role/department", "department/role"]
+scratch_search_all.py:3 | Match 'department/role': search_terms = ["token", "repeat", "pymt. mode", "pymt_mode", "payment_mode", "payment mode", "role/department", "department/role"]
+scratch_search_text.py:3 | Match 'token': search_terms = ["token", "repeat", "pymt", "account head", "role/department", "in-active"]
+scratch_search_text.py:3 | Match 'repeat': search_terms = ["token", "repeat", "pymt", "account head", "role/department", "in-active"]
+scratch_search_text.py:3 | Match 'role/department': search_terms = ["token", "repeat", "pymt", "account head", "role/department", "in-active"]
+backend\schemas_flat.py:27 | Match 'token': class Token(BaseModel):
+backend\schemas_flat.py:28 | Match 'token': access_token: str
+backend\schemas_flat.py:29 | Match 'token': token_type: str
+backend\schemas_flat.py:31 | Match 'token': class TokenData(BaseModel):
+backend\core\dependencies.py:7 | Match 'token': from backend.schemas import TokenData
+backend\core\dependencies.py:10 | Match 'token': oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
+backend\core\dependencies.py:19 | Match 'token': def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)) -> User:
+backend\core\dependencies.py:26 | Match 'token': payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+backend\core\dependencies.py:30 | Match 'token': token_data = TokenData(username=username)
+backend\core\dependencies.py:34 | Match 'token': user = db.query(User).filter(User.username == token_data.username).first()
+backend\core\security.py:9 | Match 'token': ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 12 # 12 hours
+backend\core\security.py:19 | Match 'token': def create_access_token(subject: Union[str, Any], expires_delta: timedelta = None) -> str:
+backend\core\security.py:23 | Match 'token': expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+backend\routers\auth.py:6 | Match 'token': from backend.core.security import verify_password, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_password_hash
+backend\routers\auth.py:8 | Match 'token': from backend.schemas import Token, UserResponse, UserCreate
+backend\routers\auth.py:13 | Match 'token': @router.post("/login", response_model=Token)
+backend\routers\auth.py:14 | Match 'token': def login_access_token(db: Session = Depends(dep_get_db), form_data: OAuth2PasswordRequestForm = Depends()):
+backend\routers\auth.py:21 | Match 'token': access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+backend\routers\auth.py:22 | Match 'token': access_token = create_access_token(
+backend\routers\auth.py:23 | Match 'token': subject=user.username, expires_delta=access_token_expires
+backend\routers\auth.py:25 | Match 'token': return {"access_token": access_token, "token_type": "bearer"}
+backend\schemas\auth.py:4 | Match 'token': class Token(BaseModel):
+backend\schemas\auth.py:5 | Match 'token': access_token: str
+backend\schemas\auth.py:6 | Match 'token': token_type: str
+backend\schemas\auth.py:8 | Match 'token': class TokenData(BaseModel):
+backend\schemas\__init__.py:4 | Match 'token': Token, TokenData,
+backend\schemas\__init__.py:40 | Match 'token': "Token", "TokenData",
+frontend\package-lock.json:33 | Match 'token': "js-tokens": "^4.0.0",
+frontend\package-lock.json:3111 | Match 'repeat': "string.prototype.repeat": "^1.0.0"
+frontend\package-lock.json:4172 | Match 'token': "node_modules/js-tokens": {
+frontend\package-lock.json:4174 | Match 'token': "resolved": "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz",
+frontend\package-lock.json:4339 | Match 'token': "js-tokens": "^3.0.0 || ^4.0.0"
+frontend\package-lock.json:5393 | Match 'repeat': "node_modules/string.prototype.repeat": {
+frontend\package-lock.json:5395 | Match 'repeat': "resolved": "https://registry.npmjs.org/string.prototype.repeat/-/string.prototype.repeat-1.0.0.tgz",
+frontend\src\app\dashboard.module.css:174 | Match 'repeat': grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+frontend\src\app\page.tsx:17 | Match 'token': const token = localStorage.getItem("token");
+frontend\src\app\page.tsx:18 | Match 'token': if (token) {
+frontend\src\app\page.tsx:64 | Match 'token': localStorage.setItem("token", data.access_token);
+frontend\src\app\dashboard\layout.tsx:286 | Match 'token': const token = localStorage.getItem("token");
+frontend\src\app\dashboard\layout.tsx:287 | Match 'token': if (!token) {
+frontend\src\app\dashboard\layout.tsx:312 | Match 'token': localStorage.removeItem("token");
+frontend\src\app\dashboard\accounts\page.tsx:76 | Match 'repeat': gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+frontend\src\app\dashboard\admin\page.tsx:74 | Match 'repeat': gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+frontend\src\app\dashboard\admin\security\page.tsx:84 | Match 'token': <label htmlFor="jwtExpiryHours">JWT Access Token Validity (Hours)</label>
+frontend\src\app\dashboard\bed-management\page.tsx:76 | Match 'repeat': <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "24px" }}>
+frontend\src\app\dashboard\doctors\page.tsx:106 | Match 'token': const token = localStorage.getItem("token");
+frontend\src\app\dashboard\doctors\page.tsx:111 | Match 'token': "Authorization": `Bearer ${token}`
+frontend\src\app\dashboard\ipd\page.tsx:121 | Match 'repeat': gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+frontend\src\app\dashboard\ipd\admission\page.tsx:92 | Match 'token': const token = localStorage.getItem("token");
+frontend\src\app\dashboard\ipd\admission\page.tsx:97 | Match 'token': "Authorization": `Bearer ${token}`
+frontend\src\app\dashboard\ipd\discharge\page.tsx:112 | Match 'token': const token = localStorage.getItem("token");
+frontend\src\app\dashboard\ipd\discharge\page.tsx:117 | Match 'token': headers: { "Authorization": `Bearer ${token}` }
+frontend\src\app\dashboard\ipd\discharge\page.tsx:130 | Match 'token': "Authorization": `Bearer ${token}`
+frontend\src\app\dashboard\ipd\payment\page.tsx:89 | Match 'payment mode': <th>Payment Mode</th>
+frontend\src\app\dashboard\laboratory\page.tsx:109 | Match 'repeat': gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+frontend\src\app\dashboard\masters\page.tsx:128 | Match 'repeat': <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "20px" }}>
+frontend\src\app\dashboard\masters\page.tsx:165 | Match 'repeat': <div style={{ padding: "20px", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "16px" }}>
+frontend\src\app\dashboard\masters\page.tsx:202 | Match 'repeat': <div style={{ padding: "20px", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "16px" }}>
+frontend\src\app\dashboard\masters\area\page.tsx:16 | Match 'token': const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+frontend\src\app\dashboard\masters\area\page.tsx:17 | Match 'token': const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
+frontend\src\app\dashboard\masters\bed\page.tsx:80 | Match 'token': const token = localStorage.getItem("token");
+frontend\src\app\dashboard\masters\bed\page.tsx:85 | Match 'token': "Authorization": `Bearer ${token}`
+frontend\src\app\dashboard\masters\diagnosis\page.tsx:13 | Match 'token': const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+frontend\src\app\dashboard\masters\diagnosis\page.tsx:14 | Match 'token': const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
+frontend\src\app\dashboard\masters\doctor\page.tsx:32 | Match 'token': const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+frontend\src\app\dashboard\masters\doctor\page.tsx:33 | Match 'token': const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
+frontend\src\app\dashboard\masters\doctor-role\page.tsx:48 | Match 'token': const token = localStorage.getItem("token");
+frontend\src\app\dashboard\masters\doctor-role\page.tsx:53 | Match 'token': "Authorization": `Bearer ${token}`
+frontend\src\app\dashboard\masters\floor\page.tsx:48 | Match 'token': const token = localStorage.getItem("token");
+frontend\src\app\dashboard\masters\floor\page.tsx:53 | Match 'token': "Authorization": `Bearer ${token}`
+frontend\src\app\dashboard\masters\package\page.tsx:83 | Match 'repeat': <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "24px" }}>
+frontend\src\app\dashboard\masters\party\page.tsx:23 | Match 'token': const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+frontend\src\app\dashboard\masters\party\page.tsx:24 | Match 'token': const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
+frontend\src\app\dashboard\masters\party-group\page.tsx:14 | Match 'token': const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+frontend\src\app\dashboard\masters\party-group\page.tsx:15 | Match 'token': const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
+frontend\src\app\dashboard\masters\patient-category\page.tsx:18 | Match 'token': const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+frontend\src\app\dashboard\masters\patient-category\page.tsx:19 | Match 'token': const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
+frontend\src\app\dashboard\masters\payroll\department\page.tsx:14 | Match 'token': const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+frontend\src\app\dashboard\masters\payroll\department\page.tsx:15 | Match 'token': const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
+frontend\src\app\dashboard\masters\payroll\designation\page.tsx:14 | Match 'token': const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+frontend\src\app\dashboard\masters\payroll\designation\page.tsx:15 | Match 'token': const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
+frontend\src\app\dashboard\masters\payroll\employee\page.tsx:26 | Match 'token': const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+frontend\src\app\dashboard\masters\payroll\employee\page.tsx:27 | Match 'token': const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
+frontend\src\app\dashboard\masters\product\page.tsx:20 | Match 'token': const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+frontend\src\app\dashboard\masters\product\page.tsx:21 | Match 'token': const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
+frontend\src\app\dashboard\masters\product-group\page.tsx:14 | Match 'token': const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+frontend\src\app\dashboard\masters\product-group\page.tsx:15 | Match 'token': const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
+frontend\src\app\dashboard\masters\referral-by\page.tsx:21 | Match 'token': const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+frontend\src\app\dashboard\masters\referral-by\page.tsx:22 | Match 'token': const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
+frontend\src\app\dashboard\masters\referral-to\page.tsx:21 | Match 'token': const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+frontend\src\app\dashboard\masters\referral-to\page.tsx:22 | Match 'token': const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
+frontend\src\app\dashboard\masters\referred-category\page.tsx:13 | Match 'token': const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+frontend\src\app\dashboard\masters\referred-category\page.tsx:14 | Match 'token': const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
+frontend\src\app\dashboard\masters\service\page.tsx:77 | Match 'token': const token = localStorage.getItem("token");
+frontend\src\app\dashboard\masters\service\page.tsx:82 | Match 'token': "Authorization": `Bearer ${token}`
+frontend\src\app\dashboard\masters\service-group\page.tsx:48 | Match 'token': const token = localStorage.getItem("token");
+frontend\src\app\dashboard\masters\service-group\page.tsx:53 | Match 'token': "Authorization": `Bearer ${token}`
+frontend\src\app\dashboard\masters\station\page.tsx:14 | Match 'token': const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+frontend\src\app\dashboard\masters\station\page.tsx:15 | Match 'token': const authHdr = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
+frontend\src\app\dashboard\masters\ward\page.tsx:73 | Match 'token': const token = localStorage.getItem("token");
+frontend\src\app\dashboard\masters\ward\page.tsx:78 | Match 'token': "Authorization": `Bearer ${token}`
+frontend\src\app\dashboard\opd\page.tsx:113 | Match 'repeat': gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+frontend\src\app\dashboard\opd\payment\page.tsx:56 | Match 'payment mode': <th>Payment Mode</th>
+frontend\src\app\dashboard\opd\registration\page.tsx:112 | Match 'token': const token = localStorage.getItem("token");
+frontend\src\app\dashboard\opd\registration\page.tsx:119 | Match 'token': "Authorization": `Bearer ${token}`
+frontend\src\app\dashboard\opd\registration\page.tsx:140 | Match 'token': "Authorization": `Bearer ${token}`
+frontend\src\app\dashboard\patients\page.tsx:94 | Match 'token': const token = localStorage.getItem("token");
+frontend\src\app\dashboard\patients\page.tsx:99 | Match 'token': "Authorization": `Bearer ${token}`
+frontend\src\app\dashboard\pharmacy\page.tsx:122 | Match 'repeat': gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",

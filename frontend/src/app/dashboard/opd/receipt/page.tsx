@@ -1,241 +1,162 @@
 "use client";
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styles from "../../../dashboard.module.css";
-import { Receipt, Search, Printer } from "lucide-react";
+import { RefreshCw, Search, Receipt } from "lucide-react";
 
-interface Patient {
-  ptt_code: number;
-  ptt_name: string;
-  ptt_reg_no: number;
+const API = "http://127.0.0.1:8000/api/opd";
+
+interface ReceiptRow {
+  OrcCode:     number;
+  VchNo:       number;
+  Date:        string;
+  Time:        string;
+  ReceiptType: string;
+  PttName:     string;
+  PttRegNo:    number | null;
+  DctName:     string;
+  Scheme:      string;
+  PymtMode:    string;
+  TotalAmt:    number;
+  Discount:    number;
+  RecvdAmt:    number;
+  BalAmt:      number;
+  AdvAmt:      number;
+  RefuAmt:     number;
+  Remark:      string;
+  CareOf:      string;
+  Address:     string;
 }
 
-interface Doctor {
-  dct_code: number;
-  dct_name: string;
-  dct_title: string;
+function getDefaultDates() {
+  const to = new Date(); const from = new Date(); from.setDate(from.getDate() - 30);
+  return { from: from.toISOString().split("T")[0], to: to.toISOString().split("T")[0] };
 }
 
-interface OPDBill {
-  bill_id: number;
-  bill_no: string;
-  total_amount: number;
-  discount_amount: number;
-  net_amount: number;
-  paid_amount: number;
-  status: string;
-  created_at: string;
-}
+export default function OPDReceiptPage() {
+  const def = getDefaultDates();
+  const [list, setList]         = useState<ReceiptRow[]>([]);
+  const [loading, setLoading]   = useState(false);
+  const [fromDate, setFromDate] = useState(def.from);
+  const [toDate, setToDate]     = useState(def.to);
+  const [search, setSearch]     = useState("");
+  const [selectedRow, setSelectedRow] = useState<ReceiptRow | null>(null);
 
-interface OPDRegistration {
-  opg_code: number;
-  opg_visit_date: string;
-  opg_fee: number;
-  patient?: Patient;
-  doctor?: Doctor;
-  bills: OPDBill[];
-}
-
-export default function OPDReceiptsLogPage() {
-  const [registrations, setRegistrations] = useState<OPDRegistration[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  
-  // Invoice print state
-  const [selectedReg, setSelectedReg] = useState<OPDRegistration | null>(null);
-  const [invoiceOpen, setInvoiceOpen] = useState(false);
-
-  const fetchRegistrations = async () => {
+  const loadList = useCallback(async () => {
+    setLoading(true);
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/opd/registrations");
-      if (response.ok) {
-        setRegistrations(await response.json());
-      }
-    } catch (e) {
-      console.log("Error loading registrations list:", e);
-    } finally {
-      setLoading(false);
-    }
-  };
+      const r = await fetch(`${API}/receipt-charges/summary?from_date=${fromDate}&to_date=${toDate}`);
+      if (r.ok) setList(await r.json());
+    } catch (e) { console.error(e); } finally { setLoading(false); }
+  }, [fromDate, toDate]);
 
-  useEffect(() => {
-    fetchRegistrations();
-  }, []);
+  useEffect(() => { loadList(); }, [loadList]);
 
-  const handleShowReceipt = (reg: OPDRegistration) => {
-    setSelectedReg(reg);
-    setInvoiceOpen(true);
-  };
-
-  const filteredRegs = registrations.filter(reg =>
-    (reg.patient?.ptt_name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (reg.doctor?.dct_name || "").toLowerCase().includes(searchTerm.toLowerCase())
+  const filtered = list.filter(r =>
+    r.PttName.toLowerCase().includes(search.toLowerCase()) ||
+    String(r.PttRegNo || "").includes(search) ||
+    r.DctName.toLowerCase().includes(search.toLowerCase())
   );
 
+  const totalAmt   = filtered.reduce((s, r) => s + r.TotalAmt, 0);
+  const totalRecvd = filtered.reduce((s, r) => s + r.RecvdAmt, 0);
+  const totalBal   = filtered.reduce((s, r) => s + r.BalAmt, 0);
+
   return (
-    <div>
-      <div className={styles.toolbar}>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", gap: 0 }}>
+      <div className={styles.toolbar} style={{ flexWrap: "wrap", gap: 8 }}>
         <div className={styles.searchBar}>
-          <Search size={18} style={{ color: "var(--text-muted)" }} />
-          <input
-            type="text"
-            placeholder="Search receipts by patient or doctor..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          <Search size={16} style={{ color: "var(--text-muted)" }} />
+          <input placeholder="Search patient, doctor…" value={search} onChange={e => setSearch(e.target.value)} />
         </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginLeft: "auto" }}>
+          <span style={{ fontSize: 13, color: "var(--text-secondary)" }}>From:</span>
+          <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)}
+            style={{ padding: "4px 8px", border: "1px solid var(--border-light)", borderRadius: 6, background: "var(--bg-card)", color: "var(--text-primary)" }} />
+          <span style={{ fontSize: 13, color: "var(--text-secondary)" }}>To:</span>
+          <input type="date" value={toDate} onChange={e => setToDate(e.target.value)}
+            style={{ padding: "4px 8px", border: "1px solid var(--border-light)", borderRadius: 6, background: "var(--bg-card)", color: "var(--text-primary)" }} />
+          <button onClick={loadList} className={styles.btnSecondary} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <RefreshCw size={14} /> Refresh
+          </button>
+        </div>
+        <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-secondary)" }}>OPD Receipt / Procedures / Diagnostics</span>
       </div>
 
-      {loading ? (
-        <p style={{ color: "var(--text-secondary)", fontSize: "14px" }}>Loading receipts directory...</p>
-      ) : filteredRegs.length === 0 ? (
-        <div style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border-light)", borderRadius: "16px", padding: "60px", textAlign: "center" }}>
-          <Receipt size={44} style={{ color: "var(--text-muted)", marginBottom: "16px" }} />
-          <h3 style={{ fontSize: "16px", marginBottom: "8px" }}>No Receipts Logged</h3>
-          <p style={{ color: "var(--text-secondary)", fontSize: "13px" }}>No consultation visits or bills match the search parameters.</p>
-        </div>
-      ) : (
-        <div className={styles.tableContainer}>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Visit Date</th>
-                <th>Receipt / Invoice No</th>
-                <th>Patient Name</th>
-                <th>Consulting Doctor</th>
-                <th>Net Total</th>
-                <th>Paid Amount</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredRegs.map((reg) => {
-                const bill = reg.bills && reg.bills.length > 0 ? reg.bills[0] : null;
-                return (
-                  <tr key={reg.opg_code}>
-                    <td style={{ fontWeight: 500 }}>
-                      {new Date(reg.opg_visit_date).toLocaleString("en-IN", { dateStyle: "short", timeStyle: "short" })}
-                    </td>
-                    <td style={{ fontWeight: 600, color: "var(--accent-color)" }}>
-                      {bill ? bill.bill_no : `OPD-REC-${reg.opg_code}`}
-                    </td>
-                    <td style={{ fontWeight: 600 }}>{reg.patient ? reg.patient.ptt_name : "Unknown"}</td>
-                    <td>{reg.doctor ? `${reg.doctor.dct_title} ${reg.doctor.dct_name}` : "Unknown"}</td>
-                    <td style={{ fontWeight: 600 }}>₹{bill ? bill.net_amount : reg.opg_fee}</td>
-                    <td>₹{bill ? bill.paid_amount : 0}</td>
-                    <td>
-                      <span className={`${styles.badge} ${
-                        !bill ? styles.badgeDanger :
-                        bill.status === "paid" ? styles.badgeSuccess :
-                        bill.status === "partial" ? styles.badgeWarning : styles.badgeDanger
-                      }`}>
-                        {bill ? bill.status : "unpaid"}
-                      </span>
-                    </td>
-                    <td>
-                      <button className={styles.closeBtn} onClick={() => handleShowReceipt(reg)} title="Print Receipt">
-                        <Receipt size={18} style={{ color: "var(--accent-color)" }} />
-                      </button>
+      <div className={styles.sectionBox} style={{ padding: 0, flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+        <div style={{ flex: 1, overflowY: "auto" }}>
+          {loading ? (
+            <div style={{ padding: 40, textAlign: "center" }}>
+              <RefreshCw size={24} className="animate-spin" style={{ color: "var(--text-muted)", margin: "0 auto 10px" }} />
+              <span style={{ color: "var(--text-secondary)" }}>Loading…</span>
+            </div>
+          ) : (
+            <table className={styles.table} style={{ fontSize: 12, minWidth: 1400, borderCollapse: "collapse", width: "100%" }}>
+              <thead style={{ position: "sticky", top: 0, zIndex: 10, background: "var(--bg-secondary)" }}>
+                <tr>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Voucher</th>
+                  <th>Vchr.No</th>
+                  <th>Patient Name</th>
+                  <th>Reg.No (UHID)</th>
+                  <th>Doctor</th>
+                  <th>Scheme</th>
+                  <th>Pymt Mode</th>
+                  <th style={{ textAlign: "right" }}>Total Charges</th>
+                  <th style={{ textAlign: "right" }}>Discount</th>
+                  <th style={{ textAlign: "right" }}>Received</th>
+                  <th style={{ textAlign: "right" }}>Balance</th>
+                  <th>Remark</th>
+                  <th>Care of</th>
+                  <th>Address</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.length === 0 ? (
+                  <tr>
+                    <td colSpan={16} style={{ padding: "40px 0", textAlign: "center", color: "var(--text-secondary)" }}>
+                      No OPD receipt records found.
                     </td>
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                ) : (
+                  filtered.map(r => {
+                    const selected = selectedRow?.OrcCode === r.OrcCode;
+                    return (
+                      <tr key={r.OrcCode} onClick={() => setSelectedRow(r)}
+                        style={{ background: selected ? "var(--accent-light)" : "transparent", cursor: "pointer", borderBottom: "1px solid var(--border-light)" }}>
+                        <td>{r.Date}</td>
+                        <td style={{ color: "var(--text-secondary)", fontSize: 11 }}>{r.Time || "—"}</td>
+                        <td>{r.ReceiptType}</td>
+                        <td><strong style={{ color: "var(--accent-color)" }}>#{r.VchNo}</strong></td>
+                        <td><strong>{r.PttName}</strong></td>
+                        <td>{r.PttRegNo || "—"}</td>
+                        <td>{r.DctName || "—"}</td>
+                        <td>{r.Scheme || "—"}</td>
+                        <td>{r.PymtMode}</td>
+                        <td style={{ textAlign: "right", fontWeight: 700 }}>₹{r.TotalAmt.toFixed(2)}</td>
+                        <td style={{ textAlign: "right", color: "var(--text-secondary)" }}>₹{r.Discount.toFixed(2)}</td>
+                        <td style={{ textAlign: "right", fontWeight: 700, color: "var(--status-success)" }}>₹{r.RecvdAmt.toFixed(2)}</td>
+                        <td style={{ textAlign: "right", color: r.BalAmt > 0 ? "var(--status-danger)" : "var(--text-muted)" }}>₹{r.BalAmt.toFixed(2)}</td>
+                        <td style={{ fontSize: 11, color: "var(--text-secondary)" }}>{r.Remark || "—"}</td>
+                        <td>{r.CareOf || "—"}</td>
+                        <td>{r.Address || "—"}</td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          )}
         </div>
-      )}
-
-      {invoiceOpen && selectedReg && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent} style={{ maxWidth: "480px" }}>
-            <div className={styles.modalHeader}>
-              <h3 style={{ fontSize: "18px", fontWeight: 600 }}>OPD Consultation Receipt</h3>
-              <button className={styles.closeBtn} onClick={() => setInvoiceOpen(false)}>×</button>
-            </div>
-            
-            <div className={styles.modalBody} style={{ padding: "24px 32px" }}>
-              <div id="receipt-print-area" style={{ color: "#000", fontFamily: "sans-serif" }}>
-                {/* Receipt Header */}
-                <div style={{ textAlign: "center", marginBottom: "20px", borderBottom: "2px dashed #e2e8f0", paddingBottom: "16px" }}>
-                  <h2 style={{ fontSize: "20px", fontWeight: 700, margin: "0 0 4px 0" }}>STAR HOSPITAL</h2>
-                  <p style={{ fontSize: "11px", color: "#64748b", margin: 0 }}>Main Road St., Suite 101, Medical District</p>
-                  <p style={{ fontSize: "11px", color: "#64748b", margin: 0 }}>Tel: 9876543210 | info@starhospital.com</p>
-                </div>
-
-                {/* Receipt details */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "13px", marginBottom: "16px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span style={{ color: "#64748b" }}>Receipt No:</span>
-                    <strong style={{ color: "#000" }}>{selectedReg.bills[0]?.bill_no || `OPD-REC-${selectedReg.opg_code}`}</strong>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span style={{ color: "#64748b" }}>Date:</span>
-                    <span>{new Date(selectedReg.opg_visit_date).toLocaleString()}</span>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span style={{ color: "#64748b" }}>Patient Name:</span>
-                    <strong>{selectedReg.patient?.ptt_name}</strong>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span style={{ color: "#64748b" }}>Reg Number:</span>
-                    <span>#{selectedReg.patient?.ptt_reg_no || selectedReg.opg_code}</span>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span style={{ color: "#64748b" }}>Doctor Name:</span>
-                    <span>{selectedReg.doctor ? `${selectedReg.doctor.dct_title} ${selectedReg.doctor.dct_name}` : "General Consultant"}</span>
-                  </div>
-                </div>
-
-                {/* Receipt items list */}
-                <div style={{ borderTop: "1px solid #e2e8f0", borderBottom: "1px solid #e2e8f0", padding: "12px 0", marginBottom: "16px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 600, fontSize: "13px", marginBottom: "6px" }}>
-                    <span>Description</span>
-                    <span>Amount</span>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "13px" }}>
-                    <span>OPD Consultation Charge</span>
-                    <span>₹{selectedReg.opg_fee.toFixed(2)}</span>
-                  </div>
-                </div>
-
-                {/* Total breakdowns */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "13px", alignItems: "flex-end", borderBottom: "2px dashed #e2e8f0", paddingBottom: "16px", marginBottom: "16px" }}>
-                  <div style={{ display: "flex", width: "200px", justifyContent: "space-between" }}>
-                    <span style={{ color: "#64748b" }}>Subtotal:</span>
-                    <span>₹{selectedReg.opg_fee.toFixed(2)}</span>
-                  </div>
-                  <div style={{ display: "flex", width: "200px", justifyContent: "space-between" }}>
-                    <span style={{ color: "#64748b" }}>Discount:</span>
-                    <span>-₹{(selectedReg.bills[0]?.discount_amount || 0).toFixed(2)}</span>
-                  </div>
-                  <div style={{ display: "flex", width: "200px", justifyContent: "space-between", fontWeight: 700, fontSize: "15px", marginTop: "4px" }}>
-                    <span>Net Total:</span>
-                    <span>₹{(selectedReg.bills[0]?.net_amount || selectedReg.opg_fee).toFixed(2)}</span>
-                  </div>
-                  <div style={{ display: "flex", width: "200px", justifyContent: "space-between", fontWeight: 600, color: "var(--accent-color)", marginTop: "4px" }}>
-                    <span>Paid Amount:</span>
-                    <span>₹{(selectedReg.bills[0]?.paid_amount || 0).toFixed(2)}</span>
-                  </div>
-                </div>
-
-                {/* Footer notes */}
-                <div style={{ textAlign: "center", fontSize: "11px", color: "#64748b" }}>
-                  <p>Thank you for choosing Star Hospital</p>
-                  <p>Get well soon!</p>
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.modalFooter}>
-              <button className={styles.secondaryBtn} onClick={() => setInvoiceOpen(false)}>Close</button>
-              <button className={styles.primaryBtn} onClick={() => window.print()} style={{ gap: "6px" }}>
-                <Printer size={16} /> Print Receipt
-              </button>
-            </div>
+        {filtered.length > 0 && (
+          <div style={{ padding: "8px 16px", borderTop: "2px solid var(--border-light)", background: "var(--bg-secondary)", display: "flex", justifyContent: "flex-end", gap: 24, fontSize: 13, fontWeight: 700 }}>
+            <span>Records: {filtered.length}</span>
+            <span>Total Charges: ₹{totalAmt.toFixed(2)}</span>
+            <span style={{ color: "var(--status-success)" }}>Total Received: ₹{totalRecvd.toFixed(2)}</span>
+            <span style={{ color: totalBal > 0 ? "var(--status-danger)" : "var(--text-muted)" }}>Balance: ₹{totalBal.toFixed(2)}</span>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

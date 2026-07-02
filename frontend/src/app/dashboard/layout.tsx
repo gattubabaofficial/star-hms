@@ -30,8 +30,8 @@ const navItems = [
           { name: "Referred Category", href: "/dashboard/masters/referred-category" },
           { name: "Doctor Role", href: "/dashboard/masters/doctor-role" },
           { name: "Doctor Master", href: "/dashboard/masters/doctor" },
-          { name: "Referred By Master", href: "/dashboard/masters/referral" },
-          { name: "Referred To Master", href: "/dashboard/masters/referral" },
+          { name: "Referred By Master", href: "/dashboard/masters/referral-by" },
+          { name: "Referred To Master", href: "/dashboard/masters/referral-to" },
           { name: "Service Group Master", href: "/dashboard/masters/service-group" },
           { name: "Service Master", href: "/dashboard/masters/service" },
           { name: "Advance Rate Master", href: "/dashboard/masters/advance-rate" },
@@ -74,9 +74,11 @@ const navItems = [
       {
         name: "Medical Store Master",
         items: [
+          { name: "Supplier Group Master", href: "/dashboard/masters/party-group" },
+          { name: "Supplier (Party) Master", href: "/dashboard/masters/party" },
+          { name: "Product Group Master", href: "/dashboard/masters/product-group" },
           { name: "Product Master", href: "/dashboard/masters/product" },
           { name: "Product Company Master", href: "/dashboard/masters/product-company" },
-          { name: "Product Group Master", href: "/dashboard/masters/product-group" },
           { name: "Product Composition Master", href: "/dashboard/masters/product-composition" },
         ],
       },
@@ -94,6 +96,14 @@ const navItems = [
           { name: "Voucher Type", href: "/dashboard/masters/voucher-type" },
           { name: "Account Group", href: "/dashboard/masters/account-group" },
           { name: "Print Report Master", href: "/dashboard/masters/print-report" },
+        ],
+      },
+      {
+        name: "Payroll Master",
+        items: [
+          { name: "Department Master", href: "/dashboard/masters/payroll/department" },
+          { name: "Designation Master", href: "/dashboard/masters/payroll/designation" },
+          { name: "Employee Master", href: "/dashboard/masters/payroll/employee" },
         ],
       },
     ],

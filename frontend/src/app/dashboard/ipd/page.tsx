@@ -53,7 +53,7 @@ export default function IPDPortalHubPage() {
   const ipdFeatures = [
     { name: "Inpatient Admission", desc: "Admit patient & register initial deposit.", href: "/dashboard/ipd/admission", icon: DoorOpen, color: "#2563eb", bg: "#eff6ff" },
     { name: "Bed Occupancy Grid", desc: "Interactive map of ward beds & floor status.", href: "/dashboard/ipd/bed-status", icon: LayoutGrid, color: "#10b981", bg: "#ecfdf5" },
-    { name: "IPD Billing Console", desc: "Generate invoices for ward stays & services.", href: "/dashboard/ipd/billing", icon: Receipt, color: "#f59e0b", bg: "#fefbeb" },
+    { name: "IPD Billing Console", desc: "Generate invoices for ward stays & services.", href: "/dashboard/ipd/bill", icon: Receipt, color: "#f59e0b", bg: "#fefbeb" },
     { name: "Advance Deposits", desc: "Log advance payments and deposit registry.", href: "/dashboard/ipd/deposit", icon: PiggyBank, color: "#06b6d4", bg: "#ecfeff" },
     { name: "Settlements Desk", desc: "Record final discharge payments & receipts.", href: "/dashboard/ipd/payment", icon: CreditCard, color: "#8b5cf6", bg: "#f5f3ff" },
     { name: "Refund Console", desc: "Refund excess deposit payments.", href: "/dashboard/ipd/refund", icon: RotateCcw, color: "#ec4899", bg: "#fdf2f8" },

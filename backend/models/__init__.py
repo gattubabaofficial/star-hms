@@ -5,7 +5,8 @@ from backend.models.auth import Company, UserRoleMst, UserMast, UserRightMst
 from backend.models.masters import (
     PatCatgMst, DoctCatgMst, DoctRoleMst, RefCatgMst, AreaMast, StsnMast, DiagMast,
     FloorMast, WardMast, ServGrpMst, ServMast, ServRateMst, DoctMast, RefByMast, RefToMast, PatMast, BedMast,
-    SubItmGrpMst, SubItmMast, PartyGrpMst, PartyMast
+    SubItmGrpMst, SubItmMast, PartyGrpMst, PartyMast,
+    PayDeptMast, PayDesnMast, PayEmpMast,
 )
 from backend.models.opd import (
     OutdReg, OutdHdr, OutdBill, OutdBlDctDtl, OutdBlPymtHdr, OutdBlRefdHdr,
@@ -14,7 +15,10 @@ from backend.models.opd import (
 from backend.models.ipd import (
     IndrHdr, IBedState, IndrBlHdr, IndrBill, IndrBlDctDtl,
     IndrBlPymtHdr, IndrBlDpogDtl, IndrBlRefdHdr, IndrBlRfugDtl,
-    IndrReg, IndrRgPymt, IndrRgRefd
+    IndrReg, IndrRgPymt, IndrRgRefd, IndrBlIbsDtl, IndrBlIbsDtl_Log,
+    IndrPymtHdr, IndrPymtHdr_Log, IndrPymtDtl, IndrPymtDtl_Log,
+    IndrRefdHdr, IndrRefdHdr_Log, IndrRefdDtl, IndrRefdDtl_Log,
+    IndrClinHis, IndrDischSum
 )
 from backend.models.lab import (
     LabHdr, LabRcpt, LabRcDctDtl, LabPymtHdr, LabRefdHdr
@@ -51,7 +55,9 @@ __all__ = [
     # IPD
     "IndrHdr", "IBedState", "IndrBlHdr", "IndrBill", "IndrBlDctDtl",
     "IndrBlPymtHdr", "IndrBlDpogDtl", "IndrBlRefdHdr", "IndrBlRfugDtl",
-    "IndrReg", "IndrRgPymt", "IndrRgRefd",
+    "IndrReg", "IndrRgPymt", "IndrRgRefd", "IndrBlIbsDtl", "IndrBlIbsDtl_Log",
+    "IndrPymtHdr", "IndrPymtHdr_Log", "IndrPymtDtl", "IndrPymtDtl_Log",
+    "IndrRefdHdr", "IndrRefdHdr_Log", "IndrRefdDtl", "IndrRefdDtl_Log",
     # Lab
     "LabHdr", "LabRcpt", "LabRcDctDtl", "LabPymtHdr", "LabRefdHdr",
     # Pharmacy
