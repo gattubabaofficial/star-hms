@@ -65,14 +65,13 @@ export default function IndoorChargesPage() {
   const router = useRouter();
 
   const today = new Date().toISOString().slice(0, 10);
-  const firstOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-    .toISOString().slice(0, 10);
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
   const [rows, setRows]           = useState<ChargeRow[]>([]);
   const [loading, setLoading]     = useState(false);
   const [selected, setSelected]   = useState<number | null>(null);
   const [search, setSearch]       = useState("");
-  const [startDate, setStartDate] = useState(firstOfMonth);
+  const [startDate, setStartDate] = useState(thirtyDaysAgo);
   const [endDate, setEndDate]     = useState(today);
   const [toast, setToast]         = useState<{ msg: string; ok: boolean } | null>(null);
   const [deleting, setDeleting]   = useState(false);

@@ -95,6 +95,8 @@ const navItems = [
           { name: "Area Master", href: "/dashboard/masters/area" },
           { name: "Voucher Type", href: "/dashboard/masters/voucher-type" },
           { name: "Account Group", href: "/dashboard/masters/account-group" },
+          { name: "Banker Master", href: "/dashboard/masters/banker" },
+          { name: "Nation/State Master", href: "/dashboard/masters/nation-state" },
           { name: "Print Report Master", href: "/dashboard/masters/print-report" },
         ],
       },

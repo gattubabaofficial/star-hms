@@ -5,7 +5,8 @@ from backend.models.auth import Company, UserRoleMst, UserMast, UserRightMst
 from backend.models.masters import (
     PatCatgMst, DoctCatgMst, DoctRoleMst, RefCatgMst, AreaMast, StsnMast, DiagMast,
     FloorMast, WardMast, ServGrpMst, ServMast, ServRateMst, DoctMast, RefByMast, RefToMast, PatMast, BedMast,
-    SubItmGrpMst, SubItmMast, PartyGrpMst, PartyMast
+    SubItmGrpMst, SubItmMast, PartyGrpMst, PartyMast,
+    PayDeptMast, PayDesnMast, PayEmpMast,
 )
 from backend.models.opd import (
     OutdReg, OutdHdr, OutdBill, OutdBlDctDtl, OutdBlPymtHdr, OutdBlRefdHdr,
@@ -14,7 +15,10 @@ from backend.models.opd import (
 from backend.models.ipd import (
     IndrHdr, IBedState, IndrBlHdr, IndrBill, IndrBlDctDtl,
     IndrBlPymtHdr, IndrBlDpogDtl, IndrBlRefdHdr, IndrBlRfugDtl,
-    IndrReg, IndrRgPymt, IndrRgRefd
+    IndrReg, IndrRgPymt, IndrRgRefd, IndrBlIbsDtl, IndrBlIbsDtl_Log,
+    IndrPymtHdr, IndrPymtHdr_Log, IndrPymtDtl, IndrPymtDtl_Log,
+    IndrRefdHdr, IndrRefdHdr_Log, IndrRefdDtl, IndrRefdDtl_Log,
+    IndrClinHis, IndrDischSum
 )
 from backend.models.lab import (
     LabHdr, LabRcpt, LabRcDctDtl, LabPymtHdr, LabRefdHdr
@@ -23,6 +27,9 @@ from backend.models.pharmacy import (
     IndrStk, IndrStkDtl, OutdStk, OutdStkDtl
 )
 from backend.models.sync import SyncLog, SyncConfig
+from backend.models.accounts import (
+    AcntGrpMst, AchdMast, BnkrMast, NatioStateMast, VTypMast, Journal, JrnHdr,
+)
 
 # Legacy flat-model imports for backward compatibility
 # (routers that do `from backend.models import User, Patient, ...`)
@@ -51,13 +58,17 @@ __all__ = [
     # IPD
     "IndrHdr", "IBedState", "IndrBlHdr", "IndrBill", "IndrBlDctDtl",
     "IndrBlPymtHdr", "IndrBlDpogDtl", "IndrBlRefdHdr", "IndrBlRfugDtl",
-    "IndrReg", "IndrRgPymt", "IndrRgRefd",
+    "IndrReg", "IndrRgPymt", "IndrRgRefd", "IndrBlIbsDtl", "IndrBlIbsDtl_Log",
+    "IndrPymtHdr", "IndrPymtHdr_Log", "IndrPymtDtl", "IndrPymtDtl_Log",
+    "IndrRefdHdr", "IndrRefdHdr_Log", "IndrRefdDtl", "IndrRefdDtl_Log",
     # Lab
     "LabHdr", "LabRcpt", "LabRcDctDtl", "LabPymtHdr", "LabRefdHdr",
     # Pharmacy
     "IndrStk", "IndrStkDtl", "OutdStk", "OutdStkDtl",
     # Sync
     "SyncLog", "SyncConfig",
+    # Accounts
+    "AcntGrpMst", "AchdMast", "BnkrMast", "NatioStateMast", "VTypMast", "Journal", "JrnHdr",
     # Legacy flat models
     "User",
     "PatientCategory", "Patient",

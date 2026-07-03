@@ -1,6 +1,4 @@
 # Re-export all schemas from the flat schemas.py for backward compatibility.
-# Routers that do `from backend.schemas import Token, UserResponse, ...`
-# will continue to work because schemas/ is now a package.
 from backend.schemas_flat import (
     UserBase, UserCreate, UserLogin, UserResponse,
     Token, TokenData,
@@ -19,6 +17,29 @@ from backend.schemas_flat import (
     IPDAdmissionBase, IPDAdmissionCreate, IPDAdmissionResponse,
     IPDBillCreate, IPDBillResponse,
     DashboardStats,
+    # Payroll
+    PayDeptBase, PayDeptCreate, PayDeptResponse,
+    PayDesnBase, PayDesnCreate, PayDesnResponse,
+    PayEmpBase, PayEmpCreate, PayEmpResponse,
+    # New masters
+    RefCatgBase, RefCatgCreate, RefCatgResponse,
+    RefByBase, RefByCreate, RefByResponse,
+    RefToBase, RefToCreate, RefToResponse,
+    StationBase, StationCreate, StationResponse,
+    AreaBase, AreaCreate, AreaResponse,
+    PartyGroupBase, PartyGroupCreate, PartyGroupResponse,
+    PartyBase, PartyCreate, PartyResponse,
+    ProductGroupBase, ProductGroupCreate, ProductGroupResponse,
+    ProductBase, ProductCreate, ProductResponse,
+    # Diagnosis
+    DiagBase, DiagCreate, DiagResponse,
+    # Accounts
+    BankerBase, BankerCreate, BankerResponse,
+    NationStateBase, NationStateCreate, NationStateResponse,
+    VoucherTypeBase, VoucherTypeCreate, VoucherTypeResponse,
+    AccountGroupBase, AccountGroupCreate, AccountGroupResponse,
+    AccountLedgerBase, AccountLedgerCreate, AccountLedgerResponse,
+    JournalBase, JournalCreate, JournalResponse,
 )
 
 __all__ = [
@@ -39,4 +60,27 @@ __all__ = [
     "IPDAdmissionBase", "IPDAdmissionCreate", "IPDAdmissionResponse",
     "IPDBillCreate", "IPDBillResponse",
     "DashboardStats",
+    # Payroll
+    "PayDeptBase", "PayDeptCreate", "PayDeptResponse",
+    "PayDesnBase", "PayDesnCreate", "PayDesnResponse",
+    "PayEmpBase", "PayEmpCreate", "PayEmpResponse",
+    # New masters
+    "RefCatgBase", "RefCatgCreate", "RefCatgResponse",
+    "RefByBase", "RefByCreate", "RefByResponse",
+    "RefToBase", "RefToCreate", "RefToResponse",
+    "StationBase", "StationCreate", "StationResponse",
+    "AreaBase", "AreaCreate", "AreaResponse",
+    "PartyGroupBase", "PartyGroupCreate", "PartyGroupResponse",
+    "PartyBase", "PartyCreate", "PartyResponse",
+    "ProductGroupBase", "ProductGroupCreate", "ProductGroupResponse",
+    "ProductBase", "ProductCreate", "ProductResponse",
+    # Diagnosis
+    "DiagBase", "DiagCreate", "DiagResponse",
+    # Accounts
+    "BankerBase", "BankerCreate", "BankerResponse",
+    "NationStateBase", "NationStateCreate", "NationStateResponse",
+    "VoucherTypeBase", "VoucherTypeCreate", "VoucherTypeResponse",
+    "AccountGroupBase", "AccountGroupCreate", "AccountGroupResponse",
+    "AccountLedgerBase", "AccountLedgerCreate", "AccountLedgerResponse",
+    "JournalBase", "JournalCreate", "JournalResponse",
 ]

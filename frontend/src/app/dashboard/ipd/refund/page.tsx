@@ -1,164 +1,466 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styles from "../../../dashboard.module.css";
-import { Search, RotateCcw, Plus } from "lucide-react";
+import {
+  Search, Plus, RefreshCw, X, Save,
+  Calendar, Clock, AlertCircle, CheckCircle, User,
+  FileText, ArrowLeft, ArrowUpRight
+} from "lucide-react";
 
-interface IPDRefundLog {
-  ref_id: string;
-  ipd_no: string;
-  patient_name: string;
-  amount: number;
-  reason: string;
-  date: string;
+const API = "http://127.0.0.1:8000/api/ipd";
+
+interface ActiveAdmission {
+  IhdCode:  number;
+  IhdVchNo: number;
+  PttCode:  number;
+  PttName:  string;
+  PttRegNo: number | null;
+}
+
+interface RefundRecord {
+  IgfCode:    number;
+  IgfIpgCode: number;
+  VchNo:      number;
+  Date:       string;
+  PttName:    string;
+  RfugAmt:    number;
+  Remark:     string;
 }
 
 export default function IPDRefundPage() {
-  const [refunds, setRefunds] = useState<IPDRefundLog[]>([
-    { ref_id: "IREF-8812", ipd_no: "IPD-102", patient_name: "Anita Bose", amount: 2500, reason: "Excess advance deposit refund upon discharge", date: "2026-06-10 14:00" }
-  ]);
-
+  const [refunds, setRefunds] = useState<RefundRecord[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
+  const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
+
+  // Form Modal state
+  const [showModal, setShowModal] = useState(false);
+  const [activeAdmissions, setActiveAdmissions] = useState<ActiveAdmission[]>([]);
+  const [showPatSearch, setShowPatSearch] = useState(false);
+  const [patFilter, setPatFilter] = useState("");
   
-  const [formData, setFormData] = useState({
-    ipd_no: "",
-    patient_name: "",
-    amount: "1000",
-    reason: ""
-  });
+  // Selected Patient
+  const [selectedPat, setSelectedPat] = useState<ActiveAdmission | null>(null);
+  const [refundableSurplus, setRefundableSurplus] = useState<number | null>(null);
+  const [calculatingSurplus, setCalculatingSurplus] = useState(false);
 
-  const handleAddRefund = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.ipd_no.trim() || !formData.patient_name.trim()) return;
+  // Inputs
+  const today = new Date().toISOString().slice(0, 10);
+  const [rfdDate, setRfdDate] = useState(today);
+  const [rfdTime, setRfdTime] = useState("12:00");
+  const [amount, setAmount] = useState("");
+  const [payMode, setPayMode] = useState("Cash");
+  const [remark, setRemark] = useState("");
+  const [saving, setSaving] = useState(false);
 
-    setRefunds(prev => [
-      {
-        ref_id: `IREF-${Math.floor(1000 + Math.random() * 9000)}`,
-        ipd_no: formData.ipd_no,
-        patient_name: formData.patient_name,
-        amount: Number(formData.amount),
-        reason: formData.reason || "Adjusted deposit balance",
-        date: new Date().toISOString().replace("T", " ").substring(0, 16)
-      },
-      ...prev
-    ]);
+  const patSearchRef = useRef<HTMLInputElement>(null);
 
-    setFormData({ ipd_no: "", patient_name: "", amount: "1000", reason: "" });
-    setModalOpen(false);
+  const loadRefunds = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API}/refunds`);
+      if (res.ok) setRefunds(await res.json());
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadRefunds();
+  }, []);
+
+  useEffect(() => {
+    if (!showPatSearch) return;
+    fetch(`${API}/admissions/active`)
+      .then(r => r.json())
+      .catch(() => [])
+      .then(data => setActiveAdmissions(data));
+    setTimeout(() => patSearchRef.current?.focus(), 100);
+  }, [showPatSearch]);
+
+  const loadSurplusCredit = async (ihdCode: number) => {
+    setCalculatingSurplus(true);
+    try {
+      const res = await fetch(`${API}/registrations/${ihdCode}/linked-trans`);
+      if (res.ok) {
+        const ledger = await res.json();
+        
+        // Sum total deposits
+        const totalAdv = ledger.advances?.reduce((s: number, a: any) => s + (a.amount || 0), 0) || 0;
+        const totalRef = ledger.refunds?.reduce((s: number, r: any) => s + (r.amount || 0), 0) || 0;
+        
+        // Sum total bills
+        const billsTotal = ledger.bills?.reduce((s: number, b: any) => s + (b.total || 0), 0) || 0;
+        
+        // Surplus is excess credit deposits not spent on bills
+        const creditBalance = (totalAdv - totalRef) - billsTotal;
+        setRefundableSurplus(creditBalance > 0 ? creditBalance : 0);
+        setAmount(creditBalance > 0 ? String(creditBalance) : "0.00");
+      }
+    } catch {
+      setRefundableSurplus(null);
+    } finally {
+      setCalculatingSurplus(false);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedPat) {
+      loadSurplusCredit(selectedPat.IhdCode);
+    } else {
+      setRefundableSurplus(null);
+    }
+  }, [selectedPat]);
+
+  const showToast = (msg: string, ok = true) => {
+    setToast({ msg, ok });
+    setTimeout(() => setToast(null), 4000);
+  };
+
+  const handleSave = async () => {
+    if (!selectedPat) { showToast("Please select a patient first.", false); return; }
+    const rfdAmt = parseFloat(amount);
+    if (!rfdAmt || rfdAmt <= 0) { showToast("Enter a valid refund amount.", false); return; }
+
+    if (refundableSurplus !== null && rfdAmt > refundableSurplus) {
+      showToast("Excess Refund Amount: Refund cannot exceed credit surplus.", false);
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const res = await fetch(`${API}/refunds`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          IgfIpgCode: selectedPat.IhdCode,
+          IgfPttCode: selectedPat.PttCode,
+          IgfRfugAmt: rfdAmt,
+          IgfRemark:  `Mode: ${payMode}. ${remark}`.trim(),
+        }),
+      });
+
+      if (!res.ok) throw new Error("Saving refund failed");
+      showToast("Refund issued successfully!");
+      setShowModal(false);
+      // Reset inputs
+      setSelectedPat(null);
+      setAmount("");
+      setRemark("");
+      loadRefunds();
+    } catch {
+      showToast("Transaction failed. Check ledger constraints.", false);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const filteredRefunds = refunds.filter(r =>
-    r.patient_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    r.ipd_no.toLowerCase().includes(searchTerm.toLowerCase())
+    r.PttName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    String(r.VchNo).includes(searchTerm)
+  );
+
+  const filteredAdmissions = activeAdmissions.filter(a =>
+    a.PttName.toLowerCase().includes(patFilter.toLowerCase()) ||
+    String(a.IhdVchNo).includes(patFilter)
   );
 
   return (
-    <div>
-      <div className={styles.toolbar}>
-        <div className={styles.searchBar}>
-          <Search size={18} style={{ color: "var(--text-muted)" }} />
-          <input
-            type="text"
-            placeholder="Search refunds by Patient Name or IPD code..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      {/* Toast Alert */}
+      {toast && (
+        <div style={{
+          position: "fixed", top: 24, right: 24, zIndex: 9999,
+          background: toast.ok ? "#10b981" : "#ef4444",
+          color: "#fff", padding: "14px 22px", borderRadius: 12,
+          boxShadow: "0 8px 24px rgba(0,0,0,.18)",
+          display: "flex", alignItems: "center", gap: 10,
+          fontWeight: 600, fontSize: 14,
+        }}>
+          {toast.ok ? <CheckCircle size={18} /> : <AlertCircle size={18} />}
+          {toast.msg}
         </div>
-        <button className={styles.primaryBtn} onClick={() => setModalOpen(true)}>
-          <Plus size={18} />
-          <span>Issue Deposit Refund</span>
-        </button>
-      </div>
+      )}
 
-      <div className={styles.tableContainer}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Refund ID</th>
-              <th>IPD Case Ref</th>
-              <th>Patient Name</th>
-              <th>Date Issued</th>
-              <th>Reason</th>
-              <th>Refunded Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredRefunds.map((r) => (
-              <tr key={r.ref_id}>
-                <td style={{ fontWeight: 700, color: "var(--status-danger)" }}>{r.ref_id}</td>
-                <td style={{ fontWeight: 600 }}>{r.ipd_no}</td>
-                <td style={{ fontWeight: 600 }}>{r.patient_name}</td>
-                <td>{r.date}</td>
-                <td>{r.reason}</td>
-                <td style={{ fontWeight: 700, color: "var(--status-danger)" }}>₹{r.amount.toLocaleString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {modalOpen && (
+      {/* Patient Search Lookup */}
+      {showPatSearch && (
         <div className={styles.modalOverlay}>
-          <div className={styles.modalContent} style={{ maxWidth: "450px" }}>
+          <div className={styles.modalContent} style={{ maxWidth: 480 }}>
             <div className={styles.modalHeader}>
-              <h3 style={{ fontSize: "18px", fontWeight: 600 }}>Issue Deposit Refund</h3>
-              <button className={styles.closeBtn} onClick={() => setModalOpen(false)}>×</button>
+              <h3 style={{ fontSize: 15, fontWeight: 700 }}>Select Patient Admission</h3>
+              <button className={styles.closeBtn} onClick={() => setShowPatSearch(false)}>×</button>
             </div>
-            <form onSubmit={handleAddRefund}>
-              <div className={styles.modalBody}>
-                <div className={styles.formGroup}>
-                  <label>IPD Case Reference (e.g. IPD-102) *</label>
-                  <input
-                    type="text"
-                    className={styles.formControl}
-                    value={formData.ipd_no}
-                    onChange={(e) => setFormData(prev => ({ ...prev, ipd_no: e.target.value }))}
-                    required
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Patient Name *</label>
-                  <input
-                    type="text"
-                    className={styles.formControl}
-                    value={formData.patient_name}
-                    onChange={(e) => setFormData(prev => ({ ...prev, patient_name: e.target.value }))}
-                    required
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Refund Amount (₹) *</label>
-                  <input
-                    type="number"
-                    className={styles.formControl}
-                    value={formData.amount}
-                    onChange={(e) => setFormData(prev => ({ ...prev, amount: e.target.value }))}
-                    required
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Reason for Refund *</label>
-                  <textarea
-                    rows={2}
-                    className={styles.formControl}
-                    value={formData.reason}
-                    onChange={(e) => setFormData(prev => ({ ...prev, reason: e.target.value }))}
-                    required
-                  />
-                </div>
+            <div className={styles.modalBody} style={{ padding: "14px 20px" }}>
+              <div className={styles.searchBar} style={{ marginBottom: 12 }}>
+                <Search size={16} />
+                <input
+                  ref={patSearchRef}
+                  type="text"
+                  placeholder="Filter name or IPD No..."
+                  value={patFilter}
+                  onChange={e => setPatFilter(e.target.value)}
+                />
               </div>
-              <div className={styles.modalFooter}>
-                <button type="button" className={styles.secondaryBtn} onClick={() => setModalOpen(false)}>Cancel</button>
-                <button type="submit" className={styles.primaryBtn} style={{ backgroundColor: "var(--status-danger)" }}>Issue Refund</button>
+              <div style={{ maxHeight: 240, overflowY: "auto" }}>
+                {filteredAdmissions.length === 0 ? (
+                  <p style={{ padding: "16px 0", textAlign: "center", color: "var(--text-secondary)" }}>
+                    No matching active admissions found.
+                  </p>
+                ) : (
+                  filteredAdmissions.map(a => (
+                    <div
+                      key={a.IhdCode}
+                      className={styles.dropdownItem}
+                      style={{
+                        padding: "10px 12px", borderBottom: "1px solid var(--border-light)",
+                        cursor: "pointer", transition: "background .12s",
+                      }}
+                      onClick={() => {
+                        setSelectedPat(a);
+                        setShowPatSearch(false);
+                        setPatFilter("");
+                      }}
+                    >
+                      <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 600 }}>
+                        <span>{a.PttName}</span>
+                        <span style={{ color: "var(--accent-color)" }}>IPD #{a.IhdVchNo}</span>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
-            </form>
+            </div>
           </div>
         </div>
       )}
+
+      {/* Main Form Modal */}
+      {showModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent} style={{ maxWidth: 440 }}>
+            <div className={styles.modalHeader}>
+              <h3 style={{ fontSize: 16, fontWeight: 700, display: "flex", alignItems: "center", gap: 8 }}>
+                <ArrowUpRight size={18} style={{ color: "var(--accent-color)" }} />
+                Issue Deposit Refund
+              </h3>
+              <button className={styles.closeBtn} onClick={() => setShowModal(false)}>×</button>
+            </div>
+            <div className={styles.modalBody} style={{ display: "flex", flexDirection: "column", gap: 14, padding: 20 }}>
+              
+              <div>
+                <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", marginBottom: 6 }}>
+                  Select Patient
+                </label>
+                <div style={{ display: "flex", gap: 6 }}>
+                  <input
+                    type="text"
+                    readOnly
+                    value={selectedPat ? `${selectedPat.PttName} (IPD No: ${selectedPat.IhdVchNo})` : "Click search to select patient..."}
+                    style={{
+                      border: "1px solid var(--border-light)", borderRadius: 8,
+                      padding: "8px 12px", width: "100%", outline: "none", fontSize: 13,
+                      background: "var(--bg-secondary)", color: selectedPat ? "var(--text-primary)" : "var(--text-muted)",
+                    }}
+                  />
+                  <button className={styles.secondaryBtn} onClick={() => setShowPatSearch(true)} style={{ padding: 8 }}>
+                    <Search size={16} />
+                  </button>
+                </div>
+              </div>
+
+              {selectedPat && (
+                <div style={{ background: "var(--bg-secondary)", padding: 12, borderRadius: 8 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>
+                    <span style={{ color: "var(--text-secondary)" }}>Refundable Deposit Credit:</span>
+                    <strong>
+                      {calculatingSurplus ? (
+                        <RefreshCw size={12} className="animate-spin" />
+                      ) : refundableSurplus !== null ? (
+                        `₹${refundableSurplus.toFixed(2)}`
+                      ) : (
+                        "—"
+                      )}
+                    </strong>
+                  </div>
+                </div>
+              )}
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                <div>
+                  <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", marginBottom: 6 }}>
+                    Date
+                  </label>
+                  <input
+                    type="date"
+                    value={rfdDate}
+                    onChange={e => setRfdDate(e.target.value)}
+                    style={{
+                      border: "1px solid var(--border-light)", borderRadius: 8,
+                      padding: "8px 12px", width: "100%", outline: "none", fontSize: 13,
+                      background: "var(--bg-card)", color: "var(--text-primary)",
+                    }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", marginBottom: 6 }}>
+                    Time
+                  </label>
+                  <input
+                    type="text"
+                    value={rfdTime}
+                    onChange={e => setRfdTime(e.target.value)}
+                    placeholder="HH:MM"
+                    style={{
+                      border: "1px solid var(--border-light)", borderRadius: 8,
+                      padding: "8px 12px", width: "100%", outline: "none", fontSize: 13,
+                      background: "var(--bg-card)", color: "var(--text-primary)",
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", marginBottom: 6 }}>
+                  Refund Amount (INR)
+                </label>
+                <input
+                  type="text"
+                  placeholder="0.00"
+                  value={amount}
+                  onChange={e => setAmount(e.target.value)}
+                  style={{
+                    border: "1px solid var(--border-light)", borderRadius: 8,
+                    padding: "8px 12px", width: "100%", outline: "none", fontSize: 13,
+                    background: "var(--bg-card)", color: "var(--text-primary)", fontWeight: 700,
+                  }}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", marginBottom: 6 }}>
+                  Refund Method
+                </label>
+                <select
+                  value={payMode}
+                  onChange={e => setPayMode(e.target.value)}
+                  style={{
+                    border: "1px solid var(--border-light)", borderRadius: 8,
+                    padding: "8px 12px", width: "100%", outline: "none", fontSize: 13,
+                    background: "var(--bg-card)", color: "var(--text-primary)",
+                  }}
+                >
+                  <option value="Cash">Cash</option>
+                  <option value="UPI">UPI / Instant Transfer</option>
+                  <option value="Cheque">Bank Refund Cheque</option>
+                </select>
+              </div>
+
+              <div>
+                <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", marginBottom: 6 }}>
+                  Remarks
+                </label>
+                <textarea
+                  value={remark}
+                  onChange={e => setRemark(e.target.value)}
+                  placeholder="Reason for refund / transaction details..."
+                  style={{
+                    border: "1px solid var(--border-light)", borderRadius: 8,
+                    padding: "8px 12px", width: "100%", outline: "none", fontSize: 13,
+                    background: "var(--bg-card)", color: "var(--text-primary)", resize: "none", height: 60,
+                  }}
+                />
+              </div>
+
+              <button
+                className={styles.primaryBtn}
+                onClick={handleSave}
+                disabled={saving}
+                style={{ width: "100%", display: "flex", justifyContent: "center", gap: 8, height: 40 }}
+              >
+                {saving ? <RefreshCw size={16} className="animate-spin" /> : <Save size={16} />}
+                Issue & Save Refund
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Title & Toolbar */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div>
+          <h2 style={{ fontSize: 20, fontWeight: 700, margin: 0 }}>IPD Refund Desk</h2>
+          <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>
+            Manage and issue deposit refunds back to inpatient credit accounts.
+          </p>
+        </div>
+        <button className={styles.primaryBtn} onClick={() => setShowModal(true)} style={{ gap: 6 }}>
+          <Plus size={16} /> Issue Refund
+        </button>
+      </div>
+
+      {/* Search and stats bar */}
+      <div style={{ display: "flex", gap: 12 }}>
+        <div className={styles.searchBar} style={{ flex: 1 }}>
+          <Search size={18} style={{ color: "var(--text-muted)" }} />
+          <input
+            type="text"
+            placeholder="Search refunds by patient or voucher no..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <button className={styles.secondaryBtn} onClick={loadRefunds} style={{ padding: 10 }}>
+          <RefreshCw size={15} />
+        </button>
+      </div>
+
+      {/* Main Table view */}
+      <div className={styles.sectionBox} style={{ padding: 0 }}>
+        {loading ? (
+          <div style={{ padding: 40, textAlign: "center" }}>
+            <RefreshCw size={24} className="animate-spin" style={{ color: "var(--text-muted)", margin: "0 auto 10px" }} />
+            <span style={{ color: "var(--text-secondary)", fontSize: 13 }}>Fetching ledger refunds...</span>
+          </div>
+        ) : filteredRefunds.length === 0 ? (
+          <div style={{ padding: 40, textAlign: "center", color: "var(--text-muted)" }}>
+            No refund records found.
+          </div>
+        ) : (
+          <div className={styles.tableContainer}>
+            <table className={styles.table} style={{ fontSize: 13 }}>
+              <thead>
+                <tr>
+                  <th>Voucher No</th>
+                  <th>Date</th>
+                  <th>Patient Name</th>
+                  <th style={{ textAlign: "right" }}>Refunded Amount (INR)</th>
+                  <th>Remarks</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredRefunds.map(r => (
+                  <tr key={r.IgfCode}>
+                    <td>
+                      <strong style={{ color: "var(--accent-color)" }}>#{r.VchNo}</strong>
+                    </td>
+                    <td>{r.Date}</td>
+                    <td>
+                      <strong style={{ color: "var(--text-primary)" }}>{r.PttName}</strong>
+                    </td>
+                    <td style={{ textAlign: "right", fontWeight: 700, color: "var(--status-danger)" }}>
+                      ₹{r.RfugAmt.toFixed(2)}
+                    </td>
+                    <td style={{ color: "var(--text-secondary)", fontSize: 12 }}>{r.Remark || "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -40,6 +40,7 @@ class PatientCategoryBase(BaseModel):
     pcg_disc_per: Optional[float] = 0.0
     pcg_show_in_list: Optional[bool] = True
     pcg_rec_state: Optional[int] = 1
+    pcg_type: Optional[str] = None
 
 class PatientCategoryCreate(PatientCategoryBase):
     pass
@@ -131,6 +132,7 @@ class DoctorResponse(DoctorBase):
 class FloorBase(BaseModel):
     flr_name: str
     flr_rec_state: Optional[int] = 1
+    flr_show_in_list: Optional[bool] = True
 
 class FloorCreate(FloorBase):
     pass
@@ -146,6 +148,7 @@ class WardBase(BaseModel):
     wrd_name: str
     wrd_flr_code: int
     wrd_rec_state: Optional[int] = 1
+    wrd_show_in_list: Optional[bool] = True
 
 class WardCreate(WardBase):
     pass
@@ -163,6 +166,17 @@ class BedBase(BaseModel):
     bdm_wrd_code: int
     bdm_rec_state: Optional[int] = 1
     is_occupied: Optional[bool] = False
+    bdm_flr_code: Optional[int] = None
+    bdm_srv_code: Optional[int] = None
+    bdm_index: Optional[int] = 0
+    bdm_charges: Optional[float] = 0.0
+    bdm_disc_allowed: Optional[bool] = False
+    bdm_disc_per: Optional[float] = 0.0
+    bdm_chk_out_time_basis: Optional[str] = None
+    bdm_chk_time: Optional[str] = None
+    bdm_free_allot: Optional[bool] = False
+    bdm_remark: Optional[str] = None
+    bdm_show_in_list: Optional[bool] = True
 
 class BedCreate(BedBase):
     pass
@@ -178,6 +192,14 @@ class BedResponse(BedBase):
 class ServiceGroupBase(BaseModel):
     sgp_name: str
     sgp_rec_state: Optional[int] = 1
+    sgp_index: Optional[int] = 0
+    sgp_expanded: Optional[bool] = False
+    sgp_editable: Optional[bool] = False
+    sgp_inf_allowed: Optional[bool] = False
+    sgp_def_allowed: Optional[bool] = False
+    sgp_disc_allowed: Optional[bool] = False
+    sgp_disc_per: Optional[float] = 0.0
+    sgp_show_in_list: Optional[bool] = True
 
 class ServiceGroupCreate(ServiceGroupBase):
     pass
@@ -194,6 +216,19 @@ class ServiceBase(BaseModel):
     srv_sgp_code: Optional[int] = None
     srv_rate: Optional[float] = 0.0
     srv_rec_state: Optional[int] = 1
+    srv_index: Optional[int] = 0
+    srv_rate_editable: Optional[bool] = False
+    srv_amt_editable: Optional[bool] = False
+    srv_unit_editable: Optional[bool] = False
+    srv_multi_dct: Optional[bool] = False
+    srv_show_in_list: Optional[bool] = True
+    srv_auto_ins_indr: Optional[bool] = False
+    srv_auto_ins_once_indr: Optional[bool] = False
+    srv_auto_calc_indr: Optional[bool] = False
+    srv_inf_allowed: Optional[bool] = False
+    srv_def_allowed: Optional[bool] = False
+    srv_disc_allowed: Optional[bool] = False
+    srv_disc_per: Optional[float] = 0.0
 
 class ServiceCreate(ServiceBase):
     pass
@@ -306,3 +341,351 @@ class DashboardStats(BaseModel):
     opd_today_count: int
     ipd_today_count: int
     total_revenue_today: float
+
+# ── Payroll Schemas ────────────────────────────────────────────────────────────
+
+class PayDeptBase(BaseModel):
+    pdp_name: str
+    pdp_desc: Optional[str] = None
+    pdp_rec_state: Optional[int] = 1
+
+class PayDeptCreate(PayDeptBase):
+    pass
+
+class PayDeptResponse(PayDeptBase):
+    pdp_code: int
+
+    class Config:
+        from_attributes = True
+
+
+class PayDesnBase(BaseModel):
+    pdn_name: str
+    pdn_desc: Optional[str] = None
+    pdn_rec_state: Optional[int] = 1
+
+class PayDesnCreate(PayDesnBase):
+    pass
+
+class PayDesnResponse(PayDesnBase):
+    pdn_code: int
+
+    class Config:
+        from_attributes = True
+
+
+class PayEmpBase(BaseModel):
+    pem_title: Optional[str] = None
+    pem_name: str
+    pem_dept_code: Optional[int] = None
+    pem_desn_code: Optional[int] = None
+    pem_gender: Optional[str] = None
+    pem_dob: Optional[date] = None
+    pem_doj: Optional[date] = None
+    pem_phone: Optional[str] = None
+    pem_email: Optional[str] = None
+    pem_address: Optional[str] = None
+    pem_basic_salary: Optional[float] = 0.0
+    pem_rec_state: Optional[int] = 1
+
+class PayEmpCreate(PayEmpBase):
+    pass
+
+class PayEmpResponse(PayEmpBase):
+    pem_code: int
+    department: Optional[PayDeptResponse] = None
+    designation: Optional[PayDesnResponse] = None
+
+    class Config:
+        from_attributes = True
+
+
+# ── Referred Category Schemas ───────────────────────────────────────────────────
+class RefCatgBase(BaseModel):
+    rfg_name: str
+    rfg_rec_state: Optional[int] = 1
+
+class RefCatgCreate(RefCatgBase):
+    pass
+
+class RefCatgResponse(RefCatgBase):
+    rfg_code: int
+    class Config:
+        from_attributes = True
+
+# ── Referred By Master Schemas ──────────────────────────────────────────────────
+class RefByBase(BaseModel):
+    rby_name: str
+    rby_speci: Optional[str] = None
+    rby_rfg_code: Optional[int] = None
+    rby_addr: Optional[str] = None
+    rby_tel_no: Optional[str] = None
+    rby_email: Optional[str] = None
+    rby_share: Optional[float] = 0.0
+    rby_rec_state: Optional[int] = 1
+
+class RefByCreate(RefByBase):
+    pass
+
+class RefByResponse(RefByBase):
+    rby_code: int
+    category: Optional[RefCatgResponse] = None
+    class Config:
+        from_attributes = True
+
+# ── Referred To Master Schemas ──────────────────────────────────────────────────
+class RefToBase(BaseModel):
+    rto_name: str
+    rto_speci: Optional[str] = None
+    rto_rfg_code: Optional[int] = None
+    rto_addr: Optional[str] = None
+    rto_tel_no: Optional[str] = None
+    rto_email: Optional[str] = None
+    rto_share: Optional[float] = 0.0
+    rto_rec_state: Optional[int] = 1
+
+class RefToCreate(RefToBase):
+    pass
+
+class RefToResponse(RefToBase):
+    rto_code: int
+    category: Optional[RefCatgResponse] = None
+    class Config:
+        from_attributes = True
+
+# ── Station Master Schemas ──────────────────────────────────────────────────────
+class StationBase(BaseModel):
+    stn_name: str
+    stn_show_in_list: Optional[bool] = True
+    stn_rec_state: Optional[int] = 1
+
+class StationCreate(StationBase):
+    pass
+
+class StationResponse(StationBase):
+    stn_code: int
+    class Config:
+        from_attributes = True
+
+# ── Area Master Schemas ─────────────────────────────────────────────────────────
+class AreaBase(BaseModel):
+    ara_name: str
+    ara_stn_code: Optional[int] = None
+    ara_rec_state: Optional[int] = 1
+
+class AreaCreate(AreaBase):
+    pass
+
+class AreaResponse(AreaBase):
+    ara_code: int
+    station: Optional[StationResponse] = None
+    class Config:
+        from_attributes = True
+
+# ── Party Group Master Schemas ──────────────────────────────────────────────────
+class PartyGroupBase(BaseModel):
+    pgm_name: str
+    pgm_desc: Optional[str] = None
+    pgm_rec_state: Optional[int] = 1
+
+class PartyGroupCreate(PartyGroupBase):
+    pass
+
+class PartyGroupResponse(PartyGroupBase):
+    pgm_code: int
+    class Config:
+        from_attributes = True
+
+# ── Party (Supplier) Master Schemas ────────────────────────────────────────────
+class PartyBase(BaseModel):
+    prt_title: Optional[str] = None
+    prt_name: str
+    prt_pgm_code: int
+    prt_addr: Optional[str] = None
+    prt_tel_no: Optional[str] = None
+    prt_sms_no: Optional[str] = None
+    prt_email: Optional[str] = None
+    prt_show_in_list: Optional[bool] = True
+    prt_remark: Optional[str] = None
+    prt_rec_state: Optional[int] = 1
+
+class PartyCreate(PartyBase):
+    pass
+
+class PartyResponse(PartyBase):
+    prt_code: int
+    group: Optional[PartyGroupResponse] = None
+    class Config:
+        from_attributes = True
+
+# ── Sub-Item (Product) Group Master Schemas ─────────────────────────────────────
+class ProductGroupBase(BaseModel):
+    sig_name: str
+    sig_desc: Optional[str] = None
+    sig_rec_state: Optional[int] = 1
+
+class ProductGroupCreate(ProductGroupBase):
+    pass
+
+class ProductGroupResponse(ProductGroupBase):
+    sig_code: int
+    class Config:
+        from_attributes = True
+
+# ── Sub-Item (Product) Master Schemas ───────────────────────────────────────────
+class ProductBase(BaseModel):
+    sim_name: str
+    sim_desc: Optional[str] = None
+    sim_sig_code: int
+    sim_purch_rate: Optional[float] = 0.0
+    sim_mrp_rate: Optional[float] = 0.0
+    sim_sale_rate: Optional[float] = 0.0
+    sim_rec_state: Optional[int] = 1
+
+class ProductCreate(ProductBase):
+    pass
+
+class ProductResponse(ProductBase):
+    sim_code: int
+    group: Optional[ProductGroupResponse] = None
+    class Config:
+        from_attributes = True
+
+# ── Diagnosis Master Schemas ────────────────────────────────────────────────────
+class DiagBase(BaseModel):
+    dig_name: str
+    dig_rec_state: Optional[int] = 1
+
+class DiagCreate(DiagBase):
+    pass
+
+class DiagResponse(DiagBase):
+    dig_code: int
+    class Config:
+        from_attributes = True
+
+# ── Banker Master Schemas ───────────────────────────────────────────────────────
+class BankerBase(BaseModel):
+    bkr_name: str
+    bkr_desc: str
+    bkr_rec_state: Optional[int] = 1
+
+class BankerCreate(BankerBase):
+    pass
+
+class BankerResponse(BankerBase):
+    bkr_code: int
+    class Config:
+        from_attributes = True
+
+# ── Nation/State Master Schemas ─────────────────────────────────────────────────
+class NationStateBase(BaseModel):
+    nst_name: Optional[str] = None
+    nst_ref_code: Optional[str] = None
+    nst_rec_state: Optional[int] = 1
+
+class NationStateCreate(NationStateBase):
+    pass
+
+class NationStateResponse(NationStateBase):
+    nst_code: int
+    class Config:
+        from_attributes = True
+
+# ── Voucher Type Master Schemas ─────────────────────────────────────────────────
+class VoucherTypeBase(BaseModel):
+    vtm_name: Optional[str] = None
+    vtm_abvr: Optional[str] = None
+    vtm_sys_code: Optional[int] = None
+    vtm_editable: Optional[bool] = True
+    vtm_prefix: Optional[str] = None
+    vtm_postfix: Optional[str] = None
+    vtm_itm_narr: Optional[str] = None
+    vtm_com_narr: Optional[str] = None
+    vtm_start_no: Optional[int] = None
+    vtm_reset_no_basis: Optional[int] = None
+    vtm_index: Optional[int] = None
+    vtm_show_in_list: Optional[bool] = True
+    vtm_rec_state: Optional[int] = 1
+    vtm_prnt_name: Optional[str] = None
+    vtm_prnt_copies: Optional[int] = None
+    vtm_pymt_mode: Optional[str] = None
+    vtm_prnt_fmt_speci: Optional[str] = None
+    vtm_stk_mode: Optional[int] = None
+    vtm_send_sms_nos: Optional[str] = None
+    vtm_add_new_sms: Optional[bool] = False
+    vtm_edit_sms: Optional[bool] = False
+    vtm_dele_sms: Optional[bool] = False
+    vtm_no_dues: Optional[bool] = False
+
+class VoucherTypeCreate(VoucherTypeBase):
+    pass
+
+class VoucherTypeResponse(VoucherTypeBase):
+    vtm_code: int
+    class Config:
+        from_attributes = True
+
+# ── Account Group Master Schemas ────────────────────────────────────────────────
+class AccountGroupBase(BaseModel):
+    acg_name: str
+    acg_abvr: Optional[str] = None
+    acg_sys_code: Optional[int] = None
+    acg_base_code: Optional[int] = None
+    acg_index: Optional[int] = None
+    acg_depends: Optional[int] = None
+    acg_rec_state: Optional[int] = 1
+
+class AccountGroupCreate(AccountGroupBase):
+    pass
+
+class AccountGroupResponse(AccountGroupBase):
+    acg_code: int
+    parent_name: Optional[str] = None
+    class Config:
+        from_attributes = True
+
+# ── Account Ledger (Head) Master Schemas ────────────────────────────────────────
+class AccountLedgerBase(BaseModel):
+    ah_name: str
+    ah_depends: Optional[int] = None
+    ah_rec_state: Optional[int] = 1
+    ah_acg_code: Optional[int] = None
+
+class AccountLedgerCreate(AccountLedgerBase):
+    pass
+
+class AccountLedgerResponse(AccountLedgerBase):
+    ah_code: int
+    group_name: Optional[str] = None
+    parent_name: Optional[str] = None
+    class Config:
+        from_attributes = True
+
+# ── Journal Schemas ──────────────────────────────────────────────────────────────
+class JournalBase(BaseModel):
+    jrn_vtm_code: Optional[int] = None
+    jrn_date: Optional[datetime] = None
+    jrn_ah_code: int
+    jrn_amt: float
+    jrn_narr: Optional[str] = None
+    jrn_l_ah_code: int
+    jrn_rec_state: Optional[int] = 1
+
+class JournalCreate(JournalBase):
+    pass
+
+class JournalResponse(JournalBase):
+    jrn_code: int
+    jrn_icode: Optional[int] = None
+    jrn_sno: Optional[int] = None
+    jrn_prefix: Optional[str] = None
+    jrn_vch_no: Optional[int] = None
+    jrn_postfix: Optional[str] = None
+    jrn_cmp_code: Optional[int] = None
+    jrn_auto_gen: Optional[bool] = False
+    voucher_type_name: Optional[str] = None
+    debit_head_name: Optional[str] = None
+    credit_head_name: Optional[str] = None
+    class Config:
+        from_attributes = True

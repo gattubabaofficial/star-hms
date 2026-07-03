@@ -15,6 +15,8 @@ class PatCatgMst(Base):
     PcgDiscPer = Column(Double, nullable=False, default=0.0)
     PcgShowInList = Column(Boolean, nullable=False, default=True)
     PcgRecState = Column(SmallInteger, nullable=False, default=1)
+    PcgType = Column(String(50), nullable=True)
+
 
 class DoctCatgMst(Base):
     __tablename__ = "DoctCatgMst"
@@ -344,6 +346,8 @@ class PatCatgMst_Log(Base):
     PcgDiscPer = Column(Double, nullable=False, default=0.0)
     PcgShowInList = Column(Boolean, nullable=False, default=True)
     PcgRecState = Column(SmallInteger, nullable=False, default=1)
+    PcgType = Column(String(50), nullable=True)
+
 
 
 
@@ -757,5 +761,50 @@ class SubItmMast_Log(Base):
     SimSaleRate = Column(Double, nullable=False, default=0.0)
     SimItmCode = Column(Integer, default=0)
     SimRecState = Column(SmallInteger, nullable=False, default=1)
+
+
+# ── Payroll Masters ────────────────────────────────────────────────────────────
+
+class PayDeptMast(Base):
+    """Payroll – Department Master"""
+    __tablename__ = "PayDeptMast"
+    PdpCode = Column(Integer, primary_key=True, autoincrement=True, index=True)
+    PdpName = Column(String(100), nullable=False)
+    PdpDesc = Column(String(250))
+    PdpRecState = Column(SmallInteger, nullable=False, default=1)
+
+    employees = relationship("PayEmpMast", back_populates="department")
+
+
+class PayDesnMast(Base):
+    """Payroll – Designation Master"""
+    __tablename__ = "PayDesnMast"
+    PdnCode = Column(Integer, primary_key=True, autoincrement=True, index=True)
+    PdnName = Column(String(100), nullable=False)
+    PdnDesc = Column(String(250))
+    PdnRecState = Column(SmallInteger, nullable=False, default=1)
+
+    employees = relationship("PayEmpMast", back_populates="designation")
+
+
+class PayEmpMast(Base):
+    """Payroll – Employee Master"""
+    __tablename__ = "PayEmpMast"
+    PemCode    = Column(Integer, primary_key=True, autoincrement=True, index=True)
+    PemTitle   = Column(String(10))
+    PemName    = Column(String(100), nullable=False)
+    PemDeptCode = Column(Integer, ForeignKey("PayDeptMast.PdpCode"))
+    PemDesnCode = Column(Integer, ForeignKey("PayDesnMast.PdnCode"))
+    PemGender  = Column(String(10))
+    PemDOB     = Column(Date)
+    PemDOJ     = Column(Date)
+    PemPhone   = Column(String(50))
+    PemEmail   = Column(String(100))
+    PemAddress = Column(String(250))
+    PemBasicSalary = Column(Double, default=0.0)
+    PemRecState = Column(SmallInteger, nullable=False, default=1)
+
+    department  = relationship("PayDeptMast", back_populates="employees")
+    designation = relationship("PayDesnMast", back_populates="employees")
     
 
