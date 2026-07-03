@@ -15,6 +15,7 @@ from backend.models.masters import (
     StsnMast, AreaMast,
     PatCatgMst, DoctCatgMst, DoctRoleMst, DoctMast,
     FloorMast, WardMast, BedMast, ServGrpMst, ServMast,
+    TestMethodMast, TestSampTypMast, TestGrpMast, TestDeptMast, TestParaMast, TestFmtMast, TestValCalcMast,
 )
 from backend.schemas import (
     PatientCategoryCreate, PatientCategoryResponse,
@@ -40,6 +41,13 @@ from backend.schemas import (
     ProductGroupCreate, ProductGroupResponse,
     ProductCreate, ProductResponse,
     DiagCreate, DiagResponse,
+    TestMethodCreate, TestMethodResponse,
+    TestSampTypCreate, TestSampTypResponse,
+    TestGrpCreate, TestGrpResponse,
+    TestDeptCreate, TestDeptResponse,
+    TestParaCreate, TestParaResponse,
+    TestFmtCreate, TestFmtResponse,
+    TestValCalcCreate, TestValCalcResponse,
 )
 from backend.core.dependencies import get_current_active_user
 
@@ -1408,4 +1416,201 @@ def delete_user_right(code: int, db: Session = Depends(get_db), current_user=Dep
     right.UhtRecState = 0
     db.commit()
     return {"ok": True}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Diagnostic Lab Masters (Pathology)
+# ─────────────────────────────────────────────────────────────────────────────
+
+# 1. TestMethodMast (Lab Test Method)
+@router.post("/pathology/test-methods", response_model=TestMethodResponse)
+def create_test_method(schema: TestMethodCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = TestMethodMast(**schema.model_dump())
+    db.add(obj); db.commit(); db.refresh(obj)
+    return obj
+
+@router.get("/pathology/test-methods", response_model=List[TestMethodResponse])
+def get_test_methods(db: Session = Depends(get_db)):
+    return db.query(TestMethodMast).filter(TestMethodMast.TmhRecState != 0).order_by(TestMethodMast.TmhName).all()
+
+@router.put("/pathology/test-methods/{code}", response_model=TestMethodResponse)
+def update_test_method(code: int, schema: TestMethodCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = db.query(TestMethodMast).filter(TestMethodMast.TmhCode == code).first()
+    if not obj: raise HTTPException(404, "Not found")
+    for k, v in schema.model_dump().items(): setattr(obj, k, v)
+    db.commit(); db.refresh(obj)
+    return obj
+
+@router.delete("/pathology/test-methods/{code}")
+def delete_test_method(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = db.query(TestMethodMast).filter(TestMethodMast.TmhCode == code).first()
+    if not obj: raise HTTPException(404, "Not found")
+    obj.TmhRecState = 0; db.commit()
+    return {"ok": True}
+
+
+# 2. TestSampTypMast (Lab Test Sample Type)
+@router.post("/pathology/test-samples", response_model=TestSampTypResponse)
+def create_test_sample(schema: TestSampTypCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = TestSampTypMast(**schema.model_dump())
+    db.add(obj); db.commit(); db.refresh(obj)
+    return obj
+
+@router.get("/pathology/test-samples", response_model=List[TestSampTypResponse])
+def get_test_samples(db: Session = Depends(get_db)):
+    return db.query(TestSampTypMast).filter(TestSampTypMast.TspRecState != 0).order_by(TestSampTypMast.TspName).all()
+
+@router.put("/pathology/test-samples/{code}", response_model=TestSampTypResponse)
+def update_test_sample(code: int, schema: TestSampTypCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = db.query(TestSampTypMast).filter(TestSampTypMast.TspCode == code).first()
+    if not obj: raise HTTPException(404, "Not found")
+    for k, v in schema.model_dump().items(): setattr(obj, k, v)
+    db.commit(); db.refresh(obj)
+    return obj
+
+@router.delete("/pathology/test-samples/{code}")
+def delete_test_sample(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = db.query(TestSampTypMast).filter(TestSampTypMast.TspCode == code).first()
+    if not obj: raise HTTPException(404, "Not found")
+    obj.TspRecState = 0; db.commit()
+    return {"ok": True}
+
+
+# 3. TestGrpMast (Lab Test Group)
+@router.post("/pathology/test-groups", response_model=TestGrpResponse)
+def create_test_group(schema: TestGrpCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = TestGrpMast(**schema.model_dump())
+    db.add(obj); db.commit(); db.refresh(obj)
+    return obj
+
+@router.get("/pathology/test-groups", response_model=List[TestGrpResponse])
+def get_test_groups(db: Session = Depends(get_db)):
+    return db.query(TestGrpMast).filter(TestGrpMast.TgpRecState != 0).order_by(TestGrpMast.TgpName).all()
+
+@router.put("/pathology/test-groups/{code}", response_model=TestGrpResponse)
+def update_test_group(code: int, schema: TestGrpCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = db.query(TestGrpMast).filter(TestGrpMast.TgpCode == code).first()
+    if not obj: raise HTTPException(404, "Not found")
+    for k, v in schema.model_dump().items(): setattr(obj, k, v)
+    db.commit(); db.refresh(obj)
+    return obj
+
+@router.delete("/pathology/test-groups/{code}")
+def delete_test_group(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = db.query(TestGrpMast).filter(TestGrpMast.TgpCode == code).first()
+    if not obj: raise HTTPException(404, "Not found")
+    obj.TgpRecState = 0; db.commit()
+    return {"ok": True}
+
+
+# 4. TestDeptMast (Lab Test Department)
+@router.post("/pathology/test-departments", response_model=TestDeptResponse)
+def create_test_department(schema: TestDeptCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = TestDeptMast(**schema.model_dump())
+    db.add(obj); db.commit(); db.refresh(obj)
+    return obj
+
+@router.get("/pathology/test-departments", response_model=List[TestDeptResponse])
+def get_test_departments(db: Session = Depends(get_db)):
+    return db.query(TestDeptMast).filter(TestDeptMast.TdpRecState != 0).order_by(TestDeptMast.TdpName).all()
+
+@router.put("/pathology/test-departments/{code}", response_model=TestDeptResponse)
+def update_test_department(code: int, schema: TestDeptCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = db.query(TestDeptMast).filter(TestDeptMast.TdpCode == code).first()
+    if not obj: raise HTTPException(404, "Not found")
+    for k, v in schema.model_dump().items(): setattr(obj, k, v)
+    db.commit(); db.refresh(obj)
+    return obj
+
+@router.delete("/pathology/test-departments/{code}")
+def delete_test_department(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = db.query(TestDeptMast).filter(TestDeptMast.TdpCode == code).first()
+    if not obj: raise HTTPException(404, "Not found")
+    obj.TdpRecState = 0; db.commit()
+    return {"ok": True}
+
+
+# 5. TestParaMast (Lab Test Parameters)
+@router.post("/pathology/test-parameters", response_model=TestParaResponse)
+def create_test_parameter(schema: TestParaCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = TestParaMast(**schema.model_dump())
+    db.add(obj); db.commit(); db.refresh(obj)
+    return obj
+
+@router.get("/pathology/test-parameters", response_model=List[TestParaResponse])
+def get_test_parameters(db: Session = Depends(get_db)):
+    return db.query(TestParaMast).filter(TestParaMast.TprRecState != 0).order_by(TestParaMast.TprName).all()
+
+@router.put("/pathology/test-parameters/{code}", response_model=TestParaResponse)
+def update_test_parameter(code: int, schema: TestParaCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = db.query(TestParaMast).filter(TestParaMast.TprCode == code).first()
+    if not obj: raise HTTPException(404, "Not found")
+    for k, v in schema.model_dump().items(): setattr(obj, k, v)
+    db.commit(); db.refresh(obj)
+    return obj
+
+@router.delete("/pathology/test-parameters/{code}")
+def delete_test_parameter(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = db.query(TestParaMast).filter(TestParaMast.TprCode == code).first()
+    if not obj: raise HTTPException(404, "Not found")
+    obj.TprRecState = 0; db.commit()
+    return {"ok": True}
+
+
+# 6. TestFmtMast (Test Report Formats)
+@router.post("/pathology/test-formats", response_model=TestFmtResponse)
+def create_test_format(schema: TestFmtCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = TestFmtMast(**schema.model_dump())
+    db.add(obj); db.commit(); db.refresh(obj)
+    return obj
+
+@router.get("/pathology/test-formats", response_model=List[TestFmtResponse])
+def get_test_formats(db: Session = Depends(get_db), style: Optional[str] = None):
+    q = db.query(TestFmtMast).filter(TestFmtMast.TfmRecState != 0)
+    if style:
+        q = q.filter(TestFmtMast.TfmRepStyle == style)
+    return q.order_by(TestFmtMast.TfmName).all()
+
+@router.put("/pathology/test-formats/{code}", response_model=TestFmtResponse)
+def update_test_format(code: int, schema: TestFmtCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = db.query(TestFmtMast).filter(TestFmtMast.TfmCode == code).first()
+    if not obj: raise HTTPException(404, "Not found")
+    for k, v in schema.model_dump().items(): setattr(obj, k, v)
+    db.commit(); db.refresh(obj)
+    return obj
+
+@router.delete("/pathology/test-formats/{code}")
+def delete_test_format(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = db.query(TestFmtMast).filter(TestFmtMast.TfmCode == code).first()
+    if not obj: raise HTTPException(404, "Not found")
+    obj.TfmRecState = 0; db.commit()
+    return {"ok": True}
+
+
+# 7. TestValCalcMast (Test Auto Calculation Methods)
+@router.post("/pathology/test-calcs", response_model=TestValCalcResponse)
+def create_test_calc(schema: TestValCalcCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = TestValCalcMast(**schema.model_dump())
+    db.add(obj); db.commit(); db.refresh(obj)
+    return obj
+
+@router.get("/pathology/test-calcs", response_model=List[TestValCalcResponse])
+def get_test_calcs(db: Session = Depends(get_db)):
+    return db.query(TestValCalcMast).filter(TestValCalcMast.TvcRecState != 0).order_by(TestValCalcMast.TvcName).all()
+
+@router.put("/pathology/test-calcs/{code}", response_model=TestValCalcResponse)
+def update_test_calc(code: int, schema: TestValCalcCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = db.query(TestValCalcMast).filter(TestValCalcMast.TvcCode == code).first()
+    if not obj: raise HTTPException(404, "Not found")
+    for k, v in schema.model_dump().items(): setattr(obj, k, v)
+    db.commit(); db.refresh(obj)
+    return obj
+
+@router.delete("/pathology/test-calcs/{code}")
+def delete_test_calc(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    obj = db.query(TestValCalcMast).filter(TestValCalcMast.TvcCode == code).first()
+    if not obj: raise HTTPException(404, "Not found")
+    obj.TvcRecState = 0; db.commit()
+    return {"ok": True}
+
 

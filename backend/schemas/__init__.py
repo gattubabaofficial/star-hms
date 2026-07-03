@@ -84,3 +84,24 @@ __all__ = [
     "AccountLedgerBase", "AccountLedgerCreate", "AccountLedgerResponse",
     "JournalBase", "JournalCreate", "JournalResponse",
 ]
+
+# Pathology / Lab Master schemas
+from backend.schemas.pathology import (
+    TestMethodCreate, TestMethodResponse,
+    TestSampTypCreate, TestSampTypResponse,
+    TestGrpCreate, TestGrpResponse,
+    TestDeptCreate, TestDeptResponse,
+    TestParaCreate, TestParaResponse,
+    TestFmtCreate, TestFmtResponse,
+    TestValCalcCreate, TestValCalcResponse,
+)
+
+__all__.extend([
+    "TestMethodCreate", "TestMethodResponse",
+    "TestSampTypCreate", "TestSampTypResponse",
+    "TestGrpCreate", "TestGrpResponse",
+    "TestDeptCreate", "TestDeptResponse",
+    "TestParaCreate", "TestParaResponse",
+    "TestFmtCreate", "TestFmtResponse",
+    "TestValCalcCreate", "TestValCalcResponse",
+])
