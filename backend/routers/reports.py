@@ -5,14 +5,24 @@ from typing import List, Optional
 from datetime import date
 
 from backend.database import get_db
-from backend.models.opd import OutdReg, OutdRcpt, OutdBlPymtHdr, OutdBill, OutdHdr
-from backend.models.ipd import IndrHdr, IndrRgPymt, IndrBlDpogDtl, IndrBill, IBedState, IndrBlHdr
+from backend.models.opd import (
+    OutdReg, OutdRcpt, OutdBlPymtHdr, OutdBill, OutdHdr,
+    OutdPymtHdr, OutdRefdHdr, OutdRgRefd, OutdBlRefdHdr,
+)
+from backend.models.ipd import (
+    IndrHdr, IndrRgPymt, IndrBlDpogDtl, IndrBill, IBedState, IndrBlHdr,
+    IndrReg, IndrRgRefd, IndrBlPymtHdr, IndrBlRefdHdr,
+)
 from backend.models.pharmacy import OutdStk, IndrStk
-from backend.models.lab import LabPymtHdr
-from backend.models.masters import PatMast, WardMast, BedMast, FloorMast, ServMast, DoctMast, RefByMast
+from backend.models.lab import LabHdr, LabPymtHdr, LabRefdHdr
+from backend.models.masters import (
+    PatMast, WardMast, BedMast, FloorMast, ServMast, DoctMast, RefByMast,
+    ServGrpMst, AreaMast, StsnMast, PatCatgMst,
+)
 from backend.schemas.reports import (
     OpdReportItem, IpdReportItem, PharmacyReportItem,
-    CollectionReportItem, ServiceReportItem, BedOccupancyItem
+    CollectionReportItem, ServiceReportItem, BedOccupancyItem,
+    CollectionTransaction, CollectionRow, CollectionSummary, CollectionResponse,
 )
 
 router = APIRouter()
@@ -81,97 +91,263 @@ def get_pharmacy_report(start_date: date, end_date: date, db: Session = Depends(
     sorted_results = sorted(report_dict.values(), key=lambda x: x["Date"], reverse=True)
     return [PharmacyReportItem(**r) for r in sorted_results]
 
-from backend.models.ipd import IndrReg
-from backend.models.lab import LabHdr
-from backend.schemas.reports import CollectionTransaction
+# =====================================================================
+# Central Collection Desk  (faithful port of VB6 frmCollectionViewRep)
+# ---------------------------------------------------------------------
+# The VB6 "Collection Report" UNION-ALL's every money voucher across
+# OPD / IPD / Lab over a date range, then joins patient + masters.
+# Refunds are stored negative so the grid nets to the true collection.
+# Each source below maps a VB6 voucher type to the new flat schema.
+# =====================================================================
 
-@router.get("/collection", response_model=List[CollectionTransaction])
-def get_collection_report(start_date: date, end_date: date, db: Session = Depends(get_db)):
-    transactions = []
-    
-    # 1. OPD Registration
-    opd_rcpt = db.query(
-        OutdRcpt.OrcDate.label("Date"), OutdRcpt.OrcVchNo.label("VchNo"), 
-        PatMast.PttName.label("PatName"), DoctMast.DctName.label("DctName"), 
-        OutdRcpt.OrcRecvdAmt.label("Amount")
-    ).join(PatMast, PatMast.PttCode == OutdRcpt.OrcPttCode) \
-    .outerjoin(DoctMast, DoctMast.DctCode == OutdRcpt.OrcCDctCode) \
-    .filter(OutdRcpt.OrcDate >= start_date, OutdRcpt.OrcDate <= end_date, OutdRcpt.OrcRecState == 1).all()
-    
-    for r in opd_rcpt:
-        transactions.append(CollectionTransaction(
-            Date=r.Date, ReceiptNo=str(r.VchNo), PatientName=r.PatName, 
-            DoctorName=r.DctName, Module="OPD Registration", Amount=float(r.Amount or 0)
+# source code -> (Module label, Voucher label)
+COLLECTION_SOURCES = {
+    "opd_reg":       ("Outdoor", "Outdoor Registration"),
+    "opd_reg_refd":  ("Outdoor", "Outdoor Reg.Refund"),
+    "opd_rcpt":      ("Outdoor", "Outdoor Receipts"),
+    "opd_pymt":      ("Outdoor", "Outdoor Rcpt Payment"),
+    "opd_refd":      ("Outdoor", "Outdoor Rcpt Refund"),
+    "opd_bill_pymt": ("Outdoor", "Outdoor Bill Payment"),
+    "opd_bill_refd": ("Outdoor", "Outdoor Bill Refund"),
+    "ipd_adv":       ("Indoor",  "Indoor Admit.Advance"),
+    "ipd_rg_pymt":   ("Indoor",  "Indoor On A/c.Payment"),
+    "ipd_rg_refd":   ("Indoor",  "Indoor On A/c.Refund"),
+    "ipd_bill_pymt": ("Indoor",  "Indoor Bill Payment"),
+    "ipd_bill_refd": ("Indoor",  "Indoor Bill Refund"),
+    "lab_rcpt":      ("Lab",     "Lab Receipts"),
+    "lab_pymt":      ("Lab",     "Lab Rcpt Payment"),
+    "lab_refd":      ("Lab",     "Lab Rcpt Refund"),
+}
+
+
+@router.get("/collection", response_model=CollectionResponse)
+def get_collection_report(
+    start_date: date,
+    end_date: date,
+    include: Optional[str] = None,   # comma list of source codes; default = all
+    ptt_code: Optional[int] = None,  # filter: patient
+    dct_code: Optional[int] = None,  # filter: consulting doctor
+    srv_code: Optional[int] = None,  # filter: service
+    sgp_code: Optional[int] = None,  # filter: service group
+    db: Session = Depends(get_db),
+):
+    # which voucher types to include (VB6 "Filter By" checkboxes)
+    if include:
+        wanted = {c.strip() for c in include.split(",") if c.strip() in COLLECTION_SOURCES}
+    else:
+        wanted = set(COLLECTION_SOURCES.keys())
+
+    # When a service / service-group filter is active, only the OPD
+    # Registration carries a service link – every other voucher type is
+    # excluded (mirrors the VB6 "and 0 = 1" behaviour).
+    service_filter = srv_code is not None or sgp_code is not None
+
+    # ---- preload master lookups once (cheap, avoids N joins) ----------
+    patients = {
+        p.PttCode: p for p in db.query(
+            PatMast.PttCode, PatMast.PttName, PatMast.PttRegNo, PatMast.PttRefName,
+            PatMast.PttAddr, PatMast.PttAraCode, PatMast.PttStnCode, PatMast.PttPcgCode,
+        ).all()
+    }
+    doctors = {d.DctCode: ((d.DctTitle or "") + " " + (d.DctName or "")).strip()
+               for d in db.query(DoctMast.DctCode, DoctMast.DctTitle, DoctMast.DctName).all()}
+    areas = {a.AraCode: a.AraName for a in db.query(AreaMast.AraCode, AreaMast.AraName).all()}
+    stations = {s.StnCode: s.StnName for s in db.query(StsnMast.StnCode, StsnMast.StnName).all()}
+    categories = {c.PcgCode: c.PcgName for c in db.query(PatCatgMst.PcgCode, PatCatgMst.PcgName).all()}
+    sgroups = {g.SgpCode: g.SgpName for g in db.query(ServGrpMst.SgpCode, ServGrpMst.SgpName).all()}
+    services = {s.SrvCode: (s.SrvName, s.SrvSgpCode)
+                for s in db.query(ServMast.SrvCode, ServMast.SrvName, ServMast.SrvSgpCode).all()}
+    # consulting doctor per IPD registration (for IPD payment/refund vouchers)
+    indr_reg_dct = {r.IpgCode: r.IpgCDctCode
+                    for r in db.query(IndrReg.IpgCode, IndrReg.IpgCDctCode).all()}
+
+    rows: list[CollectionRow] = []
+
+    def add(code, trn_date, vch_no, ptt, dct, amount, disc=0.0, trn_time=None, srv=None):
+        module, voucher = COLLECTION_SOURCES[code]
+        p = patients.get(ptt)
+        srv_name, sgp_name = "", ""
+        if srv is not None and srv in services:
+            srv_name, sgp = services[srv]
+            sgp_name = sgroups.get(sgp, "")
+        rows.append(CollectionRow(
+            TrnType=code, Module=module, Voucher=voucher,
+            VchNo=str(vch_no or ""), TrnDate=trn_date, TrnTime=trn_time,
+            PttCode=ptt,
+            PttName=(p.PttName if p else "") or "",
+            PttRegNo=(p.PttRegNo if p else None),
+            PttRefName=(p.PttRefName if p else "") or "",
+            PttAddr=(p.PttAddr if p else "") or "",
+            AreaName=(areas.get(p.PttAraCode, "") if p else ""),
+            StationName=(stations.get(p.PttStnCode, "") if p else ""),
+            CategoryName=(categories.get(p.PttPcgCode, "") if p else ""),
+            DoctorName=(doctors.get(dct, "") if dct else ""),
+            ServiceName=srv_name, ServiceGroupName=sgp_name,
+            ReceivedAmount=float(amount or 0), DiscountAmount=float(disc or 0),
         ))
 
-    # 2. OPD Billing
-    opd_bill = db.query(
-        OutdBlPymtHdr.ObpDate.label("Date"), OutdHdr.OhdVchNo.label("VchNo"), 
-        PatMast.PttName.label("PatName"), DoctMast.DctName.label("DctName"), 
-        OutdBlPymtHdr.ObpAmt.label("Amount")
-    ).join(OutdHdr, OutdHdr.OhdCode == OutdBlPymtHdr.ObpOhdCode) \
-    .join(PatMast, PatMast.PttCode == OutdHdr.OhdPttCode) \
-    .outerjoin(DoctMast, DoctMast.DctCode == OutdHdr.OhdCDctCode) \
-    .filter(OutdBlPymtHdr.ObpDate >= start_date, OutdBlPymtHdr.ObpDate <= end_date, OutdBlPymtHdr.ObpRecState == 1).all()
-    
-    for r in opd_bill:
-        transactions.append(CollectionTransaction(
-            Date=r.Date, ReceiptNo=f"OPB-{r.VchNo}", PatientName=r.PatName, 
-            DoctorName=r.DctName, Module="OPD Billing", Amount=float(r.Amount or 0)
-        ))
+    # ---------------- OUTDOOR ----------------------------------------
+    if "opd_reg" in wanted:
+        q = db.query(OutdReg).filter(
+            OutdReg.OpgDate >= start_date, OutdReg.OpgDate <= end_date,
+            OutdReg.OpgRecState == 1)
+        if ptt_code: q = q.filter(OutdReg.OpgPttCode == ptt_code)
+        if dct_code: q = q.filter(OutdReg.OpgCDctCode == dct_code)
+        if srv_code: q = q.filter(OutdReg.OpgSrvCode == srv_code)
+        for r in q.all():
+            if sgp_code:
+                sv = services.get(r.OpgSrvCode)
+                if not sv or sv[1] != sgp_code:
+                    continue
+            add("opd_reg", r.OpgDate, r.OpgVchNo, r.OpgPttCode, r.OpgCDctCode,
+                r.OpgAmtAftDisc, r.OpgDiscAmt, r.OpgTime, r.OpgSrvCode)
 
-    # 3. IPD Advance
-    ipd_adv = db.query(
-        IndrRgPymt.IgtDate.label("Date"), IndrRgPymt.IgtVchNo.label("VchNo"), 
-        PatMast.PttName.label("PatName"), DoctMast.DctName.label("DctName"), 
-        IndrRgPymt.IgtDpogAmt.label("Amount")
-    ).join(PatMast, PatMast.PttCode == IndrRgPymt.IgtPttCode) \
-    .outerjoin(IndrReg, IndrReg.IpgCode == IndrRgPymt.IgtIpgCode) \
-    .outerjoin(DoctMast, DoctMast.DctCode == IndrReg.IpgCDctCode) \
-    .filter(IndrRgPymt.IgtDate >= start_date, IndrRgPymt.IgtDate <= end_date, IndrRgPymt.IgtRecState == 1).all()
+    if "opd_reg_refd" in wanted and not service_filter:
+        q = db.query(OutdRgRefd, OutdReg).join(OutdReg, OutdReg.OpgCode == OutdRgRefd.OrrOpgCode).filter(
+            OutdRgRefd.OrrDate >= start_date, OutdRgRefd.OrrDate <= end_date,
+            OutdRgRefd.OrrRecState == 1)
+        if ptt_code: q = q.filter(OutdReg.OpgPttCode == ptt_code)
+        if dct_code: q = q.filter(OutdReg.OpgCDctCode == dct_code)
+        for rf, rg in q.all():
+            add("opd_reg_refd", rf.OrrDate, rg.OpgVchNo, rg.OpgPttCode, rg.OpgCDctCode,
+                -(rf.OrrAmt or 0))
 
-    for r in ipd_adv:
-        transactions.append(CollectionTransaction(
-            Date=r.Date, ReceiptNo=f"ADV-{r.VchNo}", PatientName=r.PatName, 
-            DoctorName=r.DctName, Module="IPD Advance", Amount=float(r.Amount or 0)
-        ))
+    if "opd_rcpt" in wanted and not service_filter:
+        q = db.query(OutdRcpt).filter(
+            OutdRcpt.OrcDate >= start_date, OutdRcpt.OrcDate <= end_date,
+            OutdRcpt.OrcRecState == 1)
+        if ptt_code: q = q.filter(OutdRcpt.OrcPttCode == ptt_code)
+        if dct_code: q = q.filter(OutdRcpt.OrcCDctCode == dct_code)
+        for r in q.all():
+            add("opd_rcpt", r.OrcDate, r.OrcVchNo, r.OrcPttCode, r.OrcCDctCode,
+                r.OrcRecvdAmt, 0.0, r.OrcTime)
 
-    # 4. IPD Billing (Deposit against Bill)
-    ipd_bill = db.query(
-        IndrBlDpogDtl.IbpyDate.label("Date"), IndrBlHdr.IbhVchNo.label("VchNo"), 
-        PatMast.PttName.label("PatName"), DoctMast.DctName.label("DctName"), 
-        IndrBlDpogDtl.IbpyDepoAmt.label("Amount")
-    ).join(IndrBlHdr, IndrBlHdr.IbhCode == IndrBlDpogDtl.IbpyIbhCode) \
-    .join(PatMast, PatMast.PttCode == IndrBlDpogDtl.IbpyPttCode) \
-    .outerjoin(IndrHdr, IndrHdr.IhdCode == IndrBlHdr.IbhIhdCode) \
-    .outerjoin(DoctMast, DoctMast.DctCode == IndrHdr.IhdCDctCode) \
-    .filter(IndrBlDpogDtl.IbpyDate >= start_date, IndrBlDpogDtl.IbpyDate <= end_date, IndrBlDpogDtl.IbpyRecState == 1).all()
+    if "opd_pymt" in wanted and not service_filter:
+        q = db.query(OutdPymtHdr, OutdRcpt).join(OutdRcpt, OutdRcpt.OrcCode == OutdPymtHdr.OphOrcCode).filter(
+            OutdPymtHdr.OphDate >= start_date, OutdPymtHdr.OphDate <= end_date,
+            OutdPymtHdr.OphRecState == 1)
+        if ptt_code: q = q.filter(OutdRcpt.OrcPttCode == ptt_code)
+        if dct_code: q = q.filter(OutdRcpt.OrcCDctCode == dct_code)
+        for pm, rc in q.all():
+            add("opd_pymt", pm.OphDate, rc.OrcVchNo, rc.OrcPttCode, rc.OrcCDctCode, pm.OphAmt)
 
-    for r in ipd_bill:
-        transactions.append(CollectionTransaction(
-            Date=r.Date, ReceiptNo=f"IPB-{r.VchNo}", PatientName=r.PatName, 
-            DoctorName=r.DctName, Module="IPD Billing", Amount=float(r.Amount or 0)
-        ))
+    if "opd_refd" in wanted and not service_filter:
+        q = db.query(OutdRefdHdr, OutdRcpt).join(OutdRcpt, OutdRcpt.OrcCode == OutdRefdHdr.OrhOrcCode).filter(
+            OutdRefdHdr.OrhDate >= start_date, OutdRefdHdr.OrhDate <= end_date,
+            OutdRefdHdr.OrhRecState == 1)
+        if ptt_code: q = q.filter(OutdRcpt.OrcPttCode == ptt_code)
+        if dct_code: q = q.filter(OutdRcpt.OrcCDctCode == dct_code)
+        for rf, rc in q.all():
+            add("opd_refd", rf.OrhDate, rc.OrcVchNo, rc.OrcPttCode, rc.OrcCDctCode, -(rf.OrhAmt or 0))
 
-    # 5. Laboratory
-    lab_pymt = db.query(
-        LabPymtHdr.LphDate.label("Date"), LabHdr.LhdVchNo.label("VchNo"), 
-        PatMast.PttName.label("PatName"), DoctMast.DctName.label("DctName"), 
-        LabPymtHdr.LphAmt.label("Amount")
-    ).join(LabHdr, LabHdr.LhdCode == LabPymtHdr.LphLhdCode) \
-    .join(PatMast, PatMast.PttCode == LabHdr.LhdPttCode) \
-    .outerjoin(DoctMast, DoctMast.DctCode == LabHdr.LhdCDctCode) \
-    .filter(LabPymtHdr.LphDate >= start_date, LabPymtHdr.LphDate <= end_date, LabPymtHdr.LphRecState == 1).all()
+    if "opd_bill_pymt" in wanted and not service_filter:
+        q = db.query(OutdBlPymtHdr, OutdHdr).join(OutdHdr, OutdHdr.OhdCode == OutdBlPymtHdr.ObpOhdCode).filter(
+            OutdBlPymtHdr.ObpDate >= start_date, OutdBlPymtHdr.ObpDate <= end_date,
+            OutdBlPymtHdr.ObpRecState == 1)
+        if ptt_code: q = q.filter(OutdHdr.OhdPttCode == ptt_code)
+        if dct_code: q = q.filter(OutdHdr.OhdCDctCode == dct_code)
+        for pm, hd in q.all():
+            add("opd_bill_pymt", pm.ObpDate, hd.OhdVchNo, hd.OhdPttCode, hd.OhdCDctCode, pm.ObpAmt)
 
-    for r in lab_pymt:
-        transactions.append(CollectionTransaction(
-            Date=r.Date, ReceiptNo=f"LAB-{r.VchNo}", PatientName=r.PatName, 
-            DoctorName=r.DctName, Module="Laboratory", Amount=float(r.Amount or 0)
-        ))
+    if "opd_bill_refd" in wanted and not service_filter:
+        q = db.query(OutdBlRefdHdr, OutdHdr).join(OutdHdr, OutdHdr.OhdCode == OutdBlRefdHdr.ObrOhdCode).filter(
+            OutdBlRefdHdr.ObrDate >= start_date, OutdBlRefdHdr.ObrDate <= end_date,
+            OutdBlRefdHdr.ObrRecState == 1)
+        if ptt_code: q = q.filter(OutdHdr.OhdPttCode == ptt_code)
+        if dct_code: q = q.filter(OutdHdr.OhdCDctCode == dct_code)
+        for rf, hd in q.all():
+            add("opd_bill_refd", rf.ObrDate, hd.OhdVchNo, hd.OhdPttCode, hd.OhdCDctCode, -(rf.ObrAmt or 0))
 
-    # Sort by Date descending
-    transactions.sort(key=lambda x: x.Date, reverse=True)
-    return transactions
+    # ---------------- INDOOR -----------------------------------------
+    if "ipd_adv" in wanted and not service_filter:
+        q = db.query(IndrReg).filter(
+            IndrReg.IpgDate >= start_date, IndrReg.IpgDate <= end_date,
+            IndrReg.IpgRecState == 1, IndrReg.IpgAdvAmt > 0)
+        if ptt_code: q = q.filter(IndrReg.IpgPttCode == ptt_code)
+        if dct_code: q = q.filter(IndrReg.IpgCDctCode == dct_code)
+        for r in q.all():
+            add("ipd_adv", r.IpgDate, r.IpgVchNo, r.IpgPttCode, r.IpgCDctCode, r.IpgAdvAmt, 0.0, r.IpgTime)
+
+    if "ipd_rg_pymt" in wanted and not service_filter:
+        q = db.query(IndrRgPymt).filter(
+            IndrRgPymt.IgtDate >= start_date, IndrRgPymt.IgtDate <= end_date,
+            IndrRgPymt.IgtRecState == 1)
+        if ptt_code: q = q.filter(IndrRgPymt.IgtPttCode == ptt_code)
+        for r in q.all():
+            dct = indr_reg_dct.get(r.IgtIpgCode)
+            if dct_code and dct != dct_code: continue
+            add("ipd_rg_pymt", r.IgtDate, r.IgtVchNo, r.IgtPttCode, dct, r.IgtDpogAmt, 0.0, r.IgtTime)
+
+    if "ipd_rg_refd" in wanted and not service_filter:
+        q = db.query(IndrRgRefd).filter(
+            IndrRgRefd.IgfDate >= start_date, IndrRgRefd.IgfDate <= end_date,
+            IndrRgRefd.IgfRecState == 1)
+        if ptt_code: q = q.filter(IndrRgRefd.IgfPttCode == ptt_code)
+        for r in q.all():
+            dct = indr_reg_dct.get(r.IgfIpgCode)
+            if dct_code and dct != dct_code: continue
+            add("ipd_rg_refd", r.IgfDate, r.IgfVchNo, r.IgfPttCode, dct, -(r.IgfRfugAmt or 0), 0.0, r.IgfTime)
+
+    if "ipd_bill_pymt" in wanted and not service_filter:
+        q = db.query(IndrBlPymtHdr).filter(
+            IndrBlPymtHdr.IbphDate >= start_date, IndrBlPymtHdr.IbphDate <= end_date,
+            IndrBlPymtHdr.IbphRecState == 1)
+        if ptt_code: q = q.filter(IndrBlPymtHdr.IbphPttCode == ptt_code)
+        for r in q.all():
+            dct = indr_reg_dct.get(r.IbphIpgCode)
+            if dct_code and dct != dct_code: continue
+            add("ipd_bill_pymt", r.IbphDate, r.IbphVchNo, r.IbphPttCode, dct, r.IbphDepoAmt, 0.0, r.IbphTime)
+
+    if "ipd_bill_refd" in wanted and not service_filter:
+        q = db.query(IndrBlRefdHdr).filter(
+            IndrBlRefdHdr.IbfhDate >= start_date, IndrBlRefdHdr.IbfhDate <= end_date,
+            IndrBlRefdHdr.IbfhRecState == 1)
+        if ptt_code: q = q.filter(IndrBlRefdHdr.IbfhPttCode == ptt_code)
+        for r in q.all():
+            dct = indr_reg_dct.get(r.IbfhIpgCode)
+            if dct_code and dct != dct_code: continue
+            add("ipd_bill_refd", r.IbfhDate, r.IbfhVchNo, r.IbfhPttCode, dct, -(r.IbfhRefuAmt or 0), 0.0, r.IbfhTime)
+
+    # ---------------- LAB --------------------------------------------
+    if "lab_rcpt" in wanted and not service_filter:
+        q = db.query(LabHdr).filter(
+            LabHdr.LhdDate >= start_date, LabHdr.LhdDate <= end_date,
+            LabHdr.LhdRecState == 1)
+        if ptt_code: q = q.filter(LabHdr.LhdPttCode == ptt_code)
+        if dct_code: q = q.filter(LabHdr.LhdCDctCode == dct_code)
+        for r in q.all():
+            add("lab_rcpt", r.LhdDate, r.LhdVchNo, r.LhdPttCode, r.LhdCDctCode, r.LhdRecvdAmt, 0.0, r.LhdTime)
+
+    if "lab_pymt" in wanted and not service_filter:
+        q = db.query(LabPymtHdr, LabHdr).join(LabHdr, LabHdr.LhdCode == LabPymtHdr.LphLhdCode).filter(
+            LabPymtHdr.LphDate >= start_date, LabPymtHdr.LphDate <= end_date,
+            LabPymtHdr.LphRecState == 1)
+        if ptt_code: q = q.filter(LabHdr.LhdPttCode == ptt_code)
+        if dct_code: q = q.filter(LabHdr.LhdCDctCode == dct_code)
+        for pm, hd in q.all():
+            add("lab_pymt", pm.LphDate, hd.LhdVchNo, hd.LhdPttCode, hd.LhdCDctCode, pm.LphAmt)
+
+    if "lab_refd" in wanted and not service_filter:
+        q = db.query(LabRefdHdr, LabHdr).join(LabHdr, LabHdr.LhdCode == LabRefdHdr.LrhLhdCode).filter(
+            LabRefdHdr.LrhDate >= start_date, LabRefdHdr.LrhDate <= end_date,
+            LabRefdHdr.LrhRecState == 1)
+        if ptt_code: q = q.filter(LabHdr.LhdPttCode == ptt_code)
+        if dct_code: q = q.filter(LabHdr.LhdCDctCode == dct_code)
+        for rf, hd in q.all():
+            add("lab_refd", rf.LrhDate, hd.LhdVchNo, hd.LhdPttCode, hd.LhdCDctCode, -(rf.LrhAmt or 0))
+
+    # ---- sort (date, voucher) + build summary -----------------------
+    rows.sort(key=lambda x: (x.TrnDate, x.Voucher, x.VchNo))
+
+    summary = CollectionSummary(
+        Count=len(rows),
+        ReceivedTotal=round(sum(r.ReceivedAmount for r in rows), 2),
+        DiscountTotal=round(sum(r.DiscountAmount for r in rows), 2),
+        OutdoorTotal=round(sum(r.ReceivedAmount for r in rows if r.Module == "Outdoor"), 2),
+        IndoorTotal=round(sum(r.ReceivedAmount for r in rows if r.Module == "Indoor"), 2),
+        LabTotal=round(sum(r.ReceivedAmount for r in rows if r.Module == "Lab"), 2),
+    )
+    return CollectionResponse(Rows=rows, Summary=summary)
 
 @router.get("/services", response_model=List[ServiceReportItem])
 def get_service_report(start_date: date, end_date: date, db: Session = Depends(get_db)):

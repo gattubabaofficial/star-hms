@@ -30,6 +30,18 @@ from backend.models.sync import SyncLog, SyncConfig
 from backend.models.accounts import (
     AcntGrpMst, AchdMast, BnkrMast, NatioStateMast, VTypMast, Journal, JrnHdr,
 )
+from backend.models.pathology import (
+    TestDeptMast, TestGrpMast, TestMethodMast, TestSampTypMast, TestParaMast,
+    TestFmtMast, TestFmtDtl, TestValCalcMast, TestValCalcDtl, TestParaSrvMst,
+)
+from backend.models.drugstock import (
+    MediMast, MediGrpMst, MediCpyMst, MediCpoMst,
+    ProdMast, ProdRef, StockHdr, StockJrn,
+)
+from backend.models.acctpay import (
+    VTypMast, AcntGrpMst, AchdMast, BnkrMast, NatioStateMast,
+    DeptMast, DesgMast, EmpMast, HoliMast,
+)
 
 # Legacy flat-model imports for backward compatibility
 # (routers that do `from backend.models import User, Patient, ...`)

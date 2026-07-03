@@ -65,6 +65,8 @@ const payrollLinks: MasterLink[] = [
   { name: "Department Master", desc: "Manage hospital departments (ICU, Surgery, HR…).", href: "/dashboard/masters/payroll/department", icon: Building2, color: "#7c3aed", bg: "#f5f3ff" },
   { name: "Designation Master", desc: "Manage employee designations (Nurse, Admin…).", href: "/dashboard/masters/payroll/designation", icon: Briefcase, color: "#0891b2", bg: "#ecfeff" },
   { name: "Employee Master", desc: "Register and manage hospital staff records.", href: "/dashboard/masters/payroll/employee", icon: BadgeCheck, color: "#059669", bg: "#ecfdf5" },
+  { name: "Employee Master (Legacy)", desc: "Exact legacy payroll employee master (frmEmpMast).", href: "/dashboard/masters/payroll/employee-legacy", icon: BadgeCheck, color: "#7c3aed", bg: "#f5f3ff" },
+  { name: "Holiday Master", desc: "Configure payroll holiday calendar (frmHoliMast).", href: "/dashboard/masters/payroll/holidays", icon: Briefcase, color: "#f59e0b", bg: "#fefbeb" },
 ];
 
 function MasterCard({ item }: { item: MasterLink }) {

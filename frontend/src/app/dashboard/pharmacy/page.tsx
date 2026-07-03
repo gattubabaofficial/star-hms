@@ -59,6 +59,11 @@ export default function PharmacyPortalHubPage() {
     { name: "POS Sales Counter", desc: "Dispense medicines and print retail bills.", href: "/dashboard/pharmacy/sale", icon: ShoppingBag, color: "#10b981", bg: "#ecfdf5" },
     { name: "Stock Register", desc: "View available batch quantities & expiry status.", href: "/dashboard/pharmacy/stock-register", icon: ClipboardList, color: "#f59e0b", bg: "#fefbeb" },
     { name: "Stock Transactions", desc: "Audit trail ledger of item stock movements.", href: "/dashboard/pharmacy/stock-transactions", icon: Activity, color: "#8b5cf6", bg: "#f5f3ff" },
+    { name: "Medicine Master", desc: "Manage medicines (frmMediMast).", href: "/dashboard/pharmacy/medicines", icon: ClipboardList, color: "#0891b2", bg: "#ecfeff" },
+    { name: "Medicine Groups", desc: "Manage medicine groups (frmMediGrpMst).", href: "/dashboard/pharmacy/medicine-groups", icon: ClipboardList, color: "#7c3aed", bg: "#f5f3ff" },
+    { name: "Medicine Companies", desc: "Manufacturer / company master (frmMediCpyMst).", href: "/dashboard/pharmacy/medicine-companies", icon: ClipboardList, color: "#059669", bg: "#ecfdf5" },
+    { name: "Compositions", desc: "Drug composition master (frmMediCpoMst).", href: "/dashboard/pharmacy/medicine-compositions", icon: ClipboardList, color: "#d97706", bg: "#fffbeb" },
+    { name: "Products (Stock Items)", desc: "Non-medicine stock item master (frmProdMast).", href: "/dashboard/pharmacy/products", icon: ClipboardList, color: "#2563eb", bg: "#eff6ff" },
   ];
 
   return (

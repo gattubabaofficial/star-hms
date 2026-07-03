@@ -17,6 +17,10 @@ export default function AccountsPortalHubPage() {
     { name: "Journal Voucher (JV)", desc: "Post double-entry adjustment and provision journals.", href: "/dashboard/accounts/journal", icon: BookOpen, color: "#8b5cf6", bg: "#f5f3ff" },
     { name: "Contra Transfer (CNV)", desc: "Register cash deposits and withdrawals to/from bank.", href: "/dashboard/accounts/contra", icon: ArrowRightLeft, color: "#06b6d4", bg: "#ecfeff" },
     { name: "Ledger trial Balance", desc: "View debit vs credit account statement balances.", href: "/dashboard/accounts/reports", icon: BarChart3, color: "#eab308", bg: "#fef9c3" },
+    { name: "Voucher Type Master", desc: "Configure voucher types & numbering (frmVTypMast).", href: "/dashboard/accounts/voucher-types", icon: BookOpen, color: "#7c3aed", bg: "#f5f3ff" },
+    { name: "Account Head Master", desc: "Chart of accounts heads (frmAchdMast).", href: "/dashboard/accounts/account-heads", icon: Landmark, color: "#0891b2", bg: "#ecfeff" },
+    { name: "Account Group Master", desc: "Account group classifications (frmAcntGrpMst).", href: "/dashboard/accounts/account-groups", icon: BookOpen, color: "#059669", bg: "#ecfdf5" },
+    { name: "Banker Master", desc: "Bank / banker master (frmBnkrMast).", href: "/dashboard/accounts/bankers", icon: Landmark, color: "#f97316", bg: "#fff7ed" },
   ];
 
   return (

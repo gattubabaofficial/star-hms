@@ -48,6 +48,10 @@ export default function LaboratoryPortalHubPage() {
     { name: "Receipt & Billing", desc: "Register diagnostic investigations & issue patient bills.", href: "/dashboard/laboratory/receipt", icon: Receipt, color: "#2563eb", bg: "#eff6ff" },
     { name: "Collections Tracker", desc: "Collect pending laboratory transaction balances.", href: "/dashboard/laboratory/payment", icon: CreditCard, color: "#10b981", bg: "#ecfdf5" },
     { name: "Refund Console", desc: "Refund cancelled medical diagnostic test vouchers.", href: "/dashboard/laboratory/refund", icon: RotateCcw, color: "#ef4444", bg: "#fef2f2" },
+    { name: "Test Departments", desc: "Configure pathology test departments (frmTestDeptMast).", href: "/dashboard/laboratory/test-departments", icon: ClipboardList, color: "#7c3aed", bg: "#f5f3ff" },
+    { name: "Test Groups", desc: "Configure pathology test groups (frmTestGrpMast).", href: "/dashboard/laboratory/test-groups", icon: ClipboardList, color: "#0891b2", bg: "#ecfeff" },
+    { name: "Test Methods", desc: "Configure test methods (frmTestMethodMast).", href: "/dashboard/laboratory/test-methods", icon: ClipboardList, color: "#059669", bg: "#ecfdf5" },
+    { name: "Sample Types", desc: "Configure specimen sample types (frmTestSampTypMast).", href: "/dashboard/laboratory/test-sample-types", icon: ClipboardList, color: "#d97706", bg: "#fffbeb" },
   ];
 
   return (

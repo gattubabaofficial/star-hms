@@ -13,19 +13,19 @@ const API = "http://127.0.0.1:8000/api/ipd";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface ChargeRow {
-  IbhCode:     number;
-  ChargeNo:    number;
-  Date:        string;
-  Voucher:     string;
-  IpdNo:       number | null;
-  PttName:     string;
-  PttRegNo:    number | null;
-  DctName:     string;
+  IbhCode: number;
+  ChargeNo: number;
+  Date: string;
+  Voucher: string;
+  IpdNo: number | null;
+  PttName: string;
+  PttRegNo: number | null;
+  DctName: string;
   ChargeGroup: string;
-  GrossAmt:    number;
-  DiscAmt:     number;
-  NetAmt:      number;
-  Status:      string;
+  GrossAmt: number;
+  DiscAmt: number;
+  NetAmt: number;
+  Status: string;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -44,9 +44,9 @@ function fmtAmt(n: number) {
 
 function statusBadge(s: string) {
   const map: Record<string, { bg: string; color: string }> = {
-    Open:     { bg: "var(--accent-light)",         color: "var(--accent-color)" },
-    Closed:   { bg: "var(--status-success-light)",  color: "var(--status-success)" },
-    Voided:   { bg: "var(--status-danger-light)",   color: "var(--status-danger)" },
+    Open: { bg: "var(--accent-light)", color: "var(--accent-color)" },
+    Closed: { bg: "var(--status-success-light)", color: "var(--status-success)" },
+    Voided: { bg: "var(--status-danger-light)", color: "var(--status-danger)" },
   };
   const c = map[s] || { bg: "var(--bg-secondary)", color: "var(--text-secondary)" };
   return (
@@ -64,17 +64,16 @@ function statusBadge(s: string) {
 export default function IndoorChargesPage() {
   const router = useRouter();
 
-  const today = new Date().toISOString().slice(0, 10);
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
-  const [rows, setRows]           = useState<ChargeRow[]>([]);
-  const [loading, setLoading]     = useState(false);
-  const [selected, setSelected]   = useState<number | null>(null);
-  const [search, setSearch]       = useState("");
+  const [rows, setRows] = useState<ChargeRow[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [selected, setSelected] = useState<number | null>(null);
+  const [search, setSearch] = useState("");
   const [startDate, setStartDate] = useState(thirtyDaysAgo);
-  const [endDate, setEndDate]     = useState(today);
-  const [toast, setToast]         = useState<{ msg: string; ok: boolean } | null>(null);
-  const [deleting, setDeleting]   = useState(false);
+  const [endDate, setEndDate] = useState(today);
+  const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
+  const [deleting, setDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // ── Data fetch ──────────────────────────────────────────────────────────────
@@ -84,8 +83,8 @@ export default function IndoorChargesPage() {
     try {
       const params = new URLSearchParams();
       if (startDate) params.set("start_date", startDate);
-      if (endDate)   params.set("end_date", endDate);
-      if (search)    params.set("search", search);
+      if (endDate) params.set("end_date", endDate);
+      if (search) params.set("search", search);
 
       const res = await fetch(`${API}/charges?${params}`);
       if (!res.ok) throw new Error("Failed to load charges");
@@ -135,7 +134,7 @@ export default function IndoorChargesPage() {
 
   // ── Export ──────────────────────────────────────────────────────────────────
   function handleExport() {
-    const header = ["Charge No","Date","Voucher","IPD No","Patient","UHID","Doctor","Charge Group","Gross","Discount","Net","Status"];
+    const header = ["Charge No", "Date", "Voucher", "IPD No", "Patient", "UHID", "Doctor", "Charge Group", "Gross", "Discount", "Net", "Status"];
     const csvRows = [
       header.join(","),
       ...filtered.map(r => [
@@ -145,8 +144,8 @@ export default function IndoorChargesPage() {
       ].join(",")),
     ];
     const blob = new Blob([csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement("a"); a.href = url;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url;
     a.download = `indoor_charges_${today}.csv`; a.click();
     URL.revokeObjectURL(url);
     showToast("Exported to CSV.");
@@ -167,8 +166,8 @@ export default function IndoorChargesPage() {
 
   // ── Summary totals ─────────────────────────────────────────────────────────
   const totalGross = filtered.reduce((a, r) => a + r.GrossAmt, 0);
-  const totalDisc  = filtered.reduce((a, r) => a + r.DiscAmt,  0);
-  const totalNet   = filtered.reduce((a, r) => a + r.NetAmt,   0);
+  const totalDisc = filtered.reduce((a, r) => a + r.DiscAmt, 0);
+  const totalNet = filtered.reduce((a, r) => a + r.NetAmt, 0);
 
   const selectedRow = selected ? filtered.find(r => r.IbhCode === selected) : null;
 
@@ -247,8 +246,8 @@ export default function IndoorChargesPage() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
         {[
           { label: "Total Charges", value: filtered.length, icon: <FileText size={20} />, color: "var(--accent-color)", bg: "var(--accent-light)" },
-          { label: "Gross Amount",  value: fmtAmt(totalGross), icon: <IndianRupee size={20} />, color: "#7c3aed", bg: "#ede9fe" },
-          { label: "Net Amount",    value: fmtAmt(totalNet),   icon: <IndianRupee size={20} />, color: "var(--status-success)", bg: "var(--status-success-light)" },
+          { label: "Gross Amount", value: fmtAmt(totalGross), icon: <IndianRupee size={20} />, color: "#7c3aed", bg: "#ede9fe" },
+          { label: "Net Amount", value: fmtAmt(totalNet), icon: <IndianRupee size={20} />, color: "var(--status-success)", bg: "var(--status-success-light)" },
         ].map(k => (
           <div key={k.label} className={styles.card}>
             <div className={styles.cardInfo}>
@@ -423,18 +422,18 @@ export default function IndoorChargesPage() {
               <table className={styles.table} style={{ fontSize: 13 }}>
                 <thead>
                   <tr>
-                    <th style={{ width: 90  }}>Charge No</th>
+                    <th style={{ width: 90 }}>Charge No</th>
                     <th style={{ width: 100 }}>Date</th>
-                    <th style={{ width: 80  }}>Voucher</th>
-                    <th style={{ width: 70  }}>IPD No</th>
+                    <th style={{ width: 80 }}>Voucher</th>
+                    <th style={{ width: 70 }}>IPD No</th>
                     <th>Patient Name</th>
-                    <th style={{ width: 80  }}>UHID</th>
+                    <th style={{ width: 80 }}>UHID</th>
                     <th>Doctor</th>
                     <th>Charge Group</th>
                     <th style={{ width: 100, textAlign: "right" }}>Gross Amt</th>
-                    <th style={{ width: 90,  textAlign: "right" }}>Discount</th>
+                    <th style={{ width: 90, textAlign: "right" }}>Discount</th>
                     <th style={{ width: 100, textAlign: "right" }}>Net Amt</th>
-                    <th style={{ width: 80  }}>Status</th>
+                    <th style={{ width: 80 }}>Status</th>
                   </tr>
                 </thead>
                 <tbody>
