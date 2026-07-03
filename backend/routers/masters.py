@@ -13,6 +13,8 @@ from backend.models.masters import (
     PartyGrpMst, PartyMast,
     SubItmGrpMst, SubItmMast,
     StsnMast, AreaMast,
+    PatCatgMst, DoctCatgMst, DoctRoleMst, DoctMast,
+    FloorMast, WardMast, BedMast, ServGrpMst, ServMast,
 )
 from backend.schemas import (
     PatientCategoryCreate, PatientCategoryResponse,
@@ -50,6 +52,18 @@ router = APIRouter()
 def create_patient_category(schema: PatientCategoryCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
     obj = PatientCategory(**schema.model_dump())
     db.add(obj); db.commit(); db.refresh(obj)
+    legacy = PatCatgMst(
+        PcgCode=obj.pcg_code,
+        PcgName=obj.pcg_name,
+        PcgInfAllowed=obj.pcg_inf_allowed,
+        PcgDefAllowed=obj.pcg_def_allowed,
+        PcgDiscAllowed=obj.pcg_disc_allowed,
+        PcgDiscPer=obj.pcg_disc_per,
+        PcgShowInList=obj.pcg_show_in_list,
+        PcgRecState=obj.pcg_rec_state or 1,
+        PcgType=obj.pcg_type
+    )
+    db.add(legacy); db.commit(); db.refresh(legacy)
     return obj
 
 @router.get("/patient-categories", response_model=List[PatientCategoryResponse])
@@ -61,6 +75,18 @@ def update_patient_category(code: int, schema: PatientCategoryCreate, db: Sessio
     obj = db.query(PatientCategory).filter(PatientCategory.pcg_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
     for k, v in schema.model_dump().items(): setattr(obj, k, v)
+    legacy = db.query(PatCatgMst).filter(PatCatgMst.PcgCode == code).first()
+    if not legacy:
+        legacy = PatCatgMst(PcgCode=code)
+        db.add(legacy)
+    legacy.PcgName = obj.pcg_name
+    legacy.PcgInfAllowed = obj.pcg_inf_allowed
+    legacy.PcgDefAllowed = obj.pcg_def_allowed
+    legacy.PcgDiscAllowed = obj.pcg_disc_allowed
+    legacy.PcgDiscPer = obj.pcg_disc_per
+    legacy.PcgShowInList = obj.pcg_show_in_list
+    legacy.PcgRecState = obj.pcg_rec_state or 1
+    legacy.PcgType = obj.pcg_type
     db.commit(); db.refresh(obj)
     return obj
 
@@ -68,7 +94,11 @@ def update_patient_category(code: int, schema: PatientCategoryCreate, db: Sessio
 def delete_patient_category(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
     obj = db.query(PatientCategory).filter(PatientCategory.pcg_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
-    obj.pcg_rec_state = 0; db.commit()
+    obj.pcg_rec_state = 0
+    legacy = db.query(PatCatgMst).filter(PatCatgMst.PcgCode == code).first()
+    if legacy:
+        legacy.PcgRecState = 0
+    db.commit()
     return {"ok": True}
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -298,6 +328,12 @@ def update_patient(code: int, data: dict, db: Session = Depends(get_db), current
 def create_doctor_category(schema: DoctorCategoryCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
     obj = DoctorCategory(**schema.model_dump())
     db.add(obj); db.commit(); db.refresh(obj)
+    legacy = DoctCatgMst(
+        DcgCode=obj.dcg_code,
+        DcgName=obj.dcg_name,
+        DcgRecState=obj.dcg_rec_state or 1
+    )
+    db.add(legacy); db.commit(); db.refresh(legacy)
     return obj
 
 @router.get("/doctor-categories", response_model=List[DoctorCategoryResponse])
@@ -309,6 +345,12 @@ def update_doctor_category(code: int, schema: DoctorCategoryCreate, db: Session 
     obj = db.query(DoctorCategory).filter(DoctorCategory.dcg_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
     for k, v in schema.model_dump().items(): setattr(obj, k, v)
+    legacy = db.query(DoctCatgMst).filter(DoctCatgMst.DcgCode == code).first()
+    if not legacy:
+        legacy = DoctCatgMst(DcgCode=code)
+        db.add(legacy)
+    legacy.DcgName = obj.dcg_name
+    legacy.DcgRecState = obj.dcg_rec_state or 1
     db.commit(); db.refresh(obj)
     return obj
 
@@ -316,7 +358,11 @@ def update_doctor_category(code: int, schema: DoctorCategoryCreate, db: Session 
 def delete_doctor_category(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
     obj = db.query(DoctorCategory).filter(DoctorCategory.dcg_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
-    obj.dcg_rec_state = 0; db.commit()
+    obj.dcg_rec_state = 0
+    legacy = db.query(DoctCatgMst).filter(DoctCatgMst.DcgCode == code).first()
+    if legacy:
+        legacy.DcgRecState = 0
+    db.commit()
     return {"ok": True}
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -326,6 +372,12 @@ def delete_doctor_category(code: int, db: Session = Depends(get_db), current_use
 def create_doctor_role(schema: DoctorRoleCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
     obj = DoctorRole(**schema.model_dump())
     db.add(obj); db.commit(); db.refresh(obj)
+    legacy = DoctRoleMst(
+        DrlCode=obj.drl_code,
+        DrlName=obj.drl_name,
+        DrlRecState=obj.drl_rec_state or 1
+    )
+    db.add(legacy); db.commit(); db.refresh(legacy)
     return obj
 
 @router.get("/doctor-roles", response_model=List[DoctorRoleResponse])
@@ -337,6 +389,12 @@ def update_doctor_role(code: int, schema: DoctorRoleCreate, db: Session = Depend
     obj = db.query(DoctorRole).filter(DoctorRole.drl_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
     for k, v in schema.model_dump().items(): setattr(obj, k, v)
+    legacy = db.query(DoctRoleMst).filter(DoctRoleMst.DrlCode == code).first()
+    if not legacy:
+        legacy = DoctRoleMst(DrlCode=code)
+        db.add(legacy)
+    legacy.DrlName = obj.drl_name
+    legacy.DrlRecState = obj.drl_rec_state or 1
     db.commit(); db.refresh(obj)
     return obj
 
@@ -344,7 +402,11 @@ def update_doctor_role(code: int, schema: DoctorRoleCreate, db: Session = Depend
 def delete_doctor_role(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
     obj = db.query(DoctorRole).filter(DoctorRole.drl_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
-    obj.drl_rec_state = 0; db.commit()
+    obj.drl_rec_state = 0
+    legacy = db.query(DoctRoleMst).filter(DoctRoleMst.DrlCode == code).first()
+    if legacy:
+        legacy.DrlRecState = 0
+    db.commit()
     return {"ok": True}
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -354,6 +416,20 @@ def delete_doctor_role(code: int, db: Session = Depends(get_db), current_user=De
 def create_doctor(schema: DoctorCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
     obj = Doctor(**schema.model_dump())
     db.add(obj); db.commit(); db.refresh(obj)
+    legacy = DoctMast(
+        DctCode=obj.dct_code,
+        DctTitle=obj.dct_title,
+        DctName=obj.dct_name,
+        DctSpeci=obj.dct_specialty,
+        DctDcgCode=obj.dct_dcg_code,
+        DctDrlCode=obj.dct_drl_code,
+        DctAddr=obj.dct_address,
+        DctTelNo=obj.dct_telephone,
+        DctEmail=obj.dct_email,
+        DctShare=obj.dct_share_percent or 0.0,
+        DctRecState=obj.dct_rec_state or 1
+    )
+    db.add(legacy); db.commit(); db.refresh(legacy)
     return obj
 
 @router.get("/doctors", response_model=List[DoctorResponse])
@@ -365,6 +441,20 @@ def update_doctor(code: int, schema: DoctorCreate, db: Session = Depends(get_db)
     obj = db.query(Doctor).filter(Doctor.dct_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
     for k, v in schema.model_dump().items(): setattr(obj, k, v)
+    legacy = db.query(DoctMast).filter(DoctMast.DctCode == code).first()
+    if not legacy:
+        legacy = DoctMast(DctCode=code)
+        db.add(legacy)
+    legacy.DctTitle = obj.dct_title
+    legacy.DctName = obj.dct_name
+    legacy.DctSpeci = obj.dct_specialty
+    legacy.DctDcgCode = obj.dct_dcg_code
+    legacy.DctDrlCode = obj.dct_drl_code
+    legacy.DctAddr = obj.dct_address
+    legacy.DctTelNo = obj.dct_telephone
+    legacy.DctEmail = obj.dct_email
+    legacy.DctShare = obj.dct_share_percent or 0.0
+    legacy.DctRecState = obj.dct_rec_state or 1
     db.commit(); db.refresh(obj)
     return obj
 
@@ -372,7 +462,11 @@ def update_doctor(code: int, schema: DoctorCreate, db: Session = Depends(get_db)
 def delete_doctor(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
     obj = db.query(Doctor).filter(Doctor.dct_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
-    obj.dct_rec_state = 0; db.commit()
+    obj.dct_rec_state = 0
+    legacy = db.query(DoctMast).filter(DoctMast.DctCode == code).first()
+    if legacy:
+        legacy.DctRecState = 0
+    db.commit()
     return {"ok": True}
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -500,7 +594,16 @@ def delete_ref_to(code: int, db: Session = Depends(get_db), current_user=Depends
 # ─────────────────────────────────────────────────────────────────────────────
 @router.post("/floors", response_model=FloorResponse)
 def create_floor(schema: FloorCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
-    obj = Floor(**schema.model_dump()); db.add(obj); db.commit(); db.refresh(obj); return obj
+    obj = Floor(**schema.model_dump())
+    db.add(obj); db.commit(); db.refresh(obj)
+    legacy = FloorMast(
+        FlrCode=obj.flr_code,
+        FlrName=obj.flr_name,
+        FlrShowInList=obj.flr_show_in_list,
+        FlrRecState=obj.flr_rec_state or 1
+    )
+    db.add(legacy); db.commit(); db.refresh(legacy)
+    return obj
 
 @router.get("/floors", response_model=List[FloorResponse])
 def get_floors(db: Session = Depends(get_db)):
@@ -511,20 +614,43 @@ def update_floor(code: int, schema: FloorCreate, db: Session = Depends(get_db), 
     obj = db.query(Floor).filter(Floor.flr_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
     for k, v in schema.model_dump().items(): setattr(obj, k, v)
-    db.commit(); db.refresh(obj); return obj
+    legacy = db.query(FloorMast).filter(FloorMast.FlrCode == code).first()
+    if not legacy:
+        legacy = FloorMast(FlrCode=code)
+        db.add(legacy)
+    legacy.FlrName = obj.flr_name
+    legacy.FlrShowInList = obj.flr_show_in_list
+    legacy.FlrRecState = obj.flr_rec_state or 1
+    db.commit(); db.refresh(obj)
+    return obj
 
 @router.delete("/floors/{code}")
 def delete_floor(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
     obj = db.query(Floor).filter(Floor.flr_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
-    obj.flr_rec_state = 0; db.commit(); return {"ok": True}
+    obj.flr_rec_state = 0
+    legacy = db.query(FloorMast).filter(FloorMast.FlrCode == code).first()
+    if legacy:
+        legacy.FlrRecState = 0
+    db.commit()
+    return {"ok": True}
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Wards
 # ─────────────────────────────────────────────────────────────────────────────
 @router.post("/wards", response_model=WardResponse)
 def create_ward(schema: WardCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
-    obj = Ward(**schema.model_dump()); db.add(obj); db.commit(); db.refresh(obj); return obj
+    obj = Ward(**schema.model_dump())
+    db.add(obj); db.commit(); db.refresh(obj)
+    legacy = WardMast(
+        WrdCode=obj.wrd_code,
+        WrdName=obj.wrd_name,
+        WrdFlrCode=obj.wrd_flr_code,
+        WrdShowInList=obj.wrd_show_in_list,
+        WrdRecState=obj.wrd_rec_state or 1
+    )
+    db.add(legacy); db.commit(); db.refresh(legacy)
+    return obj
 
 @router.get("/wards", response_model=List[WardResponse])
 def get_wards(db: Session = Depends(get_db)):
@@ -535,20 +661,54 @@ def update_ward(code: int, schema: WardCreate, db: Session = Depends(get_db), cu
     obj = db.query(Ward).filter(Ward.wrd_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
     for k, v in schema.model_dump().items(): setattr(obj, k, v)
-    db.commit(); db.refresh(obj); return obj
+    legacy = db.query(WardMast).filter(WardMast.WrdCode == code).first()
+    if not legacy:
+        legacy = WardMast(WrdCode=code)
+        db.add(legacy)
+    legacy.WrdName = obj.wrd_name
+    legacy.WrdFlrCode = obj.wrd_flr_code
+    legacy.WrdShowInList = obj.wrd_show_in_list
+    legacy.WrdRecState = obj.wrd_rec_state or 1
+    db.commit(); db.refresh(obj)
+    return obj
 
 @router.delete("/wards/{code}")
 def delete_ward(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
     obj = db.query(Ward).filter(Ward.wrd_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
-    obj.wrd_rec_state = 0; db.commit(); return {"ok": True}
+    obj.wrd_rec_state = 0
+    legacy = db.query(WardMast).filter(WardMast.WrdCode == code).first()
+    if legacy:
+        legacy.WrdRecState = 0
+    db.commit()
+    return {"ok": True}
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Beds
 # ─────────────────────────────────────────────────────────────────────────────
 @router.post("/beds", response_model=BedResponse)
 def create_bed(schema: BedCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
-    obj = Bed(**schema.model_dump()); db.add(obj); db.commit(); db.refresh(obj); return obj
+    obj = Bed(**schema.model_dump())
+    db.add(obj); db.commit(); db.refresh(obj)
+    legacy = BedMast(
+        BdmCode=obj.bdm_code,
+        BdmName=obj.bdm_name,
+        BdmWrdCode=obj.bdm_wrd_code,
+        BdmFlrCode=obj.bdm_flr_code,
+        BdmSrvCode=obj.bdm_srv_code,
+        BdmIndex=obj.bdm_index,
+        BdmCharges=obj.bdm_charges,
+        BdmDiscAllowed=obj.bdm_disc_allowed,
+        BdmDiscPer=obj.bdm_disc_per,
+        BdmChkOutTimeBasis=obj.bdm_chk_out_time_basis,
+        BdmChkTime=obj.bdm_chk_time,
+        BdmFreeAllot=obj.bdm_free_allot,
+        BdmRemark=obj.bdm_remark,
+        BdmShowInList=obj.bdm_show_in_list,
+        BdmRecState=obj.bdm_rec_state or 1
+    )
+    db.add(legacy); db.commit(); db.refresh(legacy)
+    return obj
 
 @router.get("/beds", response_model=List[BedResponse])
 def get_beds(db: Session = Depends(get_db), is_occupied: Optional[bool] = None):
@@ -561,20 +721,60 @@ def update_bed(code: int, schema: BedCreate, db: Session = Depends(get_db), curr
     obj = db.query(Bed).filter(Bed.bdm_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
     for k, v in schema.model_dump().items(): setattr(obj, k, v)
-    db.commit(); db.refresh(obj); return obj
+    legacy = db.query(BedMast).filter(BedMast.BdmCode == code).first()
+    if not legacy:
+        legacy = BedMast(BdmCode=code)
+        db.add(legacy)
+    legacy.BdmName = obj.bdm_name
+    legacy.BdmWrdCode = obj.bdm_wrd_code
+    legacy.BdmFlrCode = obj.bdm_flr_code
+    legacy.BdmSrvCode = obj.bdm_srv_code
+    legacy.BdmIndex = obj.bdm_index
+    legacy.BdmCharges = obj.bdm_charges
+    legacy.BdmDiscAllowed = obj.bdm_disc_allowed
+    legacy.BdmDiscPer = obj.bdm_disc_per
+    legacy.BdmChkOutTimeBasis = obj.bdm_chk_out_time_basis
+    legacy.BdmChkTime = obj.bdm_chk_time
+    legacy.BdmFreeAllot = obj.bdm_free_allot
+    legacy.BdmRemark = obj.bdm_remark
+    legacy.BdmShowInList = obj.bdm_show_in_list
+    legacy.BdmRecState = obj.bdm_rec_state or 1
+    db.commit(); db.refresh(obj)
+    return obj
 
 @router.delete("/beds/{code}")
 def delete_bed(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
     obj = db.query(Bed).filter(Bed.bdm_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
-    obj.bdm_rec_state = 0; db.commit(); return {"ok": True}
+    obj.bdm_rec_state = 0
+    legacy = db.query(BedMast).filter(BedMast.BdmCode == code).first()
+    if legacy:
+        legacy.BdmRecState = 0
+    db.commit()
+    return {"ok": True}
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Service Groups
 # ─────────────────────────────────────────────────────────────────────────────
 @router.post("/service-groups", response_model=ServiceGroupResponse)
 def create_service_group(schema: ServiceGroupCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
-    obj = ServiceGroup(**schema.model_dump()); db.add(obj); db.commit(); db.refresh(obj); return obj
+    obj = ServiceGroup(**schema.model_dump())
+    db.add(obj); db.commit(); db.refresh(obj)
+    legacy = ServGrpMst(
+        SgpCode=obj.sgp_code,
+        SgpName=obj.sgp_name,
+        SgpIndex=obj.sgp_index,
+        SgpExpanded=obj.sgp_expanded,
+        SgpEditable=obj.sgp_editable,
+        SgpInfAllowed=obj.sgp_inf_allowed,
+        SgpDefAllowed=obj.sgp_def_allowed,
+        SgpDiscAllowed=obj.sgp_disc_allowed,
+        SgpDiscPer=obj.sgp_disc_per,
+        SgpShowInList=obj.sgp_show_in_list,
+        SgpRecState=obj.sgp_rec_state or 1
+    )
+    db.add(legacy); db.commit(); db.refresh(legacy)
+    return obj
 
 @router.get("/service-groups", response_model=List[ServiceGroupResponse])
 def get_service_groups(db: Session = Depends(get_db)):
@@ -585,20 +785,50 @@ def update_service_group(code: int, schema: ServiceGroupCreate, db: Session = De
     obj = db.query(ServiceGroup).filter(ServiceGroup.sgp_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
     for k, v in schema.model_dump().items(): setattr(obj, k, v)
-    db.commit(); db.refresh(obj); return obj
+    legacy = db.query(ServGrpMst).filter(ServGrpMst.SgpCode == code).first()
+    if not legacy:
+        legacy = ServGrpMst(SgpCode=code)
+        db.add(legacy)
+    legacy.SgpName = obj.sgp_name
+    legacy.SgpIndex = obj.sgp_index
+    legacy.SgpExpanded = obj.sgp_expanded
+    legacy.SgpEditable = obj.sgp_editable
+    legacy.SgpInfAllowed = obj.sgp_inf_allowed
+    legacy.SgpDefAllowed = obj.sgp_def_allowed
+    legacy.SgpDiscAllowed = obj.sgp_disc_allowed
+    legacy.SgpDiscPer = obj.sgp_disc_per
+    legacy.SgpShowInList = obj.sgp_show_in_list
+    legacy.SgpRecState = obj.sgp_rec_state or 1
+    db.commit(); db.refresh(obj)
+    return obj
 
 @router.delete("/service-groups/{code}")
 def delete_service_group(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
     obj = db.query(ServiceGroup).filter(ServiceGroup.sgp_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
-    obj.sgp_rec_state = 0; db.commit(); return {"ok": True}
+    obj.sgp_rec_state = 0
+    legacy = db.query(ServGrpMst).filter(ServGrpMst.SgpCode == code).first()
+    if legacy:
+        legacy.SgpRecState = 0
+    db.commit()
+    return {"ok": True}
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Services
 # ─────────────────────────────────────────────────────────────────────────────
 @router.post("/services", response_model=ServiceResponse)
 def create_service(schema: ServiceCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
-    obj = Service(**schema.model_dump()); db.add(obj); db.commit(); db.refresh(obj); return obj
+    obj = Service(**schema.model_dump())
+    db.add(obj); db.commit(); db.refresh(obj)
+    legacy = ServMast(
+        SrvCode=obj.srv_code,
+        SrvName=obj.srv_name,
+        SrvSgpCode=obj.srv_sgp_code,
+        SrvCharges=obj.srv_rate,
+        SrvRecState=obj.srv_rec_state or 1
+    )
+    db.add(legacy); db.commit(); db.refresh(legacy)
+    return obj
 
 @router.get("/services", response_model=List[ServiceResponse])
 def get_services(db: Session = Depends(get_db)):
@@ -609,13 +839,27 @@ def update_service(code: int, schema: ServiceCreate, db: Session = Depends(get_d
     obj = db.query(Service).filter(Service.srv_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
     for k, v in schema.model_dump().items(): setattr(obj, k, v)
-    db.commit(); db.refresh(obj); return obj
+    legacy = db.query(ServMast).filter(ServMast.SrvCode == code).first()
+    if not legacy:
+        legacy = ServMast(SrvCode=code)
+        db.add(legacy)
+    legacy.SrvName = obj.srv_name
+    legacy.SrvSgpCode = obj.srv_sgp_code
+    legacy.SrvCharges = obj.srv_rate
+    legacy.SrvRecState = obj.srv_rec_state or 1
+    db.commit(); db.refresh(obj)
+    return obj
 
 @router.delete("/services/{code}")
 def delete_service(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
     obj = db.query(Service).filter(Service.srv_code == code).first()
     if not obj: raise HTTPException(404, "Not found")
-    obj.srv_rec_state = 0; db.commit(); return {"ok": True}
+    obj.srv_rec_state = 0
+    legacy = db.query(ServMast).filter(ServMast.SrvCode == code).first()
+    if legacy:
+        legacy.SrvRecState = 0
+    db.commit()
+    return {"ok": True}
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Station Master
@@ -953,3 +1197,215 @@ def delete_diagnosis(code: int, db: Session = Depends(get_db), current_user=Depe
     if not obj: raise HTTPException(404, "Not found")
     obj.DigRecState = 0; db.commit()
     return {"ok": True}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Security Masters (UserRoleMst, UserMast, UserRightMst)
+# ─────────────────────────────────────────────────────────────────────────────
+from backend.models.auth import UserRoleMst, UserMast, UserRightMst
+from backend.schemas.auth import (
+    UserRoleCreate, UserRoleUpdate, UserRoleResponse,
+    UserMastCreate, UserMastUpdate, UserMastResponse,
+    UserRightCreate, UserRightUpdate, UserRightResponse,
+    ChangePasswordRequest
+)
+from backend.core.security import get_password_hash, verify_password
+
+@router.post("/user-roles", response_model=UserRoleResponse)
+def create_user_role(schema: UserRoleCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    role = UserRoleMst(UrlName=schema.UrlName, UrlRecState=1)
+    db.add(role)
+    db.commit()
+    db.refresh(role)
+    return role
+
+@router.get("/user-roles", response_model=List[UserRoleResponse])
+def get_user_roles(db: Session = Depends(get_db)):
+    return db.query(UserRoleMst).filter(UserRoleMst.UrlRecState != 0).all()
+
+@router.put("/user-roles/{code}", response_model=UserRoleResponse)
+def update_user_role(code: int, schema: UserRoleUpdate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    role = db.query(UserRoleMst).filter(UserRoleMst.UrlCode == code).first()
+    if not role:
+        raise HTTPException(404, "Role not found")
+    role.UrlName = schema.UrlName
+    if schema.UrlRecState is not None:
+        role.UrlRecState = schema.UrlRecState
+    db.commit()
+    db.refresh(role)
+    return role
+
+@router.delete("/user-roles/{code}")
+def delete_user_role(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    role = db.query(UserRoleMst).filter(UserRoleMst.UrlCode == code).first()
+    if not role:
+        raise HTTPException(404, "Role not found")
+    role.UrlRecState = 0
+    db.commit()
+    return {"ok": True}
+
+
+@router.post("/users", response_model=UserMastResponse)
+def create_user_mast(schema: UserMastCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    existing = db.query(UserMast).filter(UserMast.UsrName == schema.UsrName).first()
+    if existing:
+        raise HTTPException(400, "Username already exists")
+    
+    hashed_pwd = get_password_hash(schema.UsrPwd)
+    user = UserMast(
+        UsrName=schema.UsrName,
+        UsrPwd=hashed_pwd,
+        UsrUrlCode=schema.UsrUrlCode,
+        UsrRecState=schema.UsrRecState or 1
+    )
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    
+    role = db.query(UserRoleMst).filter(UserRoleMst.UrlCode == user.UsrUrlCode).first()
+    res = UserMastResponse.model_validate(user)
+    res.role_name = role.UrlName if role else None
+    return res
+
+@router.get("/users", response_model=List[UserMastResponse])
+def get_users_mast(db: Session = Depends(get_db)):
+    users = db.query(UserMast).filter(UserMast.UsrRecState != 0).all()
+    results = []
+    for u in users:
+        role = db.query(UserRoleMst).filter(UserRoleMst.UrlCode == u.UsrUrlCode).first()
+        res = UserMastResponse.model_validate(u)
+        res.role_name = role.UrlName if role else None
+        results.append(res)
+    return results
+
+@router.put("/users/{code}", response_model=UserMastResponse)
+def update_user_mast(code: int, schema: UserMastUpdate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    user = db.query(UserMast).filter(UserMast.UsrCode == code).first()
+    if not user:
+        raise HTTPException(404, "User not found")
+    
+    user.UsrName = schema.UsrName
+    user.UsrUrlCode = schema.UsrUrlCode
+    if schema.UsrRecState is not None:
+        user.UsrRecState = schema.UsrRecState
+    
+    if schema.UsrPwd:
+        user.UsrPwd = get_password_hash(schema.UsrPwd)
+        
+    db.commit()
+    db.refresh(user)
+    
+    role = db.query(UserRoleMst).filter(UserRoleMst.UrlCode == user.UsrUrlCode).first()
+    res = UserMastResponse.model_validate(user)
+    res.role_name = role.UrlName if role else None
+    return res
+
+@router.delete("/users/{code}")
+def delete_user_mast(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    user = db.query(UserMast).filter(UserMast.UsrCode == code).first()
+    if not user:
+        raise HTTPException(404, "User not found")
+    user.UsrRecState = 0
+    db.commit()
+    return {"ok": True}
+
+@router.post("/users/change-password")
+def change_user_password(schema: ChangePasswordRequest, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    user = db.query(UserMast).filter(UserMast.UsrCode == schema.UsrCode).first()
+    if not user:
+        raise HTTPException(404, "User not found")
+    
+    if not verify_password(schema.current_password, user.UsrPwd):
+        raise HTTPException(400, "Incorrect current password")
+        
+    user.UsrPwd = get_password_hash(schema.new_password)
+    db.commit()
+    return {"success": True, "message": "Password changed successfully"}
+
+
+@router.post("/user-rights", response_model=UserRightResponse)
+def create_user_right(schema: UserRightCreate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    query = db.query(UserRightMst).filter(UserRightMst.UhtSecuOptName == schema.UhtSecuOptName)
+    if schema.UhtUsrCode:
+        query = query.filter(UserRightMst.UhtUsrCode == schema.UhtUsrCode)
+    if schema.UhtUrlCode:
+        query = query.filter(UserRightMst.UhtUrlCode == schema.UhtUrlCode)
+        
+    existing = query.first()
+    if existing:
+         raise HTTPException(400, "User right for this security option already exists")
+         
+    right = UserRightMst(
+        UhtUsrCode=schema.UhtUsrCode,
+        UhtUrlCode=schema.UhtUrlCode,
+        UhtSecuOptName=schema.UhtSecuOptName,
+        UhtCanAdd=schema.UhtCanAdd,
+        UhtCanEdit=schema.UhtCanEdit,
+        UhtCanDelete=schema.UhtCanDelete,
+        UhtCanView=schema.UhtCanView,
+        UhtRemark=schema.UhtRemark,
+        UhtRecState=schema.UhtRecState or 1
+    )
+    db.add(right)
+    db.commit()
+    db.refresh(right)
+    
+    usr = db.query(UserMast).filter(UserMast.UsrCode == right.UhtUsrCode).first() if right.UhtUsrCode else None
+    role = db.query(UserRoleMst).filter(UserRoleMst.UrlCode == right.UhtUrlCode).first() if right.UhtUrlCode else None
+    
+    res = UserRightResponse.model_validate(right)
+    res.user_name = usr.UsrName if usr else None
+    res.role_name = role.UrlName if role else None
+    return res
+
+@router.get("/user-rights", response_model=List[UserRightResponse])
+def get_user_rights(db: Session = Depends(get_db)):
+    rights = db.query(UserRightMst).filter(UserRightMst.UhtRecState != 0).all()
+    results = []
+    for r in rights:
+        usr = db.query(UserMast).filter(UserMast.UsrCode == r.UhtUsrCode).first() if r.UhtUsrCode else None
+        role = db.query(UserRoleMst).filter(UserRoleMst.UrlCode == r.UhtUrlCode).first() if r.UhtUrlCode else None
+        
+        res = UserRightResponse.model_validate(r)
+        res.user_name = usr.UsrName if usr else None
+        res.role_name = role.UrlName if role else None
+        results.append(res)
+    return results
+
+@router.put("/user-rights/{code}", response_model=UserRightResponse)
+def update_user_right(code: int, schema: UserRightUpdate, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    right = db.query(UserRightMst).filter(UserRightMst.UhtCode == code).first()
+    if not right:
+        raise HTTPException(404, "User right not found")
+        
+    right.UhtUsrCode = schema.UhtUsrCode
+    right.UhtUrlCode = schema.UhtUrlCode
+    right.UhtSecuOptName = schema.UhtSecuOptName
+    right.UhtCanAdd = schema.UhtCanAdd
+    right.UhtCanEdit = schema.UhtCanEdit
+    right.UhtCanDelete = schema.UhtCanDelete
+    right.UhtCanView = schema.UhtCanView
+    right.UhtRemark = schema.UhtRemark
+    if schema.UhtRecState is not None:
+        right.UhtRecState = schema.UhtRecState
+        
+    db.commit()
+    db.refresh(right)
+    
+    usr = db.query(UserMast).filter(UserMast.UsrCode == right.UhtUsrCode).first() if right.UhtUsrCode else None
+    role = db.query(UserRoleMst).filter(UserRoleMst.UrlCode == right.UhtUrlCode).first() if right.UhtUrlCode else None
+    
+    res = UserRightResponse.model_validate(right)
+    res.user_name = usr.UsrName if usr else None
+    res.role_name = role.UrlName if role else None
+    return res
+
+@router.delete("/user-rights/{code}")
+def delete_user_right(code: int, db: Session = Depends(get_db), current_user=Depends(get_current_active_user)):
+    right = db.query(UserRightMst).filter(UserRightMst.UhtCode == code).first()
+    if not right:
+        raise HTTPException(404, "User right not found")
+    right.UhtRecState = 0
+    db.commit()
+    return {"ok": True}
+

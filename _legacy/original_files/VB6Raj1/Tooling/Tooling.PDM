@@ -1,0 +1,170 @@
+[Root]
+Most Recent Package=Bearing Tools
+
+
+[Package|Bearing Tools|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=E:\VB6Pack\Tooling\Tooling 24082013
+
+[Package|Bearing Tools|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Bearing Tools|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Bearing Tools|Files Found]
+
+[Package|Bearing Tools|Files Released]
+
+[Package|Bearing Tools|Missing Dependency Information]
+C:\Program Files\Common Files\SYSTEM\ADO\msjro.dll=
+C:\Program Files\Common Files\Microsoft Shared\DAO\dao360.dll=
+C:\Program Files\Common Files\SYSTEM\ADO\msadox.dll=
+C:\WINDOWS\SYSTEM\MSXML3.DLL=
+C:\Program Files\Microsoft Office\Office\EXCEL9.OLB=
+C:\Program Files\Microsoft Office\Office\MSACC9.OLB=
+C:\WINDOWS\system32\MSSTDFMT.DLL=
+C:\WINDOWS\system32\msxml3.dll=
+C:\Program Files\Microsoft Office\OFFICE11\EXCEL.EXE=
+C:\Program Files\Common Files\System\ado\msado26.tlb=
+C:\Program Files\Microsoft Office\OFFICE11\MSACC.OLB=
+
+[Package|Bearing Tools|Out-of-Date Dependency Information]
+C:\WINDOWS\SYSTEM\Mscomctl.ocx=
+C:\WINDOWS\SYSTEM\richtx32.ocx=
+C:\WINDOWS\SYSTEM\msflxgrd.ocx=
+C:\WINDOWS\SYSTEM\comdlg32.ocx=
+C:\WINDOWS\SYSTEM\Msstdfmt.dll=
+C:\WINDOWS\system32\MSCOMCTL.OCX=
+
+[Package|Bearing Tools|Files Added]
+
+[Package|Bearing Tools|Files Removed]
+c:\windows\system\msvbvm60.dll=
+c:\windows\system\oleaut32.dll=
+c:\windows\system\olepro32.dll=
+c:\windows\system\asycfilt.dll=
+c:\windows\system\stdole2.tlb=
+c:\program files\microsoft visual studio\vb98\wizards\pdwizard\redist\comcat.dll=
+
+[Package|Bearing Tools|Files In Project]
+E:\VB6Raj\Tooling\Tooling.exe=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\Program Files\Common Files\SYSTEM\ADO\msadox.dll=Yes
+C:\Program Files\Common Files\Microsoft Shared\DAO\dao360.dll=Yes
+C:\Program Files\Common Files\SYSTEM\ADO\msjro.dll=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\RICHED32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\WINDOWS\system32\oleaut32.dll=Yes
+C:\WINDOWS\system32\olepro32.dll=Yes
+C:\WINDOWS\system32\asycfilt.dll=Yes
+C:\WINDOWS\system32\stdole2.tlb=Yes
+C:\Program Files\Microsoft Office\OFFICE11\MSACC.OLB=Yes
+C:\Program Files\Common Files\System\ado\msado26.tlb=Yes
+C:\Program Files\Microsoft Office\OFFICE11\EXCEL.EXE=Yes
+C:\WINDOWS\system32\msxml3.dll=Yes
+C:\Program Files\Common Files\System\ado\msador15.dll=Yes
+C:\WINDOWS\system32\MSSTDFMT.DLL=Yes
+C:\WINDOWS\system32\MSBIND.DLL=Yes
+C:\WINDOWS\system32\MSADODC.OCX=Yes
+C:\WINDOWS\system32\COMDLG32.OCX=Yes
+C:\WINDOWS\system32\MSFLXGRD.OCX=Yes
+C:\WINDOWS\system32\RICHTX32.OCX=Yes
+C:\WINDOWS\system32\MSCOMCTL.OCX=Yes
+C:\WINDOWS\system32\MSWINSCK.OCX=Yes
+C:\WINDOWS\system32\MSDATGRD.OCX=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+
+[Package|Bearing Tools|Configure Registry Files]
+Applicable=No
+
+[Package|Bearing Tools|Configure Remote Servers]
+Applicable=No
+
+[Package|Bearing Tools|Install Locations]
+E:\VB6Raj\Tooling\Tooling.exe=$(AppPath)
+C:\WINDOWS\SYSTEM\msvbvm60.dll=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Office\Office\MSACC9.OLB=$(WinSysPath)
+C:\Program Files\Microsoft Office\Office\EXCEL9.OLB=$(WinSysPath)
+C:\WINDOWS\SYSTEM\MSXML3.DLL=$(WinSysPath)
+C:\Program Files\Common Files\SYSTEM\ADO\msadox.dll=$(WinSysPath)
+C:\Program Files\Common Files\Microsoft Shared\DAO\dao360.dll=$(WinSysPath)
+C:\WINDOWS\SYSTEM\Msstdfmt.dll=$(WinSysPath)
+C:\WINDOWS\SYSTEM\MSBIND.DLL=$(WinSysPath)
+C:\Program Files\Common Files\SYSTEM\ADO\msjro.dll=$(WinSysPath)
+C:\WINDOWS\SYSTEM\MSADODC.OCX=$(WinSysPath)
+C:\WINDOWS\SYSTEM\comdlg32.ocx=$(WinSysPath)
+C:\WINDOWS\SYSTEM\msflxgrd.ocx=$(WinSysPath)
+C:\WINDOWS\SYSTEM\richtx32.ocx=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\RICHED32.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\Mscomctl.ocx=$(WinSysPath)
+C:\WINDOWS\SYSTEM\MSWINSCK.OCX=$(WinSysPath)
+C:\WINDOWS\SYSTEM\Crystl32.OCX=$(WinSysPath)
+C:\WINDOWS\SYSTEM\crpe32.dll=$(WinSysPath)
+C:\WINDOWS\SYSTEM\MSDATGRD.OCX=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\SYSTEM\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\oleaut32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\olepro32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\stdole2.tlb=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Office\OFFICE11\MSACC.OLB=$(WinSysPath)
+C:\Program Files\Common Files\System\ado\msado26.tlb=$(WinSysPath)
+C:\Program Files\Microsoft Office\OFFICE11\EXCEL.EXE=$(AppPath)
+C:\WINDOWS\system32\msxml3.dll=$(WinSysPath)
+C:\Program Files\Common Files\System\ado\msador15.dll=$(CommonFilesSys)\ADO
+C:\WINDOWS\system32\MSSTDFMT.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSBIND.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MSADODC.OCX=$(WinSysPath)
+C:\WINDOWS\system32\COMDLG32.OCX=$(WinSysPath)
+C:\WINDOWS\system32\MSFLXGRD.OCX=$(WinSysPath)
+C:\WINDOWS\system32\RICHTX32.OCX=$(WinSysPath)
+C:\WINDOWS\system32\MSCOMCTL.OCX=$(WinSysPath)
+C:\WINDOWS\system32\MSWINSCK.OCX=$(WinSysPath)
+C:\WINDOWS\system32\MSDATGRD.OCX=$(WinSysPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+
+[Package|Bearing Tools|Configure Shared Files]
+Applicable=Yes
+E:\VB6Raj\Tooling\Tooling.exe=No
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=No
+C:\Program Files\Microsoft Office\OFFICE11\EXCEL.EXE=No
+
+[Package|Bearing Tools|Distribution]
+Type=single
+Size=
+Title=Bearing Tools
+
+[Package|Bearing Tools|IconGroups]
+Group0=Bearing Tools
+PrivateGroup0=True
+Parent0=$(Programs)
+
+[Package|Bearing Tools|Bearing Tools]
+Icon1=Tooling.exe
+Title1=Bearing Tools
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|Bearing Tools|Package]
+PackageFolder=E:\VB6Pack\Tooling\Tooling 24082013
+ProjectFolder=E:\VB6Raj\Tooling
+ServerSideCab=
+File1=E:\VB6Pack\Tooling\Tooling 24082013\setup.exe
+File2=E:\VB6Pack\Tooling\Tooling 24082013\Setup.Lst
+File3=E:\VB6Pack\Tooling\Tooling 24082013\Tooling.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz

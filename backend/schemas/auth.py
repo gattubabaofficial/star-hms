@@ -50,3 +50,77 @@ class UserRoleResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class UserMastCreate(BaseModel):
+    UsrName: str
+    UsrPwd: str
+    UsrUrlCode: int
+    UsrRecState: Optional[int] = 1
+
+
+class UserMastUpdate(BaseModel):
+    UsrName: str
+    UsrPwd: Optional[str] = None
+    UsrUrlCode: int
+    UsrRecState: Optional[int] = 1
+
+
+class UserMastResponse(BaseModel):
+    UsrCode: int
+    UsrName: str
+    UsrUrlCode: int
+    UsrRecState: int
+    role_name: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+
+class ChangePasswordRequest(BaseModel):
+    UsrCode: int
+    current_password: str
+    new_password: str
+
+
+class UserRightCreate(BaseModel):
+    UhtUsrCode: Optional[int] = None
+    UhtUrlCode: Optional[int] = None
+    UhtSecuOptName: str
+    UhtCanAdd: bool = False
+    UhtCanEdit: bool = False
+    UhtCanDelete: bool = False
+    UhtCanView: bool = False
+    UhtRemark: Optional[str] = None
+    UhtRecState: Optional[int] = 1
+
+
+class UserRightUpdate(BaseModel):
+    UhtUsrCode: Optional[int] = None
+    UhtUrlCode: Optional[int] = None
+    UhtSecuOptName: str
+    UhtCanAdd: bool = False
+    UhtCanEdit: bool = False
+    UhtCanDelete: bool = False
+    UhtCanView: bool = False
+    UhtRemark: Optional[str] = None
+    UhtRecState: Optional[int] = 1
+
+
+class UserRightResponse(BaseModel):
+    UhtCode: int
+    UhtUsrCode: Optional[int] = None
+    UhtUrlCode: Optional[int] = None
+    UhtSecuOptName: str
+    UhtCanAdd: bool
+    UhtCanEdit: bool
+    UhtCanDelete: bool
+    UhtCanView: bool
+    UhtRemark: Optional[str] = None
+    UhtRecState: int
+    user_name: Optional[str] = None
+    role_name: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+

@@ -1,0 +1,5570 @@
+VERSION 5.00
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Begin VB.Form frmHmsIpdOptions 
+   Appearance      =   0  'Flat
+   BackColor       =   &H80000005&
+   ClientHeight    =   9075
+   ClientLeft      =   60
+   ClientTop       =   60
+   ClientWidth     =   14010
+   ControlBox      =   0   'False
+   BeginProperty Font 
+      Name            =   "Verdana"
+      Size            =   8.25
+      Charset         =   0
+      Weight          =   400
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
+   EndProperty
+   KeyPreview      =   -1  'True
+   LinkTopic       =   "Form1"
+   ScaleHeight     =   9075
+   ScaleWidth      =   14010
+   ShowInTaskbar   =   0   'False
+   Begin VB.Frame frFormDtl 
+      Appearance      =   0  'Flat
+      BackColor       =   &H80000005&
+      Caption         =   "Detail"
+      BeginProperty Font 
+         Name            =   "Verdana"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H80000008&
+      Height          =   7815
+      Left            =   360
+      TabIndex        =   101
+      Top             =   960
+      Width           =   12615
+      Begin VB.CommandButton cmdSaveForm 
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000009&
+         Caption         =   "      &Save"
+         Height          =   255
+         Left            =   12000
+         Style           =   1  'Graphical
+         TabIndex        =   96
+         Top             =   7440
+         Width           =   375
+      End
+      Begin VB.TextBox txtOptName 
+         Appearance      =   0  'Flat
+         BeginProperty DataFormat 
+            Type            =   0
+            Format          =   "0"
+            HaveTrueFalseNull=   0
+            FirstDayOfWeek  =   0
+            FirstWeekOfYear =   0
+            LCID            =   1033
+            SubFormatType   =   0
+         EndProperty
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Left            =   1320
+         MaxLength       =   50
+         TabIndex        =   1
+         Top             =   360
+         Width           =   5295
+      End
+      Begin VB.TextBox mskFormBoundField 
+         Alignment       =   1  'Right Justify
+         Appearance      =   0  'Flat
+         BeginProperty DataFormat 
+            Type            =   1
+            Format          =   "0"
+            HaveTrueFalseNull=   0
+            FirstDayOfWeek  =   0
+            FirstWeekOfYear =   0
+            LCID            =   1033
+            SubFormatType   =   1
+         EndProperty
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Left            =   360
+         TabIndex        =   0
+         Tag             =   "AhCode"
+         Text            =   "-1"
+         Top             =   360
+         Width           =   855
+      End
+      Begin VB.Frame frIndrRgRefd 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00D2EAFF&
+         Caption         =   "Indoor On A/c.Refund Receipt (11):"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   6495
+         Left            =   240
+         TabIndex        =   152
+         Top             =   840
+         Width           =   12255
+         Begin VB.TextBox txtVtmName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   11
+            Left            =   2160
+            MaxLength       =   50
+            TabIndex        =   70
+            Top             =   1800
+            Width           =   3615
+         End
+         Begin VB.CheckBox chkVtmNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   11
+            Left            =   5880
+            TabIndex        =   71
+            Top             =   1800
+            Width           =   855
+         End
+         Begin VB.CheckBox chkPttRegNoNotZero 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Patient RegNo. not to be Zero:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   11
+            Left            =   240
+            TabIndex        =   69
+            Top             =   600
+            Width           =   4335
+         End
+         Begin VB.Label Label2 
+            Alignment       =   2  'Center
+            Caption         =   "Default Value Allocation"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Index           =   25
+            Left            =   240
+            TabIndex        =   154
+            Top             =   1200
+            Width           =   6495
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "On A/c.Refd. Type:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   24
+            Left            =   240
+            TabIndex        =   153
+            Top             =   1800
+            Width           =   1935
+         End
+      End
+      Begin VB.Frame frIndrRgPymt 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00C5DDFF&
+         Caption         =   "Indoor On A/c.Payment Receipt (10):"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   6495
+         Left            =   240
+         TabIndex        =   149
+         Top             =   840
+         Width           =   12255
+         Begin VB.CheckBox chkPttRegNoNotZero 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Patient RegNo. not to be Zero:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   10
+            Left            =   240
+            TabIndex        =   66
+            Top             =   600
+            Width           =   4335
+         End
+         Begin VB.CheckBox chkVtmNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   10
+            Left            =   5880
+            TabIndex        =   68
+            Top             =   1800
+            Width           =   855
+         End
+         Begin VB.TextBox txtVtmName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   10
+            Left            =   2160
+            MaxLength       =   50
+            TabIndex        =   67
+            Top             =   1800
+            Width           =   3615
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "On A/c.Pymt Type:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   23
+            Left            =   240
+            TabIndex        =   151
+            Top             =   1800
+            Width           =   1935
+         End
+         Begin VB.Label Label2 
+            Alignment       =   2  'Center
+            Caption         =   "Default Value Allocation"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Index           =   21
+            Left            =   240
+            TabIndex        =   150
+            Top             =   1200
+            Width           =   6495
+         End
+      End
+      Begin VB.Frame frServRateSystem 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00C6DBC1&
+         Caption         =   "Service Charges/Share System (12)"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   6495
+         Left            =   240
+         TabIndex        =   139
+         Top             =   840
+         Width           =   12255
+         Begin VB.CheckBox chkTimewseServShareSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Time-wise Service Share System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   5760
+            TabIndex        =   95
+            Top             =   4560
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkRTowseServShareSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Ref.To-wise Service Share System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   5760
+            TabIndex        =   94
+            Top             =   4200
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkRBywseServShareSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Ref.By-wise Service Share System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   5760
+            TabIndex        =   93
+            Top             =   3840
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkPcgwseServShareSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Patient Category-wise Service Share System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   5760
+            TabIndex        =   92
+            Top             =   3480
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkDctwseServShareSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Doctor-wise Service Share System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   5760
+            TabIndex        =   91
+            Top             =   3120
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkExtServShareSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H00C0C0C0&
+            Caption         =   "Extended Service Share System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   5760
+            TabIndex        =   90
+            Top             =   2760
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkTimewseServBargSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Time-wise Service Bargain System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   5760
+            TabIndex        =   89
+            Top             =   2160
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkRTowseServBargSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Ref.To-wise Service Bargain System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   5760
+            TabIndex        =   88
+            Top             =   1800
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkRBywseServBargSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Ref.By-wise Service Bargain System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   5760
+            TabIndex        =   87
+            Top             =   1440
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkPcgwseServBargSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Patient Category-wise Service Bargain System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   5760
+            TabIndex        =   86
+            Top             =   1080
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkDctwseServBargSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Doctor-wise Service Bargain System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   5760
+            TabIndex        =   85
+            Top             =   720
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkExtServBargSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H00C0C0C0&
+            Caption         =   "Extended Service Bargain System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   5760
+            TabIndex        =   84
+            Top             =   360
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkTimewseServDiscSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Time-wise Service Discount System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   240
+            TabIndex        =   83
+            Top             =   4560
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkTimewseServRateSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Time-wise Service Rate System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   240
+            TabIndex        =   77
+            Top             =   2160
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkRTowseServDiscSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Ref.To-wise Service Discount System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   240
+            TabIndex        =   82
+            Top             =   4200
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkRBywseServDiscSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Ref.By-wise Service Discount System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   240
+            TabIndex        =   81
+            Top             =   3840
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkPcgwseServDiscSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Patient Category-wise Service Discount System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   240
+            TabIndex        =   80
+            Top             =   3480
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkDctwseServDiscSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Doctor-wise Service Discount System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   240
+            TabIndex        =   79
+            Top             =   3120
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkExtServDiscSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H00C0C0C0&
+            Caption         =   "Extended Service Discount System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   240
+            TabIndex        =   78
+            Top             =   2760
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkRTowseServRateSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Ref.To-wise Service Rate System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   240
+            TabIndex        =   76
+            Top             =   1800
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkRBywseServRateSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Ref.By-wise Service Rate System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   240
+            TabIndex        =   75
+            Top             =   1440
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkPcgwseServRateSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Patient Category-wise Service Rate System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   240
+            TabIndex        =   74
+            Top             =   1080
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkDctwseServRateSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Doctor-wise Service Rate System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   240
+            TabIndex        =   73
+            Top             =   720
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkExtServRateSys 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H00C0C0C0&
+            Caption         =   "Extended Service Rate System"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   240
+            TabIndex        =   72
+            Top             =   360
+            Width           =   5055
+         End
+      End
+      Begin VB.Frame frIndrBlPymt 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00F1FFD8&
+         Caption         =   "Indoor Bill Payment Receipt (8):"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   6495
+         Left            =   240
+         TabIndex        =   143
+         Top             =   840
+         Width           =   12255
+         Begin VB.TextBox txtVtmName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   8
+            Left            =   2160
+            MaxLength       =   50
+            TabIndex        =   61
+            Top             =   1800
+            Width           =   3615
+         End
+         Begin VB.CheckBox chkVtmNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   8
+            Left            =   5880
+            TabIndex        =   62
+            Top             =   1800
+            Width           =   855
+         End
+         Begin VB.CheckBox chkPttRegNoNotZero 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Patient RegNo. not to be Zero:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   8
+            Left            =   240
+            TabIndex        =   60
+            Top             =   600
+            Width           =   4335
+         End
+         Begin VB.Label Label2 
+            Alignment       =   2  'Center
+            Caption         =   "Default Value Allocation"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Index           =   5
+            Left            =   240
+            TabIndex        =   145
+            Top             =   1200
+            Width           =   6495
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Bill Payment Type:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   2
+            Left            =   240
+            TabIndex        =   144
+            Top             =   1800
+            Width           =   1815
+         End
+      End
+      Begin VB.Frame frIndrPymt 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00B5F2EB&
+         Caption         =   "Indoor Payment Receipt (5):"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   6495
+         Left            =   240
+         TabIndex        =   133
+         Top             =   840
+         Width           =   12255
+         Begin VB.CheckBox chkPttRegNoNotZero 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Patient RegNo. not to be Zero:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   5
+            Left            =   240
+            TabIndex        =   51
+            Top             =   600
+            Width           =   4335
+         End
+         Begin VB.CheckBox chkVtmNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   5
+            Left            =   5760
+            TabIndex        =   53
+            Top             =   1800
+            Width           =   855
+         End
+         Begin VB.TextBox txtVtmName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   5
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   52
+            Top             =   1800
+            Width           =   3615
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Receipt Type:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   31
+            Left            =   240
+            TabIndex        =   135
+            Top             =   1800
+            Width           =   1815
+         End
+         Begin VB.Label Label2 
+            Alignment       =   2  'Center
+            Caption         =   "Default Value Allocation"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Index           =   30
+            Left            =   240
+            TabIndex        =   134
+            Top             =   1200
+            Width           =   6375
+         End
+      End
+      Begin VB.Frame frIndrBill 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00DFF3EB&
+         Caption         =   "Indoor Bill (7):"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   6495
+         Left            =   240
+         TabIndex        =   140
+         Top             =   840
+         Width           =   12255
+         Begin VB.CheckBox chkPttRegNoNotZero 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Patient RegNo. not to be Zero:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   7
+            Left            =   240
+            TabIndex        =   57
+            Top             =   600
+            Width           =   4335
+         End
+         Begin VB.CheckBox chkVtmNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   7
+            Left            =   5760
+            TabIndex        =   59
+            Top             =   1800
+            Width           =   855
+         End
+         Begin VB.TextBox txtVtmName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   7
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   58
+            Top             =   1800
+            Width           =   3615
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Bill Type:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   1
+            Left            =   240
+            TabIndex        =   142
+            Top             =   1800
+            Width           =   1815
+         End
+         Begin VB.Label Label2 
+            Alignment       =   2  'Center
+            Caption         =   "Default Value Allocation"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Index           =   0
+            Left            =   240
+            TabIndex        =   141
+            Top             =   1200
+            Width           =   6375
+         End
+      End
+      Begin VB.Frame frIndrRcpt 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00DFF3DC&
+         Caption         =   "Indoor Receipt (4):"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   6495
+         Left            =   240
+         TabIndex        =   130
+         Top             =   840
+         Width           =   12255
+         Begin VB.TextBox txtVtmName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   4
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   49
+            Top             =   1800
+            Width           =   3615
+         End
+         Begin VB.CheckBox chkVtmNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   4
+            Left            =   5760
+            TabIndex        =   50
+            Top             =   1800
+            Width           =   855
+         End
+         Begin VB.CheckBox chkPttRegNoNotZero 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Patient RegNo. not to be Zero:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   4
+            Left            =   240
+            TabIndex        =   48
+            Top             =   600
+            Width           =   4335
+         End
+         Begin VB.Label Label2 
+            Alignment       =   2  'Center
+            Caption         =   "Default Value Allocation"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Index           =   40
+            Left            =   240
+            TabIndex        =   132
+            Top             =   1200
+            Width           =   6375
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Receipt Type:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   36
+            Left            =   240
+            TabIndex        =   131
+            Top             =   1800
+            Width           =   1815
+         End
+      End
+      Begin VB.Frame frPatMast 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00FFD7B7&
+         Caption         =   "Patient Registration (1):"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   6495
+         Left            =   240
+         TabIndex        =   98
+         Top             =   840
+         Width           =   12255
+         Begin VB.CheckBox chkPttRegNoAutoNumber 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Patient Reg.No. AutoNumbering"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   1
+            Left            =   240
+            TabIndex        =   2
+            Top             =   480
+            Width           =   4935
+         End
+         Begin VB.TextBox txtStnName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            Enabled         =   0   'False
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   1
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   8
+            Top             =   3120
+            Width           =   3615
+         End
+         Begin VB.TextBox txtAraName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   1
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   6
+            Top             =   2760
+            Width           =   3615
+         End
+         Begin VB.TextBox txtAhName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   1
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   12
+            Top             =   3840
+            Width           =   3615
+         End
+         Begin VB.TextBox txtPcgName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   1
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   10
+            Top             =   3480
+            Width           =   3615
+         End
+         Begin VB.CheckBox chkAraNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   1
+            Left            =   5760
+            TabIndex        =   7
+            Top             =   2760
+            Width           =   855
+         End
+         Begin VB.CheckBox chkStnNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   1
+            Left            =   5760
+            TabIndex        =   9
+            Top             =   3120
+            Width           =   855
+         End
+         Begin VB.CheckBox chkPcgNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   1
+            Left            =   5760
+            TabIndex        =   11
+            Top             =   3480
+            Width           =   855
+         End
+         Begin VB.CheckBox chkAhNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   1
+            Left            =   5760
+            TabIndex        =   13
+            Top             =   3840
+            Width           =   855
+         End
+         Begin VB.CheckBox chkPttRegNoAddModeChange 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Allow Changing Patient RegNo. in Add Mode:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   1
+            Left            =   240
+            TabIndex        =   3
+            Top             =   840
+            Width           =   4935
+         End
+         Begin VB.CheckBox chkPttRegNoEditModeChange 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Allow Changing Patient RegNo. in Edit Mode:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   1
+            Left            =   240
+            TabIndex        =   4
+            Top             =   1200
+            Width           =   4935
+         End
+         Begin VB.CheckBox chkPttRegNoNotZero 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Patient RegNo. not to be Zero:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   1
+            Left            =   240
+            TabIndex        =   5
+            Top             =   1560
+            Width           =   4935
+         End
+         Begin VB.Label Label2 
+            Alignment       =   2  'Center
+            Caption         =   "Default Value Allocation"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Index           =   15
+            Left            =   240
+            TabIndex        =   113
+            Top             =   2160
+            Width           =   6375
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Station:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   8
+            Left            =   240
+            TabIndex        =   112
+            Top             =   3120
+            Width           =   1695
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Area:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   7
+            Left            =   240
+            TabIndex        =   111
+            Top             =   2760
+            Width           =   1695
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Account Head:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   6
+            Left            =   240
+            TabIndex        =   110
+            Top             =   3840
+            Width           =   1695
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Category:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   4
+            Left            =   240
+            TabIndex        =   109
+            Top             =   3480
+            Width           =   1695
+         End
+      End
+      Begin VB.Frame frIndrReg 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00FFD7B7&
+         Caption         =   "Indoor Registration (2):"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   6495
+         Left            =   240
+         TabIndex        =   114
+         Top             =   840
+         Width           =   12255
+         Begin VB.CheckBox chkPttRegNoAutoNumber 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Patient Reg.No. AutoNumbering"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   2
+            Left            =   240
+            TabIndex        =   14
+            Top             =   480
+            Width           =   5055
+         End
+         Begin VB.TextBox txtBdmName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   2
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   34
+            Top             =   5640
+            Width           =   3615
+         End
+         Begin VB.TextBox txtFDigName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   2
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   32
+            Top             =   5280
+            Width           =   3615
+         End
+         Begin VB.TextBox txtRByName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   2
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   30
+            Top             =   4920
+            Width           =   3615
+         End
+         Begin VB.TextBox txtCDctName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   2
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   28
+            Top             =   4560
+            Width           =   3615
+         End
+         Begin VB.TextBox txtVtmName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   2
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   26
+            Top             =   4200
+            Width           =   3615
+         End
+         Begin VB.TextBox txtStnName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            Enabled         =   0   'False
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   2
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   20
+            Top             =   3120
+            Width           =   3615
+         End
+         Begin VB.TextBox txtAraName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   2
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   18
+            Top             =   2760
+            Width           =   3615
+         End
+         Begin VB.TextBox txtAhName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   2
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   24
+            Top             =   3840
+            Width           =   3615
+         End
+         Begin VB.TextBox txtPcgName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   2
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   22
+            Top             =   3480
+            Width           =   3615
+         End
+         Begin VB.CheckBox chkAraNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   2
+            Left            =   5760
+            TabIndex        =   19
+            Top             =   2760
+            Width           =   855
+         End
+         Begin VB.CheckBox chkStnNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   2
+            Left            =   5760
+            TabIndex        =   21
+            Top             =   3120
+            Width           =   855
+         End
+         Begin VB.CheckBox chkPcgNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   2
+            Left            =   5760
+            TabIndex        =   23
+            Top             =   3480
+            Width           =   855
+         End
+         Begin VB.CheckBox chkAhNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   2
+            Left            =   5760
+            TabIndex        =   25
+            Top             =   3840
+            Width           =   855
+         End
+         Begin VB.CheckBox chkVtmNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   2
+            Left            =   5760
+            TabIndex        =   27
+            Top             =   4200
+            Width           =   855
+         End
+         Begin VB.CheckBox chkCDctNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   2
+            Left            =   5760
+            TabIndex        =   29
+            Top             =   4560
+            Width           =   855
+         End
+         Begin VB.CheckBox chkRByNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   2
+            Left            =   5760
+            TabIndex        =   31
+            Top             =   4920
+            Width           =   855
+         End
+         Begin VB.CheckBox chkFDigNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   2
+            Left            =   5760
+            TabIndex        =   33
+            Top             =   5280
+            Width           =   855
+         End
+         Begin VB.CheckBox chkBdmNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   2
+            Left            =   5760
+            TabIndex        =   35
+            Top             =   5640
+            Width           =   855
+         End
+         Begin VB.CheckBox chkPttRegNoAddModeChange 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Allow Changing Patient RegNo. in Add Mode:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   2
+            Left            =   240
+            TabIndex        =   15
+            Top             =   840
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkPttRegNoEditModeChange 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Allow Changing Patient RegNo. in Edit Mode:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   2
+            Left            =   240
+            TabIndex        =   16
+            Top             =   1200
+            Width           =   5055
+         End
+         Begin VB.CheckBox chkPttRegNoNotZero 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Patient RegNo. not to be Zero:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   2
+            Left            =   240
+            TabIndex        =   17
+            Top             =   1560
+            Width           =   5055
+         End
+         Begin VB.Label Label2 
+            Alignment       =   2  'Center
+            Caption         =   "Default Value Allocation"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Index           =   20
+            Left            =   240
+            TabIndex        =   124
+            Top             =   2160
+            Width           =   6375
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Final Diagnosis:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   19
+            Left            =   240
+            TabIndex        =   123
+            Top             =   5280
+            Width           =   1815
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Ref.By:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   18
+            Left            =   240
+            TabIndex        =   122
+            Top             =   4920
+            Width           =   1815
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Consulting Doctor:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   17
+            Left            =   240
+            TabIndex        =   121
+            Top             =   4560
+            Width           =   1815
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "IPD Type:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   16
+            Left            =   240
+            TabIndex        =   120
+            Top             =   4200
+            Width           =   1815
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Station:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   14
+            Left            =   240
+            TabIndex        =   119
+            Top             =   3120
+            Width           =   1815
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Area:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   13
+            Left            =   240
+            TabIndex        =   118
+            Top             =   2760
+            Width           =   1815
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Account Head:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   12
+            Left            =   240
+            TabIndex        =   117
+            Top             =   3840
+            Width           =   1815
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Category:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   11
+            Left            =   240
+            TabIndex        =   116
+            Top             =   3480
+            Width           =   1815
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Bed Name:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   3
+            Left            =   240
+            TabIndex        =   115
+            Top             =   5640
+            Width           =   1815
+         End
+      End
+      Begin VB.Frame frBedMast 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00DFF3FF&
+         Caption         =   "Bed Master (3):"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   6495
+         Left            =   240
+         TabIndex        =   125
+         Top             =   840
+         Width           =   12255
+         Begin VB.ComboBox cmbBdmChkOutTimeBasis 
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   315
+            Left            =   2400
+            Style           =   2  'Dropdown List
+            TabIndex        =   38
+            Top             =   1440
+            Width           =   3615
+         End
+         Begin VB.CheckBox chkBdmChkOutTimeBasisCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   6120
+            TabIndex        =   39
+            Top             =   1440
+            Width           =   855
+         End
+         Begin VB.CheckBox chkBdmChargesCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   6120
+            TabIndex        =   37
+            Top             =   1080
+            Width           =   855
+         End
+         Begin VB.TextBox mskBdmCharges 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   1
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   1
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Left            =   2400
+            TabIndex        =   36
+            Tag             =   "AhCode"
+            Text            =   "0.00"
+            Top             =   1080
+            Width           =   1455
+         End
+         Begin VB.TextBox txtSrvName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   3
+            Left            =   2400
+            MaxLength       =   50
+            TabIndex        =   46
+            Top             =   2880
+            Width           =   3615
+         End
+         Begin VB.CheckBox chkSrvNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   3
+            Left            =   6120
+            TabIndex        =   47
+            Top             =   2880
+            Width           =   855
+         End
+         Begin VB.CheckBox chkBdmChkTimeCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   6120
+            TabIndex        =   41
+            Top             =   1800
+            Width           =   855
+         End
+         Begin VB.TextBox txtBdmChkTime_str 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   1
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   1
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Left            =   2400
+            TabIndex        =   40
+            Tag             =   "AhCode"
+            Text            =   "00:00"
+            Top             =   1800
+            Width           =   1095
+         End
+         Begin VB.CheckBox chkWrdNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   3
+            Left            =   6120
+            TabIndex        =   45
+            Top             =   2520
+            Width           =   855
+         End
+         Begin VB.CheckBox chkFlrNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   3
+            Left            =   6120
+            TabIndex        =   43
+            Top             =   2160
+            Width           =   855
+         End
+         Begin VB.TextBox txtFlrName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   3
+            Left            =   2400
+            MaxLength       =   50
+            TabIndex        =   42
+            Top             =   2160
+            Width           =   3615
+         End
+         Begin VB.TextBox txtWrdName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   3
+            Left            =   2400
+            MaxLength       =   50
+            TabIndex        =   44
+            Top             =   2520
+            Width           =   3615
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Standard Charges:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   35
+            Left            =   240
+            TabIndex        =   157
+            Top             =   1080
+            Width           =   2175
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Check Out Time Basis:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   34
+            Left            =   240
+            TabIndex        =   156
+            Top             =   1440
+            Width           =   2175
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Service Name:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   29
+            Left            =   240
+            TabIndex        =   155
+            Top             =   2880
+            Width           =   2175
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Check Out Time:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   28
+            Left            =   240
+            TabIndex        =   129
+            Top             =   1800
+            Width           =   2175
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Floor Name:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   27
+            Left            =   240
+            TabIndex        =   128
+            Top             =   2160
+            Width           =   2175
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Ward Name:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   26
+            Left            =   240
+            TabIndex        =   127
+            Top             =   2520
+            Width           =   2175
+         End
+         Begin VB.Label Label2 
+            Alignment       =   2  'Center
+            Caption         =   "Default Value Allocation"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Index           =   22
+            Left            =   240
+            TabIndex        =   126
+            Top             =   600
+            Width           =   6375
+         End
+      End
+      Begin VB.Frame frIndrBlRefd 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00D6FDEB&
+         Caption         =   "Indoor Bill Refund Receipt (9):"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   6495
+         Left            =   240
+         TabIndex        =   146
+         Top             =   840
+         Width           =   12255
+         Begin VB.CheckBox chkPttRegNoNotZero 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Patient RegNo. not to be Zero:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   9
+            Left            =   240
+            TabIndex        =   63
+            Top             =   600
+            Width           =   4335
+         End
+         Begin VB.CheckBox chkVtmNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   9
+            Left            =   5760
+            TabIndex        =   65
+            Top             =   1800
+            Width           =   855
+         End
+         Begin VB.TextBox txtVtmName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   9
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   64
+            Top             =   1800
+            Width           =   3615
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Bill Refund Type:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   10
+            Left            =   240
+            TabIndex        =   148
+            Top             =   1800
+            Width           =   1815
+         End
+         Begin VB.Label Label2 
+            Alignment       =   2  'Center
+            Caption         =   "Default Value Allocation"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Index           =   9
+            Left            =   240
+            TabIndex        =   147
+            Top             =   1200
+            Width           =   6375
+         End
+      End
+      Begin VB.Frame frIndrRefd 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00DFE0FF&
+         Caption         =   "Indoor Refund Receipt (6):"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   6495
+         Left            =   240
+         TabIndex        =   136
+         Top             =   840
+         Width           =   12255
+         Begin VB.TextBox txtVtmName 
+            Appearance      =   0  'Flat
+            BeginProperty DataFormat 
+               Type            =   0
+               Format          =   "0"
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   1033
+               SubFormatType   =   0
+            EndProperty
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   285
+            Index           =   6
+            Left            =   2040
+            MaxLength       =   50
+            TabIndex        =   55
+            Top             =   1800
+            Width           =   3615
+         End
+         Begin VB.CheckBox chkVtmNameCFD 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "C/F:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   6
+            Left            =   5760
+            TabIndex        =   56
+            Top             =   1800
+            Width           =   855
+         End
+         Begin VB.CheckBox chkPttRegNoNotZero 
+            Alignment       =   1  'Right Justify
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            Caption         =   "Patient RegNo. not to be Zero:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   6
+            Left            =   240
+            TabIndex        =   54
+            Top             =   600
+            Width           =   4335
+         End
+         Begin VB.Label Label2 
+            Alignment       =   2  'Center
+            Caption         =   "Default Value Allocation"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Index           =   33
+            Left            =   240
+            TabIndex        =   138
+            Top             =   1200
+            Width           =   6375
+         End
+         Begin VB.Label Label2 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Receipt Type:"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Index           =   32
+            Left            =   240
+            TabIndex        =   137
+            Top             =   1800
+            Width           =   1815
+         End
+      End
+   End
+   Begin VB.TextBox txtVoid 
+      CausesValidation=   0   'False
+      Height          =   375
+      Left            =   0
+      TabIndex        =   97
+      TabStop         =   0   'False
+      Text            =   "Void"
+      Top             =   9000
+      Width           =   375
+   End
+   Begin VB.CommandButton cmdFormEnter 
+      Appearance      =   0  'Flat
+      BackColor       =   &H00FFFFFF&
+      Default         =   -1  'True
+      BeginProperty Font 
+         Name            =   "Arial Black"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   8760
+      MaskColor       =   &H000000FF&
+      TabIndex        =   104
+      TabStop         =   0   'False
+      Top             =   0
+      UseMaskColor    =   -1  'True
+      Width           =   255
+   End
+   Begin VB.CommandButton cmdFormEscape 
+      Appearance      =   0  'Flat
+      BackColor       =   &H008080FF&
+      Cancel          =   -1  'True
+      Caption         =   "X"
+      BeginProperty Font 
+         Name            =   "Arial Black"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   8040
+      MaskColor       =   &H000000FF&
+      Style           =   1  'Graphical
+      TabIndex        =   103
+      TabStop         =   0   'False
+      Top             =   0
+      Width           =   255
+   End
+   Begin VB.ComboBox cmbFormEntryMode 
+      Appearance      =   0  'Flat
+      Enabled         =   0   'False
+      BeginProperty Font 
+         Name            =   "Verdana"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   315
+      ItemData        =   "HmsIpOpt.frx":0000
+      Left            =   0
+      List            =   "HmsIpOpt.frx":000D
+      Style           =   1  'Simple Combo
+      TabIndex        =   102
+      TabStop         =   0   'False
+      Text            =   "cmbFormMode"
+      Top             =   360
+      Width           =   1455
+   End
+   Begin VB.Frame frFormSmry 
+      Appearance      =   0  'Flat
+      BackColor       =   &H80000005&
+      Caption         =   "Summary"
+      BeginProperty Font 
+         Name            =   "Verdana"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H80000008&
+      Height          =   5535
+      Left            =   1320
+      TabIndex        =   100
+      Top             =   720
+      Width           =   9855
+      Begin VB.TextBox txtList1Col 
+         Appearance      =   0  'Flat
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Index           =   0
+         Left            =   120
+         MousePointer    =   1  'Arrow
+         TabIndex        =   107
+         TabStop         =   0   'False
+         Top             =   1560
+         Width           =   1335
+      End
+      Begin VB.TextBox txtSearch1Text 
+         Appearance      =   0  'Flat
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Left            =   960
+         TabIndex        =   105
+         Top             =   360
+         Width           =   4215
+      End
+      Begin MSFlexGridLib.MSFlexGrid Mfgrd1 
+         Height          =   4335
+         Left            =   120
+         TabIndex        =   106
+         Top             =   720
+         Width           =   6855
+         _ExtentX        =   12091
+         _ExtentY        =   7646
+         _Version        =   393216
+         RowHeightMin    =   315
+         FocusRect       =   2
+         HighLight       =   2
+         SelectionMode   =   1
+         Appearance      =   0
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin VB.Label Label1 
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Search:"
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   255
+         Index           =   1
+         Left            =   120
+         TabIndex        =   108
+         Top             =   360
+         Width           =   735
+      End
+   End
+   Begin VB.Label lblFormHeading 
+      Alignment       =   2  'Center
+      Appearance      =   0  'Flat
+      BackColor       =   &H00E0E0E0&
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   "Hospital Indoor Options"
+      BeginProperty Font 
+         Name            =   "Verdana"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H80000008&
+      Height          =   375
+      Left            =   0
+      TabIndex        =   99
+      Top             =   0
+      Width           =   9015
+   End
+End
+Attribute VB_Name = "frmHmsIpdOptions"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+
+Option Explicit
+
+Dim mFormLoaded As Boolean, mLastKeyPressed As Integer, mMaskKeyPressed As Integer
+Dim mOptCode As Long
+Dim mRemoteAccess As Boolean, mEntrySaved As Boolean, mEntryAborted As Boolean
+Dim dbHmsDatabase As New ADODB.Connection, dbAcDatabase As New ADODB.Connection
+'Dim datRecset As New ADODB.Recordset
+Dim mOptName_old As String
+Dim clsOPT As clsHmsIpdOptionsEntry, mActiveControl As Object, clsListStru As clsSelectQueryStructure
+
+Dim fcmbAraName As clsComFlexSearch, fcmbStnName As clsComFlexSearch, fcmbAhName As clsComFlexSearch, fcmbVtmName As clsComFlexSearch
+Dim fcmbPcgName As clsHmsFlexSearch, fcmbCDctName As clsHmsFlexSearch, fcmbRByName As clsHmsFlexSearch, fcmbFDigName As clsHmsFlexSearch, fcmbSrvName As clsHmsFlexSearch, fcmbBdmName As clsHmsFlexSearch
+Dim fcmbFlrName As clsHmsFlexSearch, fcmbWrdName As clsHmsFlexSearch
+
+Const cOPT_PATMAST = 1
+Const cOPT_INDRREG = 2
+Const cOPT_BEDMAST = 3
+Const cOPT_INDRRCPT = 4
+Const cOPT_INDRPYMT = 5
+Const cOPT_INDRREFD = 6
+Const cOPT_INDRBILL = 7
+Const cOPT_INDRBLPYMT = 8
+Const cOPT_INDRBLREFD = 9
+Const cOPT_INDRRGPYMT = 10
+Const cOPT_INDRRGREFD = 11
+Const cOPT_SERVRATESYS = 12
+
+'Public Property Let RemoteAccessCode(ByVal mAccessCode As Long)
+'mRemoteAccess = True
+'mOptCode = mAccessCode
+'End Property
+
+Public Property Get EntryBoundCode() As Long
+EntryBoundCode = Val(mskFormBoundField.Text)
+End Property
+
+Public Property Get EntrySaved() As Boolean
+EntrySaved = mEntrySaved
+End Property
+
+Public Property Get EntryAborted() As Boolean
+EntryAborted = mEntryAborted
+End Property
+
+Public Property Get OptName() As String
+OptName = txtOptName.Text
+End Property
+
+Public Property Get FormAddEditMode() As Integer
+FormAddEditMode = cmbFormEntryMode.ListIndex
+End Property
+
+Public Property Let FormAddEditMode(ByVal New_FormEntryMode As Integer)
+cmbFormEntryMode.ListIndex = New_FormEntryMode
+ChkEntryModeSign cmbFormEntryMode
+
+End Property
+
+Public Property Get SecuMenuName() As String
+SecuMenuName = Me.Name
+End Property
+
+Private Sub chkAhNameCFD_GotFocus(Index As Integer)
+FlashActiveControl chkAhNameCFD(Index), True
+End Sub
+
+Private Sub chkAhNameCFD_LostFocus(Index As Integer)
+FlashActiveControl chkAhNameCFD(Index), False
+End Sub
+
+Private Sub chkAraNameCFD_GotFocus(Index As Integer)
+FlashActiveControl chkAraNameCFD(Index), True
+End Sub
+
+Private Sub chkAraNameCFD_LostFocus(Index As Integer)
+FlashActiveControl chkAraNameCFD(Index), False
+End Sub
+
+Private Sub chkBdmChargesCFD_GotFocus()
+FlashActiveControl chkBdmChargesCFD, True
+End Sub
+
+Private Sub chkBdmChargesCFD_LostFocus()
+FlashActiveControl chkBdmChargesCFD, False
+End Sub
+
+Private Sub chkBdmChkOutTimeBasisCFD_GotFocus()
+FlashActiveControl chkBdmChkOutTimeBasisCFD, True
+End Sub
+
+Private Sub chkBdmChkOutTimeBasisCFD_LostFocus()
+FlashActiveControl chkBdmChkOutTimeBasisCFD, False
+End Sub
+
+Private Sub chkBdmChkTimeCFD_GotFocus()
+FlashActiveControl chkBdmChkTimeCFD, True
+End Sub
+
+Private Sub chkBdmChkTimeCFD_LostFocus()
+FlashActiveControl chkBdmChkTimeCFD, False
+End Sub
+
+Private Sub chkBdmNameCFD_GotFocus(Index As Integer)
+FlashActiveControl chkBdmNameCFD(Index), True
+End Sub
+
+Private Sub chkBdmNameCFD_LostFocus(Index As Integer)
+FlashActiveControl chkBdmNameCFD(Index), False
+End Sub
+
+Private Sub chkCDctNameCFD_GotFocus(Index As Integer)
+FlashActiveControl chkCDctNameCFD(Index), True
+End Sub
+
+Private Sub chkCDctNameCFD_LostFocus(Index As Integer)
+FlashActiveControl chkCDctNameCFD(Index), False
+End Sub
+
+Private Sub chkExtServRateSys_GotFocus()
+FlashActiveControl chkExtServRateSys, True
+End Sub
+
+Private Sub chkExtServRateSys_LostFocus()
+FlashActiveControl chkExtServRateSys, False
+chkExtServRateSys.BackColor = vbButtonShadow
+End Sub
+
+Private Sub chkDctwseServRateSys_GotFocus()
+FlashActiveControl chkDctwseServRateSys, True
+End Sub
+
+Private Sub chkDctwseServRateSys_LostFocus()
+FlashActiveControl chkDctwseServRateSys, False
+End Sub
+
+Private Sub chkPcgwseServRateSys_GotFocus()
+FlashActiveControl chkPcgwseServRateSys, True
+End Sub
+
+Private Sub chkPcgwseServRateSys_LostFocus()
+FlashActiveControl chkPcgwseServRateSys, False
+End Sub
+
+Private Sub chkRBywseServRateSys_GotFocus()
+FlashActiveControl chkRBywseServRateSys, True
+End Sub
+
+Private Sub chkRBywseServRateSys_LostFocus()
+FlashActiveControl chkRBywseServRateSys, False
+End Sub
+
+Private Sub chkRTowseServRateSys_GotFocus()
+FlashActiveControl chkRTowseServRateSys, True
+End Sub
+
+Private Sub chkRTowseServRateSys_LostFocus()
+FlashActiveControl chkRTowseServRateSys, False
+End Sub
+
+Private Sub chkTimewseServRateSys_GotFocus()
+FlashActiveControl chkTimewseServRateSys, True
+End Sub
+
+Private Sub chkTimewseServRateSys_LostFocus()
+FlashActiveControl chkTimewseServRateSys, False
+End Sub
+
+Private Sub chkExtServDiscSys_GotFocus()
+FlashActiveControl chkExtServDiscSys, True
+End Sub
+
+Private Sub chkExtServDiscSys_LostFocus()
+FlashActiveControl chkExtServDiscSys, False
+chkExtServDiscSys.BackColor = vbButtonShadow
+End Sub
+
+Private Sub chkDctwseServDiscSys_GotFocus()
+FlashActiveControl chkDctwseServDiscSys, True
+End Sub
+
+Private Sub chkDctwseServDiscSys_LostFocus()
+FlashActiveControl chkDctwseServDiscSys, False
+End Sub
+
+Private Sub chkPcgwseServDiscSys_GotFocus()
+FlashActiveControl chkPcgwseServDiscSys, True
+End Sub
+
+Private Sub chkPcgwseServDiscSys_LostFocus()
+FlashActiveControl chkPcgwseServDiscSys, False
+End Sub
+
+Private Sub chkRBywseServDiscSys_GotFocus()
+FlashActiveControl chkRBywseServDiscSys, True
+End Sub
+
+Private Sub chkRBywseServDiscSys_LostFocus()
+FlashActiveControl chkRBywseServDiscSys, False
+End Sub
+
+Private Sub chkRTowseServDiscSys_GotFocus()
+FlashActiveControl chkRTowseServDiscSys, True
+End Sub
+
+Private Sub chkRTowseServDiscSys_LostFocus()
+FlashActiveControl chkRTowseServDiscSys, False
+End Sub
+
+Private Sub chkTimewseServDiscSys_GotFocus()
+FlashActiveControl chkTimewseServDiscSys, True
+End Sub
+
+Private Sub chkTimewseServDiscSys_LostFocus()
+FlashActiveControl chkTimewseServDiscSys, False
+End Sub
+
+Private Sub chkExtServBargSys_GotFocus()
+FlashActiveControl chkExtServBargSys, True
+End Sub
+
+Private Sub chkExtServBargSys_LostFocus()
+FlashActiveControl chkExtServBargSys, False
+chkExtServBargSys.BackColor = vbButtonShadow
+End Sub
+
+Private Sub chkDctwseServBargSys_GotFocus()
+FlashActiveControl chkDctwseServBargSys, True
+End Sub
+
+Private Sub chkDctwseServBargSys_LostFocus()
+FlashActiveControl chkDctwseServBargSys, False
+End Sub
+
+Private Sub chkPcgwseServBargSys_GotFocus()
+FlashActiveControl chkPcgwseServBargSys, True
+End Sub
+
+Private Sub chkPcgwseServBargSys_LostFocus()
+FlashActiveControl chkPcgwseServBargSys, False
+End Sub
+
+Private Sub chkRBywseServBargSys_GotFocus()
+FlashActiveControl chkRBywseServBargSys, True
+End Sub
+
+Private Sub chkRBywseServBargSys_LostFocus()
+FlashActiveControl chkRBywseServBargSys, False
+End Sub
+
+Private Sub chkRTowseServBargSys_GotFocus()
+FlashActiveControl chkRTowseServBargSys, True
+End Sub
+
+Private Sub chkRTowseServBargSys_LostFocus()
+FlashActiveControl chkRTowseServBargSys, False
+End Sub
+
+Private Sub chkTimewseServBargSys_GotFocus()
+FlashActiveControl chkTimewseServBargSys, True
+End Sub
+
+Private Sub chkTimewseServBargSys_LostFocus()
+FlashActiveControl chkTimewseServBargSys, False
+End Sub
+
+Private Sub chkExtServShareSys_GotFocus()
+FlashActiveControl chkExtServShareSys, True
+End Sub
+
+Private Sub chkExtServShareSys_LostFocus()
+FlashActiveControl chkExtServShareSys, False
+chkExtServShareSys.BackColor = vbButtonShadow
+End Sub
+
+Private Sub chkDctwseServShareSys_GotFocus()
+FlashActiveControl chkDctwseServShareSys, True
+End Sub
+
+Private Sub chkDctwseServShareSys_LostFocus()
+FlashActiveControl chkDctwseServShareSys, False
+End Sub
+
+Private Sub chkPcgwseServShareSys_GotFocus()
+FlashActiveControl chkPcgwseServShareSys, True
+End Sub
+
+Private Sub chkPcgwseServShareSys_LostFocus()
+FlashActiveControl chkPcgwseServShareSys, False
+End Sub
+
+Private Sub chkRBywseServShareSys_GotFocus()
+FlashActiveControl chkRBywseServShareSys, True
+End Sub
+
+Private Sub chkRBywseServShareSys_LostFocus()
+FlashActiveControl chkRBywseServShareSys, False
+End Sub
+
+Private Sub chkRTowseServShareSys_GotFocus()
+FlashActiveControl chkRTowseServShareSys, True
+End Sub
+
+Private Sub chkRTowseServShareSys_LostFocus()
+FlashActiveControl chkRTowseServShareSys, False
+End Sub
+
+Private Sub chkTimewseServShareSys_GotFocus()
+FlashActiveControl chkTimewseServShareSys, True
+End Sub
+
+Private Sub chkTimewseServShareSys_LostFocus()
+FlashActiveControl chkTimewseServShareSys, False
+End Sub
+
+Private Sub chkFDigNameCFD_GotFocus(Index As Integer)
+FlashActiveControl chkFDigNameCFD(Index), True
+End Sub
+
+Private Sub chkFDigNameCFD_LostFocus(Index As Integer)
+FlashActiveControl chkFDigNameCFD(Index), False
+End Sub
+
+Private Sub chkFlrNameCFD_GotFocus(Index As Integer)
+FlashActiveControl chkFlrNameCFD(Index), True
+End Sub
+
+Private Sub chkFlrNameCFD_LostFocus(Index As Integer)
+FlashActiveControl chkFlrNameCFD(Index), False
+End Sub
+
+Private Sub chkPttRegNoAutoNumber_GotFocus(Index As Integer)
+FlashActiveControl chkPttRegNoAutoNumber(Index), True
+End Sub
+
+Private Sub chkPttRegNoAutoNumber_LostFocus(Index As Integer)
+FlashActiveControl chkPttRegNoAutoNumber(Index), False
+End Sub
+
+Private Sub chkPttRegNoAddModeChange_GotFocus(Index As Integer)
+FlashActiveControl chkPttRegNoAddModeChange(Index), True
+End Sub
+
+Private Sub chkPttRegNoAddModeChange_LostFocus(Index As Integer)
+FlashActiveControl chkPttRegNoAddModeChange(Index), False
+End Sub
+
+Private Sub chkPttRegNoEditModeChange_GotFocus(Index As Integer)
+FlashActiveControl chkPttRegNoEditModeChange(Index), True
+End Sub
+
+Private Sub chkPttRegNoEditModeChange_LostFocus(Index As Integer)
+FlashActiveControl chkPttRegNoEditModeChange(Index), False
+End Sub
+
+Private Sub chkPttRegNoNotZero_GotFocus(Index As Integer)
+FlashActiveControl chkPttRegNoNotZero(Index), True
+End Sub
+
+Private Sub chkPttRegNoNotZero_LostFocus(Index As Integer)
+FlashActiveControl chkPttRegNoNotZero(Index), False
+End Sub
+
+Private Sub chkPcgNameCFD_GotFocus(Index As Integer)
+FlashActiveControl chkPcgNameCFD(Index), True
+End Sub
+
+Private Sub chkPcgNameCFD_LostFocus(Index As Integer)
+FlashActiveControl chkPcgNameCFD(Index), False
+End Sub
+
+Private Sub chkRByNameCFD_GotFocus(Index As Integer)
+FlashActiveControl chkRByNameCFD(Index), True
+End Sub
+
+Private Sub chkRByNameCFD_LostFocus(Index As Integer)
+FlashActiveControl chkRByNameCFD(Index), False
+End Sub
+
+Private Sub chkStnNameCFD_GotFocus(Index As Integer)
+FlashActiveControl chkStnNameCFD(Index), True
+End Sub
+
+Private Sub chkStnNameCFD_LostFocus(Index As Integer)
+FlashActiveControl chkStnNameCFD(Index), False
+End Sub
+
+Private Sub chkVtmNameCFD_GotFocus(Index As Integer)
+FlashActiveControl chkVtmNameCFD(Index), True
+End Sub
+
+Private Sub chkVtmNameCFD_LostFocus(Index As Integer)
+FlashActiveControl chkVtmNameCFD(Index), False
+End Sub
+
+Private Sub cmbBdmChkOutTimeBasis_GotFocus()
+FlashActiveControl cmbBdmChkOutTimeBasis, True
+End Sub
+
+Private Sub cmbBdmChkOutTimeBasis_LostFocus()
+FlashActiveControl cmbBdmChkOutTimeBasis, False
+End Sub
+
+Private Sub cmbBdmChkOutTimeBasis_Validate(Cancel As Boolean)
+If cmbBdmChkOutTimeBasis.ListIndex < 1 Then
+    ErrorBox "Invalid Selection !!!"
+    cmbBdmChkOutTimeBasis.SetFocus
+    Cancel = True
+End If
+
+End Sub
+
+Private Sub cmdFormEnter_Click()
+mLastKeyPressed = 13
+If FormAddEditMode = cFORM_SMRYMODE Then
+    If IsFlexNewRow(Mfgrd1, Mfgrd1.Row) = False Then
+        Call Data_EditEvent
+    End If
+    'With datRecset
+    'If .EOF = False And .BOF = False Then
+    '    Call Data_EditEvent
+    'Else
+    '    Call Data_AddEvent
+    'End If
+    'End With
+Else
+    SendKeys "{tab}"
+End If
+
+
+End Sub
+
+Private Sub cmdFormEscape_Click()
+Dim srow As Long, mRecAbsPos As Long
+mLastKeyPressed = 27
+If FormAddEditMode = cFORM_SMRYMODE Then
+    If Len(txtSearch1Text.Text) > 0 Then
+        txtSearch1Text.Text = ""
+        Call txtSearch1Text_InterActiveChange
+    Else
+        Unload Me
+    End If
+Else
+    txtVoid.SetFocus
+    If CanReject() = True Then
+        mEntryAborted = True
+        'mRecAbsPos = datRecset.AbsolutePosition
+        'Call Data_CancelEvent
+        'Call SmryList
+        'If datRecset.RecordCount > mRecAbsPos And mRecAbsPos > 0 Then
+        '    datRecset.Move mRecAbsPos - 1, Start:=1
+        'Else
+        '    MoveRecToLast datRecset
+        'End If
+        'ShowRecActiveFlexRow datRecset, Mfgrd1
+        
+        Call ShowEntryMode(False)
+        If mRemoteAccess = True Then
+            Me.Hide
+            ''Unload Me
+            Exit Sub
+        Else
+            Mfgrd1.SetFocus
+        End If
+    Else
+        Call SetControlFocus
+    End If
+
+End If
+
+End Sub
+
+Private Sub cmdSaveForm_Click()
+Call Data_SaveEvent
+
+'Call SmryList
+txtSearch1Text_InterActiveChange txtOptName.Text
+
+Call ShowEntryMode(False)
+Mfgrd1.SetFocus
+
+End Sub
+
+Private Sub cmdSaveForm_GotFocus()
+txtVoid.SetFocus
+cmdSaveForm.Enabled = False
+If Data_Verify() = True Then
+    If CanAccept() = True Then
+        Call cmdSaveForm_Click
+        If mRemoteAccess = True Then
+            Me.Hide
+            Exit Sub
+        End If
+    Else
+        Call SetControlFocus
+    End If
+End If
+cmdSaveForm.Enabled = True
+
+End Sub
+
+Private Sub Form_Activate()
+If mFormLoaded = False Then
+    If mRemoteAccess = True Then
+        If mOptCode = 0 Then
+            'Call Data_AddEvent
+        Else
+            Call Data_EditEvent
+        End If
+    Else
+        'MoveRecToFirst datRecset
+        'ShowRecActiveFlexRow datRecset, Mfgrd1
+        Mfgrd1.Row = Mfgrd1.FixedRows
+        Mfgrd1.SetFocus
+    End If
+Else
+    
+End If
+
+mFormLoaded = True
+End Sub
+
+Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
+mLastKeyPressed = KeyCode
+mMaskKeyPressed = Shift
+Select Case KeyCode
+Case vbKeyPageDown
+    If FormAddEditMode <> cFORM_SMRYMODE Then
+        Call cmdSaveForm_GotFocus
+    End If
+End Select
+
+End Sub
+
+Private Sub Form_KeyPress(KeyAscii As Integer)
+mLastKeyPressed = KeyAscii
+
+End Sub
+
+Private Sub Form_Load()
+Dim colcnt As Integer
+mFormLoaded = False
+mEntrySaved = False: mEntryAborted = False
+SetFormSize Me, frmMain
+Call Form_Resize
+
+Call SetVoidControl(txtVoid)
+txtSearch1Text.Enabled = False
+
+OpenHmsDataSource dbHmsDatabase
+OpenAcDataSource dbAcDatabase
+
+Set clsOPT = New clsHmsIpdOptionsEntry
+Set clsListStru = New clsSelectQueryStructure
+
+Set fcmbAhName = New clsComFlexSearch
+Set fcmbAhName.dbAcDatabase = dbAcDatabase
+fcmbAhName.blnAchdMastList = True
+fcmbAhName.Init
+
+Set fcmbPcgName = New clsHmsFlexSearch
+Set fcmbPcgName.dbHmsDatabase = dbHmsDatabase
+fcmbPcgName.blnPatCatgMstList = True
+fcmbPcgName.Init
+
+Set fcmbAraName = New clsComFlexSearch
+Set fcmbAraName.dbAcDatabase = dbAcDatabase
+fcmbAraName.blnAreaMastList = True
+fcmbAraName.Init
+
+Set fcmbStnName = New clsComFlexSearch
+Set fcmbStnName.dbAcDatabase = dbAcDatabase
+fcmbStnName.blnStationMastList = True
+fcmbStnName.Init
+
+Set fcmbVtmName = New clsComFlexSearch
+Set fcmbVtmName.dbAcDatabase = dbAcDatabase
+fcmbVtmName.blnVTypeMastList = True
+fcmbVtmName.mListSqlExpr = "Select * from VTypMast order by VtmName"
+fcmbVtmName.Init
+
+Set fcmbCDctName = New clsHmsFlexSearch
+Set fcmbCDctName.dbHmsDatabase = dbHmsDatabase
+fcmbCDctName.blnDoctMastList = True
+fcmbCDctName.Init
+
+Set fcmbRByName = New clsHmsFlexSearch
+Set fcmbRByName.dbHmsDatabase = dbHmsDatabase
+fcmbRByName.blnRefByMastList = True
+fcmbRByName.Init
+
+Set fcmbFDigName = New clsHmsFlexSearch
+Set fcmbFDigName.dbHmsDatabase = dbHmsDatabase
+fcmbFDigName.blnDiagMastList = True
+fcmbFDigName.Init
+
+Set fcmbSrvName = New clsHmsFlexSearch
+Set fcmbSrvName.dbHmsDatabase = dbHmsDatabase
+fcmbSrvName.blnServMastList = True
+fcmbSrvName.Init
+
+Set fcmbBdmName = New clsHmsFlexSearch
+Set fcmbBdmName.dbHmsDatabase = dbHmsDatabase
+fcmbBdmName.blnBedMastList = True
+fcmbBdmName.Init
+
+Set fcmbFlrName = New clsHmsFlexSearch
+Set fcmbFlrName.dbHmsDatabase = dbHmsDatabase
+fcmbFlrName.blnFloorMastList = True
+fcmbFlrName.Init
+
+Set fcmbWrdName = New clsHmsFlexSearch
+Set fcmbWrdName.dbHmsDatabase = dbHmsDatabase
+fcmbWrdName.blnWardMastList = True
+fcmbWrdName.Init
+
+AddItemToComboFromList cmbBdmChkOutTimeBasis, cBDM_CHKOUTTIMEBASIS_LIST
+
+If mRemoteAccess = True Then
+    'datRecset.Open "Select * from DoctCatgMst where DcgCode=" & CStr(mOptCode) & " order by OptName", dbAcDatabase, adOpenKeyset, adLockOptimistic
+Else
+    'datRecset.Open "Select * from DoctCatgMst order by OptName", dbAcDatabase, adOpenKeyset, adLockOptimistic
+End If
+Call SmryList
+
+Call ShowEntryMode(False)
+
+End Sub
+
+Private Sub Form_Resize()
+lblFormHeading.Width = Me.Width
+cmdFormEscape.Left = Me.Width - (cmdFormEscape.Width * 2)
+cmdFormEnter.Left = Me.Width + cmdFormEscape.Width
+frFormSmry.Left = (Me.Width - frFormSmry.Width) / 2: frFormSmry.Top = cmbFormEntryMode.Top + (cmbFormEntryMode.Height * 2)
+frFormDtl.Left = (Me.Width - frFormDtl.Width) / 2: frFormDtl.Top = frFormSmry.Top
+
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+Set clsOPT = Nothing
+Set fcmbAraName = Nothing
+Set fcmbStnName = Nothing
+Set fcmbAhName = Nothing
+Set fcmbVtmName = Nothing
+Set fcmbPcgName = Nothing
+Set fcmbCDctName = Nothing
+Set fcmbRByName = Nothing
+Set fcmbFDigName = Nothing
+Set fcmbSrvName = Nothing
+Set fcmbBdmName = Nothing
+Set fcmbFlrName = Nothing
+Set fcmbWrdName = Nothing
+
+Set clsListStru = Nothing
+
+'CloseTable datRecset
+CloseDataSource dbHmsDatabase
+CloseDataSource dbAcDatabase
+End Sub
+
+Private Sub ShowEntryMode(ByVal EntryMode As Boolean)
+If Me.Visible = True Then
+    txtVoid.SetFocus
+End If
+frFormSmry.Visible = Not EntryMode: frFormSmry.Enabled = Not EntryMode
+frFormDtl.Visible = EntryMode: frFormDtl.Enabled = EntryMode
+cmdSaveForm.Enabled = EntryMode
+If EntryMode = False Then
+    FormAddEditMode = cFORM_SMRYMODE
+End If
+Select Case mOptCode
+Case cOPT_PATMAST
+    frPatMast.ZOrder
+Case cOPT_INDRREG
+    frIndrReg.ZOrder
+Case cOPT_INDRREG
+    frIndrReg.ZOrder
+Case cOPT_BEDMAST
+    frBedMast.ZOrder
+Case cOPT_INDRRCPT
+    frIndrRcpt.ZOrder
+Case cOPT_INDRPYMT
+    frIndrPymt.ZOrder
+Case cOPT_INDRREFD
+    frIndrRefd.ZOrder
+Case cOPT_INDRBILL
+    frIndrBill.ZOrder
+Case cOPT_INDRBLPYMT
+    frIndrBlPymt.ZOrder
+Case cOPT_INDRBLREFD
+    frIndrBlRefd.ZOrder
+Case cOPT_INDRRGPYMT
+    frIndrRgPymt.ZOrder
+Case cOPT_INDRRGREFD
+    frIndrRgRefd.ZOrder
+Case cOPT_SERVRATESYS
+    frServRateSystem.ZOrder
+End Select
+frPatMast.Visible = EntryMode And mOptCode = cOPT_PATMAST: frPatMast.Enabled = EntryMode And mOptCode = cOPT_PATMAST
+frIndrReg.Visible = EntryMode And mOptCode = cOPT_INDRREG: frIndrReg.Enabled = EntryMode And mOptCode = cOPT_INDRREG
+frIndrReg.Visible = EntryMode And mOptCode = cOPT_INDRREG: frIndrReg.Enabled = EntryMode And mOptCode = cOPT_INDRREG
+frBedMast.Visible = EntryMode And mOptCode = cOPT_BEDMAST: frBedMast.Enabled = EntryMode And mOptCode = cOPT_BEDMAST
+frIndrRcpt.Visible = EntryMode And mOptCode = cOPT_INDRRCPT: frIndrRcpt.Enabled = EntryMode And mOptCode = cOPT_INDRRCPT
+frIndrPymt.Visible = EntryMode And mOptCode = cOPT_INDRPYMT: frIndrPymt.Enabled = EntryMode And mOptCode = cOPT_INDRPYMT
+frIndrRefd.Visible = EntryMode And mOptCode = cOPT_INDRREFD: frIndrRefd.Enabled = EntryMode And mOptCode = cOPT_INDRREFD
+frIndrBill.Visible = EntryMode And mOptCode = cOPT_INDRBILL: frIndrBill.Enabled = EntryMode And mOptCode = cOPT_INDRBILL
+frIndrBlPymt.Visible = EntryMode And mOptCode = cOPT_INDRBLPYMT: frIndrBlPymt.Enabled = EntryMode And mOptCode = cOPT_INDRBLPYMT
+frIndrBlRefd.Visible = EntryMode And mOptCode = cOPT_INDRBLREFD: frIndrBlRefd.Enabled = EntryMode And mOptCode = cOPT_INDRBLREFD
+frIndrRgPymt.Visible = EntryMode And mOptCode = cOPT_INDRRGPYMT: frIndrRgPymt.Enabled = EntryMode And mOptCode = cOPT_INDRRGPYMT
+frIndrRgRefd.Visible = EntryMode And mOptCode = cOPT_INDRRGREFD: frIndrRgRefd.Enabled = EntryMode And mOptCode = cOPT_INDRRGREFD
+frServRateSystem.Visible = EntryMode And mOptCode = cOPT_SERVRATESYS: frServRateSystem.Enabled = EntryMode And mOptCode = cOPT_SERVRATESYS
+
+End Sub
+
+Private Function Data_Verify() As Boolean
+Data_Verify = False
+'If Val(mskFormBoundField.Text) < 1 Then
+'    ErrorBox "Invalid Key Value !!!"
+'    txtOptName.SetFocus
+'    Exit Function
+'End If
+'If Trim(txtOptName.Text) = "" Then
+'    ErrorBox "Invalid Operator Name !!!"
+'    txtOptName.SetFocus
+'    Exit Function
+'End If
+'If txtOptName.Text <> mOptName_old Then
+'    If ChkIsDuplicate(dbAcDatabase, "DoctCatgMst", "OptName", txtOptName.Text, "DcgCode", Val(mskFormBoundField.Text)) = True Then
+'        ErrorBox "Duplicate Input !!!"
+'        txtOptName.SetFocus
+'        Exit Function
+'    End If
+'End If
+
+Data_Verify = True
+End Function
+
+Private Sub mskBdmCharges_GotFocus()
+FlashActiveControl mskBdmCharges, True
+End Sub
+
+Private Sub mskBdmCharges_LostFocus()
+FlashActiveControl mskBdmCharges, False
+End Sub
+
+Private Sub mskBdmCharges_Validate(Cancel As Boolean)
+mskBdmCharges.Text = ToMyNumFmt(mskBdmCharges.Text)
+If Val(UnMyNumFmt(mskBdmCharges.Text)) < 0 Then
+    ErrorBox "Invalid Input !!!"
+    mskBdmCharges.SetFocus
+    Cancel = True
+End If
+
+End Sub
+
+Private Sub txtAhName_Change(Index As Integer)
+If fcmbAhName.CallFromText_Change = False Then
+    fcmbAhName.CallFromText_Change = True
+    If InterActiveChange(txtAhName(Index)) = True Then
+        fcmbAhName.UserText = Array(txtAhName(Index).Text, txtAhName(Index).SelStart)
+        fcmbAhName.Show
+        txtAhName(Index).Text = fcmbAhName.Text
+        If fcmbAhName.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbAhName.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub txtAhName_GotFocus(Index As Integer)
+FlashActiveControl txtAhName(Index), True
+End Sub
+
+Private Sub txtAhName_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    txtAhName_Change Index
+End If
+
+End Sub
+
+Private Sub txtAhName_LostFocus(Index As Integer)
+FlashActiveControl txtAhName(Index), False
+End Sub
+
+Private Sub txtAraName_Change(Index As Integer)
+If fcmbAraName.CallFromText_Change = False Then
+    fcmbAraName.CallFromText_Change = True
+    If InterActiveChange(txtAraName(Index)) = True Then
+        fcmbAraName.UserText = Array(txtAraName(Index).Text, txtAraName(Index).SelStart)
+        fcmbAraName.Show
+        txtAraName(Index).Text = fcmbAraName.Text
+        If fcmbAraName.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbAraName.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub txtAraName_GotFocus(Index As Integer)
+FlashActiveControl txtAraName(Index), True
+End Sub
+
+Private Sub txtAraName_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    txtAraName_Change Index
+End If
+
+End Sub
+
+Private Sub txtAraName_LostFocus(Index As Integer)
+FlashActiveControl txtAraName(Index), False
+End Sub
+
+Private Sub txtAraName_Validate(Index As Integer, Cancel As Boolean)
+If Val(fcmbAraName.BoundText) = 0 Then
+    fcmbStnName.BoundText = "": txtStnName(Index).Text = ""
+Else
+    AutoInitStationFromArea cnn:=dbAcDatabase, txtStnName:=txtStnName(Index), fcmbStnName:=fcmbStnName, mAraCode:=Val(fcmbAraName.BoundText)
+End If
+
+End Sub
+
+Private Sub txtBdmChkTime_str_GotFocus()
+FlashActiveControl txtBdmChkTime_str, True
+End Sub
+
+Private Sub txtBdmChkTime_str_LostFocus()
+FlashActiveControl txtBdmChkTime_str, False
+End Sub
+
+Private Sub txtBdmChkTime_str_Validate(Cancel As Boolean)
+txtBdmChkTime_str.Text = MinToTime(TimeToMin(txtBdmChkTime_str.Text))
+If TimeToMin(txtBdmChkTime_str.Text) > cDAYMINUTES Then
+    ErrorBox "Invalid Input !!!"
+    txtBdmChkTime_str.SetFocus
+    Cancel = True
+End If
+
+End Sub
+
+Private Sub txtBdmName_Change(Index As Integer)
+If fcmbBdmName.CallFromText_Change = False Then
+    fcmbBdmName.CallFromText_Change = True
+    If InterActiveChange(txtBdmName(Index)) = True Then
+        fcmbBdmName.UserText = Array(txtBdmName(Index).Text, txtBdmName(Index).SelStart)
+        fcmbBdmName.Show
+        txtBdmName(Index).Text = fcmbBdmName.Text
+        If fcmbBdmName.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbBdmName.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub txtBdmName_GotFocus(Index As Integer)
+FlashActiveControl txtBdmName(Index), True
+End Sub
+
+Private Sub txtBdmName_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    txtBdmName_Change Index
+End If
+
+End Sub
+
+Private Sub txtBdmName_LostFocus(Index As Integer)
+FlashActiveControl txtBdmName(Index), False
+End Sub
+
+Private Sub txtCDctName_Change(Index As Integer)
+If fcmbCDctName.CallFromText_Change = False Then
+    fcmbCDctName.CallFromText_Change = True
+    If InterActiveChange(txtCDctName(Index)) = True Then
+        fcmbCDctName.UserText = Array(txtCDctName(Index).Text, txtCDctName(Index).SelStart)
+        fcmbCDctName.Show
+        txtCDctName(Index).Text = fcmbCDctName.Text
+        If fcmbCDctName.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbCDctName.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub txtCDctName_GotFocus(Index As Integer)
+FlashActiveControl txtCDctName(Index), True
+End Sub
+
+Private Sub txtCDctName_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    txtCDctName_Change Index
+End If
+
+End Sub
+
+Private Sub txtCDctName_LostFocus(Index As Integer)
+FlashActiveControl txtCDctName(Index), False
+End Sub
+
+Private Sub txtFDigName_Change(Index As Integer)
+If fcmbFDigName.CallFromText_Change = False Then
+    fcmbFDigName.CallFromText_Change = True
+    If InterActiveChange(txtFDigName(Index)) = True Then
+        fcmbFDigName.UserText = Array(txtFDigName(Index).Text, txtFDigName(Index).SelStart)
+        fcmbFDigName.Show
+        txtFDigName(Index).Text = fcmbFDigName.Text
+        If fcmbFDigName.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbFDigName.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub txtFDigName_GotFocus(Index As Integer)
+FlashActiveControl txtFDigName(Index), True
+End Sub
+
+Private Sub txtFDigName_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    txtFDigName_Change Index
+End If
+
+End Sub
+
+Private Sub txtFDigName_LostFocus(Index As Integer)
+FlashActiveControl txtFDigName(Index), False
+End Sub
+
+Private Sub txtFlrName_Change(Index As Integer)
+If fcmbFlrName.CallFromText_Change = False Then
+    fcmbFlrName.CallFromText_Change = True
+    If InterActiveChange(txtFlrName(Index)) = True Then
+        fcmbFlrName.UserText = Array(txtFlrName(Index).Text, txtFlrName(Index).SelStart)
+        fcmbFlrName.Show
+        txtFlrName(Index).Text = fcmbFlrName.Text
+        If fcmbFlrName.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbFlrName.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub txtFlrName_GotFocus(Index As Integer)
+FlashActiveControl txtFlrName(Index), True
+End Sub
+
+Private Sub txtFlrName_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    txtFlrName_Change Index
+End If
+
+End Sub
+
+Private Sub txtFlrName_LostFocus(Index As Integer)
+FlashActiveControl txtFlrName(Index), False
+End Sub
+
+Private Sub txtOptName_GotFocus()
+FlashActiveControl txtOptName, True
+End Sub
+
+Private Sub txtOptName_LostFocus()
+FlashActiveControl txtOptName, False
+End Sub
+
+Private Sub Data_EditEvent()
+Dim mLCount As Integer, mUCount As Integer, mCount As Integer, srow As Integer
+
+mEntrySaved = False: mEntryAborted = False
+FormAddEditMode = cFORM_EDITMODE
+'With datRecset
+
+srow = Mfgrd1.Row
+mOptCode = Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptCode"))
+mskFormBoundField.Text = mOptCode
+txtOptName.Text = Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptName"))
+Select Case mOptCode
+Case cOPT_PATMAST
+    With clsOPT
+    .ResetInit
+    .blnPatMastOptMast = True
+    .Init
+    .GetPatMastOptData
+    
+    chkPttRegNoAutoNumber(mOptCode).Value = IIf(.mPttRegNoAutoNumber_bln = True, vbChecked, vbUnchecked)
+    chkPttRegNoAddModeChange(mOptCode).Value = IIf(.mPttRegNoAddModeChange_bln = True, vbChecked, vbUnchecked)
+    chkPttRegNoEditModeChange(mOptCode).Value = IIf(.mPttRegNoEditModeChange_bln = True, vbChecked, vbUnchecked)
+    chkPttRegNoNotZero(mOptCode).Value = IIf(.mPttRegNoNotZero_bln = True, vbChecked, vbUnchecked)
+    fcmbAraName.BoundText = CStr(.mPttAraCodeDef_lng): txtAraName(mOptCode).Text = fcmbAraName.Text
+    fcmbStnName.BoundText = CStr(.mPttStnCodeDef_lng): txtStnName(mOptCode).Text = fcmbStnName.Text
+    fcmbPcgName.BoundText = CStr(.mPttPcgCodeDef_lng): txtPcgName(mOptCode).Text = fcmbPcgName.Text
+    fcmbAhName.BoundText = CStr(.mPttAhCodeDef_lng): txtAhName(mOptCode).Text = fcmbAhName.Text
+    ' ---------------
+    chkAraNameCFD(mOptCode).Value = IIf(.mPttAraCodeCfd_bln = True, vbChecked, vbUnchecked)
+    chkStnNameCFD(mOptCode).Value = IIf(.mPttStnCodeCfd_bln = True, vbChecked, vbUnchecked)
+    chkPcgNameCFD(mOptCode).Value = IIf(.mPttPcgCodeCfd_bln = True, vbChecked, vbUnchecked)
+    chkAhNameCFD(mOptCode).Value = IIf(.mPttAhCodeCfd_bln = True, vbChecked, vbUnchecked)
+    End With
+
+Case cOPT_INDRREG
+    With clsOPT
+    .ResetInit
+    .blnIndrRegOptMast = True
+    .Init
+    .GetIndrRegOptData
+    
+    fcmbVtmName.mListSqlExpr = "Select * from VTypMast where VtmSysCode=" & CStr(cHMS_VTYPE_INDOOR_REG) & " order by VtmName"
+    fcmbVtmName.ReInit
+    
+    chkPttRegNoAutoNumber(mOptCode).Value = IIf(.mIpgPttRegNoAutoNumber_bln = True, vbChecked, vbUnchecked)
+    chkPttRegNoAddModeChange(mOptCode).Value = IIf(.mIpgPttRegNoAddModeChange_bln = True, vbChecked, vbUnchecked)
+    chkPttRegNoEditModeChange(mOptCode).Value = IIf(.mIpgPttRegNoEditModeChange_bln = True, vbChecked, vbUnchecked)
+    chkPttRegNoNotZero(mOptCode).Value = IIf(.mIpgPttRegNoNotZero_bln = True, vbChecked, vbUnchecked)
+    fcmbAraName.BoundText = CStr(.mIpgAraCodeDef_lng): txtAraName(mOptCode).Text = fcmbAraName.Text
+    fcmbStnName.BoundText = CStr(.mIpgStnCodeDef_lng): txtStnName(mOptCode).Text = fcmbStnName.Text
+    fcmbPcgName.BoundText = CStr(.mIpgPcgCodeDef_lng): txtPcgName(mOptCode).Text = fcmbPcgName.Text
+    fcmbAhName.BoundText = CStr(.mIpgPttAhCodeDef_lng): txtAhName(mOptCode).Text = fcmbAhName.Text
+    fcmbVtmName.BoundText = CStr(.mIpgVtmCodeDef_lng): txtVtmName(mOptCode).Text = fcmbVtmName.Text
+    fcmbCDctName.BoundText = CStr(.mIpgCDctCodeDef_lng): txtCDctName(mOptCode).Text = fcmbCDctName.Text
+    fcmbRByName.BoundText = CStr(.mIpgRByCodeDef_lng): txtRByName(mOptCode).Text = fcmbRByName.Text
+    fcmbFDigName.BoundText = CStr(.mIpgFDigCodeDef_lng): txtFDigName(mOptCode).Text = fcmbFDigName.Text
+    fcmbBdmName.BoundText = CStr(.mIpgBdmCodeDef_lng): txtBdmName(mOptCode).Text = fcmbBdmName.Text
+    ' ---------------
+    chkAraNameCFD(mOptCode).Value = IIf(.mIpgAraCodeCfd_bln = True, vbChecked, vbUnchecked)
+    chkStnNameCFD(mOptCode).Value = IIf(.mIpgStnCodeCfd_bln = True, vbChecked, vbUnchecked)
+    chkPcgNameCFD(mOptCode).Value = IIf(.mIpgPcgCodeCfd_bln = True, vbChecked, vbUnchecked)
+    chkAhNameCFD(mOptCode).Value = IIf(.mIpgPttAhCodeCfd_bln = True, vbChecked, vbUnchecked)
+    chkVtmNameCFD(mOptCode).Value = IIf(.mIpgVtmCodeCfd_bln = True, vbChecked, vbUnchecked)
+    chkCDctNameCFD(mOptCode).Value = IIf(.mIpgCDctCodeCfd_bln = True, vbChecked, vbUnchecked)
+    chkRByNameCFD(mOptCode).Value = IIf(.mIpgRByCodeCfd_bln = True, vbChecked, vbUnchecked)
+    chkFDigNameCFD(mOptCode).Value = IIf(.mIpgFDigCodeCfd_bln = True, vbChecked, vbUnchecked)
+    chkBdmNameCFD(mOptCode).Value = IIf(.mIpgBdmCodeCfd_bln = True, vbChecked, vbUnchecked)
+    End With
+    
+''Case cOPT_INDRREG
+''    With clsOPT
+''    .ResetInit
+''    .blnIndrRegOptMast = True
+''    .Init
+''    .GetIndrRegOptData
+''
+''    fcmbVtmName.mListSqlExpr = "Select * from VTypMast where VtmSysCode=" & CStr(cHMS_VTYPE_INDOOR_REG) & " order by VtmName"
+''    fcmbVtmName.ReInit
+''
+''    chkPttRegNoAutoNumber(mOptCode).Value = IIf(.mIpgPttRegNoAutoNumber_bln = True, vbChecked, vbUnchecked)
+''    chkPttRegNoAddModeChange(mOptCode).Value = IIf(.mIpgPttRegNoAddModeChange_bln = True, vbChecked, vbUnchecked)
+''    chkPttRegNoEditModeChange(mOptCode).Value = IIf(.mIpgPttRegNoEditModeChange_bln = True, vbChecked, vbUnchecked)
+''    chkPttRegNoNotZero(mOptCode).Value = IIf(.mIpgPttRegNoNotZero_bln = True, vbChecked, vbUnchecked)
+''    fcmbAraName.BoundText = CStr(.mIpgAraCodeDef_lng): txtAraName(mOptCode).Text = fcmbAraName.Text
+''    fcmbStnName.BoundText = CStr(.mIpgStnCodeDef_lng): txtStnName(mOptCode).Text = fcmbStnName.Text
+''    fcmbPcgName.BoundText = CStr(.mIpgPcgCodeDef_lng): txtPcgName(mOptCode).Text = fcmbPcgName.Text
+''    fcmbAhName.BoundText = CStr(.mIpgPttAhCodeDef_lng): txtAhName(mOptCode).Text = fcmbAhName.Text
+''    fcmbVtmName.BoundText = CStr(.mIpgVtmCodeDef_lng): txtVtmName(mOptCode).Text = fcmbVtmName.Text
+''    fcmbCDctName.BoundText = CStr(.mIpgCDctCodeDef_lng): txtCDctName(mOptCode).Text = fcmbCDctName.Text
+''    fcmbRByName.BoundText = CStr(.mIpgRByCodeDef_lng): txtRByName(mOptCode).Text = fcmbRByName.Text
+''    fcmbFDigName.BoundText = CStr(.mIpgFDigCodeDef_lng): txtFDigName(mOptCode).Text = fcmbFDigName.Text
+''    fcmbBdmName.BoundText = CStr(.mIpgBdmCodeDef_lng): txtBdmName(mOptCode).Text = fcmbBdmName.Text
+''    ' ---------------
+''    chkAraNameCFD(mOptCode).Value = IIf(.mIpgAraCodeCfd_bln = True, vbChecked, vbUnchecked)
+''    chkStnNameCFD(mOptCode).Value = IIf(.mIpgStnCodeCfd_bln = True, vbChecked, vbUnchecked)
+''    chkPcgNameCFD(mOptCode).Value = IIf(.mIpgPcgCodeCfd_bln = True, vbChecked, vbUnchecked)
+''    chkAhNameCFD(mOptCode).Value = IIf(.mIpgPttAhCodeCfd_bln = True, vbChecked, vbUnchecked)
+''    chkVtmNameCFD(mOptCode).Value = IIf(.mIpgVtmCodeCfd_bln = True, vbChecked, vbUnchecked)
+''    chkCDctNameCFD(mOptCode).Value = IIf(.mIpgCDctCodeCfd_bln = True, vbChecked, vbUnchecked)
+''    chkRByNameCFD(mOptCode).Value = IIf(.mIpgRByCodeCfd_bln = True, vbChecked, vbUnchecked)
+''    chkFDigNameCFD(mOptCode).Value = IIf(.mIpgFDigCodeCfd_bln = True, vbChecked, vbUnchecked)
+''    chkBdmNameCFD(mOptCode).Value = IIf(.mIpgBdmCodeCfd_bln = True, vbChecked, vbUnchecked)
+''    End With
+    
+Case cOPT_BEDMAST
+    With clsOPT
+    .ResetInit
+    .blnBedMastOptMast = True
+    .Init
+    .GetBedMastOptData
+    
+    mskBdmCharges.Text = ToMyNumFmt(.mBdmChargesDef_dbl)
+    cmbBdmChkOutTimeBasis.ListIndex = GetListIndexFromItemData(cmbBdmChkOutTimeBasis, .mBdmChkOutTimeBasisDef_int)
+    txtBdmChkTime_str.Text = MinToTime(.mBdmChkTimeDef_lng)
+    fcmbFlrName.BoundText = CStr(.mBdmFlrCodeDef_lng): txtFlrName(mOptCode).Text = fcmbFlrName.Text
+    fcmbWrdName.BoundText = CStr(.mBdmWrdCodeDef_lng): txtWrdName(mOptCode).Text = fcmbWrdName.Text
+    fcmbSrvName.BoundText = CStr(.mBdmSrvCodeDef_lng): txtSrvName(mOptCode).Text = fcmbSrvName.Text
+    ' ---------------
+    chkBdmChargesCFD.Value = IIf(.mBdmChargesCfd_bln = True, vbChecked, vbUnchecked)
+    chkBdmChkOutTimeBasisCFD.Value = IIf(.mBdmChkOutTimeBasisCfd_bln = True, vbChecked, vbUnchecked)
+    chkBdmChkTimeCFD.Value = IIf(.mBdmChkTimeCfd_bln = True, vbChecked, vbUnchecked)
+    chkFlrNameCFD(mOptCode).Value = IIf(.mBdmFlrCodeCfd_bln = True, vbChecked, vbUnchecked)
+    chkWrdNameCFD(mOptCode).Value = IIf(.mBdmWrdCodeCfd_bln = True, vbChecked, vbUnchecked)
+    chkSrvNameCFD(mOptCode).Value = IIf(.mBdmSrvCodeCfd_bln = True, vbChecked, vbUnchecked)
+    End With
+    
+Case cOPT_INDRRCPT
+    With clsOPT
+    .ResetInit
+    .blnIndrRcptOptMast = True
+    .Init
+    .GetIndrRcptOptData
+    
+    fcmbVtmName.mListSqlExpr = "Select * from VTypMast where VtmSysCode=" & CStr(cHMS_VTYPE_INDOOR_RCPT) & " order by VtmName"
+    fcmbVtmName.ReInit
+    
+    chkPttRegNoNotZero(mOptCode).Value = IIf(.mIrcPttRegNoNotZero_bln = True, vbChecked, vbUnchecked)
+    fcmbVtmName.BoundText = CStr(.mIrcVtmCodeDef_lng): txtVtmName(mOptCode).Text = fcmbVtmName.Text
+    ' ---------------
+    chkVtmNameCFD(mOptCode).Value = IIf(.mIrcVtmCodeCfd_bln = True, vbChecked, vbUnchecked)
+    End With
+    
+Case cOPT_INDRPYMT
+    With clsOPT
+    .ResetInit
+    .blnIndrPymtOptMast = True
+    .Init
+    .GetIndrPymtOptData
+    
+    fcmbVtmName.mListSqlExpr = "Select * from VTypMast where VtmSysCode=" & CStr(cHMS_VTYPE_INDOOR_PYMT) & " order by VtmName"
+    fcmbVtmName.ReInit
+    
+    chkPttRegNoNotZero(mOptCode).Value = IIf(.mIpyPttRegNoNotZero_bln = True, vbChecked, vbUnchecked)
+    fcmbVtmName.BoundText = CStr(.mIpyVtmCodeDef_lng): txtVtmName(mOptCode).Text = fcmbVtmName.Text
+    ' ---------------
+    chkVtmNameCFD(mOptCode).Value = IIf(.mIpyVtmCodeCfd_bln = True, vbChecked, vbUnchecked)
+    End With
+    
+Case cOPT_INDRREFD
+    With clsOPT
+    .ResetInit
+    .blnIndrRefdOptMast = True
+    .Init
+    .GetIndrRefdOptData
+    
+    fcmbVtmName.mListSqlExpr = "Select * from VTypMast where VtmSysCode=" & CStr(cHMS_VTYPE_INDOOR_REFD) & " order by VtmName"
+    fcmbVtmName.ReInit
+    
+    chkPttRegNoNotZero(mOptCode).Value = IIf(.mIfdPttRegNoNotZero_bln = True, vbChecked, vbUnchecked)
+    fcmbVtmName.BoundText = CStr(.mIfdVtmCodeDef_lng): txtVtmName(mOptCode).Text = fcmbVtmName.Text
+    ' ---------------
+    chkVtmNameCFD(mOptCode).Value = IIf(.mIfdVtmCodeCfd_bln = True, vbChecked, vbUnchecked)
+    End With
+    
+Case cOPT_INDRBILL
+    With clsOPT
+    .ResetInit
+    .blnIndrBillOptMast = True
+    .Init
+    .GetIndrBillOptData
+    
+    fcmbVtmName.mListSqlExpr = "Select * from VTypMast where VtmSysCode=" & CStr(cHMS_VTYPE_INDOOR_BILL) & " order by VtmName"
+    fcmbVtmName.ReInit
+    
+    chkPttRegNoNotZero(mOptCode).Value = IIf(.mIblPttRegNoNotZero_bln = True, vbChecked, vbUnchecked)
+    fcmbVtmName.BoundText = CStr(.mIblVtmCodeDef_lng): txtVtmName(mOptCode).Text = fcmbVtmName.Text
+    ' ---------------
+    chkVtmNameCFD(mOptCode).Value = IIf(.mIblVtmCodeCfd_bln = True, vbChecked, vbUnchecked)
+    End With
+    
+Case cOPT_INDRBLPYMT
+    With clsOPT
+    .ResetInit
+    .blnIndrBlPymtOptMast = True
+    .Init
+    .GetIndrBlPymtOptData
+    
+    fcmbVtmName.mListSqlExpr = "Select * from VTypMast where VtmSysCode=" & CStr(cHMS_VTYPE_INDOOR_BLPYMT) & " order by VtmName"
+    fcmbVtmName.ReInit
+    
+    chkPttRegNoNotZero(mOptCode).Value = IIf(.mIbpyPttRegNoNotZero_bln = True, vbChecked, vbUnchecked)
+    fcmbVtmName.BoundText = CStr(.mIbpyVtmCodeDef_lng): txtVtmName(mOptCode).Text = fcmbVtmName.Text
+    ' ---------------
+    chkVtmNameCFD(mOptCode).Value = IIf(.mIbpyVtmCodeCfd_bln = True, vbChecked, vbUnchecked)
+    End With
+    
+Case cOPT_INDRBLREFD
+    With clsOPT
+    .ResetInit
+    .blnIndrBlRefdOptMast = True
+    .Init
+    .GetIndrBlRefdOptData
+    
+    fcmbVtmName.mListSqlExpr = "Select * from VTypMast where VtmSysCode=" & CStr(cHMS_VTYPE_INDOOR_BLREFD) & " order by VtmName"
+    fcmbVtmName.ReInit
+    
+    chkPttRegNoNotZero(mOptCode).Value = IIf(.mIbfdPttRegNoNotZero_bln = True, vbChecked, vbUnchecked)
+    fcmbVtmName.BoundText = CStr(.mIbfdVtmCodeDef_lng): txtVtmName(mOptCode).Text = fcmbVtmName.Text
+    ' ---------------
+    chkVtmNameCFD(mOptCode).Value = IIf(.mIbfdVtmCodeCfd_bln = True, vbChecked, vbUnchecked)
+    End With
+    
+Case cOPT_INDRRGPYMT
+    With clsOPT
+    .ResetInit
+    .blnIndrRgPymtOptMast = True
+    .Init
+    .GetIndrRgPymtOptData
+    
+    fcmbVtmName.mListSqlExpr = "Select * from VTypMast where VtmSysCode=" & CStr(cHMS_VTYPE_INDOOR_RGPYMT) & " order by VtmName"
+    fcmbVtmName.ReInit
+    
+    chkPttRegNoNotZero(mOptCode).Value = IIf(.mIgtPttRegNoNotZero_bln = True, vbChecked, vbUnchecked)
+    fcmbVtmName.BoundText = CStr(.mIgtVtmCodeDef_lng): txtVtmName(mOptCode).Text = fcmbVtmName.Text
+    ' ---------------
+    chkVtmNameCFD(mOptCode).Value = IIf(.mIgtVtmCodeCfd_bln = True, vbChecked, vbUnchecked)
+    End With
+    
+Case cOPT_INDRRGREFD
+    With clsOPT
+    .ResetInit
+    .blnIndrRgRefdOptMast = True
+    .Init
+    .GetIndrRgRefdOptData
+    
+    fcmbVtmName.mListSqlExpr = "Select * from VTypMast where VtmSysCode=" & CStr(cHMS_VTYPE_INDOOR_RGREFD) & " order by VtmName"
+    fcmbVtmName.ReInit
+    
+    chkPttRegNoNotZero(mOptCode).Value = IIf(.mIgfPttRegNoNotZero_bln = True, vbChecked, vbUnchecked)
+    fcmbVtmName.BoundText = CStr(.mIgfVtmCodeDef_lng): txtVtmName(mOptCode).Text = fcmbVtmName.Text
+    ' ---------------
+    chkVtmNameCFD(mOptCode).Value = IIf(.mIgfVtmCodeCfd_bln = True, vbChecked, vbUnchecked)
+    End With
+    
+Case cOPT_SERVRATESYS
+    With clsOPT
+    .ResetInit
+    .blnServRateSysOptMast = True
+    .Init
+    .GetServRateSysOptData
+    
+    chkExtServRateSys.Value = IIf(.mExtServRateSys_bln = True, vbChecked, vbUnchecked)
+    chkDctwseServRateSys.Value = IIf(.mDctwseServRateSys_bln = True, vbChecked, vbUnchecked)
+    chkPcgwseServRateSys.Value = IIf(.mPcgwseServRateSys_bln = True, vbChecked, vbUnchecked)
+    chkRBywseServRateSys.Value = IIf(.mRBywseServRateSys_bln = True, vbChecked, vbUnchecked)
+    chkRTowseServRateSys.Value = IIf(.mRTowseServRateSys_bln = True, vbChecked, vbUnchecked)
+    chkTimewseServRateSys.Value = IIf(.mTimewseServRateSys_bln = True, vbChecked, vbUnchecked)
+    ' -------------------------------------------------------------------------
+    chkExtServDiscSys.Value = IIf(.mExtServDiscSys_bln = True, vbChecked, vbUnchecked)
+    chkDctwseServDiscSys.Value = IIf(.mDctwseServDiscSys_bln = True, vbChecked, vbUnchecked)
+    chkPcgwseServDiscSys.Value = IIf(.mPcgwseServDiscSys_bln = True, vbChecked, vbUnchecked)
+    chkRBywseServDiscSys.Value = IIf(.mRBywseServDiscSys_bln = True, vbChecked, vbUnchecked)
+    chkRTowseServDiscSys.Value = IIf(.mRTowseServDiscSys_bln = True, vbChecked, vbUnchecked)
+    chkTimewseServDiscSys.Value = IIf(.mTimewseServDiscSys_bln = True, vbChecked, vbUnchecked)
+    ' -------------------------------------------------------------------------
+    chkExtServBargSys.Value = IIf(.mExtServBargSys_bln = True, vbChecked, vbUnchecked)
+    chkDctwseServBargSys.Value = IIf(.mDctwseServBargSys_bln = True, vbChecked, vbUnchecked)
+    chkPcgwseServBargSys.Value = IIf(.mPcgwseServBargSys_bln = True, vbChecked, vbUnchecked)
+    chkRBywseServBargSys.Value = IIf(.mRBywseServBargSys_bln = True, vbChecked, vbUnchecked)
+    chkRTowseServBargSys.Value = IIf(.mRTowseServBargSys_bln = True, vbChecked, vbUnchecked)
+    chkTimewseServBargSys.Value = IIf(.mTimewseServBargSys_bln = True, vbChecked, vbUnchecked)
+    ' -------------------------------------------------------------------------
+    chkExtServShareSys.Value = IIf(.mExtServShareSys_bln = True, vbChecked, vbUnchecked)
+    chkDctwseServShareSys.Value = IIf(.mDctwseServShareSys_bln = True, vbChecked, vbUnchecked)
+    chkPcgwseServShareSys.Value = IIf(.mPcgwseServShareSys_bln = True, vbChecked, vbUnchecked)
+    chkRBywseServShareSys.Value = IIf(.mRBywseServShareSys_bln = True, vbChecked, vbUnchecked)
+    chkRTowseServShareSys.Value = IIf(.mRTowseServShareSys_bln = True, vbChecked, vbUnchecked)
+    chkTimewseServShareSys.Value = IIf(.mTimewseServShareSys_bln = True, vbChecked, vbUnchecked)
+    ' -------------------------------------------------------------------------
+    End With
+    
+Case Else
+    ErrorBox Me.Name & "_Data_EditEvent_#649_[Undefined Case]"
+End Select
+
+mOptName_old = txtOptName.Text
+    
+Call ShowEntryMode(True)
+
+Call SetControlFocus
+
+End Sub
+
+Private Sub Data_SaveEvent()
+With clsOPT
+If FormAddEditMode = cFORM_ADDMODE Then
+    .Clear
+Else
+    If mOptCode = cOPT_PATMAST Then
+        .GetPatMastOptData
+    ElseIf mOptCode = cOPT_INDRREG Then
+        .GetIndrRegOptData
+    ElseIf mOptCode = cOPT_INDRREG Then
+        .GetIndrRegOptData
+    ElseIf mOptCode = cOPT_BEDMAST Then
+        .GetBedMastOptData
+    ElseIf mOptCode = cOPT_INDRRCPT Then
+        .GetIndrRcptOptData
+    ElseIf mOptCode = cOPT_INDRPYMT Then
+        .GetIndrPymtOptData
+    ElseIf mOptCode = cOPT_INDRREFD Then
+        .GetIndrRefdOptData
+    ElseIf mOptCode = cOPT_INDRBILL Then
+        .GetIndrBillOptData
+    ElseIf mOptCode = cOPT_INDRBLPYMT Then
+        .GetIndrBlPymtOptData
+    ElseIf mOptCode = cOPT_INDRBLREFD Then
+        .GetIndrBlRefdOptData
+    ElseIf mOptCode = cOPT_INDRRGPYMT Then
+        .GetIndrRgPymtOptData
+    ElseIf mOptCode = cOPT_INDRRGREFD Then
+        .GetIndrRgRefdOptData
+    ElseIf mOptCode = cOPT_SERVRATESYS Then
+        .GetServRateSysOptData
+    Else
+        ErrorBox Me.Name & "_Data_SaveEvent_#716_[Undefined Case]"
+    End If
+End If
+If mOptCode = cOPT_PATMAST Then
+    .mPttRegNoAutoNumber_bln = (chkPttRegNoAutoNumber(mOptCode).Value = vbChecked)
+    .mPttRegNoAddModeChange_bln = (chkPttRegNoAddModeChange(mOptCode).Value = vbChecked)
+    .mPttRegNoEditModeChange_bln = (chkPttRegNoEditModeChange(mOptCode).Value = vbChecked)
+    .mPttRegNoNotZero_bln = (chkPttRegNoNotZero(mOptCode).Value = vbChecked)
+    .mPttAraCodeDef_lng = Val(fcmbAraName.BoundText)
+    .mPttStnCodeDef_lng = Val(fcmbStnName.BoundText)
+    .mPttPcgCodeDef_lng = Val(fcmbPcgName.BoundText)
+    .mPttAhCodeDef_lng = Val(fcmbAhName.BoundText)
+    ' ---------------
+    .mPttAraCodeCfd_bln = (chkAraNameCFD(mOptCode).Value = vbChecked)
+    .mPttStnCodeCfd_bln = (chkStnNameCFD(mOptCode).Value = vbChecked)
+    .mPttPcgCodeCfd_bln = (chkPcgNameCFD(mOptCode).Value = vbChecked)
+    .mPttAhCodeCfd_bln = (chkAhNameCFD(mOptCode).Value = vbChecked)
+    
+    .UpdatePatMastOpt
+    mEntrySaved = True
+
+ElseIf mOptCode = cOPT_INDRREG Then
+    .mIpgPttRegNoAutoNumber_bln = (chkPttRegNoAutoNumber(mOptCode).Value = vbChecked)
+    .mIpgPttRegNoAddModeChange_bln = (chkPttRegNoAddModeChange(mOptCode).Value = vbChecked)
+    .mIpgPttRegNoEditModeChange_bln = (chkPttRegNoEditModeChange(mOptCode).Value = vbChecked)
+    .mIpgPttRegNoNotZero_bln = (chkPttRegNoNotZero(mOptCode).Value = vbChecked)
+    .mIpgAraCodeDef_lng = Val(fcmbAraName.BoundText)
+    .mIpgStnCodeDef_lng = Val(fcmbStnName.BoundText)
+    .mIpgPcgCodeDef_lng = Val(fcmbPcgName.BoundText)
+    .mIpgPttAhCodeDef_lng = Val(fcmbAhName.BoundText)
+    .mIpgVtmCodeDef_lng = Val(fcmbVtmName.BoundText)
+    .mIpgCDctCodeDef_lng = Val(fcmbCDctName.BoundText)
+    .mIpgRByCodeDef_lng = Val(fcmbRByName.BoundText)
+    .mIpgFDigCodeDef_lng = Val(fcmbFDigName.BoundText)
+    .mIpgBdmCodeDef_lng = Val(fcmbBdmName.BoundText)
+    ' ---------------
+    .mIpgAraCodeCfd_bln = (chkAraNameCFD(mOptCode).Value = vbChecked)
+    .mIpgStnCodeCfd_bln = (chkStnNameCFD(mOptCode).Value = vbChecked)
+    .mIpgPcgCodeCfd_bln = (chkPcgNameCFD(mOptCode).Value = vbChecked)
+    .mIpgPttAhCodeCfd_bln = (chkAhNameCFD(mOptCode).Value = vbChecked)
+    .mIpgVtmCodeCfd_bln = (chkVtmNameCFD(mOptCode).Value = vbChecked)
+    .mIpgCDctCodeCfd_bln = (chkCDctNameCFD(mOptCode).Value = vbChecked)
+    .mIpgRByCodeCfd_bln = (chkRByNameCFD(mOptCode).Value = vbChecked)
+    .mIpgFDigCodeCfd_bln = (chkFDigNameCFD(mOptCode).Value = vbChecked)
+    .mIpgBdmCodeCfd_bln = (chkBdmNameCFD(mOptCode).Value = vbChecked)
+
+    .UpdateIndrRegOpt
+    mEntrySaved = True
+    
+ElseIf mOptCode = cOPT_BEDMAST Then
+    .mBdmChargesDef_dbl = Val(UnMyNumFmt(mskBdmCharges.Text))
+    .mBdmChkOutTimeBasisDef_int = cmbBdmChkOutTimeBasis.ItemData(cmbBdmChkOutTimeBasis.ListIndex)
+    .mBdmChkTimeDef_lng = TimeToMin(txtBdmChkTime_str.Text)
+    .mBdmFlrCodeDef_lng = Val(fcmbFlrName.BoundText)
+    .mBdmWrdCodeDef_lng = Val(fcmbWrdName.BoundText)
+    .mBdmSrvCodeDef_lng = Val(fcmbSrvName.BoundText)
+    ' ---------------
+    .mBdmChargesCfd_bln = (chkBdmChargesCFD.Value = vbChecked)
+    .mBdmChkOutTimeBasisCfd_bln = (chkBdmChkOutTimeBasisCFD.Value = vbChecked)
+    .mBdmChkTimeCfd_bln = (chkBdmChkTimeCFD.Value = vbChecked)
+    .mBdmFlrCodeCfd_bln = (chkFlrNameCFD(mOptCode).Value = vbChecked)
+    .mBdmWrdCodeCfd_bln = (chkWrdNameCFD(mOptCode).Value = vbChecked)
+    .mBdmSrvCodeCfd_bln = (chkSrvNameCFD(mOptCode).Value = vbChecked)
+    
+    .UpdateBedMastOpt
+    mEntrySaved = True
+    
+ElseIf mOptCode = cOPT_INDRRCPT Then
+    .mIrcPttRegNoNotZero_bln = (chkPttRegNoNotZero(mOptCode).Value = vbChecked)
+    .mIrcVtmCodeDef_lng = Val(fcmbVtmName.BoundText)
+    ' ---------------
+    .mIrcVtmCodeCfd_bln = (chkVtmNameCFD(mOptCode).Value = vbChecked)
+
+    .UpdateIndrRcptOpt
+    mEntrySaved = True
+    
+ElseIf mOptCode = cOPT_INDRPYMT Then
+    .mIpyPttRegNoNotZero_bln = (chkPttRegNoNotZero(mOptCode).Value = vbChecked)
+    .mIpyVtmCodeDef_lng = Val(fcmbVtmName.BoundText)
+    ' ---------------
+    .mIpyVtmCodeCfd_bln = (chkVtmNameCFD(mOptCode).Value = vbChecked)
+    
+    .UpdateIndrPymtOpt
+    mEntrySaved = True
+
+ElseIf mOptCode = cOPT_INDRREFD Then
+    .mIfdPttRegNoNotZero_bln = (chkPttRegNoNotZero(mOptCode).Value = vbChecked)
+    .mIfdVtmCodeDef_lng = Val(fcmbVtmName.BoundText)
+    ' ---------------
+    .mIfdVtmCodeCfd_bln = (chkVtmNameCFD(mOptCode).Value = vbChecked)
+    
+    .UpdateIndrRefdOpt
+    mEntrySaved = True
+
+ElseIf mOptCode = cOPT_INDRBILL Then
+    .mIblPttRegNoNotZero_bln = (chkPttRegNoNotZero(mOptCode).Value = vbChecked)
+    .mIblVtmCodeDef_lng = Val(fcmbVtmName.BoundText)
+    ' ---------------
+    .mIblVtmCodeCfd_bln = (chkVtmNameCFD(mOptCode).Value = vbChecked)
+
+    .UpdateIndrBillOpt
+    mEntrySaved = True
+    
+ElseIf mOptCode = cOPT_INDRBLPYMT Then
+    .mIbpyPttRegNoNotZero_bln = (chkPttRegNoNotZero(mOptCode).Value = vbChecked)
+    .mIbpyVtmCodeDef_lng = Val(fcmbVtmName.BoundText)
+    ' ---------------
+    .mIbpyVtmCodeCfd_bln = (chkVtmNameCFD(mOptCode).Value = vbChecked)
+    
+    .UpdateIndrBlPymtOpt
+    mEntrySaved = True
+
+ElseIf mOptCode = cOPT_INDRBLREFD Then
+    .mIbfdPttRegNoNotZero_bln = (chkPttRegNoNotZero(mOptCode).Value = vbChecked)
+    .mIbfdVtmCodeDef_lng = Val(fcmbVtmName.BoundText)
+    ' ---------------
+    .mIbfdVtmCodeCfd_bln = (chkVtmNameCFD(mOptCode).Value = vbChecked)
+    
+    .UpdateIndrBlRefdOpt
+    mEntrySaved = True
+
+ElseIf mOptCode = cOPT_INDRRGPYMT Then
+    .mIgtPttRegNoNotZero_bln = (chkPttRegNoNotZero(mOptCode).Value = vbChecked)
+    .mIgtVtmCodeDef_lng = Val(fcmbVtmName.BoundText)
+    ' ---------------
+    .mIgtVtmCodeCfd_bln = (chkVtmNameCFD(mOptCode).Value = vbChecked)
+    
+    .UpdateIndrRgPymtOpt
+    mEntrySaved = True
+
+ElseIf mOptCode = cOPT_INDRRGREFD Then
+    .mIgfPttRegNoNotZero_bln = (chkPttRegNoNotZero(mOptCode).Value = vbChecked)
+    .mIgfVtmCodeDef_lng = Val(fcmbVtmName.BoundText)
+    ' ---------------
+    .mIgfVtmCodeCfd_bln = (chkVtmNameCFD(mOptCode).Value = vbChecked)
+    
+    .UpdateIndrRgRefdOpt
+    mEntrySaved = True
+
+ElseIf mOptCode = cOPT_SERVRATESYS Then
+    .mExtServRateSys_bln = (chkExtServRateSys.Value = vbChecked)
+    .mDctwseServRateSys_bln = (chkDctwseServRateSys.Value = vbChecked)
+    .mPcgwseServRateSys_bln = (chkPcgwseServRateSys.Value = vbChecked)
+    .mRBywseServRateSys_bln = (chkRBywseServRateSys.Value = vbChecked)
+    .mRTowseServRateSys_bln = (chkRTowseServRateSys.Value = vbChecked)
+    .mTimewseServRateSys_bln = (chkTimewseServRateSys.Value = vbChecked)
+    ' ------------------------------------------------------------
+    .mExtServDiscSys_bln = (chkExtServDiscSys.Value = vbChecked)
+    .mDctwseServDiscSys_bln = (chkDctwseServDiscSys.Value = vbChecked)
+    .mPcgwseServDiscSys_bln = (chkPcgwseServDiscSys.Value = vbChecked)
+    .mRBywseServDiscSys_bln = (chkRBywseServDiscSys.Value = vbChecked)
+    .mRTowseServDiscSys_bln = (chkRTowseServDiscSys.Value = vbChecked)
+    .mTimewseServDiscSys_bln = (chkTimewseServDiscSys.Value = vbChecked)
+    ' ------------------------------------------------------------
+    .mExtServBargSys_bln = (chkExtServBargSys.Value = vbChecked)
+    .mDctwseServBargSys_bln = (chkDctwseServBargSys.Value = vbChecked)
+    .mPcgwseServBargSys_bln = (chkPcgwseServBargSys.Value = vbChecked)
+    .mRBywseServBargSys_bln = (chkRBywseServBargSys.Value = vbChecked)
+    .mRTowseServBargSys_bln = (chkRTowseServBargSys.Value = vbChecked)
+    .mTimewseServBargSys_bln = (chkTimewseServBargSys.Value = vbChecked)
+    ' ------------------------------------------------------------
+    .mExtServShareSys_bln = (chkExtServShareSys.Value = vbChecked)
+    .mDctwseServShareSys_bln = (chkDctwseServShareSys.Value = vbChecked)
+    .mPcgwseServShareSys_bln = (chkPcgwseServShareSys.Value = vbChecked)
+    .mRBywseServShareSys_bln = (chkRBywseServShareSys.Value = vbChecked)
+    .mRTowseServShareSys_bln = (chkRTowseServShareSys.Value = vbChecked)
+    .mTimewseServShareSys_bln = (chkTimewseServShareSys.Value = vbChecked)
+    ' ------------------------------------------------------------
+    
+    .UpdateExtServRateOpt
+    mEntrySaved = True
+    
+    Call InitHmsServRateSysParaOpt
+
+Else
+    'Call Data_CancelEvent
+    'AlertBox "Entry Cancelled !!!"
+    ErrorBox Me.Name & "_Data_SaveEvent_#796_[Undefined Case]"
+End If
+
+End With
+
+End Sub
+
+Private Sub Data_DeleteEvent()
+Dim mDeleteit As Boolean, mRecAbsPos As Long
+'If (datRecset.EOF Or datRecset.BOF) = True Then
+'    Exit Sub
+'End If
+
+'mOptCode = datRecset.Fields("DcgCode")
+'mRecAbsPos = datRecset.AbsolutePosition
+'
+'If clsOPT.CanDeleteMast(mOptCode) = True Then
+'    txtVoid.SetFocus
+'    If clsOPT.BeginMast(mOptCode) = True Then
+'        clsOPT.DeleteMast mOptCode
+'        clsOPT.UpdateMast mOptCode
+'        clsOPT.EndMast mOptCode
+'
+'        Call SmryList
+'        If datRecset.RecordCount > mRecAbsPos And mRecAbsPos > 0 Then
+'            datRecset.Move mRecAbsPos - 1, 1
+'        Else
+'            MoveRecToLast datRecset
+'        End If
+'    End If
+'    ShowRecActiveFlexRow datRecset, Mfgrd1
+'    Mfgrd1.SetFocus
+'Else
+'    Mfgrd1.SetFocus
+'End If
+
+End Sub
+
+Private Sub Data_CancelEvent()
+'clsOPT.CancelMast mOptCode
+'clsOPT.EndMast mOptCode
+mEntryAborted = True
+
+End Sub
+
+Private Sub SmryList()
+Dim gcolcount As Integer, acount As Integer, mLow As Integer, mHigh As Integer, mPos As Integer, srow As Long, mColCount As Integer
+
+clsListStru.Clear
+
+Rem column definitions
+clsListStru.AddFields mExpr:="OptCode", mAttrib:=cFAT_SYSTEM
+clsListStru.AddFields mExpr:="OptName", mTitle:="Option Name", mAlign:=1, mWidth:=4000, mShowItem:=True
+
+RefreshDatabase dbHmsDatabase
+RefreshDatabase dbAcDatabase
+'datRecset.Requery
+
+Mfgrd1.Height = Int(Mfgrd1.Height / Mfgrd1.RowHeightMin) * Mfgrd1.RowHeightMin
+Mfgrd1.Cols = clsListStru.UFields + 1
+gcolcount = 0
+mLow = clsListStru.LFields
+mHigh = clsListStru.UFields
+For acount = mLow To mHigh
+    With Mfgrd1
+    .ColAlignment(gcolcount) = clsListStru.Field_Align(acount)
+    If clsListStru.Field_Show(acount) = True Then
+        .ColWidth(gcolcount) = clsListStru.Field_Width(acount)
+    Else
+        .ColWidth(gcolcount) = 0
+    End If
+    .TextMatrix(0, gcolcount) = clsListStru.Field_Title(acount)
+    End With
+    
+    gcolcount = gcolcount + 1
+Next acount
+If FlexColsWidth(Mfgrd1) > Mfgrd1.Width Then
+    Mfgrd1.SelectionMode = flexSelectionFree
+Else
+    Mfgrd1.SelectionMode = flexSelectionByRow
+End If
+
+srow = 1
+'MoveRecToFirst datRecset
+'With datRecset
+'If .RecordCount > 0 Then
+'    Do While .EOF = False
+        ' --------------------------------
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptCode")) = cOPT_PATMAST
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptName")) = "Patient Registration"
+        ' --------------------------------
+        srow = srow + 1
+        If Mfgrd1.Rows < srow + 1 Then
+            Mfgrd1.Rows = Mfgrd1.Rows + 1
+        End If
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptCode")) = cOPT_INDRREG
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptName")) = "Indoor Registration"
+        ' --------------------------------
+        srow = srow + 1
+        If Mfgrd1.Rows < srow + 1 Then
+            Mfgrd1.Rows = Mfgrd1.Rows + 1
+        End If
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptCode")) = cOPT_BEDMAST
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptName")) = "Bed Master"
+        ' --------------------------------
+        srow = srow + 1
+        If Mfgrd1.Rows < srow + 1 Then
+            Mfgrd1.Rows = Mfgrd1.Rows + 1
+        End If
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptCode")) = cOPT_INDRRCPT
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptName")) = "Indoor Receipt"
+        ' --------------------------------
+        srow = srow + 1
+        If Mfgrd1.Rows < srow + 1 Then
+            Mfgrd1.Rows = Mfgrd1.Rows + 1
+        End If
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptCode")) = cOPT_INDRPYMT
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptName")) = "Indoor Payment"
+        ' --------------------------------
+        srow = srow + 1
+        If Mfgrd1.Rows < srow + 1 Then
+            Mfgrd1.Rows = Mfgrd1.Rows + 1
+        End If
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptCode")) = cOPT_INDRREFD
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptName")) = "Indoor Refund"
+        ' --------------------------------
+        srow = srow + 1
+        If Mfgrd1.Rows < srow + 1 Then
+            Mfgrd1.Rows = Mfgrd1.Rows + 1
+        End If
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptCode")) = cOPT_INDRBILL
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptName")) = "Indoor Bill"
+        ' --------------------------------
+        srow = srow + 1
+        If Mfgrd1.Rows < srow + 1 Then
+            Mfgrd1.Rows = Mfgrd1.Rows + 1
+        End If
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptCode")) = cOPT_INDRBLPYMT
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptName")) = "Indoor Bill Payment"
+        ' --------------------------------
+        srow = srow + 1
+        If Mfgrd1.Rows < srow + 1 Then
+            Mfgrd1.Rows = Mfgrd1.Rows + 1
+        End If
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptCode")) = cOPT_INDRBLREFD
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptName")) = "Indoor Bill Refund"
+        ' --------------------------------
+        srow = srow + 1
+        If Mfgrd1.Rows < srow + 1 Then
+            Mfgrd1.Rows = Mfgrd1.Rows + 1
+        End If
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptCode")) = cOPT_INDRRGPYMT
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptName")) = "Indoor On A/c.Payment"
+        ' --------------------------------
+        srow = srow + 1
+        If Mfgrd1.Rows < srow + 1 Then
+            Mfgrd1.Rows = Mfgrd1.Rows + 1
+        End If
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptCode")) = cOPT_INDRRGREFD
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptName")) = "Indoor On A/c.Refund"
+        ' --------------------------------
+        srow = srow + 1
+        If Mfgrd1.Rows < srow + 1 Then
+            Mfgrd1.Rows = Mfgrd1.Rows + 1
+        End If
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptCode")) = cOPT_SERVRATESYS
+        Mfgrd1.TextMatrix(srow, clsListStru.GetItemIndex("OptName")) = "Service Charges/Share System"
+        ' --------------------------------
+        srow = srow + 1
+        If Mfgrd1.Rows < srow + 1 Then
+            Mfgrd1.Rows = Mfgrd1.Rows + 1
+        End If
+        
+'        .MoveNext
+'    Loop
+'End If
+'End With
+For mColCount = 0 To Mfgrd1.Cols - 1
+    Mfgrd1.TextMatrix(srow, mColCount) = ""
+Next mColCount
+Mfgrd1.Rows = srow + 1
+
+SetFlexColCursor txtList1Col, Mfgrd1
+
+End Sub
+
+Private Function GetActiveControl() As Boolean
+Dim mCnt As Integer
+
+On Error GoTo errhand
+GetActiveControl = False
+If Screen.ActiveForm.Name = Me.Name Then
+    If Screen.ActiveControl.Visible = True And Screen.ActiveControl.Enabled = True Then
+        Set mActiveControl = Screen.ActiveControl
+        GetActiveControl = True
+    End If
+End If
+
+errhand:
+mCnt = mCnt + 1
+If mCnt > 2 Then
+    Exit Function
+End If
+
+End Function
+
+Private Function SetActiveControl() As Boolean
+Dim mCnt As Integer
+
+On Error GoTo errhand
+SetActiveControl = False
+If Screen.ActiveForm.Name = Me.Name And IsEmpty(mActiveControl) = False Then
+    If mActiveControl.Visible = True And mActiveControl.Enabled = True Then
+        mActiveControl.SetFocus
+        SetActiveControl = True
+    End If
+End If
+
+errhand:
+mCnt = mCnt + 1
+If mCnt > 2 Then
+    Exit Function
+End If
+
+End Function
+
+Private Sub Mfgrd1_DblClick()
+Call cmdFormEnter_Click
+
+End Sub
+
+Private Sub Mfgrd1_GotFocus()
+Mfgrd1.Col = FlexLeftVisibleCol(Mfgrd1)
+Mfgrd1.LeftCol = FlexLeftVisibleCol(Mfgrd1)
+If Mfgrd1.SelectionMode = flexSelectionByRow Then
+    Mfgrd1.ColSel = 0: Mfgrd1.ColSel = Mfgrd1.Cols - 1
+End If
+Call Mfgrd1_RowColChange
+txtSearch1Text.Text = ""
+
+End Sub
+
+Private Sub Mfgrd1_KeyDown(KeyCode As Integer, Shift As Integer)
+If MyAddNewKey(Shift, KeyCode) = True Then
+    'Call Data_AddEvent
+ElseIf MyDeleteKey(Shift, KeyCode) = True Then
+    'If Mfgrd1.Row < Mfgrd1.Rows - 1 Then
+    '    Call Data_DeleteEvent
+    'End If
+ElseIf Shift = vbCtrlMask And KeyCode = vbKeySpace Then
+    Call cmdFormEnter_Click
+End If
+
+End Sub
+
+Private Sub Mfgrd1_KeyPress(KeyAscii As Integer)
+mLastKeyPressed = KeyAscii
+If mMaskKeyPressed = 0 Or mMaskKeyPressed = vbShiftMask Then
+    txtSearch1Text.Text = JoinKeyAscii(txtSearch1Text.Text, KeyAscii)
+    Call txtSearch1Text_InterActiveChange
+End If
+
+End Sub
+
+Private Sub Mfgrd1_RowColChange()
+'If datRecset.RecordCount > 0 Then
+'    If datRecset.AbsolutePosition <> Mfgrd1.Row - Mfgrd1.FixedRows + 1 Then
+'        datRecset.MoveFirst
+'        datRecset.Move Mfgrd1.Row - Mfgrd1.FixedRows, 1     ' Mfgrd1.Row is already less by one
+'    End If
+'End If
+ShowFlexColCursor txtList1Col, Mfgrd1, Mfgrd1
+
+End Sub
+
+Private Sub Mfgrd1_Scroll()
+ShowFlexColCursor txtList1Col, Mfgrd1, Mfgrd1
+
+End Sub
+
+Private Sub txtList1Col_DblClick(Index As Integer)
+Call Mfgrd1_DblClick
+End Sub
+
+Private Sub txtList1Col_GotFocus(Index As Integer)
+Mfgrd1.SetFocus
+End Sub
+
+Private Sub txtSearch1Text_InterActiveChange(Optional ByVal mText)
+mText = IIf(IsMissing(mText) = True, txtSearch1Text.Text, mText)
+Rem SearchFlex Mfgrd1, clsListStru.GetItemIndex("OptName"), mText
+SearchRawFlex Mfgrd1, clsListStru.GetItemIndex("OptName"), mText
+ShowActiveFlexRow Mfgrd1
+
+End Sub
+
+Private Sub txtPcgName_Change(Index As Integer)
+If fcmbPcgName.CallFromText_Change = False Then
+    fcmbPcgName.CallFromText_Change = True
+    If InterActiveChange(txtPcgName(Index)) = True Then
+        fcmbPcgName.UserText = Array(txtPcgName(Index).Text, txtPcgName(Index).SelStart)
+        fcmbPcgName.Show
+        txtPcgName(Index).Text = fcmbPcgName.Text
+        If fcmbPcgName.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbPcgName.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub txtPcgName_GotFocus(Index As Integer)
+FlashActiveControl txtPcgName(Index), True
+End Sub
+
+Private Sub txtPcgName_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    txtPcgName_Change Index
+End If
+
+End Sub
+
+Private Sub txtPcgName_LostFocus(Index As Integer)
+FlashActiveControl txtPcgName(Index), False
+End Sub
+
+Private Sub txtRByName_Change(Index As Integer)
+If fcmbRByName.CallFromText_Change = False Then
+    fcmbRByName.CallFromText_Change = True
+    If InterActiveChange(txtRByName(Index)) = True Then
+        fcmbRByName.UserText = Array(txtRByName(Index).Text, txtRByName(Index).SelStart)
+        fcmbRByName.Show
+        txtRByName(Index).Text = fcmbRByName.Text
+        If fcmbRByName.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbRByName.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub txtRByName_GotFocus(Index As Integer)
+FlashActiveControl txtRByName(Index), True
+End Sub
+
+Private Sub txtRByName_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    txtRByName_Change Index
+End If
+
+End Sub
+
+Private Sub txtRByName_LostFocus(Index As Integer)
+FlashActiveControl txtRByName(Index), False
+End Sub
+
+Private Sub txtSearch1Text_GotFocus()
+FlashActiveControl txtSearch1Text, True
+End Sub
+
+Private Sub txtSearch1Text_LostFocus()
+FlashActiveControl txtSearch1Text, False
+End Sub
+
+Private Sub txtSrvName_Change(Index As Integer)
+If fcmbSrvName.CallFromText_Change = False Then
+    fcmbSrvName.CallFromText_Change = True
+    If InterActiveChange(txtSrvName(Index)) = True Then
+        fcmbSrvName.UserText = Array(txtSrvName(Index).Text, txtSrvName(Index).SelStart)
+        fcmbSrvName.Show
+        txtSrvName(Index).Text = fcmbSrvName.Text
+        If fcmbSrvName.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbSrvName.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub txtSrvName_GotFocus(Index As Integer)
+FlashActiveControl txtSrvName(Index), True
+End Sub
+
+Private Sub txtSrvName_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    txtSrvName_Change Index
+End If
+
+End Sub
+
+Private Sub txtSrvName_LostFocus(Index As Integer)
+FlashActiveControl txtSrvName(Index), False
+End Sub
+
+Private Sub txtStnName_Change(Index As Integer)
+If fcmbStnName.CallFromText_Change = False Then
+    fcmbStnName.CallFromText_Change = True
+    If InterActiveChange(txtStnName(Index)) = True Then
+        fcmbStnName.UserText = Array(txtStnName(Index).Text, txtStnName(Index).SelStart)
+        fcmbStnName.Show
+        txtStnName(Index).Text = fcmbStnName.Text
+        If fcmbStnName.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbStnName.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub txtStnName_GotFocus(Index As Integer)
+FlashActiveControl txtStnName(Index), True
+End Sub
+
+Private Sub txtStnName_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    txtStnName_Change Index
+End If
+
+End Sub
+
+Private Sub txtStnName_LostFocus(Index As Integer)
+FlashActiveControl txtStnName(Index), False
+End Sub
+
+Private Sub txtVtmName_Change(Index As Integer)
+If fcmbVtmName.CallFromText_Change = False Then
+    fcmbVtmName.CallFromText_Change = True
+    If InterActiveChange(txtVtmName(Index)) = True Then
+        fcmbVtmName.UserText = Array(txtVtmName(Index).Text, txtVtmName(Index).SelStart)
+        fcmbVtmName.Show
+        txtVtmName(Index).Text = fcmbVtmName.Text
+        If fcmbVtmName.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbVtmName.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub txtVtmName_GotFocus(Index As Integer)
+FlashActiveControl txtVtmName(Index), True
+End Sub
+
+Private Sub txtVtmName_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    txtVtmName_Change Index
+End If
+
+End Sub
+
+Private Sub txtVtmName_LostFocus(Index As Integer)
+FlashActiveControl txtVtmName(Index), False
+End Sub
+
+Private Sub txtWrdName_Change(Index As Integer)
+If fcmbWrdName.CallFromText_Change = False Then
+    fcmbWrdName.CallFromText_Change = True
+    If InterActiveChange(txtWrdName(Index)) = True Then
+        fcmbWrdName.UserText = Array(txtWrdName(Index).Text, txtWrdName(Index).SelStart)
+        fcmbWrdName.Show
+        txtWrdName(Index).Text = fcmbWrdName.Text
+        If fcmbWrdName.ListSelected = True Then
+            SendKeys "{tab}"
+        End If
+    End If
+    fcmbWrdName.CallFromText_Change = False
+End If
+
+End Sub
+
+Private Sub txtWrdName_GotFocus(Index As Integer)
+FlashActiveControl txtWrdName(Index), True
+End Sub
+
+Private Sub txtWrdName_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+If MyDropDownKey(Shift, KeyCode) = True Then
+    txtWrdName_Change Index
+End If
+
+End Sub
+
+Private Sub txtWrdName_LostFocus(Index As Integer)
+FlashActiveControl txtWrdName(Index), False
+End Sub
+
+Private Sub SetControlFocus()
+If mOptCode = cOPT_PATMAST Then
+    chkPttRegNoAutoNumber(mOptCode).SetFocus
+ElseIf mOptCode = cOPT_INDRREG Then
+    chkPttRegNoAutoNumber(mOptCode).SetFocus
+ElseIf mOptCode = cOPT_INDRREG Then
+    chkPttRegNoAutoNumber(mOptCode).SetFocus
+ElseIf mOptCode = cOPT_BEDMAST Then
+    mskBdmCharges.SetFocus
+ElseIf mOptCode = cOPT_INDRRCPT Then
+    chkPttRegNoNotZero(mOptCode).SetFocus
+ElseIf mOptCode = cOPT_INDRPYMT Then
+    chkPttRegNoNotZero(mOptCode).SetFocus
+ElseIf mOptCode = cOPT_INDRREFD Then
+    chkPttRegNoNotZero(mOptCode).SetFocus
+ElseIf mOptCode = cOPT_INDRBILL Then
+    chkPttRegNoNotZero(mOptCode).SetFocus
+ElseIf mOptCode = cOPT_INDRBLPYMT Then
+    chkPttRegNoNotZero(mOptCode).SetFocus
+ElseIf mOptCode = cOPT_INDRBLREFD Then
+    chkPttRegNoNotZero(mOptCode).SetFocus
+ElseIf mOptCode = cOPT_INDRRGPYMT Then
+    chkPttRegNoNotZero(mOptCode).SetFocus
+ElseIf mOptCode = cOPT_INDRRGREFD Then
+    chkPttRegNoNotZero(mOptCode).SetFocus
+ElseIf mOptCode = cOPT_SERVRATESYS Then
+    chkExtServRateSys.SetFocus
+Else
+
+End If
+
+End Sub

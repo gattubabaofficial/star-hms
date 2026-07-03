@@ -1,0 +1,20 @@
+Line 95: Class MSComctlLib.StatusBar of control StatusBar1 was not a loaded control class.
+Line 2459: Class MSFlexGridLib.MSFlexGrid of control Mfgrd2 was not a loaded control class.
+Line 3231: Class MSFlexGridLib.MSFlexGrid of control Mfgrd1 was not a loaded control class.
+Line 102: The property name _ExtentX in StatusBar1 is invalid.
+Line 103: The property name _ExtentY in StatusBar1 is invalid.
+Line 104: The property name _Version in StatusBar1 is invalid.
+Line 163: The property name Panels in StatusBar1 is invalid.
+Line 2465: The property name _ExtentX in Mfgrd2 is invalid.
+Line 2466: The property name _ExtentY in Mfgrd2 is invalid.
+Line 2467: The property name _Version in Mfgrd2 is invalid.
+Line 2468: The property name RowHeightMin in Mfgrd2 is invalid.
+Line 2469: The property name HighLight in Mfgrd2 is invalid.
+Line 2470: The property name SelectionMode in Mfgrd2 is invalid.
+Line 3237: The property name _ExtentX in Mfgrd1 is invalid.
+Line 3238: The property name _ExtentY in Mfgrd1 is invalid.
+Line 3239: The property name _Version in Mfgrd1 is invalid.
+Line 3240: The property name RowHeightMin in Mfgrd1 is invalid.
+Line 3241: The property name FocusRect in Mfgrd1 is invalid.
+Line 3242: The property name HighLight in Mfgrd1 is invalid.
+Line 3243: The property name SelectionMode in Mfgrd1 is invalid.

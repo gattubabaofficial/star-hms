@@ -1,0 +1,1703 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+  Persistable = 0  'NotPersistable
+  DataBindingBehavior = 0  'vbNone
+  DataSourceBehavior  = 0  'vbNone
+  MTSTransactionMode  = 0  'NotAnMTSObject
+END
+Attribute VB_Name = "clsProduct"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Rem Important hints
+Rem change in qty,item,item ref.,date,party etc. are the causes of balance update not just mere qty
+Rem use ItmCode and ItmRefCode simultaneously to have strict imposition/checking, donot use ItmRefCode in isolation
+Rem ************************************************************************
+Option Explicit
+Dim m_dbStDatabase As ADODB.Connection, m_dbGrpDatabase As ADODB.Connection
+Dim ITRecset As New ADODB.Recordset, Itm_LogRS As New ADODB.Recordset, ProdRef_LogRS As New ADODB.Recordset, OpnStk_LogRS As New ADODB.Recordset
+Public mItmCode_lng As Long, mItmName_str As String
+#If cMULTIITEMREF = False Then
+    Public mItmOpQty_dbl As Double, mItmOpRate_dbl As Double, mItmOpValue_dbl As Double, mItmCurQty_dbl As Double, mItmCurAvgRate_dbl As Double, mItmCurValue_dbl As Double
+    Public mItrRefCode_lng As Long, mItrRate_dbl As Double
+#End If
+'Dim mItmOpQty_sqf As String, mItmOpRate_gdf As String, mItmOpValue_svf As String, mItmCurQty_sqf As String, mItmCurRate_gdf As String, mItmCurValue_svf As String
+Dim adtlProdRef As ProdRef, adtlOpnStock As OpnStock, adtlCurStock As CurStock
+Dim mActiveItem As Integer, aItemTran() As Variant
+
+Private Type ProdRef
+ItrRefCode() As Variant
+ItrStkCode() As Variant
+ItrRate() As Variant
+ItrRecState() As Variant
+End Type
+
+Private Type OpnStock
+StkICode() As Variant
+StkItmRefCode() As Variant
+StkQty() As Variant
+StkRate() As Variant
+StkValue() As Variant
+StkRecState() As Variant
+End Type
+
+Private Type CurStock
+StkItmRefCode() As Variant
+StkQty() As Variant
+StkRate() As Variant
+StkValue() As Variant
+End Type
+
+Public Property Get LProdRef() As Integer
+LProdRef = LBound(adtlProdRef.ItrRefCode)
+End Property
+
+Public Property Get UProdRef() As Integer
+UProdRef = UBound(adtlProdRef.ItrRefCode)
+End Property
+
+Public Property Get ItrRefCode(ByVal mDim1 As Integer) As Variant
+ItrRefCode = adtlProdRef.ItrRefCode(mDim1)
+End Property
+
+Public Property Get ItrStkCode(ByVal mDim1 As Integer) As Variant
+ItrStkCode = adtlProdRef.ItrStkCode(mDim1)
+End Property
+
+Public Property Get ItrRate(ByVal mDim1 As Integer) As Variant
+ItrRate = adtlProdRef.ItrRate(mDim1)
+End Property
+
+Public Property Get ItrRecState(ByVal mDim1 As Integer) As Variant
+ItrRecState = adtlProdRef.ItrRecState(mDim1)
+End Property
+
+Public Sub AddProdRef(ByVal mItrRate As Double, Optional ByVal mItrStkCode As Long = cOPSTKCODE)
+Dim acount As Integer, mItrRefCode As Long
+With adtlProdRef
+acount = UBound(.ItrRefCode) + 1
+
+ReDim Preserve .ItrRefCode(acount)
+ReDim Preserve .ItrStkCode(acount)
+ReDim Preserve .ItrRate(acount)
+ReDim Preserve .ItrRecState(acount)
+
+mItrRefCode = acount 'GetNextSeqno(m_dbStDatabase, "ProdRef", "ItrRefCode") * -(acount + 1)     ' acount must never fall to 0
+
+.ItrRefCode(acount) = mItrRefCode
+.ItrStkCode(acount) = mItrStkCode
+.ItrRate(acount) = mItrRate
+.ItrRecState(acount) = cREC_ADDED
+End With
+
+End Sub
+
+Public Sub EditProdRef(ByVal mItrRefCode As Long, ByVal mItrRate As Double)
+Dim acount As Integer, mLCount As Integer, mUCount As Integer, mItmRefFound As Boolean
+
+With adtlProdRef
+mLCount = LBound(.ItrRefCode)
+mUCount = UBound(.ItrRefCode)
+mItmRefFound = False
+For acount = mLCount To mUCount
+    If .ItrRefCode(acount) = mItrRefCode Then
+        mItmRefFound = True
+        Exit For
+    End If
+Next acount
+If mItmRefFound = False Then
+    Err.Raise Number:=vbObjectError + 513, Description:="clsProduct_EditProdRef_107"
+Else
+    Rem .ItrRefCode(acount) = mItrRefCode not required
+    Rem .ItrStkCode(acount) = mItrStkCode
+    .ItrRate(acount) = mItrRate
+    .ItrRecState(acount) = ChkEditRecStatus(.ItrRecState(acount))
+End If
+End With
+
+End Sub
+
+Public Sub DeleteProdRef(ByVal mItrRefCode As Long)
+Dim acount As Integer, mLCount As Integer, mUCount As Integer, mItmRefFound As Boolean
+
+With adtlProdRef
+mLCount = LBound(.ItrRefCode)
+mUCount = UBound(.ItrRefCode)
+mItmRefFound = False
+For acount = mLCount To mUCount
+    If .ItrRefCode(acount) = mItrRefCode Then
+        mItmRefFound = True
+        Exit For
+    End If
+Next acount
+If mItmRefFound = False Then
+    Err.Raise Number:=vbObjectError + 513, Description:="clsProduct_DeleteProdRef_132"
+Else
+    Rem .ItrRefCode(acount) = mItrRefCode not required
+    Rem .ItrStkCode(acount) = mItrStkCode
+    Rem .ItrRate(acount) = mItrRate
+    .ItrRecState(acount) = ChkDeleteRecStatus(.ItrRecState(acount))
+End If
+End With
+
+End Sub
+
+Public Property Get LOpnStock() As Integer
+LOpnStock = LBound(adtlOpnStock.StkICode)
+End Property
+
+Public Property Get UOpnStock() As Integer
+UOpnStock = UBound(adtlOpnStock.StkICode)
+End Property
+
+Public Property Get OpnICode(ByVal mDim1 As Integer) As Variant
+OpnICode = adtlOpnStock.StkICode(mDim1)
+End Property
+
+Public Property Get OpnItmRefCode(ByVal mDim1 As Integer) As Variant
+OpnItmRefCode = adtlOpnStock.StkItmRefCode(mDim1)
+End Property
+
+Public Property Get OpnQty(ByVal mDim1 As Integer) As Variant
+OpnQty = adtlOpnStock.StkQty(mDim1)
+End Property
+
+Public Property Get OpnRate(ByVal mDim1 As Integer) As Variant
+OpnRate = adtlOpnStock.StkRate(mDim1)
+End Property
+
+Public Property Get OpnValue(ByVal mDim1 As Integer) As Variant
+OpnValue = adtlOpnStock.StkValue(mDim1)
+End Property
+
+Public Property Get OpnRecState(ByVal mDim1 As Integer) As Variant
+OpnRecState = adtlOpnStock.StkRecState(mDim1)
+End Property
+
+Public Sub AddOpnStock(ByVal mStkQty As Double, ByVal mStkRate As Double, ByVal mStkValue As Double)
+Dim acount As Integer, mStkICode As Long, mStkItmRefCode As Long
+With adtlOpnStock
+acount = UBound(.StkICode) + 1
+
+ReDim Preserve .StkICode(acount)
+ReDim Preserve .StkItmRefCode(acount)
+ReDim Preserve .StkQty(acount)
+ReDim Preserve .StkRate(acount)
+ReDim Preserve .StkValue(acount)
+ReDim Preserve .StkRecState(acount)
+
+mStkICode = acount   'GetNextSeqno(m_dbStDatabase, "StockJrn", "StkICode") * -(acount + 1)      ' acount must never fall to 0
+mStkItmRefCode = acount  'GetNextSeqno(m_dbStDatabase, "ProdRef", "ItrRefCode") * -(acount + 1)      ' acount must never fall to 0
+
+.StkICode(acount) = mStkICode
+.StkItmRefCode(acount) = mStkItmRefCode
+.StkQty(acount) = mStkQty
+.StkRate(acount) = mStkRate
+.StkValue(acount) = mStkValue
+.StkRecState(acount) = cREC_ADDED
+End With
+
+End Sub
+
+Public Sub EditOpnStock(ByVal mStkICode As Long, ByVal mStkQty As Double, ByVal mStkRate As Double, ByVal mStkValue As Double)
+Dim acount As Integer, mLCount As Integer, mUCount As Integer, mItmRefFound As Boolean
+With adtlOpnStock
+mLCount = LBound(.StkICode)
+mUCount = UBound(.StkICode)
+mItmRefFound = False
+For acount = mLCount To mUCount
+    If .StkICode(acount) = mStkICode Then
+        mItmRefFound = True
+        Exit For
+    End If
+Next acount
+
+If mItmRefFound = False Then
+    ErrorBox "clsProduct_EditOpnStock_235"
+Else
+    Rem .StkICode(acount) = mStkICode ' not required
+    Rem .StkItmRefCode(acount) = mStkItmRefCode not required
+    .StkQty(acount) = mStkQty
+    .StkRate(acount) = mStkRate
+    .StkValue(acount) = mStkValue
+    .StkRecState(acount) = ChkEditRecStatus(.StkRecState(acount))
+End If
+End With
+
+End Sub
+
+Public Sub DeleteOpnStock(ByVal mStkICode As Long)
+Dim acount As Integer, mLCount As Integer, mUCount As Integer, mItmRefFound As Boolean
+With adtlOpnStock
+mLCount = LBound(.StkICode)
+mUCount = UBound(.StkICode)
+mItmRefFound = False
+For acount = mLCount To mUCount
+    If .StkICode(acount) = mStkICode Then
+        mItmRefFound = True
+        Exit For
+    End If
+Next acount
+
+If mItmRefFound = False Then
+    ErrorBox "clsProduct_DeleteOpnStock_265"
+Else
+    Rem .StkICode(acount) = mStkICode ' not required
+    Rem .StkItmRefCode(acount) = mStkItmRefCode not required
+    Rem .StkQty(acount) = mStkQty
+    Rem .StkRate(acount) = mStkRate
+    Rem .StkValue(acount) = mStkValue
+    .StkRecState(acount) = ChkDeleteRecStatus(.StkRecState(acount))
+End If
+End With
+
+End Sub
+
+Public Property Get LCurStock() As Integer
+LCurStock = LBound(adtlCurStock.StkItmRefCode)
+End Property
+
+Public Property Get UCurStock() As Integer
+UCurStock = UBound(adtlCurStock.StkItmRefCode)
+End Property
+
+Public Property Get CurItmRefCode(ByVal mDim1 As Integer) As Variant
+CurItmRefCode = adtlCurStock.StkItmRefCode(mDim1)
+End Property
+
+Public Property Get CurQty(ByVal mDim1 As Integer) As Variant
+CurQty = adtlCurStock.StkQty(mDim1)
+End Property
+
+Public Property Get CurRate(ByVal mDim1 As Integer) As Variant
+CurRate = adtlCurStock.StkRate(mDim1)
+End Property
+
+Public Property Get CurValue(ByVal mDim1 As Integer) As Variant
+CurValue = adtlCurStock.StkValue(mDim1)
+End Property
+
+Public Property Set dbStDatabase(ByRef db As ADODB.Connection)
+Set m_dbStDatabase = db
+
+ITRecset.Open "ProdMast", m_dbStDatabase, adOpenKeyset, adLockOptimistic, adCmdTableDirect
+ITRecset.Index = "ItmCode"
+
+Itm_LogRS.Open "ProdMast_Log", m_dbStDatabase, adOpenKeyset, adLockOptimistic, adCmdTableDirect
+Itm_LogRS.Index = "ItmCode"
+
+ProdRef_LogRS.Open "ProdRef_Log", m_dbStDatabase, adOpenKeyset, adLockOptimistic, adCmdTableDirect
+ProdRef_LogRS.Index = "ItrRefCode"
+
+OpnStk_LogRS.Open "StockJrn_Log", m_dbStDatabase, adOpenKeyset, adLockOptimistic, adCmdTableDirect
+OpnStk_LogRS.Index = "StkICode"
+
+End Property
+
+Public Property Set dbGrpDatabase(ByRef db As ADODB.Connection)
+Set m_dbGrpDatabase = db
+End Property
+
+Private Sub Class_Initialize()
+aItemTran = Array()
+mActiveItem = UBound(aItemTran)
+End Sub
+
+Public Sub GetData(ByVal mItmCode As Long, Optional ByVal mStkCode As Long = cOPSTKCODE)
+Dim acount As Integer, tRecset As New ADODB.Recordset
+Me.Clear
+With ITRecset
+.Seek Array(mItmCode)
+If .EOF = False Then
+    mItmCode_lng = .Fields("ItmCode")
+    mItmName_str = .Fields("ItmName")
+End If
+End With
+
+Rem item reference
+tRecset.Open "Select * from ProdRef where ItrStkCode=" & CStr(mStkCode) & " and ItrItmCode=" & CStr(mItmCode) & " order by ItrRefcode", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+If tRecset.RecordCount > 0 Then
+    Do While tRecset.EOF = False
+        With adtlProdRef
+        acount = UBound(.ItrRefCode) + 1
+        
+        ReDim Preserve .ItrRefCode(acount)
+        ReDim Preserve .ItrStkCode(acount)
+        ReDim Preserve .ItrRate(acount)
+        ReDim Preserve .ItrRecState(acount)
+        
+        .ItrRefCode(acount) = tRecset.Fields("ItrRefCode")
+        .ItrStkCode(acount) = tRecset.Fields("ItrStkCode")
+        .ItrRate(acount) = tRecset.Fields("ItrRate")
+        .ItrRecState(acount) = tRecset.Fields("ItrRecState")
+        End With
+        
+        tRecset.MoveNext
+    Loop
+End If
+CloseTable tRecset
+
+Rem opening stock
+tRecset.Open "Select * from StockJrn where StkCode=" & CStr(mStkCode) & " and StkItmCode=" & CStr(mItmCode) & " and StkDate=#" & CStr(sBooksFromDate - 1) & "#", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+If tRecset.RecordCount > 0 Then
+    Do While tRecset.EOF = False
+        With adtlOpnStock
+        acount = UBound(.StkICode) + 1
+        
+        ReDim Preserve .StkICode(acount)
+        ReDim Preserve .StkItmRefCode(acount)
+        ReDim Preserve .StkQty(acount)
+        ReDim Preserve .StkRate(acount)
+        ReDim Preserve .StkValue(acount)
+        ReDim Preserve .StkRecState(acount)
+        
+        .StkICode(acount) = tRecset.Fields("StkICode")
+        .StkItmRefCode(acount) = tRecset.Fields("StkItmRefCode")
+        .StkQty(acount) = tRecset.Fields("StkQty")
+        .StkRate(acount) = tRecset.Fields("StkRate")
+        .StkValue(acount) = tRecset.Fields("StkValue")
+        .StkRecState(acount) = tRecset.Fields("StkRecState")
+        End With
+        
+        tRecset.MoveNext
+    Loop
+End If
+CloseTable tRecset
+
+Rem current stock
+tRecset.Open "Select gpsItmRefCode,sum(gpsQty) as gpsQty_sum from gProdSum where gpsItmCode=" & CStr(mItmCode) & " group by gpsItmRefCode order by gpsItmRefCode", m_dbGrpDatabase, adOpenKeyset, adLockOptimistic
+If tRecset.RecordCount > 0 Then
+    Do While tRecset.EOF = False
+        With adtlCurStock
+        acount = UBound(.StkItmRefCode) + 1
+        
+        ReDim Preserve .StkItmRefCode(acount)
+        ReDim Preserve .StkQty(acount)
+        ReDim Preserve .StkRate(acount)
+        ReDim Preserve .StkValue(acount)
+        
+        .StkItmRefCode(acount) = tRecset.Fields("gpsItmRefCode")
+        .StkQty(acount) = tRecset.Fields("gpsQty_sum")
+        .StkRate(acount) = 0
+        .StkValue(acount) = 0
+        End With
+        
+        tRecset.MoveNext
+    Loop
+End If
+CloseTable tRecset
+
+End Sub
+
+Public Sub Clear()
+mItmCode_lng = 0
+mItmName_str = ""
+
+With adtlProdRef
+.ItrRefCode = Array()
+.ItrStkCode = Array()
+.ItrRate = Array()
+.ItrRecState = Array()
+End With
+
+With adtlOpnStock
+.StkICode = Array()
+.StkItmRefCode = Array()
+.StkQty = Array()
+.StkRate = Array()
+.StkValue = Array()
+.StkRecState = Array()
+End With
+
+With adtlCurStock
+.StkItmRefCode = Array()
+.StkQty = Array()
+.StkRate = Array()
+.StkValue = Array()
+End With
+
+End Sub
+
+Public Sub Requery()
+ITRecset.Requery
+Itm_LogRS.Requery
+ProdRef_LogRS.Requery
+OpnStk_LogRS.Requery
+
+End Sub
+
+Private Sub Class_Terminate()
+If UBound(aItemTran) >= LBound(aItemTran) Then
+    ErrorBox "Product Master Entry in Process !!!"
+End If
+
+CloseTable ITRecset
+CloseTable Itm_LogRS
+CloseTable ProdRef_LogRS
+CloseTable OpnStk_LogRS
+
+End Sub
+
+Public Function BeginItem(ByVal mItmCode As Long) As Boolean
+BeginItem = False
+ITRecset.Requery
+If mItmCode = 0 Then
+    mItmCode = GetNextSeqno(m_dbStDatabase, "ProdMast", "ItmCode")
+    If mItmCode < 1 Then
+        ErrorBox "New Product Master Entry Failed !!!"
+        Exit Function
+    End If
+ElseIf mItmCode > 0 Then
+    ITRecset.Seek Array(mItmCode)
+    If ITRecset.EOF = True Then
+        ErrorBox "Product Master Entry not Found !!!"
+        Exit Function
+    End If
+Else
+    ErrorBox "Invalid Product Master Entry !!!"
+    Exit Function
+End If
+mActiveItem = UBound(aItemTran) + 1
+ReDim Preserve aItemTran(mActiveItem)
+aItemTran(mActiveItem) = mItmCode
+
+Call Data_CreateLog(mItmCode)
+
+BeginItem = True
+
+End Function
+
+Public Function EndItem(ByVal mItmCode As Long) As Boolean
+Dim mCnt As Integer
+EndItem = False
+If Chk_ActiveItem() = False Or mItmCode <> ActiveItmCode Then
+    ErrorBox "No Active Product Master Entry !!!"
+    Exit Function
+End If
+Call Data_RemoveLog(mItmCode)
+
+For mCnt = (mActiveItem + 1) To UBound(aItemTran)
+    If (mCnt - 1) >= LBound(aItemTran) Then
+        aItemTran(mCnt - 1) = aItemTran(mCnt)
+    End If
+Next mCnt
+If LBound(aItemTran) = UBound(aItemTran) Then
+    aItemTran = Array()
+Else
+    ReDim Preserve aItemTran(UBound(aItemTran) - 1)
+End If
+If mActiveItem > UBound(aItemTran) Then
+    mActiveItem = mActiveItem - 1
+End If
+
+EndItem = True
+End Function
+
+Public Property Get ActiveItmCode() As Long
+On Error GoTo errhand
+
+ActiveItmCode = aItemTran(mActiveItem)
+
+Exit Property
+
+errhand:
+ErrorBox Err.Description
+ActiveItmCode = -1
+Exit Property
+
+End Property
+
+Rem update transactional sum up, physically deletes records marked for deletion or marks ok records for added or edited
+Public Function CommitItem(ByVal mItmCode As Long, Optional ByVal mStkCode As Long = cOPSTKCODE) As Boolean
+Dim tRecset As New ADODB.Recordset, mLCount As Integer, mUCount As Integer, acount As Integer
+
+CommitItem = False
+On Error GoTo errhand
+
+m_dbStDatabase.BeginTrans
+Rem updating ProdMast
+With tRecset
+.Open "Select * from ProdMast where ItmCode=" & CStr(mItmCode) & "", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+If .RecordCount > 0 Then
+    If InList(.Fields("ItmRecState"), Array(cREC_ADDED, cREC_EDITED, cREC_UNCHANGED)) = True Then
+        .Fields("ItmRecState") = cREC_UNCHANGED
+        .Update
+    Else
+        .Fields("ItmRecState") = ChkDeleteRecStatus(.Fields("ItmRecState"))
+        .Update
+        .Delete
+    End If
+End If
+End With
+CloseTable tRecset
+m_dbStDatabase.CommitTrans  ' required because item ref. rate is queried in stock bal update blow
+
+Rem ProdRef table
+With adtlProdRef
+mLCount = LBound(.ItrRefCode)
+mUCount = UBound(.ItrRefCode)
+For acount = mLCount To mUCount
+    Rem we will find added record only in addnew
+    If .ItrRecState(acount) = cREC_ADDED Then     ' newly added
+        CommitProdRef acount, mItmCode
+    ElseIf .ItrRecState(acount) = cREC_EDITED Then      ' edit mode
+        CommitProdRef acount, mItmCode
+    ElseIf .ItrRecState(acount) = cREC_DELETED Then      ' existing rec deleted
+        CommitProdRef acount, mItmCode
+    ElseIf .ItrRecState(acount) = cREC_CANCELED Then      ' newly added rec deleted
+        CommitProdRef acount, mItmCode
+    ElseIf .ItrRecState(acount) = cREC_UNCHANGED Then      ' existing rec unchanged
+        CommitProdRef acount, mItmCode
+    Else  ' unknown
+        ErrorBox "clsProduct_AddNew_982"
+        Rem Err.Raise Number:=vbObjectError + 513, Description:="clsProduct_AddNew_1063"
+    End If
+Next acount
+
+Rem StockJrn - opening stock
+m_dbStDatabase.BeginTrans
+With tRecset
+.Open "Select * from StockJrn where StkCode=" & CStr(mStkCode) & " and StkItmCode=" & CStr(mItmCode) & " and StkRecState<>" & CStr(cREC_UNCHANGED) & " order by StkICode", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+If .RecordCount > 0 Then
+    Do While .EOF = False
+        If .Fields("StkRecState") = cREC_EDITED Or .Fields("StkRecState") = cREC_DELETED Then
+            OpnStk_LogRS.Seek Array(.Fields("StkICode"))
+            If OpnStk_LogRS.EOF = False Then
+                UpdateGrpQtySum OpnStk_LogRS.Fields("StkItmCode"), OpnStk_LogRS.Fields("StkItmRefCode"), OpnStk_LogRS.Fields("StkQty"), 0, cREMOVEBAL, OpnStk_LogRS.Fields("StkDate")
+            Else
+                ErrorBox "clsProduct_CommitItem_626"
+            End If
+        End If
+        If .Fields("StkRecState") = cREC_ADDED Or .Fields("StkRecState") = cREC_EDITED Then
+            UpdateGrpQtySum .Fields("StkItmCode"), .Fields("StkItmRefCode"), .Fields("StkQty"), 0, cADDBAL, .Fields("StkDate")
+        End If
+        
+        If InList(.Fields("StkRecState"), Array(cREC_ADDED, cREC_EDITED, cREC_UNCHANGED)) = True Then
+            .Fields("StkRecState") = cREC_UNCHANGED
+            .Update
+        Else
+            .Fields("StkRecState") = ChkDeleteRecStatus(.Fields("StkRecState"))
+            .Update
+            .Delete
+        End If
+        .MoveNext
+    Loop
+End If
+End With
+CloseTable tRecset
+m_dbStDatabase.CommitTrans
+
+Rem gProdSum -  stock day balances
+m_dbGrpDatabase.BeginTrans
+With tRecset
+.Open "Select * from gProdSum where gpsItmCode=" & CStr(mItmCode) & " and gpsDate=#" & CStr(sBooksFromDate - 1) & "# and gpsRecState<>" & CStr(cREC_UNCHANGED) & " order by gpsICode", m_dbGrpDatabase, adOpenKeyset, adLockOptimistic
+If .RecordCount > 0 Then
+    Do While .EOF = False
+        If InList(.Fields("gpsRecState"), Array(cREC_ADDED, cREC_EDITED, cREC_UNCHANGED)) = True Then
+            .Fields("gpsRecState") = cREC_UNCHANGED
+            .Update
+        Else
+            .Fields("gpsRecState") = ChkDeleteRecStatus(.Fields("gpsRecState"))
+            .Update
+            .Delete
+        End If
+        .MoveNext
+    Loop
+End If
+End With
+CloseTable tRecset
+
+m_dbGrpDatabase.CommitTrans
+
+Rem refreshing online data
+ITRecset.Requery
+
+CommitItem = True
+
+Exit Function
+errhand:
+MsgBox Err.Description
+m_dbStDatabase.Cancel
+Exit Function
+
+End Function
+
+Public Function CommitProdRef(ByVal mACount As Integer, ByVal mItmCode As Long) As Boolean
+Dim tRecset As New ADODB.Recordset
+
+On Error GoTo errhand
+CommitProdRef = False
+
+m_dbStDatabase.BeginTrans
+With tRecset
+.Open "Select * from ProdRef where ItrStkCode=" & CStr(adtlProdRef.ItrStkCode(mACount)) & " and ItrItmCode=" & CStr(mItmCode) & " and ItrRefCode=" & adtlProdRef.ItrRefCode(mACount) & " and ItrRecState<>" & CStr(cREC_UNCHANGED) & " order by ItrRefCode", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+If .RecordCount > 0 Then
+    Do While .EOF = False
+        If InList(.Fields("ItrRecState"), Array(cREC_ADDED, cREC_EDITED, cREC_UNCHANGED)) = True Then
+            .Fields("ItrRecState") = cREC_UNCHANGED
+            .Update
+        Else
+            .Fields("ItrRecState") = ChkDeleteRecStatus(.Fields("ItrRecState"))
+            .Update
+            .Delete
+        End If
+    
+        .MoveNext
+    Loop
+End If
+End With
+CloseTable tRecset
+m_dbStDatabase.CommitTrans
+CommitProdRef = True
+
+Exit Function
+errhand:
+MsgBox Err.Description
+m_dbStDatabase.Cancel
+Exit Function
+
+End Function
+
+Rem checks entries with log table, if log exist restores log records else delete records (assuming new records added), stock updation part not done here because master entries does not have effect while in process
+Public Function CancelItem(ByVal mItmCode As Long) As Boolean
+Dim tRecset As New ADODB.Recordset, OpnStk_LogRS As New ADODB.Recordset, Itm_LogRS As New ADODB.Recordset
+
+CancelItem = False
+If Chk_ActiveItem() = False Or mItmCode <> ActiveItmCode Then
+    ErrorBox "No Active Product Master Entry to Cancel !!!"
+    GoTo EndSub
+End If
+On Error GoTo errhand
+
+m_dbStDatabase.BeginTrans
+With tRecset
+.Open "Select * from ProdMast where ItmCode=" & CStr(mItmCode) & "", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+Itm_LogRS.Open "Select * from ProdMast_Log where ItmCode=" & CStr(mItmCode) & "", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+If .RecordCount > 0 Then
+    If Itm_LogRS.EOF = False Then
+        ' any prior updations can be made here
+        .Fields("ItmName") = Itm_LogRS.Fields("ItmName")
+        .Fields("ItmRecState") = Itm_LogRS.Fields("ItmRecState")
+        .Update
+    Else
+        ' any prior updations can be made here
+        .Fields("ItmRecState") = ChkDeleteRecStatus(.Fields("ItmRecState"))
+        .Update
+        .Delete
+    End If
+End If
+End With
+m_dbStDatabase.BeginTrans
+CloseTable tRecset
+CloseTable Itm_LogRS
+
+Rem ProdRef
+With adtlProdRef
+mLCount = LBound(.ItrRefCode)
+mUCount = UBound(.ItrRefCode)
+For acount = mLCount To mUCount
+    CancelProdRef acount, mItmCode
+Next acount
+
+Rem Opening Stock - StockJrn
+mLCount = LBound(adtlOpnStock.StkICode)
+mUCount = UBound(adtlOpnStock.StkICode)
+For acount = mLCount To mUCount
+    m_dbStDatabase.BeginTrans
+    With tRecset
+    .Open "Select * from StockJrn where StkICode=" & adtlOpnStock.StkICode(acount) & "", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+    OpnStk_LogRS.Open "Select * from StockJrn_Log where StkICode=" & adtlOpnStock.StkICode(acount) & "", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+    If .RecordCount > 0 Then
+        If OpnStk_LogRS.EOF = False Then
+            ' any prior updations can be made here
+            .Fields("StkSno") = OpnStk_LogRS.Fields("StkSno")
+            .Fields("StkDate") = OpnStk_LogRS.Fields("StkDate")
+            .Fields("StkItmCode") = OpnStk_LogRS.Fields("StkItmCode")
+            .Fields("StkItmRefCode") = OpnStk_LogRS.Fields("StkItmRefCode")
+            .Fields("StkQty") = OpnStk_LogRS.Fields("StkQty")
+            .Fields("StkRate") = OpnStk_LogRS.Fields("StkRate")
+            .Fields("StkValue") = OpnStk_LogRS.Fields("StkValue")
+            .Fields("StkNarr") = OpnStk_LogRS.Fields("StkNarr")
+            .Fields("StkRecState") = OpnStk_LogRS.Fields("StkRecState")
+            .Fields("StkLItmCode") = OpnStk_LogRS.Fields("StkLItmCode")
+            .Update
+        Else
+            ' any prior updations can be made here
+            .Fields("StkRecState") = ChkDeleteRecStatus(.Fields("StkRecState"))
+            .Update
+            .Delete
+        End If
+    End If
+    End With
+    CloseTable tRecset
+    CloseTable OpnStk_LogRS
+    m_dbStDatabase.CommitTrans
+Next acount
+CancelItem = True
+Exit Function
+
+errhand:
+MsgBox Err.Description
+m_dbStDatabase.Cancel
+GoTo EndSub
+Exit Function
+
+EndSub:
+Set tRecset = Nothing
+Set OpnStk_LogRS = Nothing
+Set Itm_LogRS = Nothing
+Exit Function
+
+End Function
+
+Public Function CancelProdRef(ByVal mACount As Integer, ByVal mItmCode As Long) As Boolean
+Dim tRecset As New ADODB.Recordset, ProdRef_LogRS As New ADODB.Recordset
+
+CancelProdRef = False
+On Error GoTo errhand
+
+m_dbStDatabase.BeginTrans
+With tRecset
+.Open "Select * from ProdRef where ItrRefCode=" & CStr(adtlProdRef.ItrRefCode(mACount)) & "", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+ProdRef_LogRS.Open "Select * from ProdRef_Log where ItrRefCode=" & CStr(adtlProdRef.ItrRefCode(mACount)) & "", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+If .RecordCount > 0 Then
+    If ProdRef_LogRS.EOF = False Then
+        ' any prior updations can be made here
+        .Fields("ItrRate") = ProdRef_LogRS.Fields("ItrRate")
+        .Fields("ItrRecState") = ProdRef_LogRS.Fields("ItrRecState")
+        .Update
+    Else
+        ' any prior updations can be made here
+        .Fields("ItrRecState") = ChkDeleteRecStatus(.Fields("ItrRecState"))
+        .Update
+        .Delete
+    End If
+End If
+End With
+m_dbStDatabase.CommitTrans
+CloseTable tRecset
+CloseTable ProdRef_LogRS
+
+CancelProdRef = True
+
+Exit Function
+
+errhand:
+MsgBox Err.Description
+m_dbStDatabase.Cancel
+GoTo EndSub
+Exit Function
+
+EndSub:
+Set tRecset = Nothing
+Set ProdRef_LogRS = Nothing
+Exit Function
+
+End Function
+
+Rem marking records for deletion
+Public Function DeleteItem(ByVal mItmCode As Long) As Boolean
+Dim tRecset As New ADODB.Recordset
+DeleteItem = False
+If Chk_ActiveItem() = False Or mItmCode <> ActiveItmCode Then
+    ErrorBox "No Active Product Master Entry to Delete !!!"
+    GoTo EndSub
+End If
+On Error GoTo errhand
+
+m_dbStDatabase.BeginTrans
+With tRecset
+.Open "Select * from ProdMast where ItmCode=" & CStr(mItmCode) & "", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+If .RecordCount > 0 Then
+    .Fields("ItmRecState") = ChkDeleteRecStatus(.Fields("ItmRecState"))
+    .Update
+Else
+    ErrorBox "clsProduct_DeleteItem_824"
+End If
+End With
+m_dbStDatabase.CommitTrans
+CloseTable tRecset
+
+m_dbStDatabase.BeginTrans
+With tRecset
+.Open "Select * from ProdRef where ItrStkCode=" & CStr(mStkCode) & " and ItrItmCode=" & CStr(mItmCode) & " order by ItrRefCode", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+If .RecordCount > 0 Then
+    Do While .EOF = False
+        .Fields("ItrRecState") = ChkDeleteRecStatus(.Fields("ItrRecState"))
+        .Update
+        
+        .MoveNext
+    Loop
+Else
+    ErrorBox "clsProduct_DeleteItem_835"
+End If
+End With
+m_dbStDatabase.CommitTrans
+CloseTable tRecset
+
+With tRecset
+.Open "Select * from StockJrn where StkCode=" & CStr(mStkCode) & " and StkItmCode=" & CStr(mItmCode) & " order by StkICode", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+If .RecordCount > 0 Then
+    Do While .EOF = False
+        .Fields("StkRecState") = ChkDeleteRecStatus(.Fields("StkRecState"))
+        .Update
+        
+        .MoveNext
+    Loop
+Else
+    ErrorBox "clsProduct_DeleteItem_849"
+End If
+End With
+CloseTable tRecset
+m_dbStDatabase.CommitTrans
+
+ITRecset.Requery
+
+DeleteItem = True
+
+Exit Function
+
+errhand:
+MsgBox Err.Description
+m_dbStDatabase.Cancel
+Exit Function
+
+EndSub:
+Set tRecset = Nothing
+Exit Function
+
+End Function
+
+Public Function SelectItem(ByVal mItmCode As Long) As Boolean
+Dim mEntryFound As Boolean
+SelectItem = False
+If mItmCode < 1 Then
+    ErrorBox "Invalid Product Master Entry !!!"
+    Exit Function
+End If
+mEntryFound = False
+For mActiveItem = LBound(aItemTran) To UBound(aItemTran)
+    If aItemTran(mActiveItem) = mItmCode Then
+        mEntryFound = True
+        Exit For
+    End If
+Next mActiveItem
+If mEntryFound = False Then
+    mActiveItem = UBound(aItemTran) + 1
+End If
+
+SelectItem = True
+End Function
+
+Public Function NextStock() As Boolean
+NextStock = False
+If EOStk = True Then
+    ErrorBox "End of Stock Entry !!!"
+    Exit Function
+End If
+mActiveItem = mActiveItem + 1
+
+NextStock = True
+End Function
+
+Public Function PreviousStock()
+PreviousStock = False
+If BOStk = True Then
+    ErrorBox "Begining of Stock Entry !!!"
+    Exit Function
+End If
+mActiveItem = mActiveItem - 1
+
+PreviousStock = True
+End Function
+
+Public Function FirstStock() As Boolean
+FirstStock = False
+If CountStock = 0 Then
+    ErrorBox "No Stock Entry !!!"
+    Exit Function
+End If
+mActiveItem = LBound(aItemTran)
+
+FirstStock = True
+
+End Function
+
+Public Function LastStock() As Boolean
+LastStock = False
+If CountStock = 0 Then
+    ErrorBox "No Stock Entry !!!"
+    Exit Function
+End If
+mActiveItem = UBound(aItemTran)
+
+LastStock = True
+
+End Function
+
+Public Property Get CountStock() As Integer
+If UBound(aItemTran) = -1 Then
+    CountStock = 0
+Else
+    CountStock = UBound(aItemTran) - LBound(aItemTran) + 1
+End If
+
+End Property
+
+Public Property Get EOStk() As Boolean
+EOStk = (mActiveItem > UBound(aItemTran) Or UBound(aItemTran) = -1)
+End Property
+
+Public Property Get BOStk() As Boolean
+BOStk = (mActiveItem < LBound(aItemTran) Or UBound(aItemTran) = -1)
+End Property
+
+Public Function Chk_ActiveItem() As Boolean
+If BOStk = False And EOStk = False Then
+    Chk_ActiveItem = True
+Else
+    Chk_ActiveItem = False
+End If
+
+End Function
+
+Private Function Data_CreateLog(ByVal mItmCode As Long, Optional ByVal mStkCode As Long = cOPSTKCODE) As Boolean
+Data_CreateLog = False
+If Chk_ActiveItem() = False Or mItmCode <> ActiveItmCode Then
+    ErrorBox "No Active Stock Entry to Create Log !!!"
+    Exit Function
+End If
+
+With Itm_LogRS
+.Seek Array(mItmCode)
+If .EOF = True Then
+    m_dbStDatabase.BeginTrans
+    m_dbStDatabase.Execute "Insert into ProdMast_Log Select * from ProdMast where ItmCode=" & CStr(mItmCode) & ""
+    m_dbStDatabase.CommitTrans
+    .Requery
+Else
+    AlertBox "Unsaved Product Master Entry !!!"
+End If
+End With
+
+With ProdRef_LogRS
+.Seek Array(mItmCode)
+If .EOF = True Then
+    m_dbStDatabase.BeginTrans
+    m_dbStDatabase.Execute "Insert into ProdRef_Log Select * from ProdRef where ItrStkCode=" & CStr(mStkCode) & " and ItrItmCode=" & CStr(mItmCode) & ""
+    m_dbStDatabase.CommitTrans
+    .Requery
+Else
+    AlertBox "Unsaved Product Master(Ref.) Entry !!!"
+End If
+End With
+
+With OpnStk_LogRS
+.Seek Array(mStkCode)
+If .EOF = True Then
+    m_dbStDatabase.BeginTrans
+    m_dbStDatabase.Execute "Insert into StockJrn_Log Select * from StockJrn where StkCode=" & CStr(mStkCode) & " and StkItmCode=" & CStr(mItmCode) & ""
+    m_dbStDatabase.CommitTrans
+    .Requery
+Else
+    AlertBox "Unsaved Product Master(Opn.Stk) Entry !!!"
+End If
+End With
+
+Data_CreateLog = True
+
+End Function
+
+Private Function Data_RemoveLog(ByVal mItmCode As Long, Optional ByVal mStkCode As Long = cOPSTKCODE) As Boolean
+Data_RemoveLog = False
+If Chk_ActiveItem() = False Or mItmCode <> ActiveItmCode Then
+    ErrorBox "No Active Product Master Entry to Remove Log !!!"
+    Exit Function
+End If
+
+m_dbStDatabase.BeginTrans
+m_dbStDatabase.Execute "Delete from ProdMast_Log where ItmCode=" & CStr(mItmCode)
+m_dbStDatabase.Execute "Delete from ProdRef_Log where ItrStkCode=" & CStr(mStkCode) & " and ItrItmCode=" & CStr(mItmCode) & ""
+m_dbStDatabase.Execute "Delete from StockJrn_Log where StkCode=" & CStr(mStkCode) & " and StkItmCode=" & CStr(mItmCode) & ""
+m_dbStDatabase.CommitTrans
+
+Itm_LogRS.Requery
+ProdRef_LogRS.Requery
+OpnStk_LogRS.Requery
+
+Data_RemoveLog = True
+
+End Function
+
+Public Sub AddNew(Optional mStkCode As Long = cOPSTKCODE)
+Dim tRecset As New ADODB.Recordset, mCanAddNew As Boolean, acount As Integer, mLCount As Integer, mUCount As Integer, mStkSno As Integer
+mCanAddNew = True
+
+tRecset.Open "Select ItmName from ProdMast where ItmName='" & mItmName_str & "'", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+If tRecset.EOF = False Then
+    mCanAddNew = False
+    ErrorBox "Duplicate Name !!!"
+End If
+CloseTable tRecset
+
+On Error GoTo errhand
+mItmCode_lng = 0
+If mCanAddNew = True Then
+    m_dbStDatabase.BeginTrans
+    With ITRecset
+    .AddNew
+    Rem .Fields("ItmCode") = mItmCode_lng
+    .Fields("ItmName") = mItmName_str
+    .Fields("ItmRecState") = cREC_ADDED
+    .Update
+    mItmCode_lng = .Fields("ItmCode")
+    aItemTran(mActiveItem) = mItmCode_lng
+    End With
+    If mItmCode_lng > 0 Then    ' when successfull
+        Rem Adding ProdRef
+        With adtlProdRef
+        mLCount = LBound(.ItrRefCode)
+        mUCount = UBound(.ItrRefCode)
+        For acount = mLCount To mUCount
+            Rem we will find added record only in addnew
+            If .ItrRecState(acount) = cREC_ADDED Then     ' newly added
+                AddNewProdRef acount, mItmCode_lng
+                
+                adtlOpnStock.StkItmRefCode(acount) = .ItrRefCode(acount)
+            ElseIf .ItrRecState(acount) = cREC_EDITED Then      ' edit mode
+                ErrorBox "clsProduct_AddNew_974"
+            ElseIf .ItrRecState(acount) = cREC_DELETED Then      ' existing rec deleted
+                ErrorBox "clsProduct_AddNew_976"
+            ElseIf .ItrRecState(acount) = cREC_CANCELED Then      ' newly added rec deleted
+                Rem may occur
+            ElseIf .ItrRecState(acount) = cREC_UNCHANGED Then      ' existing rec unchanged
+                ErrorBox "clsProduct_AddNew_980"
+            Else  ' unknown
+                ErrorBox "clsProduct_AddNew_982"
+                Rem Err.Raise Number:=vbObjectError + 513, Description:="clsProduct_AddNew_1063"
+            End If
+        Next acount
+        
+        Rem updating opening stock
+        tRecset.Open "Select * from StockJrn where StkCode=" & CStr(mStkCode) & " and StkItmCode=" & CStr(mItmCode_lng) & " order by StkICode", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+        If tRecset.RecordCount > 0 Then
+            ErrorBox "clsProduct_AddNew_1072"
+        End If
+        
+        With adtlOpnStock
+        mLCount = LBound(.StkICode)
+        mUCount = UBound(.StkICode)
+        For acount = mLCount To mUCount
+            If .StkRecState(acount) = cREC_ADDED Then     ' newly added. we will find added record only in addnew
+                mStkSno = GetNextSeqno(m_dbStDatabase, "StockJrn", "StkSno", "StkCode=" & CStr(mStkCode) & "")
+                
+                tRecset.AddNew
+                Rem tRecset.Fields("StkICode") = AutoNumber
+                tRecset.Fields("StkCode") = mStkCode
+                tRecset.Fields("StkSno") = mStkSno
+                tRecset.Fields("StkDate") = (sBooksFromDate - 1)
+                tRecset.Fields("StkItmCode") = mItmCode_lng
+                tRecset.Fields("StkItmRefCode") = .StkItmRefCode(acount)
+                tRecset.Fields("StkQty") = .StkQty(acount)
+                tRecset.Fields("StkRate") = .StkRate(acount)
+                tRecset.Fields("StkValue") = .StkValue(acount)
+                tRecset.Fields("StkNarr") = ""
+                tRecset.Fields("StkRecState") = cREC_ADDED
+                tRecset.Update
+                
+            ElseIf .StkRecState(acount) = cREC_EDITED Then      ' edit mode
+                ErrorBox "clsProduct_AddNew_1100"
+            ElseIf .StkRecState(acount) = cREC_DELETED Then      ' existing rec deleted
+                ErrorBox "clsProduct_AddNew_1102"
+            ElseIf .StkRecState(acount) = cREC_CANCELED Then      ' newly added rec deleted
+                Rem may occur
+            ElseIf .StkRecState(acount) = cREC_UNCHANGED Then      ' existing rec unchanged
+                ErrorBox "clsProduct_AddNew_1106"
+            Else  ' error/mistake
+                ErrorBox "clsProduct_AddNew_1108"
+            End If
+        Next acount
+        End With
+        CloseTable tRecset
+    End If
+    m_dbStDatabase.CommitTrans
+End If
+
+Exit Sub
+
+errhand:
+MsgBox Err.Description
+m_dbStDatabase.Cancel
+Exit Sub
+
+End Sub
+
+Public Sub AddNewProdRef(ByVal mACount As Integer, ByVal mItmCode As Long)
+Dim tRecset As New ADODB.Recordset
+
+With adtlProdRef
+tRecset.Open "Select * from ProdRef where ItrStkCode=" & CStr(.ItrStkCode(mACount)) & " and ItrItmCode=" & CStr(mItmCode) & " and ItrRefCode=" & .ItrRefCode(mACount) & "", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+If tRecset.RecordCount > 0 Then
+    ErrorBox "clsProduct_AddNew_1025"
+End If
+Rem we will find added record only in addnew
+If .ItrRecState(mACount) = cREC_ADDED Then     ' newly added
+    tRecset.AddNew
+    Rem .Fields("ItrRefCode") = AutoNumber
+    tRecset.Fields("ItrItmCode") = mItmCode
+    tRecset.Fields("ItrStkCode") = .ItrStkCode(mACount)
+    tRecset.Fields("ItrRate") = .ItrRate(mACount)
+    tRecset.Fields("ItrRecState") = cREC_ADDED
+    tRecset.Update
+    
+    .ItrRefCode(mACount) = tRecset.Fields("ItrRefCode")
+ElseIf .ItrRecState(mACount) = cREC_EDITED Then      ' edit mode
+    ErrorBox "clsProduct_AddNew_1055"
+ElseIf .ItrRecState(mACount) = cREC_DELETED Then      ' existing rec deleted
+    ErrorBox "clsProduct_AddNew_1057"
+ElseIf .ItrRecState(mACount) = cREC_CANCELED Then      ' newly added rec deleted
+    Rem may occur
+ElseIf .ItrRecState(mACount) = cREC_UNCHANGED Then      ' existing rec unchanged
+    ErrorBox "clsProduct_AddNew_1061"
+Else  ' unknown
+    ErrorBox "clsProduct_AddNew_1063"
+    Rem Err.Raise Number:=vbObjectError + 513, Description:="clsProduct_AddNew_1063"
+End If
+End With
+CloseTable tRecset
+
+End Sub
+
+Public Sub Update(ByVal mItmCode As Long, Optional ByVal mStkCode As Long = cOPSTKCODE)
+Dim tRecset As New ADODB.Recordset, mCanUpdate As Boolean, mLCount As Integer, mUCount As Integer, acount As Integer, mStkSno As Integer
+mCanUpdate = True
+
+tRecset.Open "Select ItmName from ProdMast where ItmName='" & mItmName_str & "' and ItmCode<>" & CStr(mItmCode) & "", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+If tRecset.EOF = False Then
+    mCanUpdate = False
+    ErrorBox "Duplicate Name !!!"
+End If
+CloseTable tRecset
+
+On Error GoTo errhand
+mItmCode_lng = 0
+If mCanUpdate = True Then
+    m_dbStDatabase.BeginTrans
+    With ITRecset
+    .Seek Array(mItmCode)
+    
+    .Fields("ItmName") = mItmName_str
+    .Fields("ItmRecState") = ChkEditRecStatus(.Fields("ItmRecState"))
+    .Update
+    mItmCode_lng = .Fields("ItmCode")
+    End With
+    
+    If mItmCode_lng > 0 Then    ' when successfull
+        Rem Updating ProdRef
+        With adtlProdRef
+        mLCount = LBound(.ItrRefCode)
+        mUCount = UBound(.ItrRefCode)
+        For acount = mLCount To mUCount
+            If .ItrRecState(acount) = cREC_ADDED Then     ' newly added
+                UpdateProdRef acount, mItmCode
+                adtlOpnStock.StkItmRefCode(acount) = .ItrRefCode(acount)
+            ElseIf .ItrRecState(acount) = cREC_EDITED Then      ' edit mode
+                UpdateProdRef acount, mItmCode
+            ElseIf .ItrRecState(acount) = cREC_DELETED Or .ItrRecState(acount) = cREC_CANCELED Then      ' existing rec deleted/canceled
+                UpdateProdRef acount, mItmCode
+            ElseIf .ItrRecState(acount) = cREC_UNCHANGED Then      ' existing rec unchanged
+                UpdateProdRef acount, mItmCode
+            Else  ' error/mistake
+                ErrorBox "clsProduct_Update_1120"
+            End If
+        Next acount
+        End With
+        
+        Rem updating opening stock
+        tRecset.Open "Select * from StockJrn where StkCode=" & CStr(mStkCode) & " and StkItmCode=" & CStr(mItmCode) & " order by StkICode", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+        If tRecset.RecordCount = 0 Then
+            ErrorBox "clsProduct_Update_1213"
+        End If
+        
+        With adtlOpnStock
+        mLCount = LBound(.StkICode)
+        mUCount = UBound(.StkICode)
+        For acount = mLCount To mUCount
+            If .StkRecState(acount) = cREC_ADDED Then     ' newly added. we will find added record only in addnew
+                mStkSno = GetNextSeqno(m_dbStDatabase, "StockJrn", "StkSno", "StkCode=" & CStr(mStkCode) & "")
+                
+                tRecset.AddNew
+                Rem tRecset.Fields("StkICode") = AutoNumber
+                tRecset.Fields("StkCode") = mStkCode
+                tRecset.Fields("StkSno") = mStkSno
+                tRecset.Fields("StkDate") = (sBooksFromDate - 1)
+                tRecset.Fields("StkItmCode") = mItmCode
+                tRecset.Fields("StkItmRefCode") = .StkItmRefCode(acount)
+                tRecset.Fields("StkQty") = .StkQty(acount)
+                tRecset.Fields("StkRate") = .StkRate(acount)
+                tRecset.Fields("StkValue") = .StkValue(acount)
+                tRecset.Fields("StkRecState") = cREC_ADDED
+                tRecset.Update
+                
+            ElseIf .StkRecState(acount) = cREC_EDITED Then      ' edit mode
+                MoveRecToFirst tRecset
+                tRecset.Find "StkICode=" & CStr(.StkICode(acount))
+                If tRecset.EOF = False Then
+                    Rem tRecset.Fields("StkICode") = AutoNumber
+                    Rem tRecset.Fields("StkCode") = mStkCode
+                    Rem tRecset.Fields("StkSno") = mStkSno
+                    Rem tRecset.Fields("StkDate") = (sBooksFromDate - 1)
+                    Rem tRecset.Fields("StkItmCode") = mItmCode
+                    Rem tRecset.Fields("StkItmRefCode") = .StkItmRefCode(acount)
+                    tRecset.Fields("StkQty") = .StkQty(acount)
+                    tRecset.Fields("StkRate") = .StkRate(acount)
+                    tRecset.Fields("StkValue") = .StkValue(acount)
+                    tRecset.Fields("StkRecState") = ChkEditRecStatus(tRecset.Fields("StkRecState"))
+                    tRecset.Update
+                Else
+                    ErrorBox "clsProduct_Update_1288"
+                End If
+            ElseIf .StkRecState(acount) = cREC_DELETED Or .StkRecState(acount) = cREC_CANCELED Then      ' existing rec deleted or new rec canceled
+                MoveRecToFirst tRecset
+                tRecset.Find "StkICode=" & CStr(.StkICode(acount))
+                If tRecset.EOF = False Then
+                    tRecset.Fields("StkRecState") = ChkDeleteRecStatus(tRecset.Fields("StkRecState"))
+                    tRecset.Update
+                Else
+                    If .StkRecState(acount) = cREC_DELETED Then
+                        ErrorBox "clsProduct_Update_1298"
+                    End If
+                End If
+            ElseIf .StkRecState(acount) = cREC_UNCHANGED Then      ' existing rec unchanged
+                MoveRecToFirst tRecset
+                tRecset.Find "StkICode=" & CStr(.StkICode(acount))
+                If tRecset.EOF = False Then
+                    Rem nochange required
+                Else
+                    ErrorBox "clsProduct_Update_1289"
+                End If
+            Else  ' error/mistake
+                ErrorBox "clsProduct_Update_1304"
+            End If
+        Next acount
+        End With
+        CloseTable tRecset
+    End If
+    m_dbStDatabase.CommitTrans
+End If
+
+Exit Sub
+
+errhand:
+MsgBox Err.Description
+m_dbStDatabase.Cancel
+
+End Sub
+
+Private Sub UpdateProdRef(ByVal mACount As Integer, ByVal mItmCode As Long)
+Dim tRecset As New ADODB.Recordset
+
+With adtlProdRef
+tRecset.Open "Select * from ProdRef where ItrStkCode=" & CStr(.ItrStkCode(mACount)) & " and ItrItmCode=" & CStr(mItmCode) & " and ItrRefCode=" & .ItrRefCode(mACount) & "", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+If tRecset.RecordCount = 0 Then
+    ErrorBox "clsProduct_Update_1154"
+End If
+If .ItrRecState(mACount) = cREC_ADDED Then     ' newly added
+    tRecset.AddNew
+    Rem tRecset.Fields("ItrRefCode") = AutoNumber
+    tRecset.Fields("ItrItmCode") = mItmCode
+    tRecset.Fields("ItrStkCode") = .ItrStkCode(mACount)
+    tRecset.Fields("ItrRate") = .ItrRate(mACount)
+    tRecset.Fields("ItrRecState") = cREC_ADDED
+    tRecset.Update
+    
+    .ItrRefCode(mACount) = tRecset.Fields("ItrRefCode")
+ElseIf .ItrRecState(mACount) = cREC_EDITED Then      ' edit mode
+    Rem tRecset.Fields("ItrRefCode") = AutoNumber
+    Rem tRecset.Fields("ItrItmCode") = mItmCode
+    Rem tRecset.Fields("ItrStkCode") = .ItrStkCode(mACount)
+    tRecset.Fields("ItrRate") = .ItrRate(mACount)
+    tRecset.Fields("ItrRecState") = ChkEditRecStatus(tRecset.Fields("ItrRecState"))
+    tRecset.Update
+ElseIf .ItrRecState(mACount) = cREC_DELETED Or .ItrRecState(mACount) = cREC_CANCELED Then      ' existing rec deleted/canceled
+    Rem marking for deletion from ProdRef table
+    tRecset.Fields("ItrRecState") = ChkDeleteRecStatus(tRecset.Fields("ItrRecState"))
+    tRecset.Update
+ElseIf .ItrRecState(mACount) = cREC_UNCHANGED Then      ' existing rec unchanged
+    Rem no change required
+Else  ' error/mistake
+    ErrorBox "clsProduct_Update_1227"
+End If
+End With
+CloseTable tRecset
+
+End Sub
+
+Public Function CanDeleteItem(ByVal mItmCode As Long) As Boolean
+Dim mDeleteit As Boolean
+
+mDeleteit = True
+
+If ChkEntryExist(mItmCode) = True Then
+    ErrorBox "Entry Exist !!!"
+    mDeleteit = False
+End If
+If mDeleteit = True Then
+    mDeleteit = CanDelete()
+End If
+
+CanDeleteItem = mDeleteit
+
+End Function
+
+Rem returns wheather item code or item reference is having any transaction
+Public Function ChkEntryExist(ByVal mAltCode As Long, Optional ByVal mRefItem As Boolean = False) As Boolean
+Dim tRecset As New ADODB.Recordset
+With tRecset
+If mRefItem = False Then
+    .Open "Select * from StockJrn where StkItmCode=" & CStr(mAltCode) & " and StkCode<>" & CStr(mStkCode) & "", m_dbStDatabase, adOpenKeyset, adLockReadOnly
+Else
+    .Open "Select * from StockJrn where StkItmRefCode=" & CStr(mAltCode) & " and StkCode<>" & CStr(mStkCode) & "", m_dbStDatabase, adOpenKeyset, adLockReadOnly
+End If
+ChkEntryExist = (.RecordCount > 0)
+End With
+CloseTable tRecset
+End Function
+
+Rem updates transacted qty to group item summation
+Public Sub UpdateGrpQtySum(ByVal mItmCode As Long, ByVal mItmRefCode As Long, ByVal mTargetQty As Double, ByVal mOldQty As Double, ByVal mAddBal As Boolean, ByVal mDate As Date)
+Dim tRecset As New ADODB.Recordset, gProdSumRS As New ADODB.Recordset
+Dim mCanUpdate As Boolean
+
+mCanUpdate = True
+
+On Error GoTo errhand
+If mCanUpdate = True Then
+    m_dbGrpDatabase.BeginTrans
+    With gProdSumRS
+    .Open "Select * from gProdSum where gpsItmRefCode=" & CStr(mItmRefCode) & " and gpsItmCode=" & CStr(mItmCode) & " and gpsDate=#" & CStr(mDate) & "#", m_dbGrpDatabase, adOpenKeyset, adLockOptimistic
+    If .RecordCount > 0 Then
+        If mAddBal = True Then
+            .Fields("gpsQty") = .Fields("gpsQty") + mTargetQty - mOldQty
+        Else
+            .Fields("gpsQty") = .Fields("gpsQty") - mTargetQty
+        End If
+        .Fields("gpsRecState") = ChkEditRecStatus(.Fields("gpsRecState"))
+        .Update
+    Else
+        If mAddBal = True Then
+            .AddNew
+            .Fields("gpsDate") = mDate
+            .Fields("gpsItmCode") = mItmCode
+            .Fields("gpsItmRefCode") = mItmRefCode
+            .Fields("gpsQty") = mTargetQty
+            .Fields("gpsRecState") = cREC_ADDED
+            .Update
+        Else
+            ErrorBox "clsProduct_UpdateQtyBal_1350"
+        End If
+    End If
+    End With
+    m_dbGrpDatabase.CommitTrans
+    CloseTable gProdSumRS
+    
+End If
+
+Exit Sub
+
+errhand:
+MsgBox Err.Description
+m_dbStDatabase.Cancel
+Exit Sub
+
+End Sub
+
+Public Sub Calc_Value()
+mItmOpValue_dbl = (mItmOpQty_dbl * mItmOpRate_dbl)
+mItmCurValue_dbl = (mItmCurQty_dbl * mItmCurAvgRate_dbl)
+
+End Sub
+
+Rem returns closing qty as on date for specified item
+Public Function GetItmQtyAsOnDate(ByVal mItmCode As Long, ByVal mDate As Date) As Double
+Dim mRtnval As Double, tRecset As New ADODB.Recordset
+
+mRtnval = 0
+With tRecset
+.Open "Select sum(gpsQty) as gpsQty_sum from gProdSum where gpsItmCode=" & CStr(mItmCode) & " and gpsDate<=#" & CStr(mDate) & "#", m_dbGrpDatabase, adOpenKeyset, adLockOptimistic
+If .RecordCount > 0 Then
+    mRtnval = .Fields("gpsQty_sum")
+End If
+End With
+CloseTable tRecset
+
+GetItmQtyAsOnDate = mRtnval
+
+End Function
+
+Rem returns opening qty, avg.rate and value in array or string for specified item
+Public Function GetItmOpnQtyRateValue(ByVal mItmCode As Long, Optional ByVal mIsRcSeperated As Boolean = False) As Variant
+Dim aRtnval(0 To 1, 0 To 2) As Variant, tRecset As New ADODB.Recordset
+
+aRtnval(0, 0) = 0 ' qty receipt/combined
+aRtnval(0, 1) = 0 ' avg.rate receipt/combined
+aRtnval(0, 2) = 0 ' value receipt/combined
+aRtnval(1, 0) = 0 ' qty issue
+aRtnval(1, 1) = 0 ' avg.rate issue
+aRtnval(1, 2) = 0 ' value issue
+
+With tRecset
+If mIsRcSeperated = True Then
+    .Open "Select sum(iif(StkQty>0,StkQty,0)) as RcStkQty_sum, sum(iif(StkQty<0,StkQty,0)) as IsStkQty_sum, sum(iif(StkValue>0,StkValue,0)) as DrStkValue_sum, sum(iif(StkValue<0,StkValue,0)) as CrStkValue_sum from StockJrn where StkCode=" & CStr(mStkCode) & " and StkItmCode=" & CStr(mItmCode) & " and StkDate=#" & CStr(sBooksFromDate - 1) & "#", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+    If tRecset.RecordCount > 0 Then
+        Rem plus stock
+        aRtnval(0, 0) = .Fields("RcStkQty_sum")
+        If .Fields("RcStkQty_sum") <> 0 And .Fields("DrStkValue_sum") <> 0 Then
+            aRtnval(0, 1) = .Fields("DrStkValue_sum") / .Fields("RcStkQty_sum")
+        End If
+        aRtnval(0, 2) = .Fields("DrStkValue_sum")
+        
+        Rem minus stock
+        aRtnval(1, 0) = .Fields("IsStkQty_sum")
+        If .Fields("IsStkQty_sum") <> 0 And .Fields("CrStkValue_sum") <> 0 Then
+            aRtnval(1, 1) = .Fields("CrStkValue_sum") / .Fields("IsStkQty_sum")
+        End If
+        aRtnval(1, 2) = .Fields("CrStkValue_sum")
+    End If
+Else
+    .Open "Select sum(StkQty) as StkQty_sum,sum(StkValue) as StkValue_sum from StockJrn where StkCode=" & CStr(mStkCode) & " and StkItmCode=" & CStr(mItmCode) & " and StkDate=#" & CStr(sBooksFromDate - 1) & "#", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+    If tRecset.RecordCount > 0 Then
+        aRtnval(0, 0) = .Fields("StkQty_sum")
+        If .Fields("StkQty_sum") <> 0 And .Fields("StkValue_sum") <> 0 Then
+            aRtnval(0, 1) = .Fields("StkValue_sum") / .Fields("StkQty_sum")
+        End If
+        aRtnval(0, 2) = .Fields("StkValue_sum")
+    End If
+End If
+End With
+CloseTable tRecset
+
+GetItmOpnQtyRateValue = aRtnval
+
+End Function
+
+Rem returns current qty, avg.rate and value as on date in array or string for specified item
+Public Function GetItmCurQtyRateValue(ByVal mItmCode As Long, ByVal mDate As Date, Optional ByVal mIsRcSeperated As Boolean = False) As Variant
+Dim aRtnval(0 To 1, 0 To 2) As Variant, tRecset As New ADODB.Recordset
+
+aRtnval(0, 0) = 0 ' qty receipt/combined
+aRtnval(0, 1) = 0 ' avg.rate receipt/combined
+aRtnval(0, 2) = 0 ' value receipt/combined
+aRtnval(1, 0) = 0 ' qty issue
+aRtnval(1, 1) = 0 ' avg.rate issue
+aRtnval(1, 2) = 0 ' value issue
+
+With tRecset
+If mIsRcSeperated = True Then
+    .Open "Select sum(iif(GpsQty>0,GpsQty,0)) as RcGpsQty_sum, sum(iif(GpsQty<0,GpsQty,0)) as IsGpsQty_sum, sum(iif(GpsValue>0,GpsValue,0)) as DrGpsValue_sum, sum(iif(GpsValue<0,GpsValue,0)) as CrGpsValue_sum from gProdSum where GpsItmCode=" & CStr(mItmCode) & " and GpsDate<=#" & CStr(mDate) & "#", m_dbGrpDatabase, adOpenKeyset, adLockOptimistic
+    If tRecset.RecordCount > 0 Then
+        Rem plus stock
+        aRtnval(0, 0) = .Fields("RcGpsQty_sum")
+        If .Fields("RcGpsQty_sum") <> 0 And .Fields("DrGpsValue_sum") <> 0 Then
+            aRtnval(0, 1) = .Fields("DrGpsValue_sum") / .Fields("RcGpsQty_sum")
+        End If
+        aRtnval(0, 2) = .Fields("DrGpsValue_sum")
+        
+        Rem minus stock
+        aRtnval(1, 0) = .Fields("IsGpsQty_sum")
+        If .Fields("IsGpsQty_sum") <> 0 And .Fields("CrGpsValue_sum") <> 0 Then
+            aRtnval(1, 1) = .Fields("CrGpsValue_sum") / .Fields("IsGpsQty_sum")
+        End If
+        aRtnval(1, 2) = .Fields("CrGpsValue_sum")
+    End If
+Else
+    .Open "Select sum(GpsQty) as GpsQty_sum,sum(GpsValue) as GpsValue_sum from gProdSum where GpsItmCode=" & CStr(mItmCode) & " and GpsDate<=#" & CStr(mDate) & "#", m_dbGrpDatabase, adOpenKeyset, adLockOptimistic
+    If tRecset.RecordCount > 0 Then
+        aRtnval(0, 0) = .Fields("GpsQty_sum")
+        If .Fields("GpsQty_sum") <> 0 And .Fields("GpsValue_sum") <> 0 Then
+            aRtnval(0, 1) = .Fields("GpsValue_sum") / .Fields("GpsQty_sum")
+        End If
+        aRtnval(0, 2) = .Fields("GpsValue_sum")
+    End If
+End If
+End With
+CloseTable tRecset
+
+GetItmCurQtyRateValue = aRtnval
+
+End Function
+
+
+
+
+
+Rem returns current qty, avg.rate and value as on date in array or string for all item
+Public Function GetAllItmCurQtyRateValue(ByVal mDate As Date, Optional ByVal mIsRcSeperated As Boolean = False) As Variant
+Dim aRtnval(0 To 1, 0 To 2) As Variant, tRecset As New ADODB.Recordset
+
+aRtnval(0, 0) = 0 ' qty receipt/combined
+aRtnval(0, 1) = 0 ' avg.rate receipt/combined
+aRtnval(0, 2) = 0 ' value receipt/combined
+aRtnval(1, 0) = 0 ' qty issue
+aRtnval(1, 1) = 0 ' avg.rate issue
+aRtnval(1, 2) = 0 ' value issue
+
+With tRecset
+.Open "Select GpsDate from gProdSum where GpsDate<=#" & CStr(mDate) & "#", m_dbGrpDatabase, adOpenKeyset, adLockOptimistic
+If .RecordCount > 0 Then
+    .Close
+    If mIsRcSeperated = True Then
+        .Open "Select sum(iif(GpsQty>0,GpsQty,0)) as RcGpsQty_sum, sum(iif(GpsQty<0,GpsQty,0)) as IsGpsQty_sum, sum(iif(GpsValue>0,GpsValue,0)) as DrGpsValue_sum, sum(iif(GpsValue<0,GpsValue,0)) as CrGpsValue_sum from gProdSum where GpsDate<=#" & CStr(mDate) & "#", m_dbGrpDatabase, adOpenKeyset, adLockOptimistic
+        If tRecset.RecordCount > 0 Then
+            Rem plus stock
+            aRtnval(0, 0) = .Fields("RcGpsQty_sum")
+            If .Fields("RcGpsQty_sum") <> 0 And .Fields("DrGpsValue_sum") <> 0 Then
+                aRtnval(0, 1) = .Fields("DrGpsValue_sum") / .Fields("RcGpsQty_sum")
+            End If
+            aRtnval(0, 2) = .Fields("DrGpsValue_sum")
+            
+            Rem minus stock
+            aRtnval(1, 0) = .Fields("IsGpsQty_sum")
+            If .Fields("IsGpsQty_sum") <> 0 And .Fields("CrGpsValue_sum") <> 0 Then
+                aRtnval(1, 1) = .Fields("CrGpsValue_sum") / .Fields("IsGpsQty_sum")
+            End If
+            aRtnval(1, 2) = .Fields("CrGpsValue_sum")
+        End If
+    Else
+        .Open "Select sum(GpsQty) as GpsQty_sum,sum(GpsValue) as GpsValue_sum from gProdSum where GpsDate<=#" & CStr(mDate) & "#", m_dbGrpDatabase, adOpenKeyset, adLockOptimistic
+        If tRecset.RecordCount > 0 Then
+            aRtnval(0, 0) = .Fields("GpsQty_sum")
+            If .Fields("GpsQty_sum") <> 0 And .Fields("GpsValue_sum") <> 0 Then
+                aRtnval(0, 1) = .Fields("GpsValue_sum") / .Fields("GpsQty_sum")
+            End If
+            aRtnval(0, 2) = .Fields("GpsValue_sum")
+        End If
+    End If
+End If
+End With
+CloseTable tRecset
+
+GetAllItmCurQtyRateValue = aRtnval
+
+End Function
+
+
+
+
+
+
+Rem returns an array containing item reference and closing qty as on date for specified item
+Public Function GetItmQtyAryAsOnDate(ByVal mItmCode As Long, ByVal mDate As Date) As Variant
+Dim tRecset As New ADODB.Recordset
+Dim aItmQtyList As Variant, aItmRefList As Variant, aQtyList As Variant, aCnt As Long
+
+aItmRefList = Array()
+aQtyList = Array()
+aItmQtyList = Array()
+
+With tRecset
+.Open "Select ItmRefCode,sum(gpsQty) as gpsQty_sum from gProdSum where gpsItmCode=" & CStr(mItmCode) & " and gpsDate<=#" & CStr(mDate) & "# group by ItmRefCode order by ItmRefCode", m_dbGrpDatabase, adOpenKeyset, adLockOptimistic
+If .RecordCount > 0 Then
+Do While .EOF = False
+    AddToArray aItmRefList, .Fields("ItmRefCode")
+    AddToArray aQtyList, .Fields("gpsQty_sum")
+    
+    .MoveNext
+Loop
+End If
+End With
+CloseTable tRecset
+
+If ALen(aItmRefList) > 0 Then
+    ReDim aItmQtyList(LBound(aItmRefList) To UBound(aItmRefList), 0 To 1)
+    For aCnt = LBound(aItmRefList) To UBound(aItmRefList)
+        aItmQtyList(aCnt, 0) = aItmRefList(aCnt)
+        aItmQtyList(aCnt, 1) = aQtyList(aCnt)
+    Next aCnt
+End If
+
+GetItmQtyAryAsOnDate = aItmQtyList
+
+End Function
+
+Rem returns closing qty as on date for a particular item reference
+Public Function GetItmRefQtyAsOnDate(ByVal mItmCode As Long, ByVal mItmRefCode As Long, ByVal mDate As Date) As Double
+Dim mRtnval As Double, tRecset As New ADODB.Recordset
+
+mRtnval = 0
+With tRecset
+.Open "Select sum(gpsQty) as gpsQty_sum from gProdSum where gpsItmRefCode=" & CStr(mItmRefCode) & " and gpsItmCode=" & CStr(mItmCode) & " and gpsDate<=#" & CStr(mDate) & "#", m_dbGrpDatabase, adOpenKeyset, adLockOptimistic
+If .RecordCount > 0 Then
+    mRtnval = .Fields("gpsQty_sum")
+End If
+End With
+CloseTable tRecset
+
+GetItmRefQtyAsOnDate = mRtnval
+
+End Function
+
+Rem returns item rate for specified item code and item reference
+Public Function GetItmValueRate(ByVal mItmCode As Long, ByVal mItmRefCode As Long) As Double
+Dim mRtnval As Double, mItmName As String, tRecset As New ADODB.Recordset
+
+mRtnval = 0
+With tRecset
+.Open "Select * from ProdRef where ItrRefCode=" & CStr(mItmRefCode) & " and ItrItmCode=" & CStr(mItmCode) & "", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+If .EOF = False Then
+    mRtnval = .Fields("ItrRate")
+Else
+    mItmName = GetItmName(mItmCode)
+    ErrorBox "clsProduct_GetItmValueRate_1453"
+End If
+End With
+CloseTable tRecset
+
+GetItmValueRate = mRtnval
+
+End Function
+
+Rem returns item name for either item code or item reference
+Public Function GetItmName(ByVal mAltCode As Long, Optional ByVal mRefItem As Boolean = False) As String
+Dim tRecset As New ADODB.Recordset, t1Recset As New ADODB.Recordset, mRtnval As String
+
+mRtnval = ""
+With tRecset
+If mRefItem = False Then
+    .Open "Select * from ProdMast where ItmCode=" & CStr(mAltCode) & "", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+Else
+    t1Recset.Open "Select * from ProdRef where ItrRefCode=" & CStr(mAltCode) & "", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+    If t1Recset.RecordCount > 0 Then
+        .Open "Select * from ProdMast where ItmCode=" & CStr(t1Recset.Fields("ItrItmCode")) & "", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+    Else
+        .Open "Select * from ProdMast where ItmCode=" & CStr(0.1) & "", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+    End If
+    CloseTable t1Recset
+End If
+If .RecordCount > 0 Then
+    mRtnval = .Fields("ItmName")
+End If
+End With
+CloseTable tRecset
+GetItmName = mRtnval
+
+End Function
+
+Rem returns the item code for specified item reference
+Public Function GetItmCode(ByVal mItmRefCode As Long) As Long
+Dim tRecset As New ADODB.Recordset, mRtnval As Long
+mRtnval = 0
+With tRecset
+.Open "Select * from ProdRef where ItrRefCode=" & CStr(mItmRefCode) & "", m_dbStDatabase, adOpenKeyset, adLockOptimistic
+If .RecordCount > 0 Then
+    mRtnval = .Fields("ItrItmCode")
+End If
+CloseTable tRecset
+End With
+
+GetItmCode = mRtnval
+
+End Function
+
