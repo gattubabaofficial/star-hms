@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.routers import auth, masters, opd, ipd, system, lab, pharmacy, reports
+from backend.routers import auth, masters, opd, ipd, system, lab, pharmacy, reports, accounts
 from backend.database import engine, Base
 import backend.models       # Register all submodule SQLAlchemy schemas
 import backend.models_flat   # Register legacy flat SQLAlchemy schemas
@@ -31,6 +31,7 @@ app.include_router(lab.router, prefix="/api/lab", tags=["lab"])
 app.include_router(pharmacy.router, prefix="/api/pharmacy", tags=["pharmacy"])
 app.include_router(reports.router, prefix="/api/reports", tags=["reports"])
 app.include_router(system.router, prefix="/api/system", tags=["system"])
+app.include_router(accounts.router, prefix="/api/accounts", tags=["accounts"])
 
 @app.get("/")
 def read_root():

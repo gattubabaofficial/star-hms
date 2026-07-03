@@ -563,3 +563,129 @@ class DiagResponse(DiagBase):
     dig_code: int
     class Config:
         from_attributes = True
+
+# ── Banker Master Schemas ───────────────────────────────────────────────────────
+class BankerBase(BaseModel):
+    bkr_name: str
+    bkr_desc: str
+    bkr_rec_state: Optional[int] = 1
+
+class BankerCreate(BankerBase):
+    pass
+
+class BankerResponse(BankerBase):
+    bkr_code: int
+    class Config:
+        from_attributes = True
+
+# ── Nation/State Master Schemas ─────────────────────────────────────────────────
+class NationStateBase(BaseModel):
+    nst_name: Optional[str] = None
+    nst_ref_code: Optional[str] = None
+    nst_rec_state: Optional[int] = 1
+
+class NationStateCreate(NationStateBase):
+    pass
+
+class NationStateResponse(NationStateBase):
+    nst_code: int
+    class Config:
+        from_attributes = True
+
+# ── Voucher Type Master Schemas ─────────────────────────────────────────────────
+class VoucherTypeBase(BaseModel):
+    vtm_name: Optional[str] = None
+    vtm_abvr: Optional[str] = None
+    vtm_sys_code: Optional[int] = None
+    vtm_editable: Optional[bool] = True
+    vtm_prefix: Optional[str] = None
+    vtm_postfix: Optional[str] = None
+    vtm_itm_narr: Optional[str] = None
+    vtm_com_narr: Optional[str] = None
+    vtm_start_no: Optional[int] = None
+    vtm_reset_no_basis: Optional[int] = None
+    vtm_index: Optional[int] = None
+    vtm_show_in_list: Optional[bool] = True
+    vtm_rec_state: Optional[int] = 1
+    vtm_prnt_name: Optional[str] = None
+    vtm_prnt_copies: Optional[int] = None
+    vtm_pymt_mode: Optional[str] = None
+    vtm_prnt_fmt_speci: Optional[str] = None
+    vtm_stk_mode: Optional[int] = None
+    vtm_send_sms_nos: Optional[str] = None
+    vtm_add_new_sms: Optional[bool] = False
+    vtm_edit_sms: Optional[bool] = False
+    vtm_dele_sms: Optional[bool] = False
+    vtm_no_dues: Optional[bool] = False
+
+class VoucherTypeCreate(VoucherTypeBase):
+    pass
+
+class VoucherTypeResponse(VoucherTypeBase):
+    vtm_code: int
+    class Config:
+        from_attributes = True
+
+# ── Account Group Master Schemas ────────────────────────────────────────────────
+class AccountGroupBase(BaseModel):
+    acg_name: str
+    acg_abvr: Optional[str] = None
+    acg_sys_code: Optional[int] = None
+    acg_base_code: Optional[int] = None
+    acg_index: Optional[int] = None
+    acg_depends: Optional[int] = None
+    acg_rec_state: Optional[int] = 1
+
+class AccountGroupCreate(AccountGroupBase):
+    pass
+
+class AccountGroupResponse(AccountGroupBase):
+    acg_code: int
+    parent_name: Optional[str] = None
+    class Config:
+        from_attributes = True
+
+# ── Account Ledger (Head) Master Schemas ────────────────────────────────────────
+class AccountLedgerBase(BaseModel):
+    ah_name: str
+    ah_depends: Optional[int] = None
+    ah_rec_state: Optional[int] = 1
+    ah_acg_code: Optional[int] = None
+
+class AccountLedgerCreate(AccountLedgerBase):
+    pass
+
+class AccountLedgerResponse(AccountLedgerBase):
+    ah_code: int
+    group_name: Optional[str] = None
+    parent_name: Optional[str] = None
+    class Config:
+        from_attributes = True
+
+# ── Journal Schemas ──────────────────────────────────────────────────────────────
+class JournalBase(BaseModel):
+    jrn_vtm_code: Optional[int] = None
+    jrn_date: Optional[datetime] = None
+    jrn_ah_code: int
+    jrn_amt: float
+    jrn_narr: Optional[str] = None
+    jrn_l_ah_code: int
+    jrn_rec_state: Optional[int] = 1
+
+class JournalCreate(JournalBase):
+    pass
+
+class JournalResponse(JournalBase):
+    jrn_code: int
+    jrn_icode: Optional[int] = None
+    jrn_sno: Optional[int] = None
+    jrn_prefix: Optional[str] = None
+    jrn_vch_no: Optional[int] = None
+    jrn_postfix: Optional[str] = None
+    jrn_cmp_code: Optional[int] = None
+    jrn_auto_gen: Optional[bool] = False
+    voucher_type_name: Optional[str] = None
+    debit_head_name: Optional[str] = None
+    credit_head_name: Optional[str] = None
+    class Config:
+        from_attributes = True

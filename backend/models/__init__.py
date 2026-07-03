@@ -27,6 +27,9 @@ from backend.models.pharmacy import (
     IndrStk, IndrStkDtl, OutdStk, OutdStkDtl
 )
 from backend.models.sync import SyncLog, SyncConfig
+from backend.models.accounts import (
+    AcntGrpMst, AchdMast, BnkrMast, NatioStateMast, VTypMast, Journal, JrnHdr,
+)
 
 # Legacy flat-model imports for backward compatibility
 # (routers that do `from backend.models import User, Patient, ...`)
@@ -64,6 +67,8 @@ __all__ = [
     "IndrStk", "IndrStkDtl", "OutdStk", "OutdStkDtl",
     # Sync
     "SyncLog", "SyncConfig",
+    # Accounts
+    "AcntGrpMst", "AchdMast", "BnkrMast", "NatioStateMast", "VTypMast", "Journal", "JrnHdr",
     # Legacy flat models
     "User",
     "PatientCategory", "Patient",
